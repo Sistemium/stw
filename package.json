@@ -10,6 +10,8 @@
     "i18n:report": "vue-cli-service i18n:report --src \"./src/**/*.?(js|vue)\" --locales \"./src/locales/**/*.json\""
   },
   "dependencies": {
+    "@bit/sistemium.vue.lang-menu": "^0.0.2",
+    "@bit/sistemium.vue.style.variables": "^0.0.2",
     "core-js": "^3.6.5",
     "element-ui": "^2.15.6",
     "vue": "^2.6.11",
@@ -50,7 +52,20 @@
     "parserOptions": {
       "parser": "babel-eslint"
     },
-    "rules": {},
+    "rules": {
+      "padded-blocks": "off",
+      "arrow-parens": [
+        "error",
+        "as-needed"
+      ],
+      "no-use-before-define": [
+        "error",
+        {
+          "functions": false,
+          "classes": true
+        }
+      ]
+    },
     "overrides": [
       {
         "files": [
