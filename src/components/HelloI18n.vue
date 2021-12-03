@@ -1,8 +1,10 @@
-<template>
-  <p>{{ $t('hello') }}</p>
-</template>
+<template lang="pug">
 
+  p {{ $t('hello') }}
+
+</template>
 <script>
+
 export default {
   name: 'HelloI18n',
   i18n: {
@@ -19,4 +21,5 @@ export default {
     },
   },
 };
+
 </script>

@@ -1,7 +1,9 @@
 <template lang="pug">
+
   .about
     h1 {{ $t('about') }}
     hello-i18n
+
 </template>
 <script>
 
