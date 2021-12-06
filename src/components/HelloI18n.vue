@@ -1,12 +1,17 @@
 <template lang="pug">
 
-  p {{ $t('hello') }}
+  resize.hello-i18n(:padding="10")
+    p {{ $t('hello') }}
+    form-buttons(:deletable="false")
 
 </template>
 <script>
 
+import FormButtons from '@bit/sistemium.vue.form-buttons/FormButtons.vue';
+
 export default {
   name: 'HelloI18n',
+  components: { FormButtons },
   i18n: {
     messages: {
       en: {

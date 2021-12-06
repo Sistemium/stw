@@ -10,7 +10,10 @@
     "i18n:report": "vue-cli-service i18n:report --src \"./src/**/*.?(js|vue)\" --locales \"./src/locales/**/*.json\""
   },
   "dependencies": {
+    "@bit/sistemium.vue.form-buttons": "^0.0.2",
     "@bit/sistemium.vue.lang-menu": "^0.0.2",
+    "@bit/sistemium.vue.mixins.debug": "^0.0.1",
+    "@bit/sistemium.vue.resize": "^0.0.4",
     "@bit/sistemium.vue.style.variables": "^0.0.2",
     "core-js": "^3.6.5",
     "element-ui": "^2.15.6",
