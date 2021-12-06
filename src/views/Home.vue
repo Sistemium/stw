@@ -15,6 +15,9 @@ export default {
   components: {
     HelloWorld,
   },
+  created() {
+    this.$debug('home');
+  },
 };
 
 </script>

@@ -2,9 +2,9 @@
 
   .app-menu
     #nav
-      router-link(to="/") {{ $t('menu.home') }}
+      router-link(to="/" v-t="'menu.home'")
       = ' | '
-      router-link(to="/about")  {{ $t('menu.about') }}
+      router-link(to="/about" v-t="'menu.about'")
     lang-menu(:languages="languages")
 
 </template>
