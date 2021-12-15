@@ -8,4 +8,10 @@ module.exports = {
       enableBridge: false,
     },
   },
+  devServer: {
+    port: 8890,
+    // proxy: {
+    //   '^/api': {},
+    // },
+  },
 };
