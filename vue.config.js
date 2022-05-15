@@ -10,8 +10,11 @@ module.exports = {
   },
   devServer: {
     port: 8890,
-    // proxy: {
-    //   '^/api': {},
-    // },
+    proxy: {
+      '^/api': {
+        target: 'http://localhost:9390',
+        changeOrigin: true,
+      },
+    },
   },
 };
