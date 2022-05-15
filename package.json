@@ -10,14 +10,23 @@
     "i18n:report": "vue-cli-service i18n:report --src \"./src/**/*.?(js|vue)\" --locales \"./src/locales/**/*.json\""
   },
   "dependencies": {
+    "@bit/sistemium.vue.drawer-editor": "^0.0.1",
     "@bit/sistemium.vue.form-buttons": "^0.0.2",
+    "@bit/sistemium.vue.form-editing": "^0.0.1",
     "@bit/sistemium.vue.lang-menu": "^0.0.2",
+    "@bit/sistemium.vue.matches-deep": "^0.0.1",
     "@bit/sistemium.vue.mixins.debug": "^0.0.1",
     "@bit/sistemium.vue.resize": "^0.0.4",
     "@bit/sistemium.vue.style.variables": "^0.0.2",
+    "@bit/sistemium.vue.update-route-params": "^0.0.1",
+    "@bit/sistemium.vue.vfs-data-model": "^0.0.1",
+    "@bit/sistemium.vue.vuex.auth": "^0.0.9",
     "core-js": "^3.6.5",
     "element-ui": "^2.15.6",
-    "vue": "^2.6.11",
+    "lodash": "^4.17.21",
+    "sistemium-data-vue": "^0.2.7",
+    "sistemium-debug": "^1.0.1",
+    "vue": "^2.6.14",
     "vue-i18n": "^8.26.3",
     "vue-router": "^3.2.0",
     "vuex": "^3.4.0"
@@ -85,5 +94,10 @@
     "> 1%",
     "last 2 versions",
     "not dead"
-  ]
+  ],
+  "bit": {
+    "env": {},
+    "componentsDefaultDirectory": "components/{name}",
+    "packageManager": "npm"
+  }
 }

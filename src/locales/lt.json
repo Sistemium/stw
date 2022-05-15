@@ -3,6 +3,16 @@
   "about": "Tai yra Apie puslapis",
   "menu": {
     "about": "Apie",
-    "home": "Pradžia"
+    "home": "Pradžia",
+    "inventory": "Inventorizacija"
+  },
+  "fields": {
+    "name": "Pavadinimas",
+    "valueType": "Vertybių tipas",
+    "required": "Privaloma"
+  },
+  "validation": {
+    "required": "{0} yra privalomas",
+    "formInvalid": "Klaidingai užpildyta forma"
   }
 }

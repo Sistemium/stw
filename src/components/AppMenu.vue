@@ -4,6 +4,8 @@
     #nav
       router-link(to="/" v-t="'menu.home'")
       = ' | '
+      router-link(to="/inventory" v-t="'menu.inventory'")
+      = ' | '
       router-link(to="/about" v-t="'menu.about'")
     lang-menu(:languages="languages")
 
