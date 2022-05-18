@@ -15,7 +15,8 @@ module.exports = defineConfig({
     port: 8890,
     proxy: {
       '^/api': {
-        target: 'http://localhost:9390/api',
+        target: 'http://localhost:9390',
+        changeOrigin: true,
       },
     },
   },

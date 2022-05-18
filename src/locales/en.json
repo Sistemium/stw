@@ -3,6 +3,16 @@
   "about": "This is an About page",
   "menu": {
     "about": "About",
-    "home": "Home"
+    "home": "Home",
+    "inventory": "Inventory"
+  },
+  "fields": {
+    "name": "Name",
+    "valueType": "Value type",
+    "required": "Required"
+  },
+  "validation": {
+    "required": "{0} is required",
+    "formInvalid": "The form is filled out with errors"
   }
 }
