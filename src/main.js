@@ -1,12 +1,12 @@
 import Vue from 'vue';
 import { authorizeAxios } from '@bit/sistemium.vue.vfs-data-model';
+import { initData } from '@/services/dataSync';
 import './init/element-ui';
 import './init/sistemium';
 import App from './App.vue';
 import router from './router';
 import store from './store';
 import i18n, { saveLocale } from './i18n';
-import { initData } from '@/services/dataSync';
 
 Vue.config.productionTip = false;
 
