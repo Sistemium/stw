@@ -52,7 +52,7 @@ export default {
 }
 
 .prop + .prop {
-  margin-top: $padding;
+  margin-top: $margin-right;
 }
 
 </style>

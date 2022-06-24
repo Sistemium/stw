@@ -9,7 +9,11 @@
   "fields": {
     "name": "Name",
     "type": "Value type",
-    "required": "Required"
+    "required": "Required",
+    "bool": {
+      "yes": "Yes",
+      "no": "No"
+    }
   },
   "validation": {
     "required": "{0} is required",

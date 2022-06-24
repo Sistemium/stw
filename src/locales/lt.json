@@ -9,7 +9,11 @@
   "fields": {
     "name": "Pavadinimas",
     "type": "Vertybių tipas",
-    "required": "Privaloma"
+    "required": "Privaloma",
+    "bool": {
+      "yes": "Taip",
+      "no": "Ne"
+    }
   },
   "validation": {
     "required": "{0} yra privalomas",
