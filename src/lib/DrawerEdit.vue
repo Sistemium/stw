@@ -38,7 +38,7 @@ export default {
     title: String,
     size: {
       type: String,
-      default: '450px',
+      default: '350px',
     },
     from: Object,
     forceModified: Boolean,
