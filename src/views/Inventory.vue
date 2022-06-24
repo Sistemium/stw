@@ -11,7 +11,7 @@
 <script>
 
 import BarcodeInput from '@/components/BarcodeScanner/BarcodeInput.vue';
-import PropertyMatcher from '@/components/PropertyMatcher.vue';
+import PropertyMatcher from '@/components/props/PropertyMatcher.vue';
 import Article from '@/models/Article';
 
 export default {

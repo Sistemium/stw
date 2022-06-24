@@ -7,6 +7,7 @@
         :size="size"
         @click="$emit('click', tag)"
       ) {{ tag.name }}
+      .empty(v-if="!tags.length" v-t="'emptyTags'")
     tool-button(
       tool="add"
       @click="onAdd"
@@ -49,12 +50,25 @@ export default {
       this.showDrawer = true;
     },
   },
+  i18n: {
+    messages: {
+      en: {
+        emptyTags: 'Add property',
+      },
+      ru: {
+        emptyTags: 'Добавить свойство',
+      },
+      lt: {
+        emptyTags: 'Pridėti ypatybę',
+      },
+    },
+  },
 };
 
 </script>
 <style scoped lang="scss">
 
-@import "../styles/variables";
+@import "../../styles/variables";
 
 .el-button {
   color: $primary-color;

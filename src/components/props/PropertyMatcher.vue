@@ -8,19 +8,13 @@
 
     .match()
       .prop(v-for="prop in props" :key="prop.id")
-        el-tag(
-          closable @close="removeProp"
-          size="small"
-          type="info"
-        ) {{ prop.name }}
-        .value
-          prop-value-input(:prop="prop")
+        prop-input(:prop="prop" @close="removeProp")
 
 </template>
 <script>
 
-import PropTags from '@/components/PropTags.vue';
-import PropValueInput from '@/components/PropValueInput.vue';
+import PropTags from '@/components/props/PropTags.vue';
+import PropInput from '@/components/props/PropInput.vue';
 
 export default {
   name: 'PropertyMatcher',
@@ -33,7 +27,7 @@ export default {
     };
   },
   components: {
-    PropValueInput,
+    PropInput,
     PropTags,
   },
   computed: {},
@@ -50,20 +44,15 @@ export default {
 </script>
 <style scoped lang="scss">
 
-@import "../styles/variables";
+@import "../../styles/variables";
 
 .match {
   margin-top: $margin-top;
   text-align: center;
 }
 
-.prop {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  > .el-tag {
-    margin-right: $margin-right;
-  }
+.prop + .prop {
+  margin-top: $padding;
 }
 
 </style>
