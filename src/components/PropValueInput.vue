@@ -2,7 +2,7 @@
 
   .prop-value-input
     el-select(
-      v-if="prop.valueType === VALUE_TYPES.options"
+      v-if="prop.type === VALUE_TYPES.options"
       allow-create
       filterable
       default-first-option

@@ -8,7 +8,7 @@
   },
   "fields": {
     "name": "Pavadinimas",
-    "valueType": "Vertybių tipas",
+    "type": "Vertybių tipas",
     "required": "Privaloma"
   },
   "validation": {

@@ -8,7 +8,7 @@
   },
   "fields": {
     "name": "Название",
-    "valueType": "Тип значений",
+    "type": "Тип значений",
     "required": "Обязательно"
   },
   "validation": {

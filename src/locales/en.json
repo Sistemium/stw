@@ -8,7 +8,7 @@
   },
   "fields": {
     "name": "Name",
-    "valueType": "Value type",
+    "type": "Value type",
     "required": "Required"
   },
   "validation": {

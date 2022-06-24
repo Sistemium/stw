@@ -11,8 +11,8 @@
     el-form-item(:label="$t('fields.name')" prop="name")
       el-input(v-model="model.name")
 
-    el-form-item(:label="$t('fields.valueType')" prop="valueType")
-      el-select(v-model="model.valueType")
+    el-form-item(:label="$t('fields.type')" prop="type")
+      el-select(v-model="model.type")
         el-option(:label="$t('string')" value="string")
         el-option(:label="$t('options')" value="options")
         el-option(:label="$t('boolean')" value="boolean")
@@ -36,7 +36,7 @@ export default {
     rules() {
       return {
         ...this.$requiredRule('name'),
-        ...this.$requiredRule('valueType'),
+        ...this.$requiredRule('type'),
       };
     },
   },
