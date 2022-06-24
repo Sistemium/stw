@@ -1,22 +1,18 @@
 <template lang="pug">
 
-  .app-menu
-    el-dropdown.hamburger
-      el-button(circle icon="el-icon-menu" size="mini")
-      el-dropdown-menu(slot="dropdown")
-        el-dropdown-item
-          router-link(to="/" v-t="'menu.home'")
-        el-dropdown-item
-          router-link(to="/inventory" v-t="'menu.inventory'")
-        el-dropdown-item
-          router-link(to="/about" v-t="'menu.about'")
-    #nav
-      router-link(to="/" v-t="'menu.home'")
-      = ' | '
-      router-link(to="/inventory" v-t="'menu.inventory'")
-      = ' | '
-      router-link(to="/about" v-t="'menu.about'")
-    lang-menu(:languages="languages")
+.app-menu
+
+  el-dropdown.hamburger(@command="onCommand")
+    el-button(circle icon="el-icon-menu" size="mini")
+    el-dropdown-menu(slot="dropdown")
+      el-dropdown-item(v-for="{ t, name } in menu" :key="t" :command="name" v-t="t")
+
+  strong {{ title }}
+
+  #nav
+    router-link(v-for="{ t, name } in menu" :key="t" :to="{ name }" v-t="t")
+
+  lang-menu(:languages="languages")
 
 </template>
 <script>
@@ -29,6 +25,24 @@ export default {
   computed: {
     languages() {
       return [...Language];
+    },
+    menu() {
+      return ['home', 'inventory', 'about']
+        .map(name => ({
+          name,
+          t: `menu.${name}`,
+        }));
+    },
+    title() {
+      const { name } = this.$route;
+      return name ? this.$t(`menu.${name}`) : '';
+    },
+  },
+  methods: {
+    onCommand(name) {
+      if (this.$route.name !== name) {
+        this.$router.push({ name });
+      }
     },
   },
   components: {
@@ -79,14 +93,27 @@ export default {
   @include responsive-only(xxs) {
     display: none;
   }
+
   a {
     font-weight: bold;
+  }
+
+  a + a:before {
+    content: "|";
+    padding: 0 $margin-right;
+  }
+}
+
+strong, .hamburger {
+  @include responsive-only(gt-xxs) {
+    display: none;
   }
 }
 
 .hamburger {
-  @include responsive-only(gt-xxs) {
-    display: none;
+  strong {
+    text-align: left;
+    flex: 1;
   }
 }
 
