@@ -11,6 +11,17 @@ Vue.mixin({
         }],
       };
     },
+    async $saveWithLoading(promise) {
+      const loading = this.$loading({});
+      try {
+        await promise();
+        this.$message.info(this.$t('saved').toString());
+      } catch (e) {
+        this.$error('saveWithLoading', e);
+        this.$message.error(this.$t('savingError').toString());
+      }
+      loading.close();
+    },
   },
 
 });

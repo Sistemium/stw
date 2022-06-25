@@ -1,6 +1,8 @@
 {
   "message": "Hello i18n!!",
   "about": "This is an About page",
+  "savingError": "Saving error",
+  "saved": "Saved",
   "menu": {
     "about": "About",
     "home": "Home",

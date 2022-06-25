@@ -1,6 +1,8 @@
 {
   "message": "Sveiki, I18n!!",
   "about": "Tai yra Apie puslapis",
+  "savingError": "Nepavyko išsaugoti",
+  "saved": "Išsaugota",
   "menu": {
     "about": "Apie",
     "home": "Pradžia",
