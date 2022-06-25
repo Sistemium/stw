@@ -6,7 +6,9 @@
     filterable
     default-first-option
     v-model="value"
-    size="small"
+    :size="size"
+    value-key="id"
+  )
   )
     el-option(label="Test" value="test")
 

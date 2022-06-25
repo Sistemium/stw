@@ -4,6 +4,10 @@ export default {
       type: Object,
       required: true,
     },
+    size: {
+      type: String,
+      default: 'small',
+    },
   },
   data() {
     return {

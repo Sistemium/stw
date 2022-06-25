@@ -3,7 +3,7 @@
 .prop-input-string
   el-input(
     v-model="value"
-    size="small"
+    :size="size"
   )
 
 </template>

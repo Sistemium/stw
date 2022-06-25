@@ -5,6 +5,7 @@
     v-model="value"
     :active-text="$t('fields.bool.yes')"
     :inactive-text="$t('fields.bool.no')"
+    :size="size"
   )
 
 </template>
