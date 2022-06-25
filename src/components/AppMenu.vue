@@ -5,7 +5,10 @@
   el-dropdown.hamburger(@command="onCommand")
     el-button(circle icon="el-icon-menu" size="mini")
     el-dropdown-menu(slot="dropdown")
-      el-dropdown-item(v-for="{ t, name } in menu" :key="t" :command="name" v-t="t")
+      el-dropdown-item(
+        v-for="{ t, name } in menu" :key="t" :command="name" v-t="t"
+        :disabled="name === $route.name"
+      )
 
   strong {{ title }}
 
