@@ -22,6 +22,8 @@ Vue.mixin({
       }
       loading.close();
     },
+    $watchImmediate(expOrFn, callback) {
+      return this.$watch(expOrFn, callback, { immediate: true });
+    },
   },
-
 });
