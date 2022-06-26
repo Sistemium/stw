@@ -7,6 +7,13 @@ const TYPES = {
   number: 'numberValue',
 };
 
+const DEFAULTS = {
+  boolean: true,
+  string: null,
+  number: undefined,
+  options: null,
+};
+
 export default {
   props: {
     prop: {
@@ -21,15 +28,6 @@ export default {
       type: Object,
       required: true,
     },
-    defaults: {
-      type: Object,
-      default: () => ({
-        boolean: true,
-        string: null,
-        number: undefined,
-        options: null,
-      }),
-    },
   },
   data() {
     const result = {};
@@ -37,9 +35,9 @@ export default {
       type: this.prop.type,
       value: this.value,
     }), ({ type, value }) => {
-      const defaultValue = this.defaults[type];
+      const defaultValue = DEFAULTS[type];
       const valName = TYPES[type];
-      result[valName] = defaults({ ...value }, { [valName]: defaultValue })[valName];
+      this.$set(result, valName, defaults({ ...value }, { [valName]: defaultValue })[valName]);
     });
     return { result };
   },

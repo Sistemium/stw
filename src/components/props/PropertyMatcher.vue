@@ -24,26 +24,41 @@ export default {
   name: 'PropertyMatcher',
   props: {
     title: String,
+    value: Array,
   },
   data() {
     return {
       props: [],
       values: {},
+      result: [],
     };
   },
   components: {
     PropInput,
     PropTags,
   },
-  computed: {},
+  computed: {
+  },
   methods: {
+    getResult(values) {
+      return this.props.map(({ id: propId }) => ({ propId, ...values[propId] }));
+    },
     removeProp(prop) {
       delete this.values[prop.id];
       this.props.splice(this.props.indexOf(prop), 1);
     },
     addProp(prop) {
       this.props.push(prop);
-      // this.values[prop.id] = {};
+      this.$set(this.values, prop.id, {});
+    },
+  },
+  watch: {
+    values: {
+      deep: true,
+      handler(values) {
+        this.result = this.getResult(values);
+        this.$emit('input', this.result);
+      },
     },
   },
 };
