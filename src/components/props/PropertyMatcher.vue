@@ -1,14 +1,18 @@
 <template lang="pug">
 
-  .property-matcher
+.property-matcher
 
-    h2(v-if="title") {{ title }}
+  h2(v-if="title") {{ title }}
 
-    prop-tags(@click="addProp" :exclude="props")
+  prop-tags(@click="addProp" :exclude="props")
 
-    .match()
-      .prop(v-for="prop in props" :key="prop.id")
-        prop-input(:prop="prop" @close="removeProp")
+  .match()
+    .prop(v-for="prop in props" :key="prop.id")
+      prop-input(
+        :prop="prop"
+        @close="removeProp"
+        v-model="values[prop.id]"
+      )
 
 </template>
 <script>
@@ -24,6 +28,7 @@ export default {
   data() {
     return {
       props: [],
+      values: {},
     };
   },
   components: {
@@ -33,10 +38,12 @@ export default {
   computed: {},
   methods: {
     removeProp(prop) {
+      delete this.values[prop.id];
       this.props.splice(this.props.indexOf(prop), 1);
     },
     addProp(prop) {
       this.props.push(prop);
+      // this.values[prop.id] = {};
     },
   },
 };

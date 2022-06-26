@@ -2,7 +2,7 @@
 
 .prop-input-string
   el-input(
-    v-model="value"
+    v-model="result.stringValue"
     :size="size"
   )
 

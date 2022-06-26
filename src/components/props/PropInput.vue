@@ -8,7 +8,11 @@
       type="info"
     ) {{ prop.name }}
   .value()
-    component(v-if="componentName" :is="componentName" :prop="prop")
+    component(
+      v-if="componentName" :is="componentName" :prop="prop"
+      :value="value"
+      @input="onInput"
+    )
 
 </template>
 
@@ -26,14 +30,20 @@ export default {
       type: Object,
       required: true,
     },
+    value: {
+      type: Object,
+      default: () => ({}),
+    },
   },
   computed: {
     componentName() {
       const { prop } = this;
-      // if (prop.type === 'boolean') {
-      //   return null;
-      // }
       return `prop-input-${prop.type}`;
+    },
+  },
+  methods: {
+    onInput(value) {
+      this.$emit('input', value);
     },
   },
   components: {
@@ -58,6 +68,7 @@ export default {
     flex: 2;
     text-align: right;
   }
+
   .value {
     flex: 3;
     text-align: left;

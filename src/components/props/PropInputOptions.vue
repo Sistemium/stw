@@ -6,7 +6,7 @@
     allow-create
     filterable
     default-first-option
-    v-model="value"
+    v-model="option"
     :size="size"
     value-key="id"
   )
@@ -34,15 +34,26 @@ export default {
       return PropOption.reactiveFilter({ propId });
     },
     isNew() {
-      return this.value && !this.value.id;
+      return this.option && !this.option.id;
     },
+  },
+  data() {
+    const { optionId } = this.value || {};
+    return {
+      option: optionId ? { id: optionId } : null,
+    };
   },
   methods: {
     onAdd() {
       this.$saveWithLoading(async () => {
-        const { value: name, propId } = this;
-        this.value = await PropOption.create({ name, propId });
+        const { option: name, propId } = this;
+        this.option = await PropOption.create({ name, propId });
       });
+    },
+  },
+  watch: {
+    option(option) {
+      this.result.optionId = this.isNew ? null : option.id;
     },
   },
 };

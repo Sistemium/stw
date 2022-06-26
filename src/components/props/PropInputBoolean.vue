@@ -2,7 +2,7 @@
 
 .prop-input-boolean
   el-switch(
-    v-model="value"
+    v-model="result.boolValue"
     :active-text="$t('fields.bool.yes')"
     :inactive-text="$t('fields.bool.no')"
     :size="size"

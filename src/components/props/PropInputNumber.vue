@@ -2,7 +2,7 @@
 
 .prop-input-number
   el-input-number(
-    v-model="value"
+    v-model="result.numberValue"
     :size="size"
   )
 
