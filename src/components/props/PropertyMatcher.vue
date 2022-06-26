@@ -37,11 +37,14 @@ export default {
     PropInput,
     PropTags,
   },
-  computed: {
-  },
+  computed: {},
   methods: {
     getResult(values) {
-      return this.props.map(({ id: propId }) => ({ propId, ...values[propId] }));
+      return this.props.map(prop => ({
+        propId: prop.id,
+        ...values[prop.id],
+        prop,
+      }));
     },
     removeProp(prop) {
       delete this.values[prop.id];

@@ -1,18 +1,19 @@
 <template lang="pug">
 
-  .inventory
-    barcode-input(@scan="onScan" :lock="false")
-    template
-      //(v-if="notFound")
-      //h2(v-t="")
-      property-matcher(:title="$t('notFoundAdding')")
+.inventory
+  barcode-input(@scan="onScan" :lock="false")
+  template
+    article-matcher(:title="$t('notFoundAdding')")
+    //(v-if="notFound")
+    //h2(v-t="")
+    //property-matcher(:title="$t('notFoundAdding')" v-model="filters")
 
 </template>
 <script>
 
 import BarcodeInput from '@/components/BarcodeScanner/BarcodeInput.vue';
-import PropertyMatcher from '@/components/props/PropertyMatcher.vue';
 import Article from '@/models/Article';
+import ArticleMatcher from '@/components/catalogue/ArticleMatcher.vue';
 
 export default {
   name: 'Inventory',
@@ -21,25 +22,23 @@ export default {
       notFound: null,
     };
   },
-  components: {
-    BarcodeInput,
-    PropertyMatcher,
-  },
   methods: {
-    onScan(code) {
+    async onScan(code) {
       this.notFound = false;
-      Article.findAll({ barcodes: code })
-        .then(res => {
-          this.notFound = !res;
-          if (!res) {
-            this.$message({
-              type: 'warning',
-              message: this.$t('not_found'),
-            });
-          }
-        })
-        .catch(e => this.$error(e));
+      try {
+        const res = Article.findAll({ barcodes: code });
+        this.notFound = !res;
+        if (!res) {
+          this.$message.warning(this.$t('not_found').toString());
+        }
+      } catch (e) {
+        this.$error('onScan:', e);
+      }
     },
+  },
+  components: {
+    ArticleMatcher,
+    BarcodeInput,
   },
   i18n: {
     messages: {
@@ -64,7 +63,7 @@ export default {
 
 @import "../styles/variables";
 
-.property-matcher {
+.article-matcher {
   margin-top: $margin-top;
 }
 

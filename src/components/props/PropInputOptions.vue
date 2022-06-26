@@ -10,7 +10,7 @@
     :size="size"
     value-key="id"
   )
-    el-option(v-for="{ id, name } in options" :label="name" :value="{id}")
+    el-option(v-for="{ id, name } in options" :label="name" :value="{id, name}" :key="id")
 
   el-button(
     v-if="isNew" size="mini" icon="el-icon-plus" @click="onAdd" circle type="success"
@@ -53,7 +53,11 @@ export default {
   },
   watch: {
     option(option) {
-      this.result.optionId = this.isNew ? null : option.id;
+      Object.assign(this.result, {
+        optionId: this.isNew ? null : option.id,
+        stringValue: this.isNew ? option : option.name,
+      });
+      this.$emit('input', { ...this.result });
     },
   },
 };
