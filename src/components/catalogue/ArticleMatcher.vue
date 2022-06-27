@@ -15,6 +15,8 @@
 <script>
 import PropertyMatcher from '@/components/props/PropertyMatcher.vue';
 import Article from '@/models/Article';
+import lowerFirst from 'lodash/lowerFirst';
+import upperFirst from 'lodash/upperFirst';
 
 export default {
   name: 'ArticleMatcher',
@@ -26,20 +28,22 @@ export default {
       return Article.reactiveFilter(this.arrayToFilters());
     },
     compoundName() {
-      return this.filters
+      const res = this.filters
         && this.filters.map(filter => {
           const { stringValue, numberValue } = filter;
           const simple = stringValue || numberValue;
           if (simple) {
             return simple;
           }
-          const { boolValue } = filter;
-          if (boolValue !== undefined) {
-            return `${boolValue ? '' : 'not '}${filter.prop.name}`;
+          const { boolValue, prop } = filter;
+          if (boolValue !== undefined && prop) {
+            return boolValue ? prop.name : prop.inverse;
           }
           return '';
         })
+          .map(lowerFirst)
           .join(' ');
+      return upperFirst(res);
     },
   },
   methods: {
