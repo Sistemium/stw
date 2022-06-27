@@ -21,6 +21,7 @@
     "@bit/sistemium.vue.update-route-params": "^0.0.1",
     "@bit/sistemium.vue.vfs-data-model": "^0.0.1",
     "@bit/sistemium.vue.vuex.auth": "^0.0.9",
+    "@syncfusion/ej2-vue-barcode-generator": "^20.1.55",
     "element-ui": "^2.15.8",
     "lodash": "^4.17.21",
     "sistemium-data-vue": "^0.2.7",
