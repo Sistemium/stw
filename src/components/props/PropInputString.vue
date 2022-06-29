@@ -2,18 +2,29 @@
 
 .prop-input-string
   el-input(
-    v-model="result.stringValue"
+    v-model="stringValue"
     :size="size"
   )
 
 </template>
 
 <script>
-import PropInput from '@/components/props/PropInputBase';
+import PropInputBase from '@/components/props/PropInputBase';
+import { TYPES_DEFAULTS } from '@/models/ArticleProp';
 
 export default {
   name: 'PropInputString',
-  mixins: [PropInput],
+  mixins: [PropInputBase],
+  computed: {
+    stringValue: {
+      get() {
+        return this.result.stringValue;
+      },
+      set(value) {
+        this.result.stringValue = value || TYPES_DEFAULTS.string;
+      },
+    },
+  },
 };
 </script>
 
