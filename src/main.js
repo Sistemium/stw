@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import { Loading } from 'element-ui';
 import { authorizeAxios } from '@bit/sistemium.vue.vfs-data-model';
 import { initData } from '@/services/dataSync';
 import './init/element-ui';
@@ -7,6 +8,7 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 import i18n, { saveLocale } from './i18n';
+import './index.scss';
 
 Vue.config.productionTip = false;
 
@@ -38,7 +40,11 @@ const unsubscribe = store.subscribe(mutation => {
   if (mutation.type === 'auth/SET_AUTHORIZED') {
     unsubscribe();
     authorizeAxios(mutation.payload.token);
+    const loading = Loading.service({});
     initData()
-      .catch(e => this.$error(e));
+      .catch(e => this.$error(e))
+      .finally(() => {
+        loading.close();
+      });
   }
 }, { prepend: true });

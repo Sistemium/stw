@@ -1,0 +1,7 @@
+@import "styles/variables";
+@import "styles/lists";
+
+.list-group {
+  @include list-group($border-radius, $list-cell-borders,
+          $gray-background, $dark-gray, $margin-top, $primary-color, $white, $padding);
+}
