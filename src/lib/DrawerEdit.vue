@@ -7,7 +7,7 @@
     :destroy-on-close="true"
     ref="drawer"
     :size="size"
-    @close="$parent.$emit('closed')"
+    @close="handleClose"
   )
 
     .resize.container(:padding="60")
@@ -143,6 +143,7 @@ export default {
     handleClose() {
       if (!this.from) {
         this.drawerOpen = false;
+        this.$parent.$emit('closed');
         return;
       }
       this.$router.replace(this.from)
