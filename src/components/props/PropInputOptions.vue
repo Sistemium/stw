@@ -19,12 +19,12 @@
 </template>
 
 <script>
-import PropInput from '@/components/props/PropInputBase';
+import PropInputBase from '@/components/props/PropInputBase';
 import PropOption from '@/models/PropOption';
 
 export default {
   name: 'PropInputOptions',
-  mixins: [PropInput],
+  mixins: [PropInputBase],
   computed: {
     propId() {
       return this.prop.id;

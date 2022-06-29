@@ -19,6 +19,14 @@
 
 import PropTags from '@/components/props/PropTags.vue';
 import PropInput from '@/components/props/PropInput.vue';
+import ArticleProp from '@/models/ArticleProp';
+
+const PICK_VALUES = [
+  'optionId',
+  'boolValue',
+  'stringValue',
+  'numberValue',
+];
 
 export default {
   name: 'PropertyMatcher',
@@ -30,25 +38,41 @@ export default {
     return {
       props: [],
       values: {},
-      result: [],
+      // result: [],
     };
   },
   components: {
     PropInput,
     PropTags,
   },
-  computed: {},
+  created() {
+    this.setData(this.value);
+  },
   methods: {
     getResult(values) {
       return this.props.map(prop => ({
         propId: prop.id,
         ...values[prop.id],
+        type: prop.type,
         prop,
       }));
+    },
+    setData(results) {
+      this.props = results.map(result => {
+        PICK_VALUES.forEach(key => {
+          const value = result[key];
+          if (value === undefined) {
+            return;
+          }
+          this.$set(this.values, key, value);
+        });
+        return ArticleProp.reactiveGet(result.propId);
+      });
     },
     removeProp(prop) {
       delete this.values[prop.id];
       this.props.splice(this.props.indexOf(prop), 1);
+      this.$emit('input', this.getResult(this.values));
     },
     addProp(prop) {
       this.props.push(prop);
@@ -59,8 +83,7 @@ export default {
     values: {
       deep: true,
       handler(values) {
-        this.result = this.getResult(values);
-        this.$emit('input', this.result);
+        this.$emit('input', this.getResult(values));
       },
     },
   },

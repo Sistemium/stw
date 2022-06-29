@@ -7,8 +7,15 @@ export default new Model({
 });
 
 export const VALUE_TYPES = {
-  string: 'string',
-  options: 'options',
-  boolean: 'boolean',
-  number: 'number',
+  boolean: 'boolValue',
+  string: 'stringValue',
+  options: 'optionId',
+  number: 'numberValue',
+};
+
+export const TYPES_DEFAULTS = {
+  boolean: true,
+  string: null,
+  number: undefined,
+  options: null,
 };

@@ -1,18 +1,5 @@
 import defaults from 'lodash/defaults';
-
-const TYPES = {
-  boolean: 'boolValue',
-  string: 'stringValue',
-  options: 'optionId',
-  number: 'numberValue',
-};
-
-const DEFAULTS = {
-  boolean: true,
-  string: null,
-  number: undefined,
-  options: null,
-};
+import { VALUE_TYPES, TYPES_DEFAULTS } from '@/models/ArticleProp';
 
 export default {
   props: {
@@ -35,8 +22,8 @@ export default {
       type: this.prop.type,
       value: this.value,
     }), ({ type, value }) => {
-      const defaultValue = DEFAULTS[type];
-      const valName = TYPES[type];
+      const defaultValue = TYPES_DEFAULTS[type];
+      const valName = VALUE_TYPES[type];
       this.$set(result, valName, defaults({ ...value }, { [valName]: defaultValue })[valName]);
     });
     return { result };

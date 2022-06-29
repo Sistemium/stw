@@ -9,11 +9,11 @@
 </template>
 
 <script>
-import PropInput from '@/components/props/PropInputBase';
+import PropInputBase from '@/components/props/PropInputBase';
 
 export default {
   name: 'PropInputNumber',
-  mixins: [PropInput],
+  mixins: [PropInputBase],
 };
 </script>
 
