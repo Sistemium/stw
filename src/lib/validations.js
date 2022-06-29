@@ -11,10 +11,10 @@ Vue.mixin({
         }],
       };
     },
-    async $saveWithLoading(promise) {
+    async $saveWithLoading(asyncFunction) {
       const loading = this.$loading({});
       try {
-        await promise();
+        await asyncFunction();
         this.$message.info(this.$t('saved').toString());
       } catch (e) {
         this.$error('saveWithLoading', e);
