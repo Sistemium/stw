@@ -139,7 +139,7 @@ export default {
 }
 
 .list-group {
-  max-width: 350px;
+  max-width: $max-width;
   margin-left: auto;
   margin-right: auto;
 }
@@ -151,6 +151,10 @@ export default {
 .compound-name {
   flex: 1;
   align-items: center;
+}
+
+.no-matches {
+  color: $orange;
 }
 
 .el-button.create {

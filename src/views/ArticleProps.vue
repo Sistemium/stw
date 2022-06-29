@@ -20,5 +20,11 @@ export default {
 
 </script>
 <style scoped lang="scss">
+@import "../styles/variables";
+
+.article-props {
+  max-width: $max-width;
+  margin: 0 auto;
+}
 
 </style>
