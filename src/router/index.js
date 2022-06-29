@@ -18,7 +18,12 @@ export const routes = [
   {
     path: '/inventory',
     name: 'inventory',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Inventory.vue'),
+    component: () => import(/* webpackChunkName: "inventory" */ '../views/Inventory.vue'),
+  },
+  {
+    path: '/articleProps',
+    name: 'articleProps',
+    component: () => import(/* webpackChunkName: "catalogue" */ '../views/ArticleProps.vue'),
   },
 ];
 
