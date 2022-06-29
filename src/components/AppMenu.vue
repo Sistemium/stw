@@ -37,8 +37,8 @@ export default {
         }));
     },
     title() {
-      const { name } = this.$route;
-      return name ? this.$t(`menu.${name}`) : '';
+      return this.routeTitle(this.$route)
+        || this.routeTitle(this.$router.currentRoute.matched[0]);
     },
   },
   methods: {
@@ -46,6 +46,15 @@ export default {
       if (this.$route.name !== name) {
         this.$router.push({ name });
       }
+    },
+    routeTitle(route) {
+      const { name } = route || {};
+      if (!name) {
+        return null;
+      }
+      const key = `menu.${name}`;
+      const hasTitle = this.$te(key);
+      return hasTitle && this.$t(key);
     },
   },
   components: {
