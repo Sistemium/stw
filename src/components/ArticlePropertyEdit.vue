@@ -5,6 +5,7 @@
     :save-fn="saveFn"
     :destroy-fn="destroyFn"
     :model-origin="modelOrigin"
+    :from="from"
   )
     template(v-slot="{ model }")
       article-property-form(ref="form" :model="model")
@@ -20,6 +21,7 @@ export default {
   name: 'ArticlePropertyEdit',
   props: {
     articlePropId: String,
+    from: Object,
   },
   computed: {
     modelOrigin() {

@@ -1,7 +1,7 @@
 <template lang="pug">
 
 .article-props-list.list-group
-  .list-group-item(v-for="prop in articleProps")
+  .list-group-item(v-for="prop in articleProps" @click="$emit('click', prop)")
     .name {{ prop.name }}
     el-tag.type(size="mini" v-t="`dataTypes.${prop.type}`" type="info")
 
