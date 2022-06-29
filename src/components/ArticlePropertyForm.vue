@@ -5,7 +5,7 @@
     ref="form"
     size="mini"
     :rules="rules"
-    :status-icon="true"
+    :status-icon="false"
   )
 
     el-form-item(:label="$t('fields.name')" prop="name")
