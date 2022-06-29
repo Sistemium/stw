@@ -6,7 +6,8 @@
   "menu": {
     "about": "Apie",
     "home": "Pradžia",
-    "inventory": "Inventorizacija"
+    "inventory": "Inventorizacija",
+    "articleProps": "Nomenklatūros ypatybės"
   },
   "fields": {
     "name": "Pavadinimas",
@@ -16,6 +17,12 @@
       "yes": "Taip",
       "no": "Ne"
     }
+  },
+  "dataTypes": {
+    "string": "Eilutė",
+    "options": "Pasirinkimas iš sąrašo",
+    "boolean": "Taip/Ne",
+    "number": "Skaičius"
   },
   "validation": {
     "required": "{0} yra privalomas",

@@ -6,7 +6,8 @@
   "menu": {
     "about": "About",
     "home": "Home",
-    "inventory": "Inventory"
+    "inventory": "Inventory",
+    "articleProps": "Article properties"
   },
   "fields": {
     "name": "Name",
@@ -16,6 +17,12 @@
       "yes": "Yes",
       "no": "No"
     }
+  },
+  "dataTypes": {
+    "string": "String",
+    "options": "Options",
+    "boolean": "Yes/no",
+    "number": "Number"
   },
   "validation": {
     "required": "{0} is required",
