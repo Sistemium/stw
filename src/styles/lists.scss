@@ -1,0 +1,48 @@
+@mixin list-group($border-radius, $list-cell-borders,
+$gray-background, $dark-gray, $margin-top, $primary-color, $white, $padding) {
+
+  font-size: 14px;
+  border-radius: $border-radius;
+  border: $list-cell-borders;
+  overflow: hidden;
+
+  & + .list-group {
+    margin-top: $margin-top;
+  }
+
+  .list-group-header {
+    padding: $padding;
+    font-weight: bold;
+    color: $dark-gray;
+    background: $gray-background;
+  }
+
+  .list-group-item {
+
+    padding: $padding;
+    cursor: pointer;
+
+    &:hover {
+      background: $gray-background;
+    }
+
+    & + .list-group-item {
+      border-top: $list-cell-borders;
+    }
+
+    &.active {
+      background: $primary-color;
+      color: $white;
+    }
+
+    > i {
+      padding: 0 $padding;
+    }
+
+  }
+
+}
+
+.flip-list-move {
+  transition: transform 0.5s;
+}
