@@ -26,16 +26,27 @@ export const routes = [
     component: () => import(/* webpackChunkName: "catalogue" */ '../views/ArticleProps.vue'),
     props: {
       editRoute: 'articlePropEdit',
+      createRoute: 'articlePropCreate',
     },
-    children: [{
-      path: '/edit/:articlePropId',
-      name: 'articlePropEdit',
-      props: ({ params: { articlePropId } }) => ({
-        articlePropId,
-        from: { name: 'articleProps' },
-      }),
-      component: () => import('../components/ArticlePropertyEdit.vue'),
-    }],
+    children: [
+      {
+        path: 'create',
+        name: 'articlePropCreate',
+        props: {
+          from: { name: 'articleProps' },
+        },
+        component: () => import('../components/ArticlePropertyEdit.vue'),
+      },
+      {
+        path: 'edit/:articlePropId',
+        name: 'articlePropEdit',
+        props: ({ params: { articlePropId } }) => ({
+          articlePropId,
+          from: { name: 'articleProps' },
+        }),
+        component: () => import('../components/ArticlePropertyEdit.vue'),
+      },
+    ],
   },
 ];
 

@@ -21,7 +21,8 @@ import ArticlePropsList from '@/components/catalogue/ArticlePropsList.vue';
 export default {
   name: 'ArticleProps',
   props: {
-    editRoute: { type: String, required: true },
+    editRoute: String,
+    createRoute: String,
   },
   computed: {
     articleProps() {
@@ -42,10 +43,7 @@ export default {
     },
     onAdd() {
       this.$router.push({
-        name: this.editRoute,
-        params: {
-          articlePropId: null,
-        },
+        name: this.createRoute,
       });
     },
   },
