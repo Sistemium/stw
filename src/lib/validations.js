@@ -11,6 +11,9 @@ Vue.mixin({
         }],
       };
     },
+    $tAction(action, name) {
+      return this.$t(`actions.${action}`, [this.$t(`accusative.${name}`)]);
+    },
     async $saveWithLoading(asyncFunction) {
       const loading = this.$loading({});
       try {
