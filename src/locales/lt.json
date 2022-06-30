@@ -11,12 +11,15 @@
   },
   "fields": {
     "name": "Pavadinimas",
-    "type": "Vertybių tipas",
+    "type": "Duomenų tipas",
     "required": "Privaloma",
     "bool": {
       "yes": "Taip",
       "no": "Ne"
-    }
+    },
+    "inverse": "Reikšmės \"ne\" pavadinimas",
+    "prefix": "Priešdėlis",
+    "suffix": "Priesaga"
   },
   "dataTypes": {
     "string": "Eilutė",
@@ -26,6 +29,13 @@
   },
   "validation": {
     "required": "{0} yra privalomas",
-    "formInvalid": "Klaidingai užpildyta forma"
+    "formInvalid": "Klaidingai užpildyta forma",
+    "noData": "Nėra duomenų"
+  },
+  "actions": {
+    "add": "Pridėti {0}"
+  },
+  "accusative": {
+    "property": "ypatybę"
   }
 }

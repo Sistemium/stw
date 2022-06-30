@@ -16,16 +16,26 @@
     "bool": {
       "yes": "Yes",
       "no": "No"
-    }
+    },
+    "inverse": "Name for value \"no\""
   },
   "dataTypes": {
     "string": "String",
     "options": "Options",
     "boolean": "Yes/no",
-    "number": "Number"
+    "number": "Number",
+    "prefix": "Prefix",
+    "suffix": "Suffix"
   },
   "validation": {
     "required": "{0} is required",
-    "formInvalid": "The form is filled out with errors"
+    "formInvalid": "The form is filled out with errors",
+    "noData": "No data"
+  },
+  "actions": {
+    "add": "Add {0}"
+  },
+  "accusative": {
+    "property": "property"
   }
 }
