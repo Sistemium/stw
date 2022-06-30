@@ -15,7 +15,7 @@
 
     form-buttons(
       :changed="changed"
-      :deletable="false"
+      :deletable="deletable"
       @saveClick="onSaveClick"
       @cancelClick="cancelClick"
       @deleteClick="onDeleteClick"
@@ -42,6 +42,10 @@ export default {
     },
     from: Object,
     forceModified: Boolean,
+    deletable: {
+      type: Boolean,
+      default: false,
+    },
     modelOrigin: {
       type: Object,
       default: null,
@@ -102,7 +106,8 @@ export default {
       }
       this.destroyFn(id)
         .then(() => {
-          this.$emit('deleted');
+          this.$emit('deleted', id);
+          this.cancelClick();
         })
         .catch(e => {
           this.$emit('error', e);
@@ -159,7 +164,7 @@ export default {
       if (drawer.closeDrawer) {
         drawer.closeDrawer();
       } else {
-        drawer.handleClose();
+        this.handleClose();
       }
     },
 
