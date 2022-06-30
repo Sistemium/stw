@@ -6,7 +6,10 @@
       closable @close="$emit('close', prop)"
       size="small"
       type="info"
-    ) {{ prop.name }}
+    )
+      span(v-if="prop.prefix") {{ prop.prefix }}
+      span {{ prop.name }}
+      span(v-if="prop.suffix") {{ prop.suffix }}
   .value()
     component(
       v-if="componentName" :is="componentName" :prop="prop"
@@ -73,6 +76,10 @@ export default {
     flex: 3;
     text-align: left;
   }
+}
+
+span + span {
+  margin-left: 2px;
 }
 
 </style>

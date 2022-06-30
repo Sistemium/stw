@@ -64,7 +64,10 @@ export default {
           const { stringValue, numberValue } = filter;
           const simple = stringValue || numberValue;
           if (simple) {
-            return simple;
+            const { prefix, suffix } = filter.prop || {};
+            return [prefix, simple, suffix]
+              .filter(a => a)
+              .join('');
           }
           const { boolValue, prop } = filter;
           if (boolValue !== undefined && prop) {
