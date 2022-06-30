@@ -1,7 +1,7 @@
 <template lang="pug">
 
 .article-props-list.list-group
-  .list-group-item(v-for="prop in articleProps" @click="$emit('click', prop)")
+  .list-group-item(v-for="prop in articleProps" @click="$emit('click', prop)" :key="prop.id")
     .name
       em(v-if="prop.prefix") {{ prop.prefix }}
       span {{ prop.name }}
