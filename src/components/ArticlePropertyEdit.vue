@@ -9,9 +9,9 @@ drawer-edit.article-property-edit(
 )
   template(v-slot="{ model }")
     el-tabs
-      el-tab-pane(label="Form")
+      el-tab-pane(:label="$t('form')")
         article-property-form(ref="form" :model="model")
-      el-tab-pane(label="Options" v-if="articlePropId && model.type === 'options'")
+      el-tab-pane(:label="$t('options')" v-if="articlePropId && model.type === 'options'")
         prop-option-list(:options="options" @click="optionClick")
 
     prop-option-edit(
@@ -73,12 +73,18 @@ export default {
     messages: {
       en: {
         title: 'Property edit',
+        form: 'Parameters',
+        options: 'Options',
       },
       ru: {
         title: 'Редактирование признака',
+        form: 'Параметры',
+        options: 'Опции выбора',
       },
       lt: {
         title: 'Ypatybės redagavimas',
+        form: 'Parametrai',
+        options: 'Pasirinkimai',
       },
     },
   },
