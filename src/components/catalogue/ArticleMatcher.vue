@@ -119,7 +119,7 @@ export default {
         noMatches: 'No matching articles',
       },
       lt: {
-        createArticle: 'Kurti',
+        createArticle: 'Sukurti',
         noMatches: 'Nėra tinkamos nomenklatūros',
       },
       ru: {

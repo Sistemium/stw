@@ -30,7 +30,7 @@ export default {
       return [...Language];
     },
     menu() {
-      return ['home', 'inventory', 'about', 'articleProps']
+      return ['home', 'inventory', 'articleProps', 'about']
         .map(name => ({
           name,
           t: `menu.${name}`,
