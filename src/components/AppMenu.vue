@@ -85,7 +85,7 @@ export default {
     right: 0;
   }
   @include responsive-only(xxs) {
-    ::v-deep .el-icon-arrow-down {
+    ::v-deep img {
       display: none;
     }
   }
