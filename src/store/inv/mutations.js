@@ -11,4 +11,7 @@ export default {
   [SET_SCANNER_STATUS](state, status) {
     state[g.SCANNER_STATUS] = status;
   },
+  [SET_SCANNED_BARCODE](state, code) {
+    state[g.SCANNED_BARCODE] = code;
+  },
 };

@@ -15,7 +15,11 @@ el-input.barcode-input(
 </template>
 <script>
 
+import { createNamespacedHelpers } from 'vuex';
 import debounce from 'lodash/debounce';
+import * as m from '@/store/inv/mutations';
+
+const { mapMutations } = createNamespacedHelpers('inv');
 
 export default {
   name: 'BarcodeInput',
@@ -42,8 +46,9 @@ export default {
     },
   },
   methods: {
-    toggleScanner() {
-    },
+    ...mapMutations({
+      setScannedBarcode: m.SET_SCANNED_BARCODE,
+    }),
     onBlur() {
       if (this.lock) {
         this.focus();
@@ -65,6 +70,7 @@ export default {
         return;
       }
       this.$emit('scan', code);
+      this.setScannedBarcode(code);
       this.input = '';
     },
   },
