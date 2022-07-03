@@ -1,7 +1,6 @@
 <template lang="pug">
 
 .inventory
-  barcode-input(@scan="onScan" :lock="false")
   template
     article-matcher(:title="$t('notFoundAdding')")
     //(v-if="notFound")
@@ -11,7 +10,6 @@
 </template>
 <script>
 
-import BarcodeInput from '@/components/BarcodeScanner/BarcodeInput.vue';
 import Article from '@/models/Article';
 import ArticleMatcher from '@/components/catalogue/ArticleMatcher.vue';
 
@@ -38,7 +36,6 @@ export default {
   },
   components: {
     ArticleMatcher,
-    BarcodeInput,
   },
   i18n: {
     messages: {
@@ -62,9 +59,5 @@ export default {
 <style scoped lang="scss">
 
 @import "../styles/variables";
-
-.article-matcher {
-  margin-top: $margin-top;
-}
 
 </style>

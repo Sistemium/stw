@@ -8,6 +8,8 @@ export default {
 
   state: {
     [states.ARTICLE_FILTERS]: [],
+    [states.SCANNED_BARCODE]: null,
+    [states.SCANNER_STATUS]: null,
   },
   mutations,
   getters,

@@ -4,18 +4,22 @@
 
   el-dropdown.hamburger(@command="onCommand" trigger="click" size="normal")
     el-button(circle icon="el-icon-menu")
-    el-dropdown-menu(slot="dropdown")
-      el-dropdown-item(
-        v-for="{ t, name } in menu" :key="t" :command="name" v-t="t"
-        :disabled="name === $route.name"
-      )
-      el-dropdown-item(
-        ov-if="isNative"
-        command="toggleTabBar"
-        :icon="tabBarIcon"
-      )
+    template(v-slot:dropdown)
+      el-dropdown-menu()
+        el-dropdown-item(
+          v-for="{ t, name } in menu" :key="t" :command="name" v-t="t"
+          :disabled="name === $route.name"
+        )
+        el-dropdown-item(
+          v-if="isNative"
+          command="toggleTabBar"
+          :icon="tabBarIcon"
+        ) {{ $tAction(tabBarShown ? 'hide' : 'show', 'profile') }}
 
-  strong {{ title }}
+  slot(name="left")
+
+  .title
+    strong {{ title }}
 
   #nav
     router-link(v-for="{ t, name } in menu" :key="t" :to="{ name }" v-t="t")
@@ -97,6 +101,10 @@ export default {
   }
 }
 
+.title {
+  flex: 1;
+}
+
 .lang-menu {
   @include responsive-only(gt-xxs) {
     position: absolute;
@@ -146,6 +154,10 @@ strong, .hamburger {
     text-align: left;
     flex: 1;
   }
+}
+
+.barcode-scanner-status {
+  margin-left: $margin-right;
 }
 
 </style>
