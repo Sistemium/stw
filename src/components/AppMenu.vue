@@ -2,7 +2,7 @@
 
 .app-menu
 
-  el-dropdown.hamburger(@command="onCommand")
+  el-dropdown.hamburger(@command="onCommand" trigger="click")
     el-button(circle icon="el-icon-menu" size="mini")
     el-dropdown-menu(slot="dropdown")
       el-dropdown-item(
@@ -15,12 +15,12 @@
   #nav
     router-link(v-for="{ t, name } in menu" :key="t" :to="{ name }" v-t="t")
 
-  lang-menu(:languages="languages")
+  lang-menu(:languages="languages" trigger="click")
 
 </template>
 <script>
 
-import LangMenu from '@bit/sistemium.vue.lang-menu';
+import LangMenu from 'sistemium-vue/components/LangMenu.vue';
 import Language from '@/models/Language';
 
 export default {
