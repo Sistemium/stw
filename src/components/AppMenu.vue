@@ -2,12 +2,17 @@
 
 .app-menu
 
-  el-dropdown.hamburger(@command="onCommand" trigger="click")
+  el-dropdown.hamburger(@command="onCommand" trigger="click" size="normal")
     el-button(circle icon="el-icon-menu")
     el-dropdown-menu(slot="dropdown")
       el-dropdown-item(
         v-for="{ t, name } in menu" :key="t" :command="name" v-t="t"
         :disabled="name === $route.name"
+      )
+      el-dropdown-item(
+        ov-if="isNative"
+        command="toggleTabBar"
+        :icon="tabBarIcon"
       )
 
   strong {{ title }}
@@ -15,16 +20,20 @@
   #nav
     router-link(v-for="{ t, name } in menu" :key="t" :to="{ name }" v-t="t")
 
-  lang-menu(:languages="languages" trigger="click")
+  lang-menu(:languages="languages" trigger="click" size="normal")
 
 </template>
 <script>
 
 import LangMenu from 'sistemium-vue/components/LangMenu.vue';
 import Language from '@/models/Language';
+import { toggleTabBar, isNative } from 'sistemium-data/src/util/native';
 
 export default {
   name: 'AppMenu',
+  data() {
+    return { tabBarShown: isNative() ? toggleTabBar() : null };
+  },
   computed: {
     languages() {
       return [...Language];
@@ -36,6 +45,12 @@ export default {
           t: `menu.${name}`,
         }));
     },
+    isNative() {
+      return isNative();
+    },
+    tabBarIcon() {
+      return this.tabBarShown ? 'el-icon-user' : 'el-icon-user-solid';
+    },
     title() {
       return this.routeTitle(this.$route)
         || this.routeTitle(this.$router.currentRoute.matched[0]);
@@ -43,6 +58,10 @@ export default {
   },
   methods: {
     onCommand(name) {
+      if (name === 'toggleTabBar') {
+        this.tabBarShown = toggleTabBar();
+        return;
+      }
       if (this.$route.name !== name) {
         this.$router.push({ name });
       }
