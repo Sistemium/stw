@@ -13,9 +13,11 @@ module.exports = defineConfig({
   },
   devServer: {
     port: 8890,
+    allowedHosts: 'all',
     proxy: {
       '^/api': {
-        target: 'http://localhost:9390',
+        // target: 'http://localhost:9390',
+        target: 'https://vfsd.sistemium.com',
       },
     },
   },
