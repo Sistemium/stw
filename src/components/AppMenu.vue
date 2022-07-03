@@ -103,6 +103,7 @@ export default {
 
 .title {
   flex: 1;
+  font-size: 18px;
 }
 
 .lang-menu {

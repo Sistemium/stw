@@ -71,4 +71,12 @@ svg {
   }
 }
 
+.el-button {
+  svg {
+    position: relative;
+    top: 2px;
+  }
+  padding: 0;
+}
+
 </style>
