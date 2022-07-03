@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Loading } from 'element-ui';
-import { authorizeAxios } from '@bit/sistemium.vue.vfs-data-model';
+import { authorizeAxios } from '@/init/HybridDataModel';
 import { initData } from '@/services/dataSync';
 import './init/element-ui';
 import './init/sistemium';
@@ -37,6 +37,8 @@ new Vue({
 }).$mount('#app');
 
 const unsubscribe = store.subscribe(mutation => {
+  // eslint-disable-next-line no-console
+  console.log(mutation.type);
   if (mutation.type === 'auth/SET_AUTHORIZED') {
     unsubscribe();
     authorizeAxios(mutation.payload.token);

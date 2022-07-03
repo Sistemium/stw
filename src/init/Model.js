@@ -1,3 +1,3 @@
-import VFSDataModel from '@bit/sistemium.vue.vfs-data-model';
+import HybridDataModel from './HybridDataModel';
 
-export default VFSDataModel;
+export default HybridDataModel;

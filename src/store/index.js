@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import auth from '@bit/sistemium.vue.vuex.auth';
+import auth from 'sistemium-vue/store/auth';
 import inv from './inv';
 
 Vue.use(Vuex);
