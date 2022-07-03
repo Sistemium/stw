@@ -6,6 +6,7 @@ drawer-edit.prop-option-edit(
   :destroy-fn="destroyFn"
   :model-origin="modelOrigin"
   :from="from"
+  :drawer-style="{ top: '65px' }"
   :deletable="true"
 )
   template(v-slot="{ model }")

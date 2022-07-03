@@ -8,6 +8,7 @@
     ref="drawer"
     :size="size"
     @close="handleClose"
+    :style="drawerStyle"
   )
 
     .resize.container(:padding="60")
@@ -62,6 +63,7 @@ export default {
         this.$error('destroyFn not implemented', id);
       },
     },
+    drawerStyle: Object,
   },
   data() {
     return {
