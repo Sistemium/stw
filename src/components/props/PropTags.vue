@@ -1,19 +1,19 @@
 <template lang="pug">
 
-  .prop-tags
-    .tags
-      el-tag(
-        v-for="tag in tags" :key="tag.id"
-        :size="size"
-        @click="$emit('click', tag)"
-      ) {{ tag.name }}
-      .empty(v-if="!tags.length" v-t="'emptyTags'")
-    tool-button(
-      tool="add"
-      @click="onAdd"
-    )
+.prop-tags
+  .tags
+    el-tag(
+      v-for="tag in tags" :key="tag.id"
+      :size="size"
+      @click="$emit('click', tag)"
+    ) {{ tag.name }}
+    .empty(v-if="!tags.length" v-t="'emptyTags'")
+  tool-button(
+    tool="add"
+    @click="onAdd"
+  )
 
-    article-property-edit(v-if="showDrawer" @closed="showDrawer = false")
+  article-property-edit(v-if="showDrawer" @closed="showDrawer = false")
 
 </template>
 <script>
@@ -28,7 +28,7 @@ export default {
   props: {
     size: {
       type: String,
-      default: 'mini',
+      // default: 'mini',
     },
     exclude: {
       type: Array,
@@ -86,10 +86,18 @@ export default {
 }
 
 .tags {
-  //flex: 1;
   display: flex;
-  flex-wrap: wrap;
-
+  //white-space: nowrap;
+  overflow-x: scroll;
+  ::-webkit-scrollbar{
+    height: 4px;
+    width: 4px;
+    background: gray;
+  }
+  ::-webkit-scrollbar-thumb:horizontal{
+    background: #000;
+    border-radius: 10px;
+  }
   > .el-tag + .el-tag {
     margin-left: $padding;
   }

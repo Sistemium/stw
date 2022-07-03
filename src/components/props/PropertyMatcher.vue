@@ -4,7 +4,7 @@
 
   h2(v-if="title") {{ title }}
 
-  prop-tags(@click="addProp" :exclude="props")
+  prop-tags(@click="addProp" :exclude="props" size="small")
 
   .match()
     .prop(v-for="prop in props" :key="prop.id")
