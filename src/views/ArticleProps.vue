@@ -9,7 +9,7 @@
   )
   el-alert(type="info" :title="$t('validation.noData')" :closable="false" v-else)
     el-button(
-      type="primary" @click="onAdd" size="mini" :plain="true"
+      type="primary" @click="onAdd" :plain="true"
     ) {{ $tAction('add', 'property') }}
   router-view
 

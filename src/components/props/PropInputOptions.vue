@@ -13,7 +13,7 @@
     el-option(v-for="{ id, name } in options" :label="name" :value="{id, name}" :key="id")
 
   el-button(
-    v-if="isNew" size="mini" icon="el-icon-plus" @click="onAdd" circle type="success"
+    v-if="isNew" icon="el-icon-plus" @click="onAdd" circle type="success"
   )
 
 </template>

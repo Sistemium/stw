@@ -6,7 +6,7 @@
       em(v-if="prop.prefix") {{ prop.prefix }}
       span {{ prop.name }}
       em(v-if="prop.suffix" ) {{ prop.suffix }}
-    el-tag.type(size="mini" v-t="`dataTypes.${prop.type}`" type="info")
+    el-tag.type(v-t="`dataTypes.${prop.type}`" type="info")
 
 </template>
 <script>

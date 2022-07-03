@@ -7,10 +7,10 @@
   .list-group.articles(v-if="this.compoundName")
     .list-group-header
       .compound-name
-        .label(size="mini" v-t="'fields.name'")
+        .label(v-t="'fields.name'")
         strong {{ this.compoundName }}
       .create(v-if="allowCreate")
-        el-button.create(type="success" v-t="'createArticle'" @click="onCreateClick" size="mini")
+        el-button.create(type="success" v-t="'createArticle'" @click="onCreateClick")
     .list-group-item.article(v-for="article in filteredArticles" :key="article.id")
       .name {{ article.name }}
     .list-group-item.no-articles(v-if="!filteredArticles.length")

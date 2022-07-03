@@ -3,7 +3,6 @@
   el-form.article-property-form(
     :model="model"
     ref="form"
-    size="mini"
     :rules="rules"
     :status-icon="false"
   )

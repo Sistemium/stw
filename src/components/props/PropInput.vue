@@ -4,7 +4,6 @@
   .label
     el-tag(
       closable @close="$emit('close', prop)"
-      size="small"
       type="info"
     )
       span(v-if="prop.prefix") {{ prop.prefix }}

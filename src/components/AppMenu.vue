@@ -3,7 +3,7 @@
 .app-menu
 
   el-dropdown.hamburger(@command="onCommand" trigger="click")
-    el-button(circle icon="el-icon-menu" size="mini")
+    el-button(circle icon="el-icon-menu")
     el-dropdown-menu(slot="dropdown")
       el-dropdown-item(
         v-for="{ t, name } in menu" :key="t" :command="name" v-t="t"

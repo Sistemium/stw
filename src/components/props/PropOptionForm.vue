@@ -3,7 +3,6 @@
 el-form.prop-option-form(
   :model="model"
   ref="form"
-  size="mini"
   :rules="rules"
 )
   el-form-item(:label="$t('fields.name')" prop="name")
