@@ -1,11 +1,16 @@
 <template lang="pug">
 
-  el-input.barcode-input(
-    v-model="input"
-    :placeholder="$t('scanBarcode')"
-    ref="wrapper"
-    @blur="onBlur"
-  )
+el-input.barcode-input(
+  v-model="input"
+  :placeholder="$t('scanBarcode')"
+  ref="wrapper"
+  @blur="onBlur"
+)
+  //template(v-slot:prepend)
+    el-button(@click="toggleScanner")
+     svg
+      use(xlink:href="/img/icons8-barcode.svg#iconRoot")
+  //template(v-slot:append)
 
 </template>
 <script>
@@ -37,6 +42,8 @@ export default {
     },
   },
   methods: {
+    toggleScanner() {
+    },
     onBlur() {
       if (this.lock) {
         this.focus();
@@ -73,5 +80,12 @@ export default {
 <style scoped lang="scss">
 
 @import "~@bit/sistemium.vue.style.variables";
+
+svg {
+  //display: inline-block;
+  width: 25px;
+  height: 25px;
+  filter: brightness(0.5);
+}
 
 </style>

@@ -35,9 +35,12 @@
     "noData": "No data"
   },
   "actions": {
-    "add": "Add {0}"
+    "add": "Add {0}",
+    "show": "Show {0}",
+    "hide": "Hide {0}"
   },
   "accusative": {
-    "property": "property"
+    "property": "property",
+    "profile": "Profile"
   }
 }
