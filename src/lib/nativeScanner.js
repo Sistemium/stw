@@ -17,7 +17,7 @@ export function barCodeScannerOn(onScan, onStatus) {
     onScan(scan);
   };
 
-  window[BARCODE_SCANNER_FN] = status => {
+  window[BARCODE_SCANNER_STATUS_FN] = status => {
     onStatus(status);
   };
 
