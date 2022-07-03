@@ -94,6 +94,12 @@ export default {
 
 @import "../../styles/variables";
 
+h2 {
+  @include responsive-only(gt-xxs) {
+    margin-bottom: 30px;
+  }
+}
+
 .match {
   margin-top: $margin-top;
   text-align: center;

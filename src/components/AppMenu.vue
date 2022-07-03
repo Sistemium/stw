@@ -158,7 +158,14 @@ strong, .hamburger {
 }
 
 .barcode-scanner-status {
-  margin-left: $margin-right;
+  @include responsive-only(gt-xxs) {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  @include responsive-only(xxs) {
+    margin-left: $margin-right;
+  }
 }
 
 </style>
