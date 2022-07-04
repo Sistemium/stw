@@ -13,8 +13,8 @@ export function barCodeScannerOn(onScan, onStatus) {
 
   window[BARCODE_SCANNER_POWER_FN] = noop;
 
-  window[BARCODE_SCANNER_FN] = scan => {
-    onScan(scan);
+  window[BARCODE_SCANNER_FN] = (scan, type, symbology) => {
+    onScan(scan, symbology);
   };
 
   window[BARCODE_SCANNER_STATUS_FN] = status => {

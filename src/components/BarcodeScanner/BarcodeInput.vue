@@ -70,7 +70,7 @@ export default {
         return;
       }
       this.$emit('scan', code);
-      this.setScannedBarcode(code);
+      this.setScannedBarcode({ code, symbology: null });
       this.input = '';
     },
   },

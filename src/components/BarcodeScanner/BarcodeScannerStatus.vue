@@ -46,8 +46,8 @@ export default {
         nativeScanner.barCodeScannerOff();
         return;
       }
-      nativeScanner.barCodeScannerOn(code => {
-        this.setScannedBarcode(code);
+      nativeScanner.barCodeScannerOn((code, symbology) => {
+        this.setScannedBarcode({ code, symbology });
       }, status => {
         this.setScannerStatus(status);
       });
