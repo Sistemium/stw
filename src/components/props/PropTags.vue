@@ -18,8 +18,6 @@
 </template>
 <script>
 
-import find from 'lodash/find';
-import ArticleProp from '@/models/ArticleProp';
 import ArticlePropertyEdit from '@/components/ArticlePropertyEdit.vue';
 
 export default {
@@ -30,7 +28,7 @@ export default {
       type: String,
       // default: 'mini',
     },
-    exclude: {
+    tags: {
       type: Array,
       default: () => [],
     },
@@ -39,11 +37,6 @@ export default {
     return {
       showDrawer: false,
     };
-  },
-  computed: {
-    tags() {
-      return ArticleProp.reactiveFilter(({ id }) => !find(this.exclude, ({ id })));
-    },
   },
   methods: {
     onAdd() {
