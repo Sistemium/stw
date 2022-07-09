@@ -12,12 +12,18 @@ drawer-edit.article-property-edit(
       el-tab-pane(:label="$t('form')")
         article-property-form(ref="form" :model="model")
       el-tab-pane(:label="$t('options')" v-if="articlePropId && model.type === 'options'")
+        .tools
+          tool-button(
+            tool="add"
+            @click="onAdd"
+          )
         prop-option-list(:options="options" @click="optionClick")
 
     prop-option-edit(
       :prop-option-id="currentOptionId"
-      v-if="currentOptionId"
+      v-if="currentOptionId !== null"
       @closed="currentOptionId = null"
+      :prop-id="articlePropId"
     )
 
 </template>
@@ -68,6 +74,9 @@ export default {
     optionClick(option) {
       this.currentOptionId = option.id;
     },
+    onAdd() {
+      this.currentOptionId = '';
+    },
   },
   i18n: {
     messages: {
@@ -97,4 +106,10 @@ export default {
 .el-tabs {
   margin-top: -$margin-top;
 }
+
+.tools {
+  text-align: right;
+  margin-bottom: $margin-right;
+}
+
 </style>

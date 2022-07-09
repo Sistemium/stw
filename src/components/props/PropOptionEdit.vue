@@ -23,6 +23,7 @@ export default {
   props: {
     propOptionId: String,
     from: Object,
+    propId: String,
   },
   methods: {
     saveFn(props) {
@@ -34,8 +35,8 @@ export default {
   },
   computed: {
     modelOrigin() {
-      const { propOptionId } = this;
-      return propOptionId ? PropOption.reactiveGet(propOptionId) : {};
+      const { propOptionId, propId } = this;
+      return propOptionId ? PropOption.reactiveGet(propOptionId) : { propId };
     },
   },
   components: {
