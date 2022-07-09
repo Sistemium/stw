@@ -4,17 +4,21 @@
 
   property-matcher(:title="title" v-model="filters")
 
-  .list-group.articles(v-if="this.compoundName")
-    .list-group-header
-      .compound-name
-        .label(v-t="'fields.name'")
-        strong {{ this.compoundName }}
-      .create(v-if="allowCreate")
-        el-button.create(type="success" v-t="'createArticle'" @click="onCreateClick")
-    .list-group-item.article(v-for="article in filteredArticles" :key="article.id")
-      .name {{ article.name }}
-    .list-group-item.no-articles(v-if="!filteredArticles.length")
-      .no-matches(v-t="'noMatches'")
+  article-list.articles(
+    v-if="compoundName"
+    :articles="filteredArticles"
+    @click="article => $emit('found', article)"
+  )
+    template(v-slot:header)
+      .list-group-header
+        .compound-name
+          simple-label(text="fields.name")
+          strong {{ compoundName }}
+        .create(v-if="allowCreate")
+          el-button.create(type="success" v-t="'createArticle'" @click="onCreateClick")
+    template(v-slot:footer)
+      .list-group-item.no-articles(v-if="!filteredArticles.length")
+        .no-matches(v-t="'noMatches'")
 
 </template>
 <script>
@@ -29,6 +33,7 @@ import { createNamespacedHelpers } from 'vuex';
 import { ARTICLE_FILTERS } from '@/store/inv/getters';
 import { SET_ARTICLE_FILTERS } from '@/store/inv/mutations';
 import { VALUE_TYPES } from '@/models/ArticleProp';
+import ArticleList from '@/components/catalogue/ArticleList.vue';
 
 const { mapGetters, mapMutations } = createNamespacedHelpers('inv');
 
@@ -114,7 +119,10 @@ export default {
       // filters: [],
     };
   },
-  components: { PropertyMatcher },
+  components: {
+    ArticleList,
+    PropertyMatcher,
+  },
   i18n: {
     messages: {
       en: {
@@ -162,16 +170,6 @@ export default {
 
 .el-button.create {
   padding: 3px 6px;
-}
-
-.label {
-  font-size: 10px;
-  padding: 0 $padding;
-  display: inline;
-  border: $list-cell-borders;
-  border-radius: $padding;
-  margin-right: $padding;
-  font-weight: normal;
 }
 
 </style>
