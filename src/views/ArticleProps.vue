@@ -17,6 +17,7 @@
 <script>
 import ArticleProp from '@/models/ArticleProp';
 import ArticlePropsList from '@/components/catalogue/ArticlePropsList.vue';
+import orderBy from 'lodash/orderBy';
 
 export default {
   name: 'ArticleProps',
@@ -26,7 +27,7 @@ export default {
   },
   computed: {
     articleProps() {
-      return ArticleProp.reactiveFilter({});
+      return orderBy(ArticleProp.reactiveFilter({}), ['isRequired', 'name'], ['desc', 'asc']);
     },
     showDrawer() {
       return this.$route.name === this.editRoute;

@@ -4,7 +4,7 @@
 
   h2(v-if="title") {{ title }}
 
-  prop-tags(@click="addProp" :exclude="props" size="small")
+  prop-tags(@click="addProp" :tags="tags" size="small")
 
   .match()
     .prop(v-for="prop in props" :key="prop.id")
@@ -17,6 +17,7 @@
 </template>
 <script>
 
+import find from 'lodash/find';
 import PropTags from '@/components/props/PropTags.vue';
 import PropInput from '@/components/props/PropInput.vue';
 import ArticleProp from '@/models/ArticleProp';
@@ -47,6 +48,11 @@ export default {
   },
   created() {
     this.setData(this.value);
+  },
+  computed: {
+    tags() {
+      return ArticleProp.reactiveFilter(({ id }) => !find(this.props, ({ id })));
+    },
   },
   methods: {
     getResult(values) {
