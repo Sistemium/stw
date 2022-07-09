@@ -25,7 +25,7 @@ export default {
       isConnected: g.SCANNER_IS_CONNECTED,
     }),
     statusSrc() {
-      const icon = this.isConnected ? 'barcode' : 'no-barcode';
+      const icon = this.isConnected ? 'no-barcode' : 'barcode';
       return `/img/icons8-${icon}.svg#iconRoot`;
     },
   },
