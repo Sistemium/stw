@@ -6,6 +6,7 @@
       em(v-if="prop.prefix") {{ prop.prefix }}
       span {{ prop.name }}
       em(v-if="prop.suffix" ) {{ prop.suffix }}
+      i.el-icon-star-on(v-if="prop.isRequired")
     el-tag.type(v-t="`dataTypes.${prop.type}`" type="info")
 
 </template>
@@ -41,6 +42,13 @@ export default {
 em {
   font-style: normal;
   color: $gray;
+}
+
+.el-icon-star-on {
+  color: $orange;
+  font-size: 10px;
+  position: relative;
+  top: -$padding;
 }
 
 </style>
