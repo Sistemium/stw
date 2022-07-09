@@ -3,6 +3,7 @@
   "about": "Tai sandėlio valdymo programa",
   "savingError": "Nepavyko išsaugoti",
   "saved": "Išsaugota",
+  "cancel": "Atšaukti",
   "menu": {
     "about": "Apie",
     "home": "Pradžia",
@@ -19,7 +20,11 @@
     },
     "inverse": "Reikšmės \"ne\" pavadinimas",
     "prefix": "Priešdėlis",
-    "suffix": "Priesaga"
+    "suffix": "Priesaga",
+    "barcode": "Brūkš. kodas"
+  },
+  "concepts": {
+    "article": "Nomenklatūra"
   },
   "dataTypes": {
     "string": "Eilutė",

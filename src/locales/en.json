@@ -3,6 +3,7 @@
   "about": "This is an application for warehouse management",
   "savingError": "Saving error",
   "saved": "Saved",
+  "cancel": "Cancel",
   "menu": {
     "about": "About",
     "home": "Home",
@@ -19,7 +20,11 @@
     },
     "inverse": "Name for value \"no\"",
     "prefix": "Prefix",
-    "suffix": "Suffix"
+    "suffix": "Suffix",
+    "barcode": "Barcode"
+  },
+  "concepts": {
+    "article": "Article"
   },
   "dataTypes": {
     "string": "String",
