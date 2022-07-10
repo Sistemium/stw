@@ -7,12 +7,27 @@
   prop-tags(@click="addProp" :tags="tags" size="small")
 
   .match()
-    .prop(v-for="prop in props" :key="prop.id")
-      prop-input(
-        :prop="prop"
-        @close="removeProp"
-        v-model="values[prop.id]"
-      )
+    transition-group(name="flip-list")
+      .prop(v-for="(prop, index) in props" :key="prop.id")
+        .ordering
+          el-button(
+            type="text"
+            @click.prevent.stop="reorder(prop, -1)"
+            :disabled = "index === 0"
+          )
+            i.el-icon-arrow-up
+
+          el-button(
+            type="text"
+            @click.prevent.stop="reorder(prop, 1)"
+            :disabled = "index === props.length - 1"
+          )
+            i.el-icon-arrow-down
+        prop-input(
+          :prop="prop"
+          @close="removeProp"
+          v-model="values[prop.id]"
+        )
 
 </template>
 <script>
@@ -48,6 +63,12 @@ export default {
   },
   created() {
     this.setData(this.value);
+    this.$watch('value', (value, oldValue) => {
+      if (oldValue && value) {
+        return;
+      }
+      this.setData(value);
+    });
   },
   computed: {
     tags() {
@@ -55,6 +76,15 @@ export default {
     },
   },
   methods: {
+    reorder(prop1, change) {
+      this.$debug(prop1, change);
+      const { props } = this;
+      const ord1 = props.indexOf(prop1);
+      const ord2 = ord1 + change;
+      props.splice(ord1, 1);
+      props.splice(ord2, 0, prop1);
+      this.$emit('input', this.getResult(this.values));
+    },
     getResult(values) {
       return this.props.map(prop => ({
         propId: prop.id,
@@ -111,8 +141,21 @@ h2 {
   text-align: center;
 }
 
+.prop {
+  display: flex;
+  align-items: center;
+
+  .prop-input {
+    flex: 1;
+  }
+}
+
 .prop + .prop {
   margin-top: $margin-right;
+}
+
+.flip-list-move {
+  transition: transform 0.3s;
 }
 
 </style>
