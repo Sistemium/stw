@@ -6,28 +6,27 @@
 
   prop-tags(@click="addProp" :tags="tags" size="small")
 
-  .match()
-    transition-group(name="flip-list")
-      .prop(v-for="(prop, index) in props" :key="prop.id")
-        .ordering
-          el-button(
-            type="text"
-            @click.prevent.stop="reorder(prop, -1)"
-            :disabled = "index === 0"
-          )
-            i.el-icon-arrow-up
-
-          el-button(
-            type="text"
-            @click.prevent.stop="reorder(prop, 1)"
-            :disabled = "index === props.length - 1"
-          )
-            i.el-icon-arrow-down
-        prop-input(
-          :prop="prop"
-          @close="removeProp"
-          v-model="values[prop.id]"
+  transition-group.match(name="flip-list")
+    .prop(v-for="(prop, index) in props" :key="prop.id")
+      .ordering
+        el-button(
+          type="text"
+          @click.prevent.stop="reorder(prop, -1)"
+          :disabled = "index === 0"
         )
+          i.el-icon-arrow-up
+
+        el-button(
+          type="text"
+          @click.prevent.stop="reorder(prop, 1)"
+          :disabled = "index === props.length - 1"
+        )
+          i.el-icon-arrow-down
+      prop-input(
+        :prop="prop"
+        @close="removeProp"
+        v-model="values[prop.id]"
+      )
 
 </template>
 <script>
@@ -139,6 +138,7 @@ h2 {
 .match {
   margin-top: $margin-top;
   text-align: center;
+  display: block;
 }
 
 .prop {
