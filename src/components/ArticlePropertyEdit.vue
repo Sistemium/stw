@@ -12,12 +12,14 @@ drawer-edit.article-property-edit(
       el-tab-pane(:label="$t('form')")
         article-property-form(ref="form" :model="model")
       el-tab-pane(:label="$t('options')" v-if="articlePropId && model.type === 'options'")
-        .tools
-          tool-button(
-            tool="add"
-            @click="onAdd"
-          )
-        prop-option-list(:options="options" @click="optionClick")
+        template(v-if="options.length")
+          .tools
+            tool-button(
+              tool="add"
+              @click="onAdd"
+            )
+          prop-option-list(:options="options" @click="optionClick" v-if="options.length")
+        el-button.empty(v-else @click="onAdd" type="primary") {{ $tAction('add', 'property') }}
 
     prop-option-edit(
       :prop-option-id="currentOptionId"
@@ -51,7 +53,7 @@ export default {
   computed: {
     modelOrigin() {
       const { articlePropId } = this;
-      return articlePropId ? ArticleProp.reactiveGet(articlePropId) : {};
+      return articlePropId ? ArticleProp.reactiveGet(articlePropId) : { isRequired: false };
     },
     options() {
       const { articlePropId: propId } = this;
@@ -110,6 +112,10 @@ export default {
 .tools {
   text-align: right;
   margin-bottom: $margin-right;
+}
+
+.empty {
+  width: 100%;
 }
 
 </style>
