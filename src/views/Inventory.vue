@@ -30,6 +30,7 @@ import Article from '@/models/Article';
 import ArticleMatcher from '@/components/catalogue/ArticleMatcher.vue';
 import * as g from '@/store/inv/getters';
 import * as m from '@/store/inv/mutations';
+import { SET_ARTICLE_FILTERS } from '@/store/inv/mutations';
 
 const { mapGetters, mapMutations } = createNamespacedHelpers('inv');
 
@@ -46,6 +47,7 @@ export default {
   methods: {
     ...mapMutations({
       clearScannedBarcode: m.SET_SCANNED_BARCODE,
+      setArticleFilters: SET_ARTICLE_FILTERS,
     }),
     init() {
     },
@@ -78,9 +80,10 @@ export default {
       }
       try {
         const res = await Article.findAll({ barcodes: code });
-        this.notFound = !res;
-        if (!res) {
+        this.notFound = !(res && res.length);
+        if (this.notFound) {
           this.$message.warning(this.$t('not_found').toString());
+          this.setArticleFilters();
           return;
         }
         if (res.length === 1) {

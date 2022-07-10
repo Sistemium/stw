@@ -6,7 +6,7 @@ export const SET_SCANNER_STATUS = 'SET_SCANNER_STATUS';
 
 export default {
   [SET_ARTICLE_FILTERS](state, filters) {
-    state[g.ARTICLE_FILTERS] = filters;
+    state[g.ARTICLE_FILTERS] = filters || [];
   },
   [SET_SCANNER_STATUS](state, status) {
     state[g.SCANNER_STATUS] = status;
