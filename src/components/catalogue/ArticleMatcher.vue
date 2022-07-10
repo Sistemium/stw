@@ -28,6 +28,7 @@ import lowerFirst from 'lodash/lowerFirst';
 import upperFirst from 'lodash/upperFirst';
 import fpPick from 'lodash/fp/pick';
 import keyBy from 'lodash/keyBy';
+import trim from 'lodash/trim';
 import { createNamespacedHelpers } from 'vuex';
 
 import { ARTICLE_FILTERS } from '@/store/inv/getters';
@@ -80,9 +81,10 @@ export default {
           }
           return '';
         })
+          .filter(x => x)
           .map(lowerFirst)
           .join(' ');
-      return upperFirst(res);
+      return upperFirst(trim(res));
     },
   },
   methods: {
