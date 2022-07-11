@@ -5,7 +5,7 @@
   property-matcher(:title="title" v-model="filters")
 
   article-list.articles(
-    v-if="compoundName"
+    v-if="showArticles"
     :articles="filteredArticles"
     @click="article => $emit('found', article)"
   )
@@ -64,6 +64,9 @@ export default {
       const { compoundName, filteredArticles } = this;
       return compoundName && !filteredArticles.find(a => a.name === compoundName);
     },
+    showArticles() {
+      return this.compoundName || this.filteredArticles.length;
+    },
     compoundName() {
       const res = this.filters
         && this.filters.map(filter => {
@@ -105,9 +108,8 @@ export default {
           }
           const valueName = VALUE_TYPES[filter.prop.type];
           const filterValue = filter[valueName];
-          return filterValue !== null
-            && filterValue !== undefined
-            && filterValue !== prop[valueName];
+          const isEmpty = filterValue === null || filterValue === undefined;
+          return !isEmpty && filterValue !== prop[valueName];
         });
         return !notMatching;
       };
