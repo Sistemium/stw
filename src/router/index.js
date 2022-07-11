@@ -12,11 +12,6 @@ export const routes = [
     component: Home,
   },
   {
-    path: '/about',
-    name: 'about',
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutPage.vue'),
-  },
-  {
     path: '/inventory',
     name: 'inventory',
     component: () => import(/* webpackChunkName: "inventory" */ '../views/InventoryPage.vue'),
@@ -25,6 +20,11 @@ export const routes = [
     },
   },
   articlePropsRoute,
+  {
+    path: '/about',
+    name: 'about',
+    component: () => import(/* webpackChunkName: "about" */ '../views/AboutPage.vue'),
+  },
 ];
 
 const router = new VueRouter({

@@ -32,6 +32,7 @@
 import LangMenu from 'sistemium-vue/components/LangMenu.vue';
 import Language from '@/models/Language';
 import { toggleTabBar, isNative } from 'sistemium-data/src/util/native';
+import { routes } from '@/router';
 
 export default {
   name: 'AppMenu',
@@ -43,8 +44,8 @@ export default {
       return [...Language];
     },
     menu() {
-      return ['home', 'inventory', 'articleProps', 'about']
-        .map(name => ({
+      return routes
+        .map(({ name }) => ({
           name,
           t: `menu.${name}`,
         }));
