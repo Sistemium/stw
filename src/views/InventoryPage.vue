@@ -35,7 +35,7 @@ import { SET_ARTICLE_FILTERS } from '@/store/inv/mutations';
 const { mapGetters, mapMutations } = createNamespacedHelpers('inv');
 
 export default {
-  name: 'Inventory',
+  name: 'InventoryPage',
   data() {
     return {
       notFound: null,

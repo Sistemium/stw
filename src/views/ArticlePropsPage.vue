@@ -20,7 +20,7 @@ import ArticlePropsList from '@/components/catalogue/ArticlePropsList.vue';
 import orderBy from 'lodash/orderBy';
 
 export default {
-  name: 'ArticleProps',
+  name: 'ArticlePropsPage',
   props: {
     editRoute: String,
     createRoute: String,

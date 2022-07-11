@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Home from '../views/Home.vue';
+import Home from '../views/HomePage.vue';
 
 Vue.use(VueRouter);
 
@@ -13,12 +13,12 @@ export const routes = [
   {
     path: '/about',
     name: 'about',
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
+    component: () => import(/* webpackChunkName: "about" */ '../views/AboutPage.vue'),
   },
   {
     path: '/inventory',
     name: 'inventory',
-    component: () => import(/* webpackChunkName: "inventory" */ '../views/Inventory.vue'),
+    component: () => import(/* webpackChunkName: "inventory" */ '../views/InventoryPage.vue'),
     meta: {
       useScanner: true,
     },
@@ -26,7 +26,7 @@ export const routes = [
   {
     path: '/articleProps',
     name: 'articleProps',
-    component: () => import(/* webpackChunkName: "catalogue" */ '../views/ArticleProps.vue'),
+    component: () => import(/* webpackChunkName: "catalogue" */ '../views/ArticlePropsPage.vue'),
     props: {
       editRoute: 'articlePropEdit',
       createRoute: 'articlePropCreate',
