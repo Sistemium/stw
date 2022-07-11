@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Home from '../views/HomePage.vue';
+import Home from '@/views/HomePage.vue';
+import articlePropsRoute from '@/router/articlePropsRoute';
 
 Vue.use(VueRouter);
 
@@ -23,34 +24,7 @@ export const routes = [
       useScanner: true,
     },
   },
-  {
-    path: '/articleProps',
-    name: 'articleProps',
-    component: () => import(/* webpackChunkName: "catalogue" */ '../views/ArticlePropsPage.vue'),
-    props: {
-      editRoute: 'articlePropEdit',
-      createRoute: 'articlePropCreate',
-    },
-    children: [
-      {
-        path: 'create',
-        name: 'articlePropCreate',
-        props: {
-          from: { name: 'articleProps' },
-        },
-        component: () => import('../components/ArticlePropertyEdit.vue'),
-      },
-      {
-        path: 'edit/:articlePropId',
-        name: 'articlePropEdit',
-        props: ({ params: { articlePropId } }) => ({
-          articlePropId,
-          from: { name: 'articleProps' },
-        }),
-        component: () => import('../components/ArticlePropertyEdit.vue'),
-      },
-    ],
-  },
+  articlePropsRoute,
 ];
 
 const router = new VueRouter({
