@@ -1,7 +1,7 @@
 <template lang="pug">
 
-  .about
-    p {{ $t('about') }}
+.about
+  h1 {{ $t('about') }}
 
 </template>
 <script>
