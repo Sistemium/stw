@@ -24,13 +24,11 @@
 <script>
 import PropertyMatcher from '@/components/props/PropertyMatcher.vue';
 import Article from '@/models/Article';
-import lowerFirst from 'lodash/lowerFirst';
-import upperFirst from 'lodash/upperFirst';
 import fpPick from 'lodash/fp/pick';
 import keyBy from 'lodash/keyBy';
-import trim from 'lodash/trim';
 import { createNamespacedHelpers } from 'vuex';
 
+import * as catalogue from '@/services/catalogue';
 import { ARTICLE_FILTERS } from '@/store/inv/getters';
 import { SET_ARTICLE_FILTERS } from '@/store/inv/mutations';
 import { VALUE_TYPES } from '@/models/ArticleProp';
@@ -68,26 +66,7 @@ export default {
       return this.compoundName || this.filteredArticles.length;
     },
     compoundName() {
-      const res = this.filters
-        && this.filters.map(filter => {
-          const { stringValue, numberValue } = filter;
-          const simple = stringValue || numberValue;
-          if (simple) {
-            const { prefix, suffix } = filter.prop || {};
-            return [prefix, simple, suffix]
-              .filter(a => a)
-              .join('');
-          }
-          const { boolValue, prop } = filter;
-          if (boolValue !== undefined && prop) {
-            return boolValue ? prop.name : prop.inverse;
-          }
-          return '';
-        })
-          .filter(x => x)
-          .map(lowerFirst)
-          .join(' ');
-      return upperFirst(trim(res));
+      return catalogue.compoundName(this.filters);
     },
   },
   methods: {
