@@ -3,7 +3,8 @@
 .articles-page
   h1 Articles
 
-  article-list(:articles="articles" @click="onArticleClick")
+  resize(:padding="20")
+    article-list(:articles="articles" @click="onArticleClick")
 
   router-view
 

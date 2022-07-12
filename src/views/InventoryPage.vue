@@ -143,7 +143,7 @@ export default {
   overflow-x: scroll;
 }
 
-.article-matcher {
+.inventory > * + * {
   margin-top: $margin-top;
 }
 
@@ -151,7 +151,6 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: $margin-top 0;
 }
 
 </style>

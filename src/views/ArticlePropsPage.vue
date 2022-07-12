@@ -3,14 +3,15 @@
 .article-props
   .buttons
     tool-button(tool="add" @click="onAdd")
-  article-props-list(
-    :article-props="articleProps" @click="onPropClick"
-    v-if="articleProps.length"
-  )
-  el-alert(type="info" :title="$t('validation.noData')" :closable="false" v-else)
-    el-button(
-      type="primary" @click="onAdd" :plain="true"
-    ) {{ $tAction('add', 'property') }}
+  resize(:padding="20")
+    article-props-list(
+      :article-props="articleProps" @click="onPropClick"
+      v-if="articleProps.length"
+    )
+    el-alert(type="info" :title="$t('validation.noData')" :closable="false" v-else)
+      el-button(
+        type="primary" @click="onAdd" :plain="true"
+      ) {{ $tAction('add', 'property') }}
   router-view
 
 </template>
