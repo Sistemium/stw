@@ -2,6 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '@/views/HomePage.vue';
 import articlePropsRoute from '@/router/articlePropsRoute';
+import articlesRoute from '@/router/articlesRoute';
 
 Vue.use(VueRouter);
 
@@ -19,6 +20,7 @@ export const routes = [
       useScanner: true,
     },
   },
+  articlesRoute,
   articlePropsRoute,
   {
     path: '/about',

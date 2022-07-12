@@ -8,7 +8,8 @@
     "about": "Apie",
     "home": "Pradžia",
     "inventory": "Inventorizacija",
-    "articleProps": "Nomenklatūros ypatybės"
+    "articleProps": "Nomenklatūros ypatybės",
+    "articles": "Nomenklatūra"
   },
   "fields": {
     "name": "Pavadinimas",
