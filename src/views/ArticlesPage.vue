@@ -1,7 +1,7 @@
 <template lang="pug">
 
 .articles-page
-  h1 Articles
+  h1 {{ $t('menu.articles') }}
 
   resize(:padding="20")
     article-list(:articles="articles" @click="onArticleClick")
@@ -41,9 +41,18 @@ export default {
 
 </script>
 <style scoped lang="scss">
+@import "../styles/variables";
 
 .article-list {
   text-align: left;
+  max-width: $max-width;
+  margin: $margin-top auto 0;
+}
+
+@include responsive-only(xxs) {
+  h1 {
+    display: none;
+  }
 }
 
 </style>
