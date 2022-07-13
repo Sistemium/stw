@@ -131,6 +131,11 @@ export default {
 }
 
 #nav {
+
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+
   @include responsive-only(xxs) {
     display: none;
   }
@@ -167,6 +172,10 @@ strong, .hamburger {
   @include responsive-only(xxs) {
     margin-left: $margin-right;
   }
+}
+
+#nav > a {
+  white-space: nowrap;
 }
 
 </style>
