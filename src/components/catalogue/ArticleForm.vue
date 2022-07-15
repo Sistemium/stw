@@ -20,7 +20,7 @@
         :value="model.props[idx][prop.component.field]"
         @input="value => onPropInput(prop, value, idx)"
       )
-        template(v-if="prop.type === 'options'")
+        template(v-if="prop.options")
           el-option(
             v-for="{ id, name } in prop.options" :key="id"
             :value="id"
@@ -62,12 +62,19 @@ export default {
       if (!props) {
         return [];
       }
-      return props.map(prop => ({
-        prop: ArticleProp.reactiveGet(prop.propId),
-        options: prop.type === 'options' && PropOption.reactiveFilter({ propId: prop.propId }),
-        ...prop,
-        component: INPUTS.get(prop.type),
-      }));
+      return props.map(p => {
+        const { propId } = p;
+        const prop = ArticleProp.reactiveGet(propId);
+        const { type } = prop;
+        const options = type === 'options' && PropOption.reactiveFilter({ propId });
+        return {
+          ...p,
+          type,
+          prop,
+          options,
+          component: INPUTS.get(type),
+        };
+      });
     },
   },
   methods: {
