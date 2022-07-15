@@ -18,7 +18,7 @@
     "@bit/sistemium.vue.style.variables": "^0.0.2",
     "@bit/sistemium.vue.update-route-params": "^0.0.1",
     "@syncfusion/ej2-vue-barcode-generator": "^20.1.55",
-    "element-ui": "^2.15.8",
+    "element-ui": "2.15.7",
     "lodash": "^4.17.21",
     "qs": "^6.11.0",
     "sistemium-data": "^1.7.1",
