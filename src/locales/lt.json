@@ -9,7 +9,8 @@
     "home": "Pradžia",
     "inventory": "Inventorizacija",
     "articleProps": "Ypatybės",
-    "articles": "Nomenklatūra"
+    "articles": "Nomenklatūra",
+    "stockTaking": "Inventorizavimas"
   },
   "fields": {
     "name": "Pavadinimas",
@@ -22,7 +23,14 @@
     "inverse": "Reikšmės \"ne\" pavadinimas",
     "prefix": "Priešdėlis",
     "suffix": "Priesaga",
-    "barcode": "Brūkš. kodas"
+    "barcode": "Brūkš. kodas",
+    "boxRel": "Vienetai dėžėje",
+    "quantity": "Kiekis",
+    "boxQuantity": "Dėžų kiekis"
+  },
+  "storage": {
+    "boxes": "Dėžės",
+    "units": "Vienetai"
   },
   "concepts": {
     "article": "Nomenklatūra"
@@ -46,5 +54,11 @@
   "accusative": {
     "property": "ypatybę",
     "profile": "Profilį"
+  },
+  "workflow": {
+    "finish": "Užbaigti",
+    "progress": "Vykdoma",
+    "continue": "Tęsti",
+    "finished": "Užbaigta"
   }
 }

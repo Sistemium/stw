@@ -9,7 +9,8 @@
     "home": "Home",
     "inventory": "Inventory",
     "articleProps": "Properties",
-    "articles": "Articles"
+    "articles": "Articles",
+    "stockTaking": "Stocktaking"
   },
   "fields": {
     "name": "Name",
@@ -22,7 +23,14 @@
     "inverse": "Name for value \"no\"",
     "prefix": "Prefix",
     "suffix": "Suffix",
-    "barcode": "Barcode"
+    "barcode": "Barcode",
+    "boxRel": "Units in box",
+    "quantity": "Quantity",
+    "boxQuantity": "Number of boxes"
+  },
+  "storage": {
+    "boxes": "Boxes",
+    "units": "Units"
   },
   "concepts": {
     "article": "Article"
@@ -48,5 +56,11 @@
   "accusative": {
     "property": "property",
     "profile": "Profile"
+  },
+  "workflow": {
+    "finish": "Finalize",
+    "progress": "In progress",
+    "continue": "Continue",
+    "finished": "Finished"
   }
 }

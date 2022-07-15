@@ -9,7 +9,8 @@
     "home": "Начало",
     "inventory": "Инвентаризация",
     "articleProps": "Свойства",
-    "articles": "Номенклатура"
+    "articles": "Номенклатура",
+    "stockTaking": "Пересчет"
   },
   "fields": {
     "name": "Название",
@@ -22,7 +23,14 @@
     "inverse": "Название для значения \"Нет\"",
     "prefix": "Префикс",
     "suffix": "Суффикс",
-    "barcode": "Штрих-код"
+    "barcode": "Штрих-код",
+    "boxRel": "Штук в коробке",
+    "quantity": "Количество",
+    "boxQuantity": "Количество коробок"
+  },
+  "storage": {
+    "boxes": "Коробки",
+    "units": "Штуки"
   },
   "concepts": {
     "article": "Номенклатура"
@@ -46,5 +54,11 @@
   "accusative": {
     "property": "свойство",
     "profile": "Профиль"
+  },
+  "workflow": {
+    "finish": "Завершить",
+    "progress": "В работе",
+    "continue": "Продолжить",
+    "finished": "Завершено"
   }
 }
