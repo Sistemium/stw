@@ -4,21 +4,22 @@
 
   property-matcher(:title="title" v-model="filters")
 
-  article-list.articles(
-    v-if="showArticles"
-    :articles="filteredArticles"
-    @click="article => $emit('found', article)"
-  )
-    template(v-slot:header)
-      .list-group-header
-        .compound-name
-          simple-label(text="fields.name")
-          strong {{ compoundName }}
-        .create(v-if="allowCreate")
-          el-button.create(type="success" v-t="'createArticle'" @click="onCreateClick")
-    template(v-slot:footer)
-      .list-group-item.no-articles(v-if="!filteredArticles.length")
-        .no-matches(v-t="'noMatches'")
+  resize(:padding="20")
+    article-list.articles(
+      v-if="showArticles"
+      :articles="filteredArticles"
+      @click="article => $emit('found', article)"
+    )
+      template(v-slot:header)
+        .list-group-header
+          .compound-name
+            simple-label(text="fields.name")
+            strong {{ compoundName }}
+          .create(v-if="allowCreate")
+            el-button.create(type="success" v-t="'createArticle'" @click="onCreateClick")
+      template(v-slot:footer)
+        .list-group-item.no-articles(v-if="!filteredArticles.length")
+          .no-matches(v-t="'noMatches'")
 
 </template>
 <script>
