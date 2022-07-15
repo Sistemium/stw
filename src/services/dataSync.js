@@ -2,6 +2,7 @@
 import ArticleProp from '@/models/ArticleProp';
 import PropOption from '@/models/PropOption';
 import Article from '@/models/Article';
+import StockTakingItem from '@/models/StockTakingItem';
 
 // const { debug } = log('initData');
 
@@ -11,4 +12,5 @@ export async function initData() {
   await ArticleProp.findAll();
   await PropOption.findAll();
   await Article.findAll();
+  await StockTakingItem.findAll();
 }

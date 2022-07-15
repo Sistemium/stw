@@ -30,7 +30,6 @@ import Article from '@/models/Article';
 import ArticleMatcher from '@/components/catalogue/ArticleMatcher.vue';
 import * as g from '@/store/inv/getters';
 import * as m from '@/store/inv/mutations';
-import { SET_ARTICLE_FILTERS } from '@/store/inv/mutations';
 
 const { mapGetters, mapMutations } = createNamespacedHelpers('inv');
 
@@ -44,10 +43,13 @@ export default {
       articles: [],
     };
   },
+  props: {
+    value: Object,
+  },
   methods: {
     ...mapMutations({
       clearScannedBarcode: m.SET_SCANNED_BARCODE,
-      setArticleFilters: SET_ARTICLE_FILTERS,
+      setArticleFilters: m.SET_ARTICLE_FILTERS,
     }),
     init() {
     },
@@ -61,15 +63,19 @@ export default {
         ],
       };
       this.$saveWithLoading(async () => {
-        this.article = await Article.createOne(props);
+        this.onArticle(await Article.createOne(props));
         this.notFound = null;
       });
     },
     onAddCancelClick() {
-      this.article = null;
+      this.onArticle(null);
     },
     onArticle(article) {
+      if (article === this.article) {
+        return;
+      }
       this.article = article;
+      this.$emit('input', article);
     },
     async onScan(barcode) {
       const { code } = barcode || {};
@@ -109,6 +115,7 @@ export default {
   },
   created() {
     this.$watchImmediate('scannedBarCode', this.onScan);
+    this.$watchImmediate('value', this.onArticle);
   },
   components: {
     ArticleMatcher,

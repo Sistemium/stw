@@ -20,6 +20,14 @@ export const routes = [
       useScanner: true,
     },
   },
+  {
+    path: '/stockTaking',
+    name: 'stockTaking',
+    component: () => import(/* webpackChunkName: "inventory" */ '../views/StockTakingPage.vue'),
+    meta: {
+      useScanner: true,
+    },
+  },
   articlesRoute,
   articlePropsRoute,
   {
