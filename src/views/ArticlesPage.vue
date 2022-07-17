@@ -1,7 +1,7 @@
 <template lang="pug">
 
 .articles-page
-  h1 {{ $t('menu.articles') }}
+  page-title(title="menu.articles")
 
   resize(:padding="20")
     article-list(:articles="articles" @click="onArticleClick")
@@ -14,6 +14,7 @@
 import ArticleList from '@/components/catalogue/ArticleList.vue';
 import Article from '@/models/Article';
 import orderBy from 'lodash/orderBy';
+import PageTitle from '@/components/PageTitle.vue';
 
 export default {
   name: 'ArticlesPage',
@@ -21,7 +22,7 @@ export default {
     editRoute: String,
     createRoute: String,
   },
-  components: { ArticleList },
+  components: { PageTitle, ArticleList },
   computed: {
     articles() {
       return orderBy(Article.reactiveFilter(), 'name');
@@ -47,12 +48,6 @@ export default {
   text-align: left;
   max-width: $max-width;
   margin: $margin-top auto 0;
-}
-
-@include responsive-only(xxs) {
-  h1 {
-    display: none;
-  }
 }
 
 </style>
