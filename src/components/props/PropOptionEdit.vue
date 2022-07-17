@@ -10,7 +10,7 @@ drawer-edit.prop-option-edit(
   :deletable="true"
 )
   template(v-slot="{ model }")
-    prop-option-form(:model="model")
+    prop-option-form(ref="form" :model="model")
 
 </template>
 <script>

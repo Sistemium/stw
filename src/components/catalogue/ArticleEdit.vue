@@ -9,7 +9,7 @@ drawer-edit.article-edit(
   :deletable="true"
 )
   template(v-slot="{ model }")
-    article-form(:model="model")
+    article-form(ref="form" :model="model")
 
 </template>
 <script>

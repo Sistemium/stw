@@ -5,6 +5,8 @@
     simple-label(text="fields.barcode")
     .code {{ scannedBarCode.code }}
 
+  el-alert(v-else title="scan barcode")
+
   template(v-if="notFound && !article")
     el-radio-group(
       v-model="matcherMode"

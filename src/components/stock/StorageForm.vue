@@ -1,6 +1,6 @@
 <template lang="pug">
 
-el-form.storage-form
+el-form.storage-form(:model="model" ref="form" :rules="rules")
 
   el-form-item(prop="type" :label="$t('fields.type')")
     el-radio-group(v-model="model.type")

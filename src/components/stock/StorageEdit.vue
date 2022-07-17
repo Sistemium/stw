@@ -9,7 +9,7 @@ drawer-edit.storage-edit(
   :deletable="true"
 )
   template(v-slot="{ model }")
-    storage-form(:model="model")
+    storage-form(ref="form" :model="model")
 
 </template>
 <script>

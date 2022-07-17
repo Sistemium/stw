@@ -1,6 +1,6 @@
 <template lang="pug">
 
-.articles-page
+.articles-page.page
   page-title(title="menu.articles")
 
   resize(:padding="20")
@@ -42,12 +42,5 @@ export default {
 
 </script>
 <style scoped lang="scss">
-@import "../styles/variables";
-
-.article-list {
-  text-align: left;
-  max-width: $max-width;
-  margin: $margin-top auto 0;
-}
-
+@import "../styles/page";
 </style>
