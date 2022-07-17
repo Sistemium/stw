@@ -2,6 +2,7 @@
 import ArticleProp from '@/models/ArticleProp';
 import PropOption from '@/models/PropOption';
 import Article from '@/models/Article';
+import StockTaking from '@/models/StockTaking';
 import StockTakingItem from '@/models/StockTakingItem';
 import Storage from '@/models/Storage';
 
@@ -15,4 +16,5 @@ export async function initData() {
   await Article.findAll();
   await StockTakingItem.findAll();
   await Storage.findAll();
+  await StockTaking.findAll();
 }
