@@ -1,5 +1,6 @@
 @import "styles/variables";
 @import "styles/lists";
+@import "styles/element-ui";
 
 .list-group {
   @include list-group($border-radius, $list-cell-borders,
@@ -11,4 +12,13 @@
   > .el-scrollbar__bar {
     opacity: 1;
   }
+}
+
+.el-drawer__body .container.resize {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.el-drawer__header {
+  margin-bottom: 20px;
 }
