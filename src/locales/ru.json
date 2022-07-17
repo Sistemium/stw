@@ -10,7 +10,8 @@
     "inventory": "Инвентаризация",
     "articleProps": "Свойства",
     "articles": "Номенклатура",
-    "stockTaking": "Пересчет"
+    "stockTakings": "Инвентаризация",
+    "storages": "Склады"
   },
   "fields": {
     "name": "Название",
@@ -27,14 +28,17 @@
     "barcode": "Штрих-код",
     "boxRel": "Штук в коробке",
     "quantity": "Количество",
-    "boxQuantity": "Количество коробок"
+    "boxQuantity": "Количество коробок",
+    "package": "Упаковка"
   },
   "storage": {
     "boxes": "Коробки",
     "units": "Штуки"
   },
   "concepts": {
-    "article": "Номенклатура"
+    "article": "Номенклатура",
+    "facility": "Помещение",
+    "personal": "Персональный"
   },
   "dataTypes": {
     "string": "Строка",
@@ -50,11 +54,20 @@
   "actions": {
     "add": "Добавить {0}",
     "show": "Показать {0}",
-    "hide": "Скрыть {0}"
+    "hide": "Скрыть {0}",
+    "start": "Начать {0}",
+    "editing": "Редактирование {0}"
   },
   "accusative": {
     "property": "свойство",
-    "profile": "Профиль"
+    "profile": "Профиль",
+    "storage": "склад"
+  },
+  "genitive": {
+    "property": "признака",
+    "article": "номенклатуры",
+    "option": "выбора",
+    "storage": "склада"
   },
   "workflow": {
     "finish": "Завершить",

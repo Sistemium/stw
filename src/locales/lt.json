@@ -10,7 +10,8 @@
     "inventory": "Inventorizacija",
     "articleProps": "Ypatybės",
     "articles": "Nomenklatūra",
-    "stockTaking": "Inventorizavimas"
+    "stockTakings": "Inventorizavimas",
+    "storages": "Sandėliai"
   },
   "fields": {
     "name": "Pavadinimas",
@@ -27,14 +28,17 @@
     "barcode": "Brūkš. kodas",
     "boxRel": "Vienetai dėžėje",
     "quantity": "Kiekis",
-    "boxQuantity": "Dėžų kiekis"
+    "boxQuantity": "Dėžų kiekis",
+    "package": "Pakavimas"
   },
   "storage": {
     "boxes": "Dėžės",
     "units": "Vienetai"
   },
   "concepts": {
-    "article": "Nomenklatūra"
+    "article": "Nomenklatūra",
+    "facility": "Patalpos",
+    "personal": "Asmeninis"
   },
   "dataTypes": {
     "string": "Eilutė",
@@ -50,11 +54,20 @@
   "actions": {
     "add": "Pridėti {0}",
     "show": "Parodyti {0}",
-    "hide": "Paslėpti {0}"
+    "hide": "Paslėpti {0}",
+    "start": "Pradeti {0}",
+    "editing": "{0} redagavimas"
   },
   "accusative": {
     "property": "ypatybę",
-    "profile": "Profilį"
+    "profile": "Profilį",
+    "storage": "sandėlį"
+  },
+  "genitive": {
+    "property": "Ypatybės",
+    "article": "Nomenklatūros",
+    "option": "Parinkties",
+    "storage": "Sandėlio"
   },
   "workflow": {
     "finish": "Užbaigti",

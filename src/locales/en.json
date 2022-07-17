@@ -10,7 +10,8 @@
     "inventory": "Inventory",
     "articleProps": "Properties",
     "articles": "Articles",
-    "stockTaking": "Stocktaking"
+    "stockTakings": "Stocktaking",
+    "storages": "Storages"
   },
   "fields": {
     "name": "Name",
@@ -27,14 +28,17 @@
     "barcode": "Barcode",
     "boxRel": "Units in box",
     "quantity": "Quantity",
-    "boxQuantity": "Number of boxes"
+    "boxQuantity": "Number of boxes",
+    "package": "Package"
   },
   "storage": {
     "boxes": "Boxes",
     "units": "Units"
   },
   "concepts": {
-    "article": "Article"
+    "article": "Article",
+    "facility": "Facility",
+    "personal": "Personal"
   },
   "dataTypes": {
     "string": "String",
@@ -52,11 +56,20 @@
   "actions": {
     "add": "Add {0}",
     "show": "Show {0}",
-    "hide": "Hide {0}"
+    "hide": "Hide {0}",
+    "start": "Start {0}",
+    "editing": "{} editing"
   },
   "accusative": {
     "property": "property",
-    "profile": "Profile"
+    "profile": "Profile",
+    "storage": "storage"
+  },
+  "genitive": {
+    "property": "Property",
+    "article": "Article",
+    "option": "Option",
+    "storage": "Storage"
   },
   "workflow": {
     "finish": "Finalize",
