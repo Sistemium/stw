@@ -1,6 +1,6 @@
 <template lang="pug">
 
-.article-props
+.article-props.page
   .buttons
     tool-button(tool="add" @click="onAdd")
   resize(:padding="20")
@@ -54,28 +54,5 @@ export default {
 
 </script>
 <style scoped lang="scss">
-@import "../styles/variables";
-
-.article-props {
-  max-width: $max-width;
-  margin: 0 auto;
-  text-align: left;
-
-  > * + * {
-    margin-top: $margin-right;
-  }
-}
-
-.buttons {
-  text-align: right;
-}
-
-::v-deep .el-alert__content {
-  flex: 1;
-
-  .el-alert__description {
-    text-align: right;
-  }
-}
-
+@import "../styles/page";
 </style>
