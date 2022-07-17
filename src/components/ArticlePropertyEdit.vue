@@ -107,7 +107,7 @@ export default {
 @import "../styles/variables";
 
 .el-tabs {
-  margin-top: -$margin-top;
+  //margin-top: -$margin-top;
 }
 
 .tools {
