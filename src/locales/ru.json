@@ -9,12 +9,14 @@
     "home": "Начало",
     "inventory": "Инвентаризация",
     "articleProps": "Свойства",
+    "articlePropsTitle": "Свойства номенклатуры",
     "articles": "Номенклатура",
     "stockTakings": "Инвентаризация",
     "storages": "Склады"
   },
   "fields": {
     "name": "Название",
+    "date": "Дата",
     "type": "Тип",
     "valueType": "Тип значений",
     "required": "Обязательно",
@@ -29,7 +31,9 @@
     "boxRel": "Штук в коробке",
     "quantity": "Количество",
     "boxQuantity": "Количество коробок",
-    "package": "Упаковка"
+    "package": "Упаковка",
+    "processing": "Статус",
+    "storage": "Склад"
   },
   "storage": {
     "boxes": "Коробки",
@@ -38,7 +42,8 @@
   "concepts": {
     "article": "Номенклатура",
     "facility": "Помещение",
-    "personal": "Персональный"
+    "personal": "Персональный",
+    "storage": "Склад"
   },
   "dataTypes": {
     "string": "Строка",
@@ -47,7 +52,7 @@
     "number": "Число"
   },
   "validation": {
-    "required": "{0} нужно указать обязательно",
+    "required": "{0} не может быть не не указано",
     "formInvalid": "Форма заполнена с ошибками",
     "noData": "Нет данных"
   },
@@ -61,13 +66,18 @@
   "accusative": {
     "property": "свойство",
     "profile": "Профиль",
-    "storage": "склад"
+    "storage": "склад",
+    "stockTaking": "инвентаризацию"
   },
   "genitive": {
     "property": "признака",
     "article": "номенклатуры",
     "option": "выбора",
-    "storage": "склада"
+    "storage": "склада",
+    "stockTaking": "инвентаризации"
+  },
+  "shortened": {
+    "positions": "поз"
   },
   "workflow": {
     "finish": "Завершить",

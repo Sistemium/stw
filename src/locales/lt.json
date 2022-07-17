@@ -9,12 +9,14 @@
     "home": "Pradžia",
     "inventory": "Inventorizacija",
     "articleProps": "Ypatybės",
+    "articlePropsTitle": "Nomenklatūrų ypatybės",
     "articles": "Nomenklatūra",
     "stockTakings": "Inventorizavimas",
     "storages": "Sandėliai"
   },
   "fields": {
     "name": "Pavadinimas",
+    "date": "Data",
     "type": "Tipas",
     "valueType": "Duomenų tipas",
     "required": "Privaloma",
@@ -29,7 +31,9 @@
     "boxRel": "Vienetai dėžėje",
     "quantity": "Kiekis",
     "boxQuantity": "Dėžų kiekis",
-    "package": "Pakavimas"
+    "package": "Pakavimas",
+    "processing": "Būsena",
+    "storage": "Sandėlis"
   },
   "storage": {
     "boxes": "Dėžės",
@@ -38,7 +42,8 @@
   "concepts": {
     "article": "Nomenklatūra",
     "facility": "Patalpos",
-    "personal": "Asmeninis"
+    "personal": "Asmeninis",
+    "storage": "Sandėlis"
   },
   "dataTypes": {
     "string": "Eilutė",
@@ -61,13 +66,18 @@
   "accusative": {
     "property": "ypatybę",
     "profile": "Profilį",
-    "storage": "sandėlį"
+    "storage": "sandėlį",
+    "stockTaking": "inventorizaciją"
   },
   "genitive": {
     "property": "Ypatybės",
     "article": "Nomenklatūros",
     "option": "Parinkties",
-    "storage": "Sandėlio"
+    "storage": "Sandėlio",
+    "stockTaking": "Inventorizacijos"
+  },
+  "shortened": {
+    "positions": "poz"
   },
   "workflow": {
     "finish": "Užbaigti",

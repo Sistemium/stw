@@ -9,6 +9,7 @@
     "home": "Home",
     "inventory": "Inventory",
     "articleProps": "Properties",
+    "articlePropsTitle": "Article properties",
     "articles": "Articles",
     "stockTakings": "Stocktaking",
     "storages": "Storages"
@@ -16,6 +17,7 @@
   "fields": {
     "name": "Name",
     "type": "Type",
+    "date": "Date",
     "valueType": "Value type",
     "required": "Required",
     "bool": {
@@ -29,7 +31,9 @@
     "boxRel": "Units in box",
     "quantity": "Quantity",
     "boxQuantity": "Number of boxes",
-    "package": "Package"
+    "package": "Package",
+    "processing": "Status",
+    "storage": "Storage"
   },
   "storage": {
     "boxes": "Boxes",
@@ -38,7 +42,8 @@
   "concepts": {
     "article": "Article",
     "facility": "Facility",
-    "personal": "Personal"
+    "personal": "Personal",
+    "storage": "Storage"
   },
   "dataTypes": {
     "string": "String",
@@ -63,13 +68,18 @@
   "accusative": {
     "property": "property",
     "profile": "Profile",
-    "storage": "storage"
+    "storage": "storage",
+    "stockTaking": "stockTaking"
   },
   "genitive": {
     "property": "Property",
     "article": "Article",
     "option": "Option",
-    "storage": "Storage"
+    "storage": "Storage",
+    "stockTaking": "Stocktaking"
+  },
+  "shortened": {
+    "positions": "pos"
   },
   "workflow": {
     "finish": "Finalize",
