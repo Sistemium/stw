@@ -16,7 +16,7 @@
 
     form-buttons(
       :changed="changed"
-      :deletable="deletable"
+      :deletable="isDeletable"
       @saveClick="onSaveClick"
       @cancelClick="cancelClick"
       @deleteClick="onDeleteClick"
@@ -80,6 +80,9 @@ export default {
   computed: {
     loading() {
       return !!this.loadingMessage;
+    },
+    isDeletable() {
+      return this.deletable && !!(this.modelOrigin && this.modelOrigin.id);
     },
     changed() {
       return this.forceModified || !matchesDeep(this.model, this.modelOrigin);
