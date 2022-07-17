@@ -14,7 +14,8 @@
   },
   "fields": {
     "name": "Pavadinimas",
-    "type": "Duomenų tipas",
+    "type": "Tipas",
+    "valueType": "Duomenų tipas",
     "required": "Privaloma",
     "bool": {
       "yes": "Taip",

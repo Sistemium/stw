@@ -16,7 +16,7 @@
     el-form-item(:label="$t('fields.suffix')" prop="suffix")
       el-input(v-model="model.suffix")
 
-    el-form-item(:label="$t('fields.type')" prop="type")
+    el-form-item(:label="$t('fields.valueType')" prop="type")
       el-select(v-model="model.type")
         el-option(
           v-for="type in types" :key="type"

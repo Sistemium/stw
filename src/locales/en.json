@@ -14,7 +14,8 @@
   },
   "fields": {
     "name": "Name",
-    "type": "Value type",
+    "type": "Type",
+    "valueType": "Value type",
     "required": "Required",
     "bool": {
       "yes": "Yes",
