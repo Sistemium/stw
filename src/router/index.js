@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import Home from '@/views/HomePage.vue';
 import articlePropsRoute from '@/router/articlePropsRoute';
 import articlesRoute from '@/router/articlesRoute';
+import storagesRoute from '@/router/storagesRoute';
 
 Vue.use(VueRouter);
 
@@ -28,6 +29,7 @@ export const routes = [
       useScanner: true,
     },
   },
+  storagesRoute,
   articlesRoute,
   articlePropsRoute,
   {
