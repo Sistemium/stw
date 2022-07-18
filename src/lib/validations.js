@@ -1,8 +1,13 @@
 import Vue from 'vue';
+import orderBy from 'lodash/orderBy';
 
 Vue.mixin({
 
   methods: {
+    $orderBy: orderBy,
+    $ts(dateString) {
+      return this.$d(new Date(dateString), 'timestamp');
+    },
     $requiredRule(fieldOrArray) {
       const res = {};
       const fields = Array.isArray(fieldOrArray) ? fieldOrArray : [fieldOrArray];

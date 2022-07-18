@@ -29,6 +29,14 @@ function loadLocaleMessages() {
 }
 
 const dateTimeFormatGeneric = {
+  timestamp: {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+  },
   short: {
     year: 'numeric',
     month: 'short',
