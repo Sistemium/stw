@@ -142,7 +142,9 @@ export default {
       this.saveFn(this.model)
         .then(record => {
           this.$emit('saved', record);
-          this.cancelClick();
+          if (this.$refs.drawer) {
+            this.cancelClick();
+          }
         })
         .catch(e => {
           this.$message.error(e.message);
