@@ -23,19 +23,27 @@ export default {
   props: {
     stockTakingId: String,
     from: Object,
+    progressRoute: String,
   },
   computed: {
     modelOrigin() {
       const { stockTakingId } = this;
       return stockTakingId ? StockTaking.reactiveGet(stockTakingId) : {
         date: new Date(),
-        processing: 'processing',
+        processing: 'progress',
       };
     },
   },
   methods: {
-    saveFn(props) {
-      return StockTaking.createOne(props);
+    async saveFn(props) {
+      const { id: stockTakingId, processing } = await StockTaking.createOne(props);
+      const { progressRoute } = this;
+      if (progressRoute && processing === 'progress') {
+        await this.$router.push({
+          name: this.progressRoute,
+          params: { stockTakingId },
+        });
+      }
     },
     destroyFn(id) {
       return StockTaking.destroy(id);

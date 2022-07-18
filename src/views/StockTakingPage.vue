@@ -4,17 +4,17 @@
 
   .header
     el-date-picker.date(v-model="stockTaking.date")
-    workflow-button(:workflow="workflow" v-model="stockTaking.processing")
+    workflow-button(:workflow="workflow" :value="stockTaking.processing" @input="onProcessing")
 
-  el-tabs(@tab-click="onTabClick" tab-position="top")
-    el-tab-pane(label="Scan")
+  el-tabs(@tab-click="onTabClick" tab-position="top" v-model="currentTab")
+    el-tab-pane(label="Scan" name="scan" v-if="showScan")
       resize(:padding="20")
-        inventory-page(:value="article" @input="onArticle")
+        inventory-page(:value="article" @input="onArticle" @scan="onScan")
         template(v-if="article")
           stock-taking-item-form(
             v-if="article"
+            :editable="true"
             :model="stockTakingItem"
-            :article="article"
           )
           form-buttons(
             :changed="true"
@@ -22,20 +22,24 @@
             @saveClick="saveItem"
             @cancelClick="cancelItem"
           )
-        el-alert(v-else title="scan barcode")
-    el-tab-pane(label="Items")
+    el-tab-pane(label="Items" name="items")
       resize(:padding="20")
-        stock-taking-item-list(:items="stockTakingItems")
+        stock-taking-item-list(:items="stockTakingItems" @click="onItemClick")
+        el-alert(
+          v-if="!stockTakingItems.length"
+          :title="$t('validation.noData')" :closable="false"
+        )
+
+  router-view
 
 </template>
 <script>
 
 import { createNamespacedHelpers } from 'vuex';
-import { workflow } from '@/models/StockTaking';
+import StockTaking, { workflow } from '@/models/StockTaking';
 import WorkflowButton from '@/lib/WorkflowButton.vue';
 import InventoryPage from '@/views/InventoryPage.vue';
 import StockTakingItemForm from '@/components/stock/StockTakingItemForm.vue';
-// import StockTaking from '@/models/StockTaking';
 import StockTakingItem from '@/models/StockTakingItem';
 import Article from '@/models/Article';
 import FormButtons from '@bit/sistemium.vue.form-buttons/FormButtons.vue';
@@ -47,29 +51,65 @@ const { mapMutations } = createNamespacedHelpers('inv');
 
 export default {
   name: 'StockTakingPage',
+  props: {
+    editItemRoute: String,
+    stockTakingId: String,
+  },
   data() {
     return {
-      stockTaking: {
-        id: 'tst',
-        date: new Date(),
-        processing: 'progress',
-      },
       article: null,
       stockTakingItem: null,
+      currentTabData: 'items',
     };
   },
   computed: {
+    currentTab: {
+      get() {
+        const { currentTabData, showScan } = this;
+        if (!showScan && currentTabData === 'scan') {
+          return 'items';
+        }
+        return currentTabData;
+      },
+      set(tab) {
+        this.currentTabData = tab;
+      },
+    },
     workflow() {
       return workflow;
     },
+    stockTaking() {
+      return StockTaking.reactiveGet(this.stockTakingId) || {};
+    },
     stockTakingItems() {
-      return StockTakingItem.reactiveFilter({ stockTakingId: this.stockTaking.id });
+      const { stockTakingId } = this;
+      return StockTakingItem.reactiveFilter({ stockTakingId });
+    },
+    showScan() {
+      return this.stockTaking.processing === 'progress';
     },
   },
   methods: {
+    onScan() {
+      this.currentTab = 'scan';
+    },
+    onProcessing(processing) {
+      this.$saveWithLoading(async () => {
+        await StockTaking.createOne({ ...this.stockTaking, processing });
+      });
+    },
     ...mapMutations({
       clearScannedBarcode: m.SET_SCANNED_BARCODE,
     }),
+    onItemClick(item) {
+      this.$router.push({
+        name: this.editItemRoute,
+        params: {
+          stockTakingItemId: item.id,
+          stockTakingId: this.stockTaking.id,
+        },
+      });
+    },
     onTabClick(tab) {
       this.$debug(tab);
     },
@@ -87,7 +127,7 @@ export default {
       this.$saveWithLoading(async () => {
         const { boxRel } = this.stockTakingItem;
         if (boxRel > 1) {
-          const { boxes = [] } = this.article;
+          const boxes = this.article.boxes || [];
           if (!find(boxes, { boxRel })) {
             await Article.create({
               ...this.article,

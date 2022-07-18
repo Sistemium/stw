@@ -5,7 +5,7 @@
     simple-label(text="fields.barcode")
     .code {{ scannedBarCode.code }}
 
-  el-alert(v-else title="scan barcode")
+  el-alert(v-else :title="$t('scanBarcode')")
 
   template(v-if="notFound && !article")
     el-radio-group(
@@ -89,6 +89,7 @@ export default {
       try {
         const res = await Article.findAll({ barcodes: code });
         this.notFound = !(res && res.length);
+        this.$emit('scan', code, this.notFound);
         if (this.notFound) {
           this.$message.warning(this.$t('not_found').toString());
           this.setArticleFilters();
@@ -128,16 +129,19 @@ export default {
         not_found: 'Not found article',
         notFoundAdding: 'Add new article or link barcode to existing',
         addBarcode: 'Link barcode to article',
+        scanBarcode: 'Scan product barcode to continue',
       },
       ru: {
         not_found: 'Номенклатура не найдена',
         notFoundAdding: 'Добавим новую номенклатуру или привяжем штрих-код к имеющейся',
         addBarcode: 'Связать код с номенклатурой',
+        scanBarcode: 'Сканируйте штрих-код товара, чтобы продолжить',
       },
       lt: {
         not_found: 'Nomenklatūros nerasta',
         notFoundAdding: 'Pridėti naują nomenklatūrą arba pridėti brūkšninį kodą prie esamos',
         addBarcode: 'Susieti kodą su nomenklatūra',
+        scanBarcode: 'Norėdami tęsti, nuskaitykite brūkšninį kodą',
       },
     },
   },

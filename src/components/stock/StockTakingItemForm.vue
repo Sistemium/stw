@@ -4,11 +4,16 @@ el-form.stock-taking-item-form(
   :model="model"
   ref="form"
   :rules="rules"
+  :disabled="!editable"
 )
-  el-form-item.mode
+
+  el-form-item.mode(:label="$t('fields.package')")
     el-radio-group(v-model="mode" @change="modeChange")
       el-radio-button(label="boxes") {{ $t('storage.boxes') }}
       el-radio-button(label="units") {{ $t('storage.units') }}
+
+  el-form-item.article(:label="$t('concepts.article')")
+    article-view(:article-id="model.articleId")
 
   template(v-if="mode==='boxes'")
     el-form-item(prop="boxRel" :label="$t('fields.boxRel')")
@@ -24,12 +29,14 @@ el-form.stock-taking-item-form(
 <script>
 /* eslint-disable vue/no-mutating-props */
 // import StockTakingItem from '@/models/StockTakingItem';
+import Article from '@/models/Article';
+import ArticleView from '@/components/catalogue/ArticleView.vue';
 
 export default {
   name: 'StockTakingItemForm',
   props: {
     model: Object,
-    article: { type: Object, required: true },
+    editable: Boolean,
   },
   data() {
     return {
@@ -39,19 +46,22 @@ export default {
   computed: {
     rules() {
       return {
-        ...this.$requiredRule('quantity'),
-        ...this.$requiredRule('boxRel'),
+        ...this.$requiredRule(['quantity', 'boxRel']),
       };
     },
     units() {
       return this.model.boxRel * this.model.quantity;
     },
+    article() {
+      const { articleId } = this.model;
+      return Article.reactiveGet(articleId);
+    },
   },
   methods: {
     modeChange(mode) {
       if (mode === 'boxes') {
-        const { boxes = [] } = this.article;
-        const [box] = boxes;
+        const { boxes } = this.article;
+        const [box] = boxes || [];
         const { boxRel = 1 } = box || {};
         this.model.boxRel = boxRel;
       } else {
@@ -63,12 +73,27 @@ export default {
     this.$watchImmediate('units', units => {
       this.model.units = units;
     });
+    this.$watchImmediate('model', model => {
+      this.mode = model.boxRel > 1 ? 'boxes' : 'units';
+    });
   },
+  components: { ArticleView },
 };
 
 </script>
 <style scoped lang="scss">
-.mode {
-  //text-align: left;
+
+.el-form-item {
+  display: flex;
+  justify-content: space-between;
+
+  &::after, &::before {
+    display: none;
+  }
 }
+
+.mode {
+  //justify-content: center;
+}
+
 </style>

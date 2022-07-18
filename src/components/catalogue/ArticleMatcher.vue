@@ -73,10 +73,11 @@ export default {
   methods: {
     async createArticle() {
       const props = this.filters.map(PICK_PROPS);
-      await Article.create({
+      const article = await Article.create({
         props,
         name: this.compoundName,
       });
+      this.$emit('found', article);
     },
     arrayToFilters() {
       return ({ props }) => {

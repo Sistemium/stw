@@ -13,7 +13,7 @@
 
 import StockTakingItem from '@/models/StockTakingItem';
 import Storage from '@/models/Storage';
-import WorkflowProcessing from '@/WorkflowProcessing.vue';
+import WorkflowProcessing from '@/lib/WorkflowProcessing.vue';
 
 export default {
   name: 'StockTakingListItemView',

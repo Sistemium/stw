@@ -1,6 +1,6 @@
 <template lang="pug">
 
-.stock-taking-item-list.list-group
+.stock-taking-item-list.list-group(v-if="items.length")
   .list-group-item(v-for="item in items" :key="item.id" @click="$emit('click', item)")
     article-view(:article-id="item.articleId")
     .info
