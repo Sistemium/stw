@@ -1,6 +1,6 @@
 <template lang="pug">
 
-el-dropdown.workflow-button(@command="onCommand" :trigger="trigger")
+el-dropdown.workflow-button(@command="onCommand" :trigger="trigger" v-if="step")
   el-button(:type="step.style" size="mini" :disabled="disabled") {{ $t(step.label) }}
   template(v-slot:dropdown)
     el-dropdown-menu
