@@ -3,11 +3,11 @@
 .stock-taking-page
 
   .header
-    el-date-picker.date(v-model="stockTaking.date")
+    el-date-picker.date(v-model="stockTaking.date" :disabled="true")
     workflow-button(:workflow="workflow" :value="stockTaking.processing" @input="onProcessing")
 
   el-tabs(@tab-click="onTabClick" tab-position="top" v-model="currentTab")
-    el-tab-pane(label="Scan" name="scan" v-if="showScan")
+    el-tab-pane(:label="$t('scan')" name="scan" v-if="showScan")
       resize(:padding="20")
         inventory-page(:value="article" @input="onArticle" @scan="onScan")
         template(v-if="article")
@@ -22,7 +22,7 @@
             @saveClick="saveItem"
             @cancelClick="cancelItem"
           )
-    el-tab-pane(label="Items" name="items")
+    el-tab-pane(:label="$t('items')" name="items")
       resize(:padding="20")
         stock-taking-item-list(:items="stockTakingItems" @click="onItemClick")
         el-alert(
@@ -152,6 +152,22 @@ export default {
     InventoryPage,
     WorkflowButton,
     FormButtons,
+  },
+  i18n: {
+    messages: {
+      en: {
+        scan: 'Scan',
+        items: 'Items',
+      },
+      ru: {
+        scan: 'Сканирование',
+        items: 'Позиции',
+      },
+      lt: {
+        scan: 'Skenavimas',
+        items: 'Pozicijos',
+      },
+    },
   },
 };
 
