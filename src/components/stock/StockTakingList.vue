@@ -5,6 +5,7 @@
     v-for="item in items" :key="item.id"
     :stock-taking-item="item"
     @click="$emit('click', item)"
+    @positionsClick="$emit('positionsClick', item)"
   )
 
 </template>

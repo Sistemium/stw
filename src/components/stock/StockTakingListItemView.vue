@@ -6,7 +6,10 @@
     .storage {{ storage }}
   .right
     workflow-processing(:processing="stockTakingItem.processing")
-    .positions {{ positions.length }} {{ $t('shortened.positions') }}.
+    el-button.positions(
+      type="text"
+      @click.stop="$emit('positionsClick')"
+    ) {{ positions.length }} {{ $t('shortened.positions') }}.
 
 </template>
 <script>
@@ -43,5 +46,7 @@ export default {
   display: flex;
   justify-content: space-between;
 }
-
+.el-button.positions {
+  padding: 0;
+}
 </style>

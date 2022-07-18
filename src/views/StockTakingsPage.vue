@@ -9,6 +9,7 @@
       stock-taking-list(
         :items="stockTakings"
         @click="onItemClick"
+        @positionsClick="onPositionsClick"
         v-if="stockTakings.length"
       )
       el-alert(type="info" :title="$t('validation.noData')" :closable="false" v-else)
@@ -44,14 +45,19 @@ export default {
     },
   },
   methods: {
-    onItemClick(stockTaking) {
+    onItemClick(stockTaking, toProgress = false) {
       const { processing } = stockTaking;
+      const progress = processing === 'progress' || toProgress;
+      const name = progress ? this.progressRoute : this.editRoute;
       this.$router.push({
-        name: processing === 'progress' ? this.progressRoute : this.editRoute,
+        name,
         params: {
           stockTakingId: stockTaking.id,
         },
       });
+    },
+    onPositionsClick(stockTaking) {
+      this.onItemClick(stockTaking, true);
     },
     onAdd() {
       this.$router.push({
