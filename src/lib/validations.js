@@ -26,10 +26,16 @@ Vue.mixin({
       const loading = this.$loading({});
       try {
         await asyncFunction();
-        this.$message.info(this.$t('saved').toString());
+        this.$message.info({
+          message: this.$t('saved').toString(),
+          showClose: true,
+        });
       } catch (e) {
         this.$error('saveWithLoading', e);
-        this.$message.error(this.$t('savingError').toString());
+        this.$message.error({
+          message: this.$t('savingError').toString(),
+          showClose: true,
+        });
       }
       loading.close();
     },
