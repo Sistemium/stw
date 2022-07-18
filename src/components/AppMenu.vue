@@ -45,6 +45,7 @@ export default {
     },
     menu() {
       return routes
+        .filter(({ meta }) => !meta || !meta.menuHidden)
         .map(({ name }) => ({
           name,
           t: `menu.${name}`,
