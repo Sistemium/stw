@@ -156,8 +156,11 @@ export default {
   overflow-x: scroll;
 }
 
-.inventory > * + * {
-  margin-top: $margin-top;
+.inventory {
+  text-align: center;
+  > * + * {
+    margin-top: $margin-top;
+  }
 }
 
 .article, .barcode {
