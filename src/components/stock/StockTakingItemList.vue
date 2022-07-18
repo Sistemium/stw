@@ -2,7 +2,9 @@
 
 .stock-taking-item-list.list-group(v-if="items.length")
   .list-group-item(v-for="item in items" :key="item.id" @click="$emit('click', item)")
-    article-view(:article-id="item.articleId")
+    .title
+      article-view(:article-id="item.articleId")
+      .cts {{ $ts(item.deviceCts || item.cts) }}
     .info
       .boxRel {{ item.quantity }}
       span x
@@ -28,6 +30,8 @@ export default {
 
 .list-group-item {
   text-align: left;
+  display: flex;
+  justify-content: space-between;
 }
 
 .info {
@@ -38,9 +42,9 @@ export default {
   }
 }
 
-.units {
-  //min-width: 20px;
-  //text-align: right;
+.cts {
+  font-size: smaller;
+  color: $gray;
 }
 
 </style>

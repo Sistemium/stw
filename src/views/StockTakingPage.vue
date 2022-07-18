@@ -83,7 +83,8 @@ export default {
     },
     stockTakingItems() {
       const { stockTakingId } = this;
-      return StockTakingItem.reactiveFilter({ stockTakingId });
+      const items = StockTakingItem.reactiveFilter({ stockTakingId });
+      return this.$orderBy(items, ['deviceCts', 'cts'], ['desc', 'desc']);
     },
     showScan() {
       return this.stockTaking.processing === 'progress';
@@ -121,6 +122,7 @@ export default {
         boxRel: 1,
         units: 1,
         stockTakingId: this.stockTaking.id,
+        deviceCts: new Date(),
       };
     },
     saveItem() {

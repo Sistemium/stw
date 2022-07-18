@@ -31,6 +31,7 @@ export default {
       return stockTakingId ? StockTaking.reactiveGet(stockTakingId) : {
         date: new Date(),
         processing: 'progress',
+        deviceCts: new Date(),
       };
     },
   },
