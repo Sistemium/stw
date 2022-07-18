@@ -74,7 +74,8 @@
     "article": "номенклатуры",
     "option": "выбора",
     "storage": "склада",
-    "stockTaking": "инвентаризации"
+    "stockTaking": "инвентаризации",
+    "stockTakingItem": "позиции инвентаризации"
   },
   "shortened": {
     "positions": "поз"

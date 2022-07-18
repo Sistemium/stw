@@ -76,7 +76,8 @@
     "article": "Article",
     "option": "Option",
     "storage": "Storage",
-    "stockTaking": "Stocktaking"
+    "stockTaking": "Stocktaking",
+    "stockTakingItem": "Stocktaking item"
   },
   "shortened": {
     "positions": "pos"

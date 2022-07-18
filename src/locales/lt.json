@@ -74,7 +74,8 @@
     "article": "Nomenklatūros",
     "option": "Parinkties",
     "storage": "Sandėlio",
-    "stockTaking": "Inventorizacijos"
+    "stockTaking": "Inventorizacijos",
+    "stockTakingItem": "Inventorizacijos pozicijos"
   },
   "shortened": {
     "positions": "poz"
