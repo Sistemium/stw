@@ -5,8 +5,8 @@ Vue.mixin({
 
   methods: {
     $orderBy: orderBy,
-    $ts(dateString) {
-      return this.$d(new Date(dateString), 'timestamp');
+    $ts(dateString, key = 'timestamp') {
+      return this.$d(new Date(dateString), key);
     },
     $requiredRule(fieldOrArray) {
       const res = {};
