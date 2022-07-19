@@ -10,7 +10,7 @@
       @click="onStorageClick"
       v-if="storages.length"
     )
-    el-alert(type="info" :title="$t('validation.noData')" :closable="false" v-else)
+    el-alert.empty(type="info" :title="$t('validation.noData')" :closable="false" v-else)
       el-button(
         type="primary" @click="onAdd" :plain="true"
       ) {{ $tAction('add', 'storage') }}

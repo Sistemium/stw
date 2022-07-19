@@ -25,7 +25,7 @@
     el-tab-pane(:label="$t('items')" name="items")
       resize(:padding="20")
         stock-taking-item-list(:items="stockTakingItems" @click="onItemClick")
-        el-alert(
+        el-alert.empty(
           v-if="!stockTakingItems.length"
           :title="$t('validation.noData')" :closable="false"
         )
