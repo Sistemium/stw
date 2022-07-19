@@ -1,7 +1,7 @@
 <template lang="pug">
 
 drawer-edit.article-edit(
-  :title="$t('title')"
+  :title="$tGen('editing', 'article')"
   :save-fn="saveFn"
   :destroy-fn="destroyFn"
   :model-origin="modelOrigin"
@@ -9,7 +9,16 @@ drawer-edit.article-edit(
   :deletable="true"
 )
   template(v-slot="{ model }")
-    article-form(ref="form" :model="model")
+    el-tabs
+      el-tab-pane(:label="$t('menu.articleProps')")
+        article-form(ref="form" :model="model")
+      el-tab-pane(:label="$t('menu.barcodes')")
+        .list-group
+          .list-group-item(
+            v-if="!model.barcodes || !model.barcodes.length"
+          ) {{ $t('validation.noData') }}
+          .list-group-item(v-for="barcode in model.barcodes" :key="barcode")
+            .code {{ barcode }}
 
 </template>
 <script>
@@ -45,15 +54,9 @@ export default {
   },
   i18n: {
     messages: {
-      en: {
-        title: 'Article edit',
-      },
-      ru: {
-        title: 'Редактирование номенклатуры',
-      },
-      lt: {
-        title: 'Nomenklatūros redagavimas',
-      },
+      en: {},
+      ru: {},
+      lt: {},
     },
   },
 };
