@@ -71,7 +71,8 @@ export default {
   },
   computed: {
     tags() {
-      return ArticleProp.reactiveFilter(({ id }) => !find(this.props, ({ id })));
+      const items = ArticleProp.reactiveFilter(({ id }) => !find(this.props, ({ id })));
+      return this.$orderBy(items, ['ord', 'isRequired'], ['acs', 'desc']);
     },
   },
   methods: {

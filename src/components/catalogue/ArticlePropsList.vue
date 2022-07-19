@@ -2,11 +2,13 @@
 
 .article-props-list.list-group
   .list-group-item(v-for="prop in articleProps" @click="$emit('click', prop)" :key="prop.id")
-    .name
-      em(v-if="prop.prefix") {{ prop.prefix }}
-      span {{ prop.name }}
-      em(v-if="prop.suffix" ) {{ prop.suffix }}
-      i.el-icon-star-on(v-if="prop.isRequired")
+    .title
+      .ord(v-if="prop.ord") {{ prop.ord }}:
+      .name
+        em(v-if="prop.prefix") {{ prop.prefix }}
+        span {{ prop.name }}
+        em(v-if="prop.suffix" ) {{ prop.suffix }}
+        i.el-icon-star-on(v-if="prop.isRequired")
     el-tag.type(v-t="`dataTypes.${prop.type}`" type="info")
 
 </template>
@@ -29,10 +31,17 @@ export default {
 .list-group-item {
   display: flex;
 
-  .name {
+  .title {
+    display: flex;
     flex: 1;
     text-align: left;
+  }
 
+  .ord {
+    margin-right: $padding;
+  }
+
+  .name {
     * + * {
       margin-left: 2px;
     }

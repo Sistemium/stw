@@ -54,7 +54,11 @@ export default {
   computed: {
     modelOrigin() {
       const { articlePropId } = this;
-      return articlePropId ? ArticleProp.reactiveGet(articlePropId) : { isRequired: false };
+      return articlePropId ? ArticleProp.reactiveGet(articlePropId) : {
+        isRequired: false,
+        isNaming: true,
+        ord: 0,
+      };
     },
     options() {
       const { articlePropId: propId } = this;

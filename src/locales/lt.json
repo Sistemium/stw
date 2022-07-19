@@ -33,7 +33,9 @@
     "boxQuantity": "Dėžų kiekis",
     "package": "Pakavimas",
     "processing": "Būsena",
-    "storage": "Sandėlis"
+    "storage": "Sandėlis",
+    "naming": "Pavadinimo dalis",
+    "ord": "Eilės numeris"
   },
   "storage": {
     "boxes": "Dėžės",

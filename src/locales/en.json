@@ -33,7 +33,9 @@
     "boxQuantity": "Number of boxes",
     "package": "Package",
     "processing": "Status",
-    "storage": "Storage"
+    "storage": "Storage",
+    "naming": "Part of name",
+    "ord": "Order number"
   },
   "storage": {
     "boxes": "Boxes",

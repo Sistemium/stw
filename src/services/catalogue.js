@@ -10,6 +10,10 @@ export function compoundName(filters) {
     const { stringValue, numberValue } = filter;
     const simple = stringValue || numberValue;
     const prop = filter.prop || ArticleProp.getByID(filter.propId) || {};
+    const { isNaming } = prop;
+    if (!isNaming) {
+      return null;
+    }
     if (simple) {
       const { prefix, suffix } = prop;
       return [prefix, simple, suffix]

@@ -23,7 +23,6 @@
 <script>
 import ArticleProp from '@/models/ArticleProp';
 import ArticlePropsList from '@/components/catalogue/ArticlePropsList.vue';
-import orderBy from 'lodash/orderBy';
 import PageTitle from '@/components/PageTitle.vue';
 
 export default {
@@ -34,7 +33,8 @@ export default {
   },
   computed: {
     articleProps() {
-      return orderBy(ArticleProp.reactiveFilter({}), ['isRequired', 'name'], ['desc', 'asc']);
+      const items = ArticleProp.reactiveFilter({});
+      return this.$orderBy(items, ['ord', 'isRequired', 'name'], ['asc', 'desc', 'asc']);
     },
     showDrawer() {
       return this.$route.name === this.editRoute;
