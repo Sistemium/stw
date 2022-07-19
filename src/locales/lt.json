@@ -4,8 +4,10 @@
   "savingError": "Nepavyko išsaugoti",
   "saved": "Išsaugota",
   "cancel": "Atšaukti",
+  "clear": "Išvalyti",
   "menu": {
     "about": "Apie",
+    "barcodes": "Brūkš. kodai",
     "home": "Pradžia",
     "inventory": "Inventorizacija",
     "articleProps": "Ypatybės",

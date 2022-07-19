@@ -4,8 +4,10 @@
   "savingError": "Saving error",
   "saved": "Saved",
   "cancel": "Cancel",
+  "clear": "Clear",
   "menu": {
     "about": "About",
+    "barcodes": "Barcodes",
     "home": "Home",
     "inventory": "Inventory",
     "articleProps": "Properties",

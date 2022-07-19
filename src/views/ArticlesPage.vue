@@ -3,8 +3,11 @@
 .articles-page.page
   page-title(title="menu.articles")
 
-  resize(:padding="20")
+  barcode-view(@input="setBarcode")
+
+  resize(:padding="20" v-if="articles.length")
     article-list(:articles="articles" @click="onArticleClick")
+  el-alert.empty(type="info" :title="$t('validation.noData')" :closable="false" v-else)
 
   router-view
 
@@ -15,6 +18,7 @@ import ArticleList from '@/components/catalogue/ArticleList.vue';
 import Article from '@/models/Article';
 import orderBy from 'lodash/orderBy';
 import PageTitle from '@/components/PageTitle.vue';
+import BarcodeView from '@/components/BarcodeScanner/BarcodeView.vue';
 
 export default {
   name: 'ArticlesPage',
@@ -22,13 +26,21 @@ export default {
     editRoute: String,
     createRoute: String,
   },
-  components: { PageTitle, ArticleList },
+  data() {
+    return { barcode: null };
+  },
+  components: { BarcodeView, PageTitle, ArticleList },
   computed: {
     articles() {
-      return orderBy(Article.reactiveFilter(), 'name');
+      const { barcode } = this;
+      const filter = !barcode ? {} : (({ barcodes }) => barcodes && barcodes.includes(barcode));
+      return orderBy(Article.reactiveFilter(filter), 'name');
     },
   },
   methods: {
+    setBarcode(barcode) {
+      this.barcode = barcode ? barcode.code : null;
+    },
     onArticleClick(article) {
       this.$router.push({
         name: this.editRoute,
@@ -38,6 +50,7 @@ export default {
       });
     },
   },
+
 };
 
 </script>
