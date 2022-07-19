@@ -29,9 +29,9 @@ export default {
     modelOrigin() {
       const { stockTakingId } = this;
       return stockTakingId ? StockTaking.reactiveGet(stockTakingId) : {
-        date: new Date(),
+        date: new Date().toJSON(),
         processing: 'progress',
-        deviceCts: new Date(),
+        deviceCts: new Date().toJSON(),
       };
     },
   },
