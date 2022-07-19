@@ -122,7 +122,7 @@ export default {
         boxRel: 1,
         units: 1,
         stockTakingId: this.stockTaking.id,
-        deviceCts: new Date(),
+        deviceCts: new Date().toJSON(),
       };
     },
     saveItem() {
@@ -140,6 +140,7 @@ export default {
         await StockTakingItem.create(this.stockTakingItem);
         this.cancelItem();
         this.clearScannedBarcode();
+        this.currentTab = 'items';
       });
     },
     cancelItem() {
