@@ -11,8 +11,8 @@
     el-radio-group(
       v-model="matcherMode"
     )
-      el-radio-button(label="add") Add article
-      el-radio-button(label="find") Find article
+      el-radio-button(label="add" :disabled="true") {{ $t('addArticle') }}
+      el-radio-button(label="find") {{ $t('findArticle') }}
     article-matcher(@found="onArticle")
 
   template(v-if="canAddBarcode")
@@ -81,7 +81,7 @@ export default {
     },
     async onScan(barcode) {
       const { code } = barcode || {};
-      this.article = null;
+      this.onArticle(null);
       if (!code) {
         this.notFound = false;
         return;
@@ -96,7 +96,7 @@ export default {
           return;
         }
         if (res.length === 1) {
-          [this.article] = res;
+          this.onArticle(res[0]);
           return;
         }
         this.articles = res;
@@ -126,18 +126,24 @@ export default {
   i18n: {
     messages: {
       en: {
+        addArticle: 'Add article',
+        findArticle: 'Find article',
         not_found: 'Not found article',
         notFoundAdding: 'Add new article or link barcode to existing',
         addBarcode: 'Link barcode to article',
         scanBarcode: 'Scan product barcode to continue',
       },
       ru: {
+        addArticle: 'Создать номенклатуру',
+        findArticle: 'Найти номенклатуру',
         not_found: 'Номенклатура не найдена',
         notFoundAdding: 'Добавим новую номенклатуру или привяжем штрих-код к имеющейся',
         addBarcode: 'Связать код с номенклатурой',
         scanBarcode: 'Сканируйте штрих-код товара, чтобы продолжить',
       },
       lt: {
+        addArticle: 'Sukurti nomenklatūrą',
+        findArticle: 'Rasti nomenklatūrą',
         not_found: 'Nomenklatūros nerasta',
         notFoundAdding: 'Pridėti naują nomenklatūrą arba pridėti brūkšninį kodą prie esamos',
         addBarcode: 'Susieti kodą su nomenklatūra',
