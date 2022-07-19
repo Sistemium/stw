@@ -2,7 +2,7 @@
 
 .stock-taking-list-item-view.list-group-item(@click="$emit('click')")
   .title
-    .date {{ $d(date) }}
+    .date {{ $ts(stockTakingItem.date, 'short') }}
     .storage {{ storage }}
   .right
     workflow-processing(:processing="stockTakingItem.processing")
@@ -28,9 +28,6 @@ export default {
     positions() {
       const { id: stockTakingId } = this.stockTakingItem;
       return StockTakingItem.reactiveFilter({ stockTakingId });
-    },
-    date() {
-      return new Date(this.stockTakingItem.date);
     },
     storage() {
       const { name } = Storage.reactiveGet(this.stockTakingItem.storageId) || {};
