@@ -14,6 +14,11 @@
       v-for="(prop, idx) in articleProps" :key="prop.id"
       :label="prop.prop.name"
     )
+      ordering-buttons(
+        :items="model.props"
+        :item="model.props[idx]"
+        @reorder="setName()"
+      )
       component(
         v-if="prop.component"
         :is="prop.component.is"
@@ -35,6 +40,7 @@ import ArticleProp from '@/models/ArticleProp';
 import PropOption from '@/models/PropOption';
 import { compoundName } from '@/services/catalogue';
 import get from 'lodash/get';
+import OrderingButtons from '@/lib/OrderingButtons.vue';
 
 const INPUTS = new Map([
   ['boolean', { is: 'el-switch', field: 'boolValue' }],
@@ -84,10 +90,13 @@ export default {
       if (prop.type === 'options') {
         this.model.props[idx].stringValue = get(PropOption.getByID(value), 'name');
       }
+      this.setName();
+    },
+    setName() {
       this.model.name = compoundName(this.model.props);
     },
   },
-  components: {},
+  components: { OrderingButtons },
 };
 
 </script>
@@ -96,6 +105,14 @@ export default {
 .list-group-item {
   display: flex;
   justify-content: space-between;
+}
+
+.ordering-buttons {
+  float: left;
+}
+
+.el-form-item {
+  text-align: right;
 }
 
 </style>
