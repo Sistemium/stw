@@ -8,20 +8,11 @@
 
   transition-group.match(name="flip-list")
     .prop(v-for="(prop, index) in props" :key="prop.id")
-      .ordering
-        el-button(
-          type="text"
-          @click.prevent.stop="reorder(prop, -1)"
-          :disabled = "index === 0"
-        )
-          i.el-icon-arrow-up
-
-        el-button(
-          type="text"
-          @click.prevent.stop="reorder(prop, 1)"
-          :disabled = "index === props.length - 1"
-        )
-          i.el-icon-arrow-down
+      ordering-buttons(
+        :items="props"
+        :item="prop"
+        @reorder="reorder"
+      )
       prop-input(
         :prop="prop"
         @close="removeProp"
@@ -36,6 +27,7 @@ import PropTags from '@/components/props/PropTags.vue';
 import PropInput from '@/components/props/PropInput.vue';
 import ArticleProp from '@/models/ArticleProp';
 import { articlePropertySort } from '@/services/catalogue';
+import OrderingButtons from '@/lib/OrderingButtons.vue';
 
 const PICK_VALUES = [
   'optionId',
@@ -58,6 +50,7 @@ export default {
     };
   },
   components: {
+    OrderingButtons,
     PropInput,
     PropTags,
   },
@@ -77,13 +70,7 @@ export default {
     },
   },
   methods: {
-    reorder(prop1, change) {
-      this.$debug(prop1, change);
-      const { props } = this;
-      const ord1 = props.indexOf(prop1);
-      const ord2 = ord1 + change;
-      props.splice(ord1, 1);
-      props.splice(ord2, 0, prop1);
+    reorder() {
       this.$emit('input', this.getResult(this.values));
     },
     getResult(values) {
