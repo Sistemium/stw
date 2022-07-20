@@ -41,6 +41,7 @@ export default {
     modelOrigin() {
       const { articleId } = this;
       return articleId ? Article.reactiveGet(articleId) : {
+        name: '',
         props: [],
         boxes: [],
         isCustomName: false,

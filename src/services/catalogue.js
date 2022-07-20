@@ -2,7 +2,7 @@ import lowerFirst from 'lodash/lowerFirst';
 import upperFirst from 'lodash/upperFirst';
 import trim from 'lodash/trim';
 import map from 'lodash/map';
-import ArticleProp from '@/models/ArticleProp';
+import ArticleProp, { TYPES_DEFAULTS, VALUE_TYPES } from '@/models/ArticleProp';
 import orderBy from 'lodash/orderBy';
 
 // eslint-disable-next-line import/prefer-default-export
@@ -38,8 +38,10 @@ export function articlePropertySort(items) {
 }
 
 export function propToArticlePropMap(prop) {
+  const { type } = prop;
   return {
     propId: prop.id,
-    type: prop.type,
+    type,
+    [VALUE_TYPES[type]]: TYPES_DEFAULTS[type],
   };
 }

@@ -5,6 +5,9 @@
 
   barcode-view(@input="setBarcode")
 
+  .buttons
+    tool-button(tool="add" @click="onAdd")
+
   resize(:padding="20" v-if="articles.length")
     article-list(:articles="articles" @click="onArticleClick")
   el-alert.empty(type="info" :title="$t('validation.noData')" :closable="false" v-else)
@@ -38,6 +41,11 @@ export default {
     },
   },
   methods: {
+    onAdd() {
+      this.$router.push({
+        name: this.createRoute,
+      });
+    },
     setBarcode(barcode) {
       this.barcode = barcode ? barcode.code : null;
     },

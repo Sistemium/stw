@@ -19,5 +19,13 @@ export default {
       }),
       component: () => import('../components/catalogue/ArticleEdit.vue'),
     },
+    {
+      path: 'create',
+      name: 'articleCreate',
+      props: () => ({
+        from: { name: 'articles' },
+      }),
+      component: () => import('../components/catalogue/ArticleEdit.vue'),
+    },
   ],
 };
