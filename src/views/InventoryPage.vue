@@ -1,10 +1,8 @@
 <template lang="pug">
 
 .inventory
-  .barcode(v-if="scannedBarCode")
-    simple-label(text="fields.barcode")
-    .code {{ scannedBarCode.code }}
 
+  barcode-view(v-if="scannedBarCode" @input="onScan")
   el-alert(v-else :title="$t('scanBarcode')")
 
   template(v-if="notFound && !article")
@@ -32,6 +30,7 @@ import Article from '@/models/Article';
 import ArticleMatcher from '@/components/catalogue/ArticleMatcher.vue';
 import * as g from '@/store/inv/getters';
 import * as m from '@/store/inv/mutations';
+import BarcodeView from '@/components/BarcodeScanner/BarcodeView.vue';
 
 const { mapGetters, mapMutations } = createNamespacedHelpers('inv');
 
@@ -121,6 +120,7 @@ export default {
     this.$watchImmediate('value', this.onArticle);
   },
   components: {
+    BarcodeView,
     ArticleMatcher,
   },
   i18n: {
@@ -164,6 +164,7 @@ export default {
 
 .inventory {
   text-align: center;
+
   > * + * {
     margin-top: $margin-top;
   }

@@ -52,5 +52,7 @@ export default {
 
 </script>
 <style scoped lang="scss">
-
+.barcode-view {
+  text-align: left;
+}
 </style>
