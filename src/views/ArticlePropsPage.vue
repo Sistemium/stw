@@ -36,9 +36,6 @@ export default {
       const items = ArticleProp.reactiveFilter({});
       return this.$orderBy(items, ['ord', 'isRequired', 'name'], ['asc', 'desc', 'asc']);
     },
-    showDrawer() {
-      return this.$route.name === this.editRoute;
-    },
   },
   methods: {
     onPropClick(prop) {

@@ -9,6 +9,8 @@
         span {{ prop.name }}
         em(v-if="prop.suffix" ) {{ prop.suffix }}
         i.el-icon-star-on(v-if="prop.isRequired")
+        i.el-icon-view(v-if="prop.isNaming")
+        //i.el-icon-key(v-if="prop.isUnique")
     el-tag.type(v-t="`dataTypes.${prop.type}`" type="info")
 
 </template>
@@ -45,19 +47,19 @@ export default {
     * + * {
       margin-left: 2px;
     }
+
+    i {
+      color: $orange;
+      font-size: 10px;
+      position: relative;
+      top: -$padding;
+    }
   }
 }
 
 em {
   font-style: normal;
   color: $gray;
-}
-
-.el-icon-star-on {
-  color: $orange;
-  font-size: 10px;
-  position: relative;
-  top: -$padding;
 }
 
 </style>
