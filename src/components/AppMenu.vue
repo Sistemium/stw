@@ -17,6 +17,12 @@
         ) {{ $tAction(tabBarShown ? 'hide' : 'show', 'profile') }}
 
   slot(name="left")
+    el-button.tab-bar-toggle(
+      circle
+      :icon="tabBarIcon"
+      v-if="isNative"
+      @click="onCommand('toggleTabBar')"
+    )
 
   .title
     strong {{ title }}
@@ -143,6 +149,7 @@ export default {
 
   a {
     font-weight: bold;
+    line-height: 25px;
   }
 
   a + a:before {
@@ -177,6 +184,15 @@ strong, .hamburger {
 
 #nav > a {
   white-space: nowrap;
+}
+
+.tab-bar-toggle {
+  @include responsive-only(xxs) {
+    display: none;
+  }
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 </style>
