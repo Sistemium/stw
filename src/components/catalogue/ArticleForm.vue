@@ -37,6 +37,7 @@
             :value="id"
             :label="name"
           )
+    prop-tags(:tags="tags" @click="addProp")
 
 </template>
 <script>
@@ -44,9 +45,11 @@
 
 import ArticleProp from '@/models/ArticleProp';
 import PropOption from '@/models/PropOption';
-import { compoundName } from '@/services/catalogue';
+import * as catalogue from '@/services/catalogue';
 import get from 'lodash/get';
 import OrderingButtons from '@/lib/OrderingButtons.vue';
+import PropTags from '@/components/props/PropTags.vue';
+import find from 'lodash/find';
 
 const INPUTS = new Map([
   ['boolean', { is: 'el-switch', field: 'boolValue' }],
@@ -64,10 +67,12 @@ export default {
     },
   },
   computed: {
+    tags() {
+      const items = ArticleProp.reactiveFilter(({ id }) => !find(this.props, ({ id })));
+      return catalogue.articlePropertySort(items);
+    },
     rules() {
-      return {
-        ...this.$requiredRule('name'),
-      };
+      return this.$requiredRule('name');
     },
     articleProps() {
       const { props = [] } = this.model;
@@ -90,6 +95,9 @@ export default {
     },
   },
   methods: {
+    addProp(prop) {
+      this.model.props.push(catalogue.propToArticlePropMap(prop));
+    },
     onPropInput(prop, value, idx) {
       this.$debug(prop, value, idx);
       this.model.props[idx][prop.component.field] = value;
@@ -100,7 +108,7 @@ export default {
     },
     setName() {
       if (!this.model.isCustomName) {
-        this.model.name = compoundName(this.model.props);
+        this.model.name = catalogue.compoundName(this.model.props);
       }
     },
     toggleClock() {
@@ -108,7 +116,7 @@ export default {
       this.setName();
     },
   },
-  components: { OrderingButtons },
+  components: { OrderingButtons, PropTags },
 };
 
 </script>

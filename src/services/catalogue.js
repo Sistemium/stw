@@ -36,3 +36,10 @@ export function compoundName(filters) {
 export function articlePropertySort(items) {
   return orderBy(items, ['ord', 'isRequired', 'name'], ['asc', 'desc', 'asc']);
 }
+
+export function propToArticlePropMap(prop) {
+  return {
+    propId: prop.id,
+    type: prop.type,
+  };
+}
