@@ -12,7 +12,7 @@
         template(v-slot:append)
           el-button(
             :class="model.isCustomName && 'isCustomName'"
-            @click="toggleClock"
+            @click="toggleNameLock"
             :icon="model.isCustomName ? 'el-icon-unlock' : 'el-icon-lock'"
           )
 
@@ -111,7 +111,7 @@ export default {
         this.model.name = catalogue.compoundName(this.model.props);
       }
     },
-    toggleClock() {
+    toggleNameLock() {
       this.model.isCustomName = !this.model.isCustomName;
       this.setName();
     },
