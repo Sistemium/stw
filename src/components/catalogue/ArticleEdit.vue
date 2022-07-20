@@ -40,7 +40,11 @@ export default {
   computed: {
     modelOrigin() {
       const { articleId } = this;
-      return articleId ? Article.reactiveGet(articleId) : { props: [] };
+      return articleId ? Article.reactiveGet(articleId) : {
+        props: [],
+        boxes: [],
+        isCustomName: false,
+      };
     },
   },
   methods: {

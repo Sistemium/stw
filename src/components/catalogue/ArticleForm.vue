@@ -8,7 +8,13 @@
   )
 
     el-form-item(:label="$t('fields.name')" prop="name")
-      el-input(v-model="model.name")
+      el-input(v-model="model.name" :readonly="!model.isCustomName")
+        template(v-slot:append)
+          el-button(
+            :class="model.isCustomName && 'isCustomName'"
+            @click="toggleClock"
+            :icon="model.isCustomName ? 'el-icon-unlock' : 'el-icon-lock'"
+          )
 
     el-form-item(
       v-for="(prop, idx) in articleProps" :key="prop.id"
@@ -93,7 +99,13 @@ export default {
       this.setName();
     },
     setName() {
-      this.model.name = compoundName(this.model.props);
+      if (!this.model.isCustomName) {
+        this.model.name = compoundName(this.model.props);
+      }
+    },
+    toggleClock() {
+      this.model.isCustomName = !this.model.isCustomName;
+      this.setName();
     },
   },
   components: { OrderingButtons },
@@ -101,6 +113,7 @@ export default {
 
 </script>
 <style scoped lang="scss">
+@import "../../styles/variables";
 
 .list-group-item {
   display: flex;
@@ -113,6 +126,10 @@ export default {
 
 .el-form-item {
   text-align: right;
+}
+
+.isCustomName ::v-deep i {
+  color: $red;
 }
 
 </style>
