@@ -24,6 +24,7 @@
 import ArticleProp from '@/models/ArticleProp';
 import ArticlePropsList from '@/components/catalogue/ArticlePropsList.vue';
 import PageTitle from '@/components/PageTitle.vue';
+import { articlePropertySort } from '@/services/catalogue';
 
 export default {
   name: 'ArticlePropsPage',
@@ -34,7 +35,7 @@ export default {
   computed: {
     articleProps() {
       const items = ArticleProp.reactiveFilter({});
-      return this.$orderBy(items, ['ord', 'isRequired', 'name'], ['asc', 'desc', 'asc']);
+      return articlePropertySort(items);
     },
   },
   methods: {

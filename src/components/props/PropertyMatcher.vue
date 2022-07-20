@@ -35,6 +35,7 @@ import find from 'lodash/find';
 import PropTags from '@/components/props/PropTags.vue';
 import PropInput from '@/components/props/PropInput.vue';
 import ArticleProp from '@/models/ArticleProp';
+import { articlePropertySort } from '@/services/catalogue';
 
 const PICK_VALUES = [
   'optionId',
@@ -72,7 +73,7 @@ export default {
   computed: {
     tags() {
       const items = ArticleProp.reactiveFilter(({ id }) => !find(this.props, ({ id })));
-      return this.$orderBy(items, ['ord', 'isRequired'], ['acs', 'desc']);
+      return articlePropertySort(items);
     },
   },
   methods: {

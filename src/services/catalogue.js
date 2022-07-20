@@ -3,6 +3,7 @@ import upperFirst from 'lodash/upperFirst';
 import trim from 'lodash/trim';
 import map from 'lodash/map';
 import ArticleProp from '@/models/ArticleProp';
+import orderBy from 'lodash/orderBy';
 
 // eslint-disable-next-line import/prefer-default-export
 export function compoundName(filters) {
@@ -30,4 +31,8 @@ export function compoundName(filters) {
     .map(lowerFirst)
     .join(' ');
   return upperFirst(trim(res));
+}
+
+export function articlePropertySort(items) {
+  return orderBy(items, ['ord', 'isRequired', 'name'], ['asc', 'desc', 'asc']);
 }
