@@ -7,7 +7,7 @@
   prop-tags(@click="addProp" :tags="tags" size="small")
 
   transition-group.match(name="flip-list")
-    .prop(v-for="(prop, index) in props" :key="prop.id")
+    .prop(v-for="prop in props" :key="prop.id")
       ordering-buttons(
         :items="props"
         :item="prop"
