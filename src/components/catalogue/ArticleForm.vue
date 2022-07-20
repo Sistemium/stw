@@ -68,7 +68,8 @@ export default {
   },
   computed: {
     tags() {
-      const items = ArticleProp.reactiveFilter(({ id }) => !find(this.props, ({ id })));
+      const filter = ({ id }) => !find(this.articleProps, ({ propId: id }));
+      const items = ArticleProp.reactiveFilter(filter);
       return catalogue.articlePropertySort(items);
     },
     rules() {
@@ -99,7 +100,6 @@ export default {
       this.model.props.push(catalogue.propToArticlePropMap(prop));
     },
     onPropInput(prop, value, idx) {
-      this.$debug(prop, value, idx);
       this.model.props[idx][prop.component.field] = value;
       if (prop.type === 'options') {
         this.model.props[idx].stringValue = get(PropOption.getByID(value), 'name');
