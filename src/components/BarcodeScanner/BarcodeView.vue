@@ -20,6 +20,9 @@ const { mapGetters, mapMutations } = createNamespacedHelpers('inv');
 
 export default {
   name: 'BarcodeView',
+  props: {
+    emitOnCreate: Boolean,
+  },
   computed: {
     ...mapGetters({
       scannedBarCode: g.SCANNED_BARCODE,
@@ -39,6 +42,11 @@ export default {
         this.$emit('clear');
       }
     },
+  },
+  created() {
+    if (this.scannedBarCode) {
+      this.$emit('input', this.scannedBarCode);
+    }
   },
 };
 
