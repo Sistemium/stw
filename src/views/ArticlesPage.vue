@@ -8,9 +8,9 @@
   .buttons
     tool-button(tool="add" @click="onAdd")
 
-  resize(:padding="20" v-if="articles.length")
-    article-list(:articles="articles" @click="onArticleClick")
-  el-alert.empty(type="info" :title="$t('validation.noData')" :closable="false" v-else)
+  resize(:padding="20")
+    article-list(:articles="articles" @click="onArticleClick" v-if="articles.length")
+    el-alert.empty(type="info" :title="$t('validation.noData')" :closable="false" v-else)
 
   router-view
 
