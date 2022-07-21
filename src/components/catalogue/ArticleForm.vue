@@ -20,6 +20,7 @@
       el-form-item(
         v-for="(prop, idx) in articleProps" :key="prop.propId"
         :label="prop.prop.name"
+        :prop="prop.prop.name"
       )
         ordering-buttons(
           :items="model.props"
@@ -76,7 +77,25 @@ export default {
       return catalogue.articlePropertySort(items);
     },
     rules() {
-      return this.$requiredRule('name');
+      const res = {
+        ...this.$requiredRule('name'),
+      };
+      this.articleProps.forEach(({ prop }, idx) => {
+        if (prop.isRequired) {
+          res[prop.name] = [{
+            message: this.$t('validation.required', [prop.name]),
+            validator: (rule, value, callback) => {
+              if (this.model.props[idx].optionId) {
+                callback();
+              } else {
+                callback(this.$t('validation.required', [prop.name]));
+              }
+            },
+            trigger: 'blur',
+          }];
+        }
+      });
+      return res;
     },
     articleProps() {
       const { props = [] } = this.model;
