@@ -24,6 +24,7 @@ new Vue({
     router.onReady(route => {
       this.$debug('router:ready', route);
       const { 'access-token': token } = route ? route.query : {};
+      const loading = Loading.service({});
       store.dispatch('auth/AUTH_INIT', token)
         .then(async () => {
           if (!token) {
@@ -31,7 +32,10 @@ new Vue({
           }
           await this.updateRouteParams({}, { 'access-token': undefined });
         })
-        .catch(e => this.$error('auth', e));
+        .catch(e => this.$error('auth', e))
+        .finally(() => {
+          loading.close();
+        });
     });
   },
 }).$mount('#app');
