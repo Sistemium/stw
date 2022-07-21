@@ -13,7 +13,6 @@ el-form.stock-taking-item-form(
       el-radio-button(label="units") {{ $t('storage.units') }}
 
   el-form-item.article(:label="$t('concepts.article')" prop="articleId")
-    //article-view(:article-id="model.articleId")
     article-select(v-model="model.articleId")
 
   template(v-if="mode==='boxes'")
@@ -48,7 +47,7 @@ export default {
   computed: {
     rules() {
       return {
-        ...this.$requiredRule(['quantity', 'boxRel']),
+        ...this.$requiredRule(['quantity', 'boxRel', 'articleId']),
       };
     },
     units() {
@@ -86,16 +85,15 @@ export default {
 <style scoped lang="scss">
 
 .el-form-item {
-  display: flex;
-  justify-content: space-between;
+  text-align: right;
 
   &::after, &::before {
     display: none;
   }
 }
 
-.mode {
-  //justify-content: center;
+.article-select {
+  width: 100%;
 }
 
 </style>
