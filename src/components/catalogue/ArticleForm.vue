@@ -25,7 +25,7 @@
           :items="model.props"
           :item="model.props[idx]"
           @reorder="setName()"
-          :show-clear="true"
+          :show-clear="!prop.prop.isRequired"
         )
         component(
           v-if="prop.component"
@@ -52,6 +52,7 @@ import get from 'lodash/get';
 import OrderingButtons from '@/lib/OrderingButtons.vue';
 import PropTags from '@/components/props/PropTags.vue';
 import find from 'lodash/find';
+import findLastIndex from 'lodash/findLastIndex';
 
 const INPUTS = new Map([
   ['boolean', { is: 'el-switch', field: 'boolValue' }],
@@ -98,12 +99,16 @@ export default {
     },
   },
   methods: {
-    clearProp(idx) {
-      this.model.props.splice(idx, 1);
-      this.setName();
-    },
     addProp(prop) {
-      this.model.props.push(catalogue.propToArticlePropMap(prop));
+      const modelProp = catalogue.propToArticlePropMap(prop);
+      const { ord } = prop;
+      const idx = findLastIndex(this.articleProps, p => p.prop.ord <= ord);
+      if (idx === -1) {
+        this.model.props.push(modelProp);
+      } else {
+        this.model.props.splice(idx + 1, 0, modelProp);
+      }
+      this.setName();
     },
     onPropInput(prop, value, idx) {
       this.model.props[idx][prop.component.field] = value;

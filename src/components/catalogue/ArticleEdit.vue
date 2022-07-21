@@ -26,6 +26,7 @@ drawer-edit.article-edit(
 import DrawerEdit from '@/lib/DrawerEdit.vue';
 import Article from '@/models/Article';
 import ArticleForm from '@/components/catalogue/ArticleForm.vue';
+import { articleInstance } from '@/services/catalogue';
 
 export default {
   name: 'ArticleEdit',
@@ -40,12 +41,7 @@ export default {
   computed: {
     modelOrigin() {
       const { articleId } = this;
-      return articleId ? Article.reactiveGet(articleId) : {
-        name: '',
-        props: [],
-        boxes: [],
-        isCustomName: false,
-      };
+      return articleId ? Article.reactiveGet(articleId) : articleInstance();
     },
   },
   methods: {

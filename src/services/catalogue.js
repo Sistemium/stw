@@ -45,3 +45,14 @@ export function propToArticlePropMap(prop) {
     [VALUE_TYPES[type]]: TYPES_DEFAULTS[type],
   };
 }
+
+export function articleInstance() {
+  const props = articlePropertySort(ArticleProp.filter({ isRequired: true }))
+    .map(propToArticlePropMap);
+  return {
+    name: '',
+    props,
+    boxes: [],
+    isCustomName: false,
+  };
+}
