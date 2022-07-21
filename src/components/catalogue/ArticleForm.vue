@@ -16,27 +16,29 @@
             :icon="model.isCustomName ? 'el-icon-unlock' : 'el-icon-lock'"
           )
 
-    el-form-item(
-      v-for="(prop, idx) in articleProps" :key="prop.id"
-      :label="prop.prop.name"
-    )
-      ordering-buttons(
-        :items="model.props"
-        :item="model.props[idx]"
-        @reorder="setName()"
+    transition-group(name="flip-list")
+      el-form-item(
+        v-for="(prop, idx) in articleProps" :key="prop.propId"
+        :label="prop.prop.name"
       )
-      component(
-        v-if="prop.component"
-        :is="prop.component.is"
-        :value="model.props[idx][prop.component.field]"
-        @input="value => onPropInput(prop, value, idx)"
-      )
-        template(v-if="prop.options")
-          el-option(
-            v-for="{ id, name } in prop.options" :key="id"
-            :value="id"
-            :label="name"
-          )
+        ordering-buttons(
+          :items="model.props"
+          :item="model.props[idx]"
+          @reorder="setName()"
+          :show-clear="true"
+        )
+        component(
+          v-if="prop.component"
+          :is="prop.component.is"
+          :value="model.props[idx][prop.component.field]"
+          @input="value => onPropInput(prop, value, idx)"
+        )
+          template(v-if="prop.options")
+            el-option(
+              v-for="{ id, name } in prop.options" :key="id"
+              :value="id"
+              :label="name"
+            )
     prop-tags(:tags="tags" @click="addProp")
 
 </template>
@@ -96,6 +98,10 @@ export default {
     },
   },
   methods: {
+    clearProp(idx) {
+      this.model.props.splice(idx, 1);
+      this.setName();
+    },
     addProp(prop) {
       this.model.props.push(catalogue.propToArticlePropMap(prop));
     },
@@ -138,6 +144,10 @@ export default {
 
 .isCustomName ::v-deep i {
   color: $red;
+}
+
+.clear-prop {
+  padding: $padding $padding $padding 0;
 }
 
 </style>

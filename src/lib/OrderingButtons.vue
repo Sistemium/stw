@@ -15,6 +15,13 @@
   )
     i.el-icon-arrow-down
 
+  el-button(
+    type="text"
+    @click.prevent.stop="remove()"
+    v-if="showClear"
+  )
+    i.el-icon-close
+
 </template>
 <script>
 
@@ -23,6 +30,7 @@ export default {
   props: {
     items: Array,
     item: Object,
+    showClear: Boolean,
   },
   computed: {
     length() {
@@ -39,6 +47,11 @@ export default {
       const ord2 = ord1 + change;
       items.splice(ord1, 1);
       items.splice(ord2, 0, this.item);
+      this.$emit('reorder');
+    },
+    remove() {
+      const { items } = this;
+      items.splice(this.index, 1);
       this.$emit('reorder');
     },
   },
