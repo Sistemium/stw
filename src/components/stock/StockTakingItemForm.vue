@@ -12,8 +12,9 @@ el-form.stock-taking-item-form(
       el-radio-button(label="boxes") {{ $t('storage.boxes') }}
       el-radio-button(label="units") {{ $t('storage.units') }}
 
-  el-form-item.article(:label="$t('concepts.article')")
-    article-view(:article-id="model.articleId")
+  el-form-item.article(:label="$t('concepts.article')" prop="articleId")
+    //article-view(:article-id="model.articleId")
+    article-select(v-model="model.articleId")
 
   template(v-if="mode==='boxes'")
     el-form-item(prop="boxRel" :label="$t('fields.boxRel')")
@@ -31,6 +32,7 @@ el-form.stock-taking-item-form(
 // import StockTakingItem from '@/models/StockTakingItem';
 import Article from '@/models/Article';
 import ArticleView from '@/components/catalogue/ArticleView.vue';
+import ArticleSelect from '@/components/catalogue/ArticleSelect.vue';
 
 export default {
   name: 'StockTakingItemForm',
@@ -77,7 +79,7 @@ export default {
       this.mode = model.boxRel > 1 ? 'boxes' : 'units';
     });
   },
-  components: { ArticleView },
+  components: { ArticleSelect, ArticleView },
 };
 
 </script>
