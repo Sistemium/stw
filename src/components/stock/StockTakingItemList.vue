@@ -36,7 +36,7 @@ export default {
 
 .info {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   span {
     margin: 0 $padding;
   }
