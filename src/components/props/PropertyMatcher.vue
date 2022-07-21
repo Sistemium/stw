@@ -143,8 +143,4 @@ h2 {
   margin-top: $margin-right;
 }
 
-.flip-list-move {
-  transition: transform 0.3s;
-}
-
 </style>
