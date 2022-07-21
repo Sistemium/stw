@@ -10,18 +10,19 @@ export default {
     return {
       stockTakingId,
       editItemRoute: 'stockTakingItemEdit',
-      createItemRoute: 'stockTakingItemEditCreate',
+      createItemRoute: 'stockTakingItemCreate',
     };
   },
   children: [
-    // {
-    //   path: 'create',
-    //   name: 'articlePropCreate',
-    //   props: {
-    //     from: { name: 'articleProps' },
-    //   },
-    //   component: () => import('../components/ArticlePropertyEdit.vue'),
-    // },
+    {
+      path: 'create',
+      name: 'stockTakingItemCreate',
+      props: ({ params: { stockTakingId } }) => ({
+        stockTakingId,
+        from: { name: 'stockTakingProgress' },
+      }),
+      component: () => import('../components/stock/StockTakingItemEdit.vue'),
+    },
     {
       path: 'editItem/:stockTakingItemId',
       name: 'stockTakingItemEdit',

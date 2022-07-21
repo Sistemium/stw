@@ -7,23 +7,24 @@ el-form.stock-taking-item-form(
   :disabled="!editable"
 )
 
-  el-form-item.mode(:label="$t('fields.package')")
-    el-radio-group(v-model="mode" @change="modeChange")
-      el-radio-button(label="boxes") {{ $t('storage.boxes') }}
-      el-radio-button(label="units") {{ $t('storage.units') }}
-
   el-form-item.article(:label="$t('concepts.article')" prop="articleId")
     article-select(v-model="model.articleId")
 
-  template(v-if="mode==='boxes'")
-    el-form-item(prop="boxRel" :label="$t('fields.boxRel')")
-      el-input-number(v-model="model.boxRel" :min="1")
+  template(v-if="article")
+    el-form-item.mode(:label="$t('fields.package')")
+      el-radio-group(v-model="mode" @change="modeChange")
+        el-radio-button(label="boxes") {{ $t('storage.boxes') }}
+        el-radio-button(label="units") {{ $t('storage.units') }}
 
-  el-form-item(
-    prop="quantity"
-    :label="$t(mode==='boxes' ? 'fields.boxQuantity' : 'fields.quantity')"
-  )
-    el-input-number(v-model="model.quantity" :min="1")
+    template(v-if="mode==='boxes'")
+      el-form-item(prop="boxRel" :label="$t('fields.boxRel')")
+        el-input-number(v-model="model.boxRel" :min="1")
+
+    el-form-item(
+      prop="quantity"
+      :label="$t(mode==='boxes' ? 'fields.boxQuantity' : 'fields.quantity')"
+    )
+      el-input-number(v-model="model.quantity" :min="1")
 
 </template>
 <script>

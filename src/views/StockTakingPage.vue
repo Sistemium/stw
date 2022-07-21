@@ -23,6 +23,8 @@
             @cancelClick="cancelItem"
           )
     el-tab-pane(:label="$t('items')" name="items")
+      .buttons(v-if="stockTakingItems.length")
+        tool-button(tool="add" @click="onAdd")
       resize(:padding="20")
         stock-taking-item-list(:items="stockTakingItems" @click="onItemClick")
         el-alert.empty(
@@ -46,12 +48,14 @@ import FormButtons from '@bit/sistemium.vue.form-buttons/FormButtons.vue';
 import find from 'lodash/find';
 import * as m from '@/store/inv/mutations';
 import StockTakingItemList from '@/components/stock/StockTakingItemList.vue';
+import { stockTakingItemInstance } from '@/services/warehousing';
 
 const { mapMutations } = createNamespacedHelpers('inv');
 
 export default {
   name: 'StockTakingPage',
   props: {
+    createItemRoute: String,
     editItemRoute: String,
     stockTakingId: String,
   },
@@ -102,12 +106,20 @@ export default {
     ...mapMutations({
       clearScannedBarcode: m.SET_SCANNED_BARCODE,
     }),
+    onAdd() {
+      this.$router.push({
+        name: this.createItemRoute,
+        params: {
+          stockTakingId: this.stockTakingId,
+        },
+      });
+    },
     onItemClick(item) {
       this.$router.push({
         name: this.editItemRoute,
         params: {
           stockTakingItemId: item.id,
-          stockTakingId: this.stockTaking.id,
+          stockTakingId: this.stockTakingId,
         },
       });
     },
@@ -116,14 +128,10 @@ export default {
     },
     onArticle(article) {
       this.article = article;
-      this.stockTakingItem = article && {
+      this.stockTakingItem = article && stockTakingItemInstance({
         articleId: article.id,
-        quantity: 1,
-        boxRel: 1,
-        units: 1,
-        stockTakingId: this.stockTaking.id,
-        deviceCts: new Date().toJSON(),
-      };
+        stockTakingId: this.stockTakingId,
+      });
     },
     saveItem() {
       this.$saveWithLoading(async () => {
@@ -197,6 +205,11 @@ export default {
 }
 
 .stock-taking-item-form {
+  text-align: right;
+}
+
+.buttons {
+  margin-bottom: $margin-top;
   text-align: right;
 }
 

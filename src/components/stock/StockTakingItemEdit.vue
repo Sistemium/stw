@@ -18,22 +18,24 @@ import DrawerEdit from '@/lib/DrawerEdit.vue';
 import StockTakingItem from '@/models/StockTakingItem';
 import StockTaking from '@/models/StockTaking';
 import StockTakingItemForm from '@/components/stock/StockTakingItemForm.vue';
+import { stockTakingItemInstance } from '@/services/warehousing';
 
 export default {
   name: 'StockTakingItemEdit',
   components: { StockTakingItemForm, DrawerEdit },
   props: {
-    stockTakingId: String,
+    stockTakingId: { type: String, required: true },
     stockTakingItemId: String,
     from: Object,
   },
   computed: {
     stockTaking() {
-      return StockTaking.reactiveGet(this.stockTakingId || this.modelOrigin.stockTakingId);
+      return StockTaking.reactiveGet(this.stockTakingId);
     },
     modelOrigin() {
       const { stockTakingItemId: id, stockTakingId } = this;
-      return id ? StockTakingItem.reactiveGet(id) : { stockTakingId };
+      return id ? StockTakingItem.reactiveGet(id)
+        : stockTakingItemInstance({ stockTakingId });
     },
     editable() {
       const { processing } = this.stockTaking || {};
