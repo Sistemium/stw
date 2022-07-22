@@ -11,6 +11,7 @@
 <script>
 
 import { createNamespacedHelpers } from 'vuex';
+import find from 'lodash/find';
 import AppMenu from '@/components/AppMenu.vue';
 import BarcodeScannerStatus, {
   isNative,
@@ -31,7 +32,9 @@ export default {
       isConnected: g.SCANNER_IS_CONNECTED,
     }),
     showBarcodeStatus() {
-      return this.$route.meta.useScanner;
+      const { matched } = this.$router.currentRoute;
+      return this.$route.meta.useScanner
+        || !!find(matched, ({ meta }) => meta && meta.useScanner);
     },
     showBarcodeInput() {
       return this.showBarcodeStatus && !isNative() && this.isConnected;
