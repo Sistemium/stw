@@ -1,26 +1,28 @@
 <template lang="pug">
 
-  el-drawer.drawer-edit(
-    :title="title"
-    :visible="true"
-    :append-to-body="true"
-    :destroy-on-close="true"
-    ref="drawer"
-    :size="size"
-    @close="handleClose"
-    :style="drawerStyle"
+component.drawer-edit.box-card(
+  :is="drawerComponent"
+  shadow="never"
+  :title="title"
+  :visible="true"
+  :append-to-body="true"
+  :destroy-on-close="true"
+  ref="drawer"
+  :size="size"
+  @close="handleClose"
+  :style="drawerStyle"
+)
+
+  .resize.container(:padding="60")
+    slot(v-bind:model="model")
+
+  form-buttons(
+    :changed="changed"
+    :deletable="isDeletable"
+    @saveClick="onSaveClick"
+    @cancelClick="cancelClick"
+    @deleteClick="onDeleteClick"
   )
-
-    .resize.container(:padding="60")
-      slot(v-bind:model="model")
-
-    form-buttons(
-      :changed="changed"
-      :deletable="isDeletable"
-      @saveClick="onSaveClick"
-      @cancelClick="cancelClick"
-      @deleteClick="onDeleteClick"
-    )
 
 </template>
 <script>
@@ -37,6 +39,7 @@ export default {
   components: { FormButtons },
   props: {
     title: String,
+    isDrawer: { type: Boolean, default: true },
     size: {
       type: String,
       default: '350px',
@@ -78,6 +81,9 @@ export default {
     });
   },
   computed: {
+    drawerComponent() {
+      return this.isDrawer ? 'el-drawer' : 'el-card';
+    },
     loading() {
       return !!this.loadingMessage;
     },
@@ -233,6 +239,13 @@ export default {
 
 .container {
   padding: $margin-right;
+}
+
+.el-card {
+  border: none;
+  ::v-deep .el-card__body, .container {
+    padding: 0;
+  }
 }
 
 </style>
