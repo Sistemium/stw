@@ -2,8 +2,10 @@ import lowerFirst from 'lodash/lowerFirst';
 import upperFirst from 'lodash/upperFirst';
 import trim from 'lodash/trim';
 import map from 'lodash/map';
+import uniq from 'lodash/uniq';
 import ArticleProp, { TYPES_DEFAULTS, VALUE_TYPES } from '@/models/ArticleProp';
 import orderBy from 'lodash/orderBy';
+import Article from '@/models/Article';
 
 // eslint-disable-next-line import/prefer-default-export
 export function compoundName(filters) {
@@ -55,4 +57,16 @@ export function articleInstance() {
     boxes: [],
     isCustomName: false,
   };
+}
+
+export async function addBarcodeToArticle(barcode, article) {
+  const { barcodes } = article;
+  const props = {
+    ...article,
+    barcodes: uniq([
+      ...(barcodes || []),
+      barcode,
+    ]),
+  };
+  return Article.createOne(props);
 }

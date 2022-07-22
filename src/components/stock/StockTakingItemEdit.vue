@@ -27,15 +27,19 @@ export default {
     stockTakingId: { type: String, required: true },
     stockTakingItemId: String,
     from: Object,
+    barcode: String,
   },
   computed: {
     stockTaking() {
       return StockTaking.reactiveGet(this.stockTakingId);
     },
     modelOrigin() {
-      const { stockTakingItemId: id, stockTakingId } = this;
+      const { stockTakingItemId: id, stockTakingId, barcode } = this;
       return id ? StockTakingItem.reactiveGet(id)
-        : stockTakingItemInstance({ stockTakingId });
+        : stockTakingItemInstance({
+          stockTakingId,
+          barcode,
+        });
     },
     editable() {
       const { processing } = this.stockTaking || {};

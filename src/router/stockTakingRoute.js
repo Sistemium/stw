@@ -17,8 +17,9 @@ export default {
     {
       path: 'create',
       name: 'stockTakingItemCreate',
-      props: ({ params: { stockTakingId } }) => ({
+      props: ({ params: { stockTakingId }, query: { barcode } }) => ({
         stockTakingId,
+        barcode,
         from: { name: 'stockTakingProgress' },
       }),
       component: () => import('../components/stock/StockTakingItemEdit.vue'),
