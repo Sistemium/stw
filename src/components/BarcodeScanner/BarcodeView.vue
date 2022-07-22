@@ -12,42 +12,11 @@ el-alert.barcode-view(
 </template>
 <script>
 
-import { createNamespacedHelpers } from 'vuex';
-import * as g from '@/store/inv/getters';
-import * as m from '@/store/inv/mutations';
-
-const { mapGetters, mapMutations } = createNamespacedHelpers('inv');
+import BarcodeScanner from '@/components/BarcodeScanner/BarcodeScanner';
 
 export default {
   name: 'BarcodeView',
-  props: {
-    emitOnCreate: Boolean,
-  },
-  computed: {
-    ...mapGetters({
-      scannedBarCode: g.SCANNED_BARCODE,
-    }),
-  },
-  methods: {
-    ...mapMutations({
-      clearBarcode: m.SET_SCANNED_BARCODE,
-    }),
-  },
-  watch: {
-    scannedBarCode(barCode) {
-      this.$emit('input', barCode);
-      if (barCode) {
-        this.$emit('scan', barCode);
-      } else {
-        this.$emit('clear');
-      }
-    },
-  },
-  created() {
-    if (this.scannedBarCode) {
-      this.$emit('input', this.scannedBarCode);
-    }
-  },
+  mixins: [BarcodeScanner],
 };
 
 </script>
