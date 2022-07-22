@@ -10,6 +10,8 @@ el-select.article-select(
     :label="item.name"
     :value="item.id"
   )
+  template(v-slot:empty)
+    slot(name="empty")
 
 </template>
 <script>
@@ -20,10 +22,16 @@ export default {
   name: 'ArticleSelect',
   props: {
     value: String,
+    filters: {
+      type: [Object, Function],
+      default() {
+        return {};
+      },
+    },
   },
   computed: {
     options() {
-      return this.$orderBy(Article.reactiveFilter());
+      return this.$orderBy(Article.reactiveFilter(this.filters), ['name']);
     },
     currentId: {
       get() {
@@ -31,6 +39,20 @@ export default {
       },
       set(id) {
         this.$emit('input', id);
+      },
+    },
+  },
+  watch: {
+    options: {
+      immediate: true,
+      handler(options) {
+        if (options.length === 1) {
+          this.currentId = options[0].id;
+          return;
+        }
+        if (this.currentId && !options.find(({ id }) => id === this.currentId)) {
+          this.currentId = null;
+        }
       },
     },
   },
