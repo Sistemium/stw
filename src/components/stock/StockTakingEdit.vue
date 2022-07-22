@@ -7,6 +7,7 @@ drawer-edit.stock-taking-edit(
   :model-origin="modelOrigin"
   :from="from"
   :deletable="true"
+  :is-drawer="isDrawer"
 )
   template(v-slot="{ model }")
     stock-taking-form(ref="form" :model="model")
@@ -24,6 +25,7 @@ export default {
     stockTakingId: String,
     from: Object,
     progressRoute: String,
+    isDrawer: { type: Boolean, default: true },
   },
   computed: {
     modelOrigin() {

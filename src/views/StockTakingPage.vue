@@ -2,26 +2,19 @@
 
 .stock-taking-page
 
-  .header
+  barcode-scanner(@scan="onScan")
+
+  //.header
     el-date-picker.date(v-model="stockTaking.date" :disabled="true")
-    workflow-button(:workflow="workflow" :value="stockTaking.processing" @input="onProcessing")
+    //workflow-button(:workflow="workflow" :value="stockTaking.processing" @input="onProcessing")
 
   el-tabs(@tab-click="onTabClick" tab-position="top" v-model="currentTab")
-    el-tab-pane(:label="$t('scan')" name="scan" v-if="showScan")
-      resize(:padding="20")
-        inventory-page(:value="article" @input="onArticle" @scan="onScan")
-        template(v-if="article")
-          stock-taking-item-form(
-            v-if="article"
-            :editable="true"
-            :model="stockTakingItem"
-          )
-          form-buttons(
-            :changed="true"
-            :deletable="false"
-            @saveClick="saveItem"
-            @cancelClick="cancelItem"
-          )
+    el-tab-pane(:label="$t('settings')" name="settings")
+      stock-taking-edit(
+        :stockTakingId="stockTakingId"
+        :is-drawer="false"
+        @closed="onClose"
+      )
     el-tab-pane(:label="$t('items')" name="items")
       .buttons(v-if="stockTakingItems.length")
         tool-button(tool="add" @click="onAdd")
@@ -49,6 +42,9 @@ import find from 'lodash/find';
 import * as m from '@/store/inv/mutations';
 import StockTakingItemList from '@/components/stock/StockTakingItemList.vue';
 import { stockTakingItemInstance } from '@/services/warehousing';
+import BarcodeScanner from '@/components/BarcodeScanner/BarcodeScanner';
+// import StockTakingForm from '@/components/stock/StockTakingForm.vue';
+import StockTakingEdit from '@/components/stock/StockTakingEdit.vue';
 
 const { mapMutations } = createNamespacedHelpers('inv');
 
@@ -58,6 +54,7 @@ export default {
     createItemRoute: String,
     editItemRoute: String,
     stockTakingId: String,
+    closeRoute: String,
   },
   data() {
     return {
@@ -95,8 +92,14 @@ export default {
     },
   },
   methods: {
-    onScan() {
-      this.currentTab = 'scan';
+    onClose() {
+      this.$router.push({ name: this.closeRoute });
+    },
+    onScan(barcode) {
+      this.currentTab = 'items';
+      if (barcode) {
+        this.onAdd(barcode.code);
+      }
     },
     onProcessing(processing) {
       this.$saveWithLoading(async () => {
@@ -106,12 +109,14 @@ export default {
     ...mapMutations({
       clearScannedBarcode: m.SET_SCANNED_BARCODE,
     }),
-    onAdd() {
+    onAdd(barcode) {
+      const query = barcode ? { barcode } : {};
       this.$router.push({
         name: this.createItemRoute,
         params: {
           stockTakingId: this.stockTakingId,
         },
+        query,
       });
     },
     onItemClick(item) {
@@ -156,23 +161,29 @@ export default {
     },
   },
   components: {
+    StockTakingEdit,
+    // StockTakingForm,
     StockTakingItemList,
     StockTakingItemForm,
     InventoryPage,
     WorkflowButton,
     FormButtons,
+    BarcodeScanner,
   },
   i18n: {
     messages: {
       en: {
+        settings: 'Parameters',
         scan: 'Scan',
         items: 'Items',
       },
       ru: {
+        settings: 'Параметры',
         scan: 'Сканирование',
         items: 'Позиции',
       },
       lt: {
+        settings: 'Nustatymai',
         scan: 'Skenavimas',
         items: 'Pozicijos',
       },
@@ -210,6 +221,14 @@ export default {
 
 .buttons {
   margin-bottom: $margin-top;
+  text-align: right;
+}
+
+.workflow-button {
+  float: right;
+}
+
+.stock-taking-edit {
   text-align: right;
 }
 

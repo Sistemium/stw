@@ -4,6 +4,7 @@ el-form.stock-taking-form(
   :model="model"
   ref="form"
   :rules="rules"
+  :disabled="disabled"
 )
 
   el-form-item(:label="$t('fields.date')" prop="date")
@@ -17,7 +18,7 @@ el-form.stock-taking-form(
       )
 
   el-form-item(:label="$t('fields.processing')" prop="processing")
-    workflow-button(:workflow="workflow" v-model="model.processing")
+    workflow-button(:workflow="workflow" v-model="model.processing" :disabled="disabled")
 
 </template>
 <script>
@@ -31,6 +32,7 @@ export default {
   components: { WorkflowButton },
   props: {
     model: Object,
+    disabled: Boolean,
   },
   computed: {
     rules() {

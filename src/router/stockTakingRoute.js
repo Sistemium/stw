@@ -11,6 +11,7 @@ export default {
       stockTakingId,
       editItemRoute: 'stockTakingItemEdit',
       createItemRoute: 'stockTakingItemCreate',
+      closeRoute: 'stockTakings',
     };
   },
   children: [
