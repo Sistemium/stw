@@ -8,13 +8,7 @@
     el-date-picker.date(v-model="stockTaking.date" :disabled="true")
     //workflow-button(:workflow="workflow" :value="stockTaking.processing" @input="onProcessing")
 
-  el-tabs(@tab-click="onTabClick" tab-position="top" v-model="currentTab")
-    el-tab-pane(:label="$t('settings')" name="settings")
-      stock-taking-edit(
-        :stockTakingId="stockTakingId"
-        :is-drawer="false"
-        @closed="onClose"
-      )
+  el-tabs(tab-position="top" v-model="currentTabData" )
     el-tab-pane(:label="$t('items')" name="items")
       .buttons(v-if="stockTakingItems.length")
         tool-button(tool="add" @click="onAdd")
@@ -24,6 +18,12 @@
           v-if="!stockTakingItems.length"
           :title="$t('validation.noData')" :closable="false"
         )
+    el-tab-pane(:label="$t('settings')" name="settings")
+      stock-taking-edit(
+        :stockTakingId="stockTakingId"
+        :is-drawer="false"
+        @closed="onClose"
+      )
 
   router-view
 
@@ -36,14 +36,10 @@ import WorkflowButton from '@/lib/WorkflowButton.vue';
 import InventoryPage from '@/views/InventoryPage.vue';
 import StockTakingItemForm from '@/components/stock/StockTakingItemForm.vue';
 import StockTakingItem from '@/models/StockTakingItem';
-import Article from '@/models/Article';
 import FormButtons from '@bit/sistemium.vue.form-buttons/FormButtons.vue';
-import find from 'lodash/find';
 import * as m from '@/store/inv/mutations';
 import StockTakingItemList from '@/components/stock/StockTakingItemList.vue';
-import { stockTakingItemInstance } from '@/services/warehousing';
 import BarcodeScanner from '@/components/BarcodeScanner/BarcodeScanner';
-// import StockTakingForm from '@/components/stock/StockTakingForm.vue';
 import StockTakingEdit from '@/components/stock/StockTakingEdit.vue';
 
 const { mapMutations } = createNamespacedHelpers('inv');
@@ -58,24 +54,12 @@ export default {
   },
   data() {
     return {
-      article: null,
+      // article: null,
       stockTakingItem: null,
       currentTabData: 'items',
     };
   },
   computed: {
-    currentTab: {
-      get() {
-        const { currentTabData, showScan } = this;
-        if (!showScan && currentTabData === 'scan') {
-          return 'items';
-        }
-        return currentTabData;
-      },
-      set(tab) {
-        this.currentTabData = tab;
-      },
-    },
     workflow() {
       return workflow;
     },
@@ -87,24 +71,18 @@ export default {
       const items = StockTakingItem.reactiveFilter({ stockTakingId });
       return this.$orderBy(items, ['deviceCts', 'cts'], ['desc', 'desc']);
     },
-    showScan() {
-      return this.stockTaking.processing === 'progress';
-    },
   },
   methods: {
-    onClose() {
-      this.$router.push({ name: this.closeRoute });
+    onClose(record) {
+      if (!record) {
+        this.$router.push({ name: this.closeRoute });
+      }
     },
     onScan(barcode) {
       this.currentTab = 'items';
       if (barcode) {
         this.onAdd(barcode.code);
       }
-    },
-    onProcessing(processing) {
-      this.$saveWithLoading(async () => {
-        await StockTaking.createOne({ ...this.stockTaking, processing });
-      });
     },
     ...mapMutations({
       clearScannedBarcode: m.SET_SCANNED_BARCODE,
@@ -128,41 +106,9 @@ export default {
         },
       });
     },
-    onTabClick(tab) {
-      this.$debug(tab);
-    },
-    onArticle(article) {
-      this.article = article;
-      this.stockTakingItem = article && stockTakingItemInstance({
-        articleId: article.id,
-        stockTakingId: this.stockTakingId,
-      });
-    },
-    saveItem() {
-      this.$saveWithLoading(async () => {
-        const { boxRel } = this.stockTakingItem;
-        if (boxRel > 1) {
-          const boxes = this.article.boxes || [];
-          if (!find(boxes, { boxRel })) {
-            await Article.create({
-              ...this.article,
-              boxes: [...boxes, { boxRel }],
-            });
-          }
-        }
-        await StockTakingItem.create(this.stockTakingItem);
-        this.cancelItem();
-        this.clearScannedBarcode();
-        this.currentTab = 'items';
-      });
-    },
-    cancelItem() {
-      this.article = null;
-    },
   },
   components: {
     StockTakingEdit,
-    // StockTakingForm,
     StockTakingItemList,
     StockTakingItemForm,
     InventoryPage,
@@ -200,32 +146,10 @@ export default {
   margin: 0 auto;
 }
 
-.header {
-  display: flex;
-  justify-content: space-between;
-}
-
-.date {
-  width: 130px;
-}
-
 .stm-resize {
   > * + * {
     margin-top: $margin-top;
   }
-}
-
-.stock-taking-item-form {
-  text-align: right;
-}
-
-.buttons {
-  margin-bottom: $margin-top;
-  text-align: right;
-}
-
-.workflow-button {
-  float: right;
 }
 
 .stock-taking-edit {
