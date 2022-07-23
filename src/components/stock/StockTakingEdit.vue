@@ -47,6 +47,7 @@ export default {
           params: { stockTakingId },
         });
       }
+      return StockTaking.reactiveGet(stockTakingId);
     },
     destroyFn(id) {
       return StockTaking.destroy(id);
