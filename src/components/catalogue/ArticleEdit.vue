@@ -7,6 +7,7 @@ drawer-edit.article-edit(
   :model-origin="modelOrigin"
   :from="from"
   :deletable="true"
+  :drawer-style="drawerStyle"
 )
   template(v-slot="{ model }")
     el-tabs
@@ -33,6 +34,7 @@ export default {
   props: {
     articleId: String,
     from: Object,
+    drawerStyle: Object,
   },
   components: {
     ArticleForm,
@@ -47,10 +49,10 @@ export default {
   methods: {
     destroyFn() {
       const { articleId } = this;
-      return articleId && this.$saveWithLoading(() => Article.destroy(articleId));
+      return articleId && Article.destroy(articleId);
     },
     saveFn(props) {
-      return this.$saveWithLoading(() => Article.createOne(props));
+      return Article.createOne(props);
     },
   },
   i18n: {
