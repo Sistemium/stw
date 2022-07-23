@@ -29,8 +29,9 @@ Vue.mixin({
     },
     async $saveWithLoading(asyncFunction) {
       const loading = this.$loading({});
+      let result;
       try {
-        await asyncFunction();
+        result = await asyncFunction();
         this.$message.info({
           message: this.$t('saved').toString(),
           showClose: true,
@@ -43,6 +44,7 @@ Vue.mixin({
         });
       }
       loading.close();
+      return result;
     },
     $watchImmediate(expOrFn, callback) {
       return this.$watch(expOrFn, callback, { immediate: true });
