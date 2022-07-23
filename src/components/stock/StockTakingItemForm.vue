@@ -20,11 +20,14 @@ el-form.stock-taking-item-form(
     ) {{ $t('addBarcode') }}
 
   el-form-item.article(:label="$t('concepts.article')" prop="articleId")
-    article-select(v-model="model.articleId" :filters="articleFilters")
-      template(v-slot:empty v-if="model.barcode && !isShowingAllArticles")
-        p.el-select-dropdown__empty
-          span {{ $t('notFound') }}
-          el-button(@click="toggleShowAllArticles") {{ $t('showAll') }}
+    .select-button
+      .prepend
+        el-button(icon="el-icon-plus" @click="addArticle")
+      article-select(v-model="model.articleId" :filters="articleFilters")
+        template(v-slot:empty v-if="model.barcode && !isShowingAllArticles")
+          p.el-select-dropdown__empty
+            span {{ $t('notFound') }}
+            el-button(@click="toggleShowAllArticles") {{ $t('showAll') }}
 
   template(v-if="article")
     el-form-item.mode(:label="$t('fields.package')")
@@ -42,6 +45,13 @@ el-form.stock-taking-item-form(
     )
       el-input-number(v-model="model.quantity" :min="1")
 
+  article-edit(
+    v-if="showDrawer"
+    @saved="articleSaved"
+    @closed="articleEditClosed"
+    :drawer-style="{ top: '50px' }"
+  )
+
 </template>
 <script>
 /* eslint-disable vue/no-mutating-props */
@@ -50,6 +60,7 @@ import Article from '@/models/Article';
 import ArticleView from '@/components/catalogue/ArticleView.vue';
 import ArticleSelect from '@/components/catalogue/ArticleSelect.vue';
 import { addBarcodeToArticle } from '@/services/catalogue';
+import ArticleEdit from '@/components/catalogue/ArticleEdit.vue';
 
 export default {
   name: 'StockTakingItemForm',
@@ -59,6 +70,7 @@ export default {
   },
   data() {
     return {
+      showDrawer: false,
       mode: 'units',
       isShowingAllArticles: false,
     };
@@ -93,6 +105,22 @@ export default {
     },
   },
   methods: {
+    articleEditClosed() {
+      this.showDrawer = false;
+    },
+    articleSaved(article) {
+      if (article) {
+        setTimeout(() => {
+          this.model.articleId = article.id;
+          if (this.canAddBarcode) {
+            this.isShowingAllArticles = true;
+          }
+        }, 0);
+      }
+    },
+    addArticle() {
+      this.showDrawer = true;
+    },
     onAddBarcodeClick() {
       const { article, model: { barcode } } = this;
       this.$saveWithLoading(async () => {
@@ -122,7 +150,7 @@ export default {
       this.mode = model.boxRel > 1 ? 'boxes' : 'units';
     });
   },
-  components: { ArticleSelect, ArticleView },
+  components: { ArticleEdit, ArticleSelect, ArticleView },
   i18n: {
     messages: {
       en: {
@@ -168,6 +196,29 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.select-button {
+  display: flex;
+  width: 100%;
+
+  ::v-deep input {
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+  }
+
+  .prepend {
+    border: 1px solid #DCDFE6;
+    border-right: none;
+    border-radius: 4px 0 0 4px;
+    line-height: 1;
+  }
+
+  .el-button {
+    line-height: 10px;
+    border: transparent;
+    background-color: #F5F7FA;
+  }
 }
 
 </style>

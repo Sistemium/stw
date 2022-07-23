@@ -34,11 +34,12 @@ export default {
       return StockTaking.reactiveGet(this.stockTakingId);
     },
     modelOrigin() {
-      const { stockTakingItemId: id, stockTakingId, barcode } = this;
+      const { stockTakingItemId: id, stockTakingId, barcode = null } = this;
       return id ? StockTakingItem.reactiveGet(id)
         : stockTakingItemInstance({
           stockTakingId,
           barcode,
+          articleId: null,
         });
     },
     editable() {
