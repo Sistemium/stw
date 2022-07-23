@@ -115,14 +115,13 @@ export default {
         this.$emit('deleted');
         return;
       }
-      this.destroyFn(id)
+      this.performOperation(() => this.destroyFn(id)
         .then(() => {
           this.$emit('deleted', id);
-          this.cancelClick();
         })
         .catch(e => {
           this.$emit('error', e);
-        });
+        }));
     },
 
     getValidateForm(parent = this.$parent) {
@@ -137,20 +136,21 @@ export default {
     onSaveClick() {
       this.getValidateForm()(valid => {
         if (valid) {
-          this.save();
+          this.performOperation(this.save);
         } else {
-          this.$message.warning(String(this.$t('validation.formInvalid')));
+          this.$message.warning(this.$t('validation.formInvalid').toString());
         }
       });
     },
 
     save() {
-      this.saveFn(this.model)
+      return this.saveFn(this.model)
         .then(record => {
-          this.$emit('saved', record);
-          if (this.$refs.drawer) {
-            this.cancelClick();
-          }
+          this.$parent.$emit('saved', record);
+          return record;
+          // if (this.$refs.drawer) {
+          //   this.cancelClick(record);
+          // }
         })
         .catch(e => {
           this.$message.error(e.message);
@@ -158,27 +158,23 @@ export default {
         });
     },
 
-    handleClose() {
+    handleClose(record) {
       if (!this.from) {
         this.drawerOpen = false;
-        this.$parent.$emit('closed');
+        this.$parent.$emit('closed', record);
         return;
       }
       this.$router.replace(this.from)
         .catch(e => error('handleClose', e));
     },
 
-    cancelClick() {
+    cancelClick(record) {
       const { drawer } = this.$refs;
       if (!drawer) {
         error('cancelClick', 'drawer ref is empty');
         return;
       }
-      if (drawer.closeDrawer) {
-        drawer.closeDrawer();
-      } else {
-        this.handleClose();
-      }
+      this.handleClose(record);
     },
 
     async performOperation(op) {
@@ -186,9 +182,9 @@ export default {
       this.showLoading();
 
       try {
-        await op();
+        const res = await op();
         this.hideLoading();
-        this.cancelClick();
+        this.cancelClick(res);
       } catch (e) {
         this.hideLoading();
         this.showError(e);
@@ -243,6 +239,7 @@ export default {
 
 .el-card {
   border: none;
+
   ::v-deep .el-card__body, .container {
     padding: 0;
   }
