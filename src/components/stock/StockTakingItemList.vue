@@ -5,8 +5,8 @@
     .title
       article-view(:article-id="item.articleId")
       .cts {{ $ts(item.deviceCts || item.cts) }}
-    .info
-      .boxRel {{ item.quantity }}
+    .right
+      .quantity {{ item.quantity }}
       span x
       .boxRel {{ item.boxRel }}
       span &equals;
@@ -34,9 +34,10 @@ export default {
   justify-content: space-between;
 }
 
-.info {
+.right {
   display: flex;
   justify-content: flex-end;
+  align-items: flex-end;
   span {
     margin: 0 $padding;
   }

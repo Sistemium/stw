@@ -38,12 +38,19 @@ export default {
 
 </script>
 <style scoped lang="scss">
+@import "../../styles/variables";
 
 .list-group-item {
   display: flex;
   justify-content: space-between;
 }
+
 .el-button.positions {
   padding: 0;
 }
+
+.right {
+  margin-left: $margin-right;
+}
+
 </style>
