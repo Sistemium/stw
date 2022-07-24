@@ -12,14 +12,19 @@ drawer-edit.article-property-edit(
     el-tabs
       el-tab-pane(:label="$t('form')")
         article-property-form(ref="form" :model="model")
-      el-tab-pane(:label="$t('options')" v-if="articlePropId && model.type === 'options'")
+      el-tab-pane(
+        :label="$t('options')"
+        v-if="articlePropId && model.type === 'options'"
+        :lazy="true"
+      )
         template(v-if="options.length")
           .tools
             tool-button(
               tool="add"
               @click="onAdd"
             )
-          prop-option-list(:options="options" @click="optionClick" v-if="options.length")
+          resize(:padding="60")
+            prop-option-list(:options="options" @click="optionClick" v-if="options.length")
         el-button.empty(v-else @click="onAdd" type="primary") {{ $tAction('add', 'property') }}
 
     prop-option-edit(
