@@ -70,3 +70,9 @@ export async function addBarcodeToArticle(barcode, article) {
   };
   return Article.createOne(props);
 }
+
+export function searchArticle(search) {
+  const re = new RegExp(search, 'i');
+  return article => re.test(article.name)
+    || re.test(article.code);
+}

@@ -6,6 +6,7 @@
   barcode-view(@input="setBarcode")
 
   .buttons
+    search-input(v-model="search" :disabled="!!barcode")
     tool-button(tool="add" @click="onAdd")
 
   resize(:padding="20")
@@ -22,6 +23,8 @@ import Article from '@/models/Article';
 import orderBy from 'lodash/orderBy';
 import PageTitle from '@/components/PageTitle.vue';
 import BarcodeView from '@/components/BarcodeScanner/BarcodeView.vue';
+import SearchInput from '@/lib/SearchInput.vue';
+import { searchArticle } from '@/services/catalogue';
 
 export default {
   name: 'ArticlesPage',
@@ -30,14 +33,30 @@ export default {
     createRoute: String,
   },
   data() {
-    return { barcode: null };
+    return {
+      barcode: null,
+    };
   },
-  components: { BarcodeView, PageTitle, ArticleList },
+  components: {
+    SearchInput,
+    BarcodeView,
+    PageTitle,
+    ArticleList,
+  },
   computed: {
     articles() {
-      const { barcode } = this;
-      const filter = !barcode ? {} : (({ barcodes }) => barcodes && barcodes.includes(barcode));
+      const { barcode, search } = this;
+      const filter = !barcode ? searchArticle(search)
+        : (({ barcodes }) => barcodes && barcodes.includes(barcode));
       return orderBy(Article.reactiveFilter(filter), 'name');
+    },
+    search: {
+      get() {
+        return this.$route.query.search || '';
+      },
+      set(search) {
+        this.updateRouteParams({}, { search });
+      },
     },
   },
   methods: {
@@ -64,4 +83,12 @@ export default {
 </script>
 <style scoped lang="scss">
 @import "../styles/page";
+.buttons {
+  display: flex;
+  align-items: center;
+  .search-input {
+    flex: 1;
+    margin-right: $margin-right;
+  }
+}
 </style>
