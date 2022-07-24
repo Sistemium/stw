@@ -88,7 +88,8 @@ export default {
           res[prop.name] = [{
             message: this.$t('validation.required', [prop.name]),
             validator: (rule, value, callback) => {
-              if (this.model.props[idx].optionId) {
+              const propValues = this.model.props[idx];
+              if (propValues.optionId || propValues.stringValue || propValues.numberValue) {
                 callback();
               } else {
                 callback(this.$t('validation.required', [prop.name]));
@@ -109,7 +110,8 @@ export default {
         const { propId } = p;
         const prop = ArticleProp.reactiveGet(propId);
         const { type } = prop;
-        const options = type === 'options' && PropOption.reactiveFilter({ propId });
+        const options = type === 'options'
+          && this.$orderBy(PropOption.reactiveFilter({ propId }), 'name');
         return {
           ...p,
           type,
