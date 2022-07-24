@@ -24,5 +24,6 @@ export default {
 <style scoped lang="scss">
 .code {
   text-align: right;
+  font-size: smaller;
 }
 </style>

@@ -3,13 +3,17 @@
 el-select.article-select(
   filterable
   v-model="currentId"
+  :filter-method="filterSearch"
+  :debounce="300"
 )
   el-option(
-    v-for="item in options"
-    :key="item.id"
-    :label="item.name"
-    :value="item.id"
+    v-for="article in options"
+    :key="article.id"
+    :label="article.name"
+    :value="article.id"
   )
+    .name {{ article.name }}
+    .code(v-if="article.code") {{ article.code }}
   template(v-slot:empty)
     slot(name="empty")
 
@@ -17,6 +21,7 @@ el-select.article-select(
 <script>
 
 import Article from '@/models/Article';
+import { searchArticle } from '@/services/catalogue';
 
 export default {
   name: 'ArticleSelect',
@@ -29,9 +34,18 @@ export default {
       },
     },
   },
+  data() {
+    return {
+      search: '',
+    };
+  },
   computed: {
     options() {
-      return this.$orderBy(Article.reactiveFilter(this.filters), ['name']);
+      const { filters } = this;
+      const all = Article.reactiveFilter(filters);
+      const res = this.$get(filters, 'name') === 'barcodeFilter' ? all
+        : all.filter(searchArticle(this.search));
+      return this.$orderBy(res, ['name']);
     },
     currentId: {
       get() {
@@ -40,6 +54,12 @@ export default {
       set(id) {
         this.$emit('input', id);
       },
+    },
+  },
+  methods: {
+    filterSearch(search) {
+      this.$debug('search', search);
+      this.search = search;
     },
   },
   watch: {
@@ -60,5 +80,18 @@ export default {
 
 </script>
 <style scoped lang="scss">
+@import "../../styles/variables";
 
+.el-select-dropdown__item {
+  display: block;
+  //flex-direction: column;
+  height: auto;
+
+  .code {
+    line-height: 1;
+    font-size: smaller;
+    color: $light-gray;
+    text-align: right;
+  }
+}
 </style>

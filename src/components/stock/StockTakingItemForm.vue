@@ -20,6 +20,7 @@ el-form.stock-taking-item-form(
     ) {{ $t('addBarcode') }}
 
   el-form-item.article(:label="$t('concepts.article')" prop="articleId")
+    .strong(v-if="article") {{ article.code }}
     .select-button
       .prepend
         el-button(icon="el-icon-plus" @click="addArticle")
@@ -82,7 +83,9 @@ export default {
     articleFilters() {
       const { barcode } = this.model;
       if (barcode && !this.isShowingAllArticles) {
-        return ({ barcodes }) => barcodes && barcodes.includes(barcode);
+        return function barcodeFilter({ barcodes }) {
+          return barcodes && barcodes.includes(barcode);
+        };
       }
       return {};
     },
@@ -219,6 +222,16 @@ export default {
     border: transparent;
     background-color: #F5F7FA;
   }
+}
+
+.strong {
+  float: right;
+  text-align: right;
+  vertical-align: middle;
+  font-size: 14px;
+  color: $gray;
+  line-height: 40px;
+  font-weight: normal;
 }
 
 </style>

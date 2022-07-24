@@ -2,6 +2,7 @@
 
 .article-view(v-if="article")
   .name {{ article.name }}
+  .code {{ article.code }}
 
 </template>
 <script>
@@ -23,5 +24,11 @@ export default {
 
 </script>
 <style scoped lang="scss">
+@import "../../styles/variables";
+
+.code {
+  font-size: smaller;
+  color: $gray;
+}
 
 </style>

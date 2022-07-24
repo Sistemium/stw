@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import orderBy from 'lodash/orderBy';
+import get from 'lodash/get';
 
 Vue.mixin({
 
@@ -27,6 +28,7 @@ Vue.mixin({
     $tGen(action, name) {
       return this.$t(`actions.${action}`, [this.$t(`genitive.${name}`)]);
     },
+    $get: get,
     async $saveWithLoading(asyncFunction) {
       const loading = this.$loading({});
       let result;

@@ -156,4 +156,9 @@ export default {
   text-align: right;
 }
 
+.buttons {
+  text-align: right;
+  margin-bottom: $margin-right;
+}
+
 </style>
