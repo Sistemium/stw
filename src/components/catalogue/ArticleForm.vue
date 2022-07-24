@@ -16,6 +16,9 @@
             :icon="model.isCustomName ? 'el-icon-unlock' : 'el-icon-lock'"
           )
 
+    el-form-item(:label="$t('fields.code')" prop="code")
+      el-input(v-model="model.code")
+
     transition-group(name="flip-list")
       el-form-item(
         v-for="(prop, idx) in articleProps" :key="prop.propId"

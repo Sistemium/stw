@@ -7,6 +7,7 @@
     @click="$emit('click', article)"
   )
     .name {{ article.name }}
+    .code {{ article.code }}
   slot(name="footer")
 
 </template>
@@ -21,5 +22,7 @@ export default {
 
 </script>
 <style scoped lang="scss">
-
+.code {
+  text-align: right;
+}
 </style>
