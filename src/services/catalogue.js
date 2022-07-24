@@ -72,6 +72,9 @@ export async function addBarcodeToArticle(barcode, article) {
 }
 
 export function searchArticle(search) {
+  if (!search) {
+    return x => x;
+  }
   const re = new RegExp(search, 'i');
   return article => re.test(article.name)
     || re.test(article.code);
