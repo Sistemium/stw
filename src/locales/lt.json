@@ -6,6 +6,7 @@
   "saving": "Išsaugojimas",
   "cancel": "Atšaukti",
   "clear": "Išvalyti",
+  "search": "paieška",
   "menu": {
     "about": "Apie",
     "barcodes": "Brūkš. kodai",
@@ -27,6 +28,7 @@
       "yes": "Taip",
       "no": "Ne"
     },
+    "code": "Serijinis kodas",
     "inverse": "Reikšmės \"ne\" pavadinimas",
     "prefix": "Priešdėlis",
     "suffix": "Priesaga",

@@ -6,6 +6,7 @@
   "saving": "Saving",
   "cancel": "Cancel",
   "clear": "Clear",
+  "search": "search",
   "menu": {
     "about": "About",
     "barcodes": "Barcodes",
@@ -27,6 +28,7 @@
       "yes": "Yes",
       "no": "No"
     },
+    "code": "Serial code",
     "inverse": "Name for value \"no\"",
     "prefix": "Prefix",
     "suffix": "Suffix",
