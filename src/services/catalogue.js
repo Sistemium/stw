@@ -1,4 +1,3 @@
-import lowerFirst from 'lodash/lowerFirst';
 import upperFirst from 'lodash/upperFirst';
 import trim from 'lodash/trim';
 import map from 'lodash/map';
@@ -14,12 +13,12 @@ export function compoundName(filters) {
     const simple = stringValue || numberValue;
     const prop = filter.prop || ArticleProp.getByID(filter.propId) || {};
     const { isNaming } = prop;
-    if (!isNaming) {
+    if ((!isNaming && !filter.isNaming) || filter.isNaming === false) {
       return null;
     }
     if (simple) {
       const { prefix, suffix } = prop;
-      return [prefix, simple, suffix]
+      return [prefix, trim(simple), suffix]
         .filter(a => a)
         .join('');
     }

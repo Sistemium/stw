@@ -31,6 +31,12 @@
           @reorder="setName()"
           :show-clear="!prop.prop.isRequired"
         )
+        el-button.naming(
+          type="text"
+          icon="el-icon-view"
+          @click.stop.prevent="toggleNaming(prop, idx)"
+          :class="{ 'is-naming': prop.isNaming }"
+        )
         component(
           v-if="prop.component"
           :is="prop.component.is"
@@ -109,11 +115,12 @@ export default {
       return props.map(p => {
         const { propId } = p;
         const prop = ArticleProp.reactiveGet(propId);
-        const { type } = prop;
+        const { type, isNaming } = prop;
         const options = type === 'options'
           && this.$orderBy(PropOption.reactiveFilter({ propId }), 'name');
         return {
           ...p,
+          isNaming: (isNaming || p.isNaming) && p.isNaming !== false,
           type,
           prop,
           options,
@@ -150,6 +157,14 @@ export default {
       this.model.isCustomName = !this.model.isCustomName;
       this.setName();
     },
+    toggleNaming(prop, idx) {
+      const aProp = this.model.props[idx];
+      const { isNaming: isNamingProp } = aProp;
+      const { isNaming } = prop.prop;
+      const value = (!isNaming || isNamingProp === false) && !isNamingProp;
+      this.$set(aProp, 'isNaming', value === isNaming ? null : value);
+      this.setName();
+    },
   },
   components: { OrderingButtons, PropTags },
 };
@@ -159,8 +174,8 @@ export default {
 @import "../../styles/variables";
 
 .list-group-item {
-  display: flex;
-  justify-content: space-between;
+  //display: flex;
+  //justify-content: space-between;
 }
 
 .ordering-buttons {
@@ -177,6 +192,21 @@ export default {
 
 .clear-prop {
   padding: $padding $padding $padding 0;
+}
+
+.naming {
+  float: left;
+  margin-left: $margin-right;
+}
+
+.el-select {
+  display: flex;
+  width: 100%;
+}
+
+.naming.is-naming {
+  color: $orange;
+  font-weight: bold;
 }
 
 </style>
