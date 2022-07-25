@@ -1,3 +1,4 @@
+// import lowerFirst from 'lodash/lowerFirst';
 import upperFirst from 'lodash/upperFirst';
 import trim from 'lodash/trim';
 import map from 'lodash/map';
@@ -29,7 +30,7 @@ export function compoundName(filters) {
     return '';
   })
     .filter(x => x)
-    .map(lowerFirst)
+    // .map(lowerFirst)
     .join(' ');
   return upperFirst(trim(res));
 }
