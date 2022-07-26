@@ -36,7 +36,6 @@ export default {
     },
     size: {
       type: String,
-      default: 'medium',
     },
     trim: {
       type: Boolean,

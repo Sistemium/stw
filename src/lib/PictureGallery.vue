@@ -222,9 +222,6 @@ export default {
 .picture-gallery {
 
   text-align: center;
-  /*height: 100%;*/
-
-  /*display: flex;*/
   flex-direction: column;
   align-items: center;
 
@@ -245,12 +242,18 @@ export default {
   }
 
   .buttons {
-    margin-top: $margin;
+    margin-top: $margin-top;
     display: flex;
     justify-content: space-around;
-  }
-
-  .take-photo-button {
+    @include responsive-only(xxs) {
+      ::v-deep button {
+        padding: 6px;
+        white-space: normal;
+        span {
+          white-space: normal;
+        }
+      }
+    }
   }
 
 }
