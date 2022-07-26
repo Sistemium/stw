@@ -146,6 +146,9 @@ export default {
     },
   },
   created() {
+    if (this.canAddBarcode) {
+      this.isShowingAllArticles = true;
+    }
     this.$watchImmediate('units', units => {
       this.model.units = units;
     });
