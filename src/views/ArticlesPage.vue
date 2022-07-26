@@ -41,6 +41,7 @@ export default {
   data() {
     return {
       barcode: null,
+      search: '',
     };
   },
   components: {
@@ -56,14 +57,14 @@ export default {
         : (({ barcodes }) => barcodes && barcodes.includes(barcode));
       return orderBy(Article.reactiveFilter(filter), 'name');
     },
-    search: {
-      get() {
-        return this.$route.query.search || '';
-      },
-      set(search) {
-        this.updateRouteParams({}, { search });
-      },
-    },
+    // search: {
+    //   get() {
+    //     return this.$route.query.search || '';
+    //   },
+    //   set(search) {
+    //     this.updateRouteParams({}, { search });
+    //   },
+    // },
   },
   methods: {
     onAdd() {

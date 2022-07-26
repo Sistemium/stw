@@ -14,6 +14,8 @@ el-dialog.article-pictures-page(
     :has-authoring="true"
     :avatars="true"
     :carousel-type="null"
+    :new-image-properties="newImageProperties"
+    @image-click="handleClose"
   )
 
 </template>

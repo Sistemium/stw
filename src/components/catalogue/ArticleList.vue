@@ -7,7 +7,7 @@
     @click="$emit('click', article)"
   )
     .avatar(@click.prevent.stop="$emit('avatarClick', article)")
-      article-avatar(:article="article" :size="32")
+      article-avatar(:article="article" size="medium")
     .description
       .name {{ article.name }}
       .code {{ article.code }}

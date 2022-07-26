@@ -5,7 +5,6 @@ import { ACCESS_TOKEN } from 'sistemium-vue/store/auth/getters';
 import { addMonths } from 'sistemium-dates';
 
 const { mapState } = createNamespacedHelpers('auth');
-const { VUE_APP_LS_PREFIX } = process.env;
 
 export default {
 
@@ -39,7 +38,7 @@ export default {
         if (orgFolder) {
           return orgFolder;
         }
-        return auth && auth.account && (auth.account.org || VUE_APP_LS_PREFIX);
+        return auth && auth.account && auth.account.org;
       },
     }),
     // isNative,
@@ -78,7 +77,7 @@ export default {
 
     imsUrl() {
       const url = [
-        `/ims/${this.org}?folder=${this.entityName}/${addMonths(new Date(), 0)}`,
+        `/ims/${this.org || ''}?folder=${this.entityName}/${addMonths(new Date(), 0)}`,
         this.trim && 'trim=true',
       ];
       return filter(url)

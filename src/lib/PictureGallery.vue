@@ -42,7 +42,7 @@
       @done="onUpload"
       @error="unUploadError"
       @imageuploading="busy = true"
-      :entity-name="model.name"
+      :entity-name="model.collection"
     )
       slot(name="photoButton")
 
@@ -157,15 +157,15 @@ export default {
     async onUpload(picturesInfo, fileName) {
 
       const { model } = this;
-      const { src } = find(picturesInfo, { name: 'original' });
-      const { src: thumbnailSrc } = find(picturesInfo, { name: 'thumbnail' });
+      const { src: href } = find(picturesInfo, { name: 'original' });
+      const { src: thumbnailHref } = find(picturesInfo, { name: 'thumbnail' });
 
       // this.$debug('onUpload', src, fileName);
 
       try {
         const picture = await model.create({
-          src,
-          thumbnailSrc,
+          href,
+          thumbnailHref,
           picturesInfo,
           name: fileName,
           ...this.newImageProperties,

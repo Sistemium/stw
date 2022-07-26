@@ -13,7 +13,7 @@ export default {
 
   computed: {
     model() {
-      return Article;
+      return Picture;
     },
     avatarId() {
       return this.article.avatarPictureId;
@@ -35,12 +35,28 @@ export default {
     },
   },
 
+  created() {
+    this.$on('uploaded', async picture => {
+      if (this.images.length === 1) {
+        await this.setAvatar(picture);
+      }
+    });
+  },
+
   methods: {
     async setAvatar(picture) {
       await this.$saveWithLoading(() => Article.createOne({
         ...this.article,
-        avatarPictureId: picture.id,
+        avatarPictureId: picture ? picture.id : null,
       }));
+    },
+    async removeArticlePicture(picture) {
+      await this.$saveWithLoading(async () => {
+        await Picture.destroy(picture.id);
+        if (this.avatarId === picture.id) {
+          await this.setAvatar(null);
+        }
+      });
     },
   },
 

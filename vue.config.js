@@ -20,7 +20,7 @@ module.exports = defineConfig({
         target: 'https://vfsd.sistemium.com',
       },
       '/ims/': {
-        target: 'https://api.sistemium.com',
+        target: 'https://stw.sistemium.com',
         // target: 'http://localhost:8088/api/image',
         changeOrigin: true,
         // pathRewrite: {

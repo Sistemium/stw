@@ -4,6 +4,8 @@ el-avatar.article-avatar(
   :src="picture.thumbnailHref"
   icon="el-icon-picture-outline"
   :size="size"
+  shape="square"
+  fit="cover"
 )
 
 </template>
@@ -15,7 +17,7 @@ export default {
   name: 'ArticleAvatar',
   props: {
     article: Object,
-    size: Number,
+    size: String,
   },
   computed: {
     picture() {
@@ -27,5 +29,9 @@ export default {
 
 </script>
 <style scoped lang="scss">
+
+.article-avatar ::v-deep img {
+  width: 100%;
+}
 
 </style>
