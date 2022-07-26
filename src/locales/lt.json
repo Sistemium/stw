@@ -7,6 +7,9 @@
   "cancel": "Atšaukti",
   "clear": "Išvalyti",
   "search": "paieška",
+  "loading": "Kraunasi ...",
+  "delete": "Ištrinti",
+  "reallyDelete": "Tikrai ištrinti?",
   "menu": {
     "about": "Apie",
     "barcodes": "Brūkš. kodai",
@@ -16,7 +19,8 @@
     "articlePropsTitle": "Nomenklatūrų ypatybės",
     "articles": "Nomenklatūra",
     "stockTakings": "Inventorizavimas",
-    "storages": "Sandėliai"
+    "storages": "Sandėliai",
+    "pictures": "Nuotraukos"
   },
   "fields": {
     "name": "Pavadinimas",
@@ -50,7 +54,8 @@
     "article": "Nomenklatūra",
     "facility": "Patalpos",
     "personal": "Asmeninis",
-    "storage": "Sandėlis"
+    "storage": "Sandėlis",
+    "image": "Nuotrauka"
   },
   "dataTypes": {
     "string": "Eilutė",
@@ -73,6 +78,7 @@
   "accusative": {
     "property": "ypatybę",
     "profile": "Profilį",
+    "picture": "nuotrauką",
     "storage": "sandėlį",
     "stockTaking": "inventorizaciją"
   },

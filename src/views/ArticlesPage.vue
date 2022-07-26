@@ -10,7 +10,12 @@
     tool-button(tool="add" @click="onAdd")
 
   resize(:padding="20")
-    article-list(:articles="articles" @click="onArticleClick" v-if="articles.length")
+    article-list(
+      :articles="articles"
+      v-if="articles.length"
+      @click="onArticleClick"
+      @avatarClick="avatarClick"
+    )
     el-alert.empty(type="info" :title="$t('validation.noData')" :closable="false" v-else)
 
   router-view
@@ -31,6 +36,7 @@ export default {
   props: {
     editRoute: String,
     createRoute: String,
+    galleryRoute: String,
   },
   data() {
     return {
@@ -76,6 +82,14 @@ export default {
         },
       });
     },
+    avatarClick(article) {
+      this.$router.push({
+        name: this.galleryRoute,
+        params: {
+          articleId: article.id,
+        },
+      });
+    },
   },
 
 };
@@ -83,9 +97,11 @@ export default {
 </script>
 <style scoped lang="scss">
 @import "../styles/page";
+
 .buttons {
   display: flex;
   align-items: center;
+
   .search-input {
     flex: 1;
     margin-right: $margin-right;

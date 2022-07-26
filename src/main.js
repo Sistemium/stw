@@ -32,8 +32,8 @@ new Vue({
           }
           await this.updateRouteParams({}, { 'access-token': undefined });
         })
-        .catch(e => this.$error('auth', e))
-        .finally(() => {
+        .catch(e => {
+          this.$error('auth', e);
           loading.close();
         });
     });

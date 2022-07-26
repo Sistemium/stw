@@ -19,6 +19,15 @@ module.exports = defineConfig({
         // target: 'http://localhost:9390',
         target: 'https://vfsd.sistemium.com',
       },
+      '/ims/': {
+        target: 'https://api.sistemium.com',
+        // target: 'http://localhost:8088/api/image',
+        changeOrigin: true,
+        // pathRewrite: {
+        //   '^/ims': '',
+        //   // '^/ims/dr50': '',
+        // },
+      },
     },
   },
 });

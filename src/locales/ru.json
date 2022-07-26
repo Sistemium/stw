@@ -7,6 +7,9 @@
   "cancel": "Отмена",
   "clear": "Очистить",
   "search": "поиск",
+  "loading": "Загрузка ...",
+  "delete": "Удалить",
+  "reallyDelete": "Точно удалить?",
   "menu": {
     "about": "О программе",
     "barcodes": "Штрих-коды",
@@ -16,7 +19,8 @@
     "articlePropsTitle": "Свойства номенклатуры",
     "articles": "Номенклатура",
     "stockTakings": "Инвентаризация",
-    "storages": "Склады"
+    "storages": "Склады",
+    "pictures": "Изображения"
   },
   "fields": {
     "name": "Название",
@@ -50,7 +54,8 @@
     "article": "Номенклатура",
     "facility": "Помещение",
     "personal": "Персональный",
-    "storage": "Склад"
+    "storage": "Склад",
+    "image": "Фото"
   },
   "dataTypes": {
     "string": "Строка",
@@ -73,6 +78,7 @@
   "accusative": {
     "property": "свойство",
     "profile": "Профиль",
+    "picture": "картинку",
     "storage": "склад",
     "stockTaking": "инвентаризацию"
   },

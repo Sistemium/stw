@@ -5,11 +5,21 @@ export default {
   props: {
     editRoute: 'articleEdit',
     createRoute: 'articleCreate',
+    galleryRoute: 'articlePictures',
   },
   meta: {
     useScanner: true,
   },
   children: [
+    {
+      path: 'pictures/:articleId',
+      name: 'articlePictures',
+      props: ({ params: { articleId } }) => ({
+        articleId,
+        from: { name: 'articles' },
+      }),
+      component: () => import('../views/ArticlePicturesPage.vue'),
+    },
     {
       path: 'edit/:articleId',
       name: 'articleEdit',

@@ -5,6 +5,7 @@ import Article from '@/models/Article';
 import StockTaking from '@/models/StockTaking';
 import StockTakingItem from '@/models/StockTakingItem';
 import Storage from '@/models/Storage';
+import Picture from '@/models/Picture';
 
 // const { debug } = log('initData');
 
@@ -17,4 +18,5 @@ export async function initData() {
   await StockTakingItem.findAll();
   await Storage.findAll();
   await StockTaking.findAll();
+  await Picture.findAll();
 }

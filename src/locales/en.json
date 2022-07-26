@@ -7,6 +7,9 @@
   "cancel": "Cancel",
   "clear": "Clear",
   "search": "search",
+  "loading": "Loading ...",
+  "delete": "Delete",
+  "reallyDelete": "Sure to delete?",
   "menu": {
     "about": "About",
     "barcodes": "Barcodes",
@@ -16,7 +19,8 @@
     "articlePropsTitle": "Article properties",
     "articles": "Articles",
     "stockTakings": "Stocktaking",
-    "storages": "Storages"
+    "storages": "Storages",
+    "pictures": "Pictures"
   },
   "fields": {
     "name": "Name",
@@ -50,7 +54,8 @@
     "article": "Article",
     "facility": "Facility",
     "personal": "Personal",
-    "storage": "Storage"
+    "storage": "Storage",
+    "image": "Image"
   },
   "dataTypes": {
     "string": "String",
@@ -75,6 +80,7 @@
   "accusative": {
     "property": "property",
     "profile": "Profile",
+    "picture": "picture",
     "storage": "storage",
     "stockTaking": "stockTaking"
   },
