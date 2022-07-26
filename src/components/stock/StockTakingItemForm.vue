@@ -166,8 +166,8 @@ export default {
       },
       lt: {
         showAll: 'Parodyti viską',
-        notFound: 'Nera šio brūkšninio kodo nomenklatūros',
-        addBarcode: 'Susieti brūkšninį kodą su nomenklatūra',
+        notFound: 'Nera šio brūkšninio kodo prekių',
+        addBarcode: 'Susieti brūkšninį kodą su prekę',
       },
       ru: {
         showAll: 'Показать все',

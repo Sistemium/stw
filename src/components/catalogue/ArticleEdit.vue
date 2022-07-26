@@ -23,7 +23,7 @@ drawer-edit.article-edit(
       el-tab-pane.pictures(:label="$t('menu.pictures')" v-if="articleId" :lazy="true")
         resize(:padding="110")
           article-pictures(:article-id="articleId")
-        take-photo-button(@done="onPictureDone" org-folder="vfsd" entity-name="Picture")
+        take-photo-button(@done="onPictureDone" entity-name="Picture")
 
 </template>
 <script>

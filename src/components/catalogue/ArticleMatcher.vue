@@ -116,7 +116,7 @@ export default {
       },
       lt: {
         createArticle: 'Sukurti',
-        noMatches: 'Nėra tinkamos nomenklatūros',
+        noMatches: 'Nėra tinkamos prekės',
       },
       ru: {
         createArticle: 'Создать',

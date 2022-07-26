@@ -80,7 +80,8 @@
     "profile": "Профиль",
     "picture": "картинку",
     "storage": "склад",
-    "stockTaking": "инвентаризацию"
+    "stockTaking": "инвентаризацию",
+    "position": "позицию"
   },
   "genitive": {
     "property": "признака",

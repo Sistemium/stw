@@ -82,7 +82,8 @@
     "profile": "Profile",
     "picture": "picture",
     "storage": "storage",
-    "stockTaking": "stockTaking"
+    "stockTaking": "stockTaking",
+    "position": "position"
   },
   "genitive": {
     "property": "Property",

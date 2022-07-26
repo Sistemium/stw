@@ -16,8 +16,8 @@
     "home": "Pradžia",
     "inventory": "Inventorizacija",
     "articleProps": "Ypatybės",
-    "articlePropsTitle": "Nomenklatūrų ypatybės",
-    "articles": "Nomenklatūra",
+    "articlePropsTitle": "Prekių ypatybės",
+    "articles": "Prekės",
     "stockTakings": "Inventorizavimas",
     "storages": "Sandėliai",
     "pictures": "Nuotraukos"
@@ -51,7 +51,7 @@
     "units": "Vienetai"
   },
   "concepts": {
-    "article": "Nomenklatūra",
+    "article": "Prekė",
     "facility": "Patalpos",
     "personal": "Asmeninis",
     "storage": "Sandėlis",
@@ -80,11 +80,12 @@
     "profile": "Profilį",
     "picture": "nuotrauką",
     "storage": "sandėlį",
-    "stockTaking": "inventorizaciją"
+    "stockTaking": "inventorizaciją",
+    "position": "poziciją"
   },
   "genitive": {
     "property": "Ypatybės",
-    "article": "Nomenklatūros",
+    "article": "Prekės",
     "option": "Parinkties",
     "storage": "Sandėlio",
     "stockTaking": "Inventorizacijos",

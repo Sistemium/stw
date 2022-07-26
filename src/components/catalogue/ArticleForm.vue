@@ -205,7 +205,7 @@ export default {
 }
 
 .naming.is-naming {
-  color: $orange;
+  color: $green;
   font-weight: bold;
 }
 
