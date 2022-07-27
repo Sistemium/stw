@@ -107,6 +107,14 @@ export default {
     justify-content: space-between;
     align-items: center;
   }
+  @include responsive-only(xs) {
+    @media (orientation: landscape) {
+      padding: 0 0 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
 }
 
 .title {
@@ -146,6 +154,11 @@ export default {
   @include responsive-only(xxs) {
     display: none;
   }
+  @include responsive-only(xs) {
+    @media (orientation: landscape) {
+      display: none;
+    }
+  }
 
   a {
     font-weight: bold;
@@ -159,8 +172,13 @@ export default {
 }
 
 strong, .hamburger {
-  @include responsive-only(gt-xxs) {
+  @include responsive-only(gt-xs) {
     display: none;
+  }
+  @include responsive-only(xs) {
+    @media (orientation: portrait) {
+      display: none;
+    }
   }
 }
 
@@ -172,13 +190,25 @@ strong, .hamburger {
 }
 
 .barcode-scanner-status {
-  @include responsive-only(gt-xxs) {
+  @include responsive-only(gt-xs) {
     position: absolute;
     top: 0;
     left: 0;
   }
+  @include responsive-only(xs) {
+    @media (orientation: portrait) {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+  }
   @include responsive-only(xxs) {
     margin-left: $margin-right;
+  }
+  @include responsive-only(xs) {
+    @media (orientation: landscape) {
+      margin-left: $margin-right;
+    }
   }
 }
 

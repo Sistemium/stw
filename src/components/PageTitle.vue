@@ -15,9 +15,15 @@ export default {
 </script>
 <style scoped lang="scss">
 @import "../styles/variables";
-@include responsive-only(xxs) {
-  h1 {
+
+h1 {
+  @include responsive-only(xxs) {
     display: none;
+  }
+  @include responsive-only(xs) {
+    @media (orientation: landscape) {
+      display: none;
+    }
   }
 }
 </style>

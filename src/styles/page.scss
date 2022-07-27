@@ -13,8 +13,8 @@
 }
 
 .page {
-  max-width: $max-width * 1.5;
-  @include responsive-only(lt-md) {
+  max-width: $max-height;
+  @include responsive-only(xxs, portrait) {
     max-width: $max-width;
   }
   margin: 0 auto;
