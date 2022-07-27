@@ -1,3 +1,11 @@
+@import "~sistemium-vue/styles/responsive";
+
 .el-drawer__header {
   font-weight: bold;
+}
+
+@include responsive-only(xxs) {
+  .el-select-dropdown.el-popper {
+    max-width: 350px;
+  }
 }
