@@ -69,7 +69,7 @@ export default {
 
 .prop-tags {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   margin: 0 auto;
   justify-content: center;
 
@@ -78,19 +78,23 @@ export default {
   }
 }
 
+::-webkit-scrollbar {
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: $border-radius;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: $border-radius;
+  background: darken($gray-background, 5%);
+}
+
 .tags {
-  display: flex;
-  //white-space: nowrap;
+  padding-bottom: $padding;
+  white-space: nowrap;
   overflow-x: scroll;
-  ::-webkit-scrollbar{
-    height: 4px;
-    width: 4px;
-    background: gray;
-  }
-  ::-webkit-scrollbar-thumb:horizontal{
-    background: #000;
-    border-radius: 10px;
-  }
   > .el-tag + .el-tag {
     margin-left: $padding;
   }
