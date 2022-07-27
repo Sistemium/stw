@@ -14,9 +14,11 @@
         tool-button(tool="add" @click="onAdd")
       resize(:padding="20")
         stock-taking-item-list(:items="stockTakingItems" @click="onItemClick")
-        el-alert.empty(
+        alert-empty(
           v-if="!stockTakingItems.length"
-          :title="$t('validation.noData')" :closable="false"
+          :title="$t('validation.noData')"
+          @click="onAdd()"
+          :button-text="$tAction('add', 'position')"
         )
     el-tab-pane(:label="$t('settings')" name="settings")
       stock-taking-edit(
@@ -40,6 +42,7 @@ import * as m from '@/store/inv/mutations';
 import StockTakingItemList from '@/components/stock/StockTakingItemList.vue';
 import BarcodeScanner from '@/components/BarcodeScanner/BarcodeScanner';
 import StockTakingEdit from '@/components/stock/StockTakingEdit.vue';
+import AlertEmpty from '@/lib/AlertEmpty.vue';
 
 const { mapMutations } = createNamespacedHelpers('inv');
 
@@ -107,6 +110,7 @@ export default {
     },
   },
   components: {
+    AlertEmpty,
     StockTakingEdit,
     StockTakingItemList,
     StockTakingItemForm,
