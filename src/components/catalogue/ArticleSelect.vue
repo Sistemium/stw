@@ -5,6 +5,7 @@ el-select.article-select(
   v-model="currentId"
   :filter-method="filterSearch"
   :debounce="300"
+  v-cancel-read-only
 )
   el-option(
     v-for="article in options"
@@ -38,6 +39,12 @@ export default {
     return {
       search: '',
     };
+  },
+  directives: {
+    cancelReadOnly(el) {
+      const input = el.querySelector('.el-input__inner');
+      input.removeAttribute('readonly');
+    },
   },
   computed: {
     options() {
