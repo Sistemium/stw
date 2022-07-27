@@ -3,6 +3,7 @@
 .article-pictures
   el-image(
     v-for="pic in pictures"
+    :key="pic.id"
     astyle="width: 100px; height: 100px"
     :src="pic.src"
     fit="fit"
