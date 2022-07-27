@@ -28,7 +28,7 @@ component.drawer-edit.box-card(
 <script>
 
 import log from 'sistemium-debug';
-import FormButtons from '@bit/sistemium.vue.form-buttons/FormButtons.vue';
+import FormButtons from 'sistemium-vue/components/FormButtons.vue';
 import matchesDeep from '@bit/sistemium.vue.matches-deep';
 import cloneDeep from 'lodash/cloneDeep';
 

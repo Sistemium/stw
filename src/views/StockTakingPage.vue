@@ -36,7 +36,6 @@ import WorkflowButton from '@/lib/WorkflowButton.vue';
 import InventoryPage from '@/views/InventoryPage.vue';
 import StockTakingItemForm from '@/components/stock/StockTakingItemForm.vue';
 import StockTakingItem from '@/models/StockTakingItem';
-import FormButtons from '@bit/sistemium.vue.form-buttons/FormButtons.vue';
 import * as m from '@/store/inv/mutations';
 import StockTakingItemList from '@/components/stock/StockTakingItemList.vue';
 import BarcodeScanner from '@/components/BarcodeScanner/BarcodeScanner';
@@ -113,7 +112,6 @@ export default {
     StockTakingItemForm,
     InventoryPage,
     WorkflowButton,
-    FormButtons,
     BarcodeScanner,
   },
   i18n: {
