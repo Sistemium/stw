@@ -6,10 +6,10 @@ drawer-edit.article-property-edit(
   :destroy-fn="destroyFn"
   :model-origin="modelOrigin"
   :from="from"
-  :deletable="true"
+  :deletable="currentTab ==='0'"
 )
   template(v-slot="{ model }")
-    el-tabs
+    el-tabs(v-model="currentTab")
       el-tab-pane(:label="$t('form')")
         article-property-form(ref="form" :model="model")
       el-tab-pane(
@@ -54,6 +54,7 @@ export default {
   data() {
     return {
       currentOptionId: null,
+      currentTab: null,
     };
   },
   computed: {
