@@ -1,6 +1,6 @@
 <template lang="pug">
 
-.stock-taking-page
+.stock-taking-page.page
 
   barcode-scanner(@scan="onScan")
 
@@ -142,11 +142,6 @@ export default {
 </script>
 <style scoped lang="scss">
 @import "../styles/variables";
-
-.stock-taking-page {
-  max-width: $max-width;
-  margin: 0 auto;
-}
 
 .stm-resize {
   > * + * {
