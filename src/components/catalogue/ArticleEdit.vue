@@ -6,11 +6,11 @@ drawer-edit.article-edit(
   :destroy-fn="destroyFn"
   :model-origin="modelOrigin"
   :from="from"
-  :deletable="true"
+  :deletable="currentTab ==='0'"
   :drawer-style="drawerStyle"
 )
   template(v-slot="{ model }")
-    el-tabs
+    el-tabs(v-model="currentTab")
       el-tab-pane(:label="$t('menu.articleProps')")
         article-form(ref="form" :model="model")
       el-tab-pane(:label="$t('menu.barcodes')")
@@ -22,7 +22,7 @@ drawer-edit.article-edit(
             .code {{ barcode }}
       el-tab-pane.pictures(:label="$t('menu.pictures')" v-if="articleId" :lazy="true")
         resize(:padding="110")
-          article-pictures(:article-id="articleId")
+          article-pictures(:pictures="pictures")
         take-photo-button(@done="onPictureDone" entity-name="Picture")
 
 </template>
@@ -33,7 +33,7 @@ import Article from '@/models/Article';
 import ArticleForm from '@/components/catalogue/ArticleForm.vue';
 import { articleInstance } from '@/services/catalogue';
 import TakePhotoButton from '@/lib/TakePhotoButton.vue';
-import Picture from '@/models/Picture';
+import Picture, { mapPictureInfo } from '@/models/Picture';
 import find from 'lodash/find';
 import ArticlePictures from '@/components/catalogue/ArticlePictures.vue';
 
@@ -43,6 +43,11 @@ export default {
     articleId: String,
     from: Object,
     drawerStyle: Object,
+  },
+  data() {
+    return {
+      currentTab: null,
+    };
   },
   components: {
     ArticlePictures,
@@ -54,6 +59,10 @@ export default {
     modelOrigin() {
       const { articleId } = this;
       return articleId ? Article.reactiveGet(articleId) : articleInstance();
+    },
+    pictures() {
+      return Picture.reactiveFilter({ ownerXid: this.articleId })
+        .map(mapPictureInfo('smallImage'));
     },
   },
   methods: {
@@ -76,8 +85,17 @@ export default {
         target: 'Article',
         ownerXid: this.articleId,
       };
-      await Picture.createOne(picture)
-        .catch(e => this.$error('onPictureDone:', e));
+      try {
+        const { id: avatarPictureId } = await Picture.createOne(picture);
+        if (this.pictures.length === 1) {
+          await Article.createOne({
+            ...this.modelOrigin,
+            avatarPictureId,
+          });
+        }
+      } catch (e) {
+        this.$error('onPictureDone', e);
+      }
     },
   },
   i18n: {
@@ -103,6 +121,7 @@ export default {
 
 .take-photo-button {
   margin-top: $margin-right;
+
   ::v-deep .el-badge {
     width: 100%;
   }

@@ -11,18 +11,10 @@
 </template>
 <script>
 
-import Picture, { mapPictureInfo } from '@/models/Picture';
-
 export default {
   name: 'ArticlePictures',
   props: {
-    articleId: String,
-  },
-  computed: {
-    pictures() {
-      return Picture.reactiveFilter({ ownerXid: this.articleId })
-        .map(mapPictureInfo('smallImage'));
-    },
+    pictures: Array,
   },
 };
 
