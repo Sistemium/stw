@@ -147,6 +147,7 @@ export default {
   },
   created() {
     if (this.canAddBarcode) {
+      // TODO make with watch
       this.isShowingAllArticles = true;
     }
     this.$watchImmediate('units', units => {
@@ -205,8 +206,10 @@ export default {
 }
 
 .select-button {
+
   display: flex;
   width: 100%;
+  align-items: flex-start;
 
   ::v-deep input {
     border-bottom-left-radius: 0;
