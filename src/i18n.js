@@ -37,6 +37,13 @@ const dateTimeFormatGeneric = {
     minute: 'numeric',
     second: 'numeric',
   },
+  minutes: {
+    // year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+  },
   short: {
     year: 'numeric',
     month: 'short',
