@@ -40,6 +40,12 @@ function configToRoute(name, options) {
       children.push(child);
     });
 
+  const meta = {};
+
+  if (options.public) {
+    meta.public = true;
+  }
+
   return {
     name,
     path: `${root ? '/' : ''}${name}`,
@@ -47,6 +53,7 @@ function configToRoute(name, options) {
     props,
     children,
     beforeEnter: options.beforeEnter,
+    meta,
   };
 }
 
