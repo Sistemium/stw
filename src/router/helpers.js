@@ -8,7 +8,7 @@ export function itemRouteHelper(name, component) {
     component,
     props: ({ params: { [parentId]: parentParam, [itemId]: itemParam } }) => ({
       [parentId]: parentParam,
-      [itemParam]: itemParam,
+      [itemId]: itemParam,
       from: {
         name,
         params: {
