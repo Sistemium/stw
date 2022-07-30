@@ -4,7 +4,7 @@
   h1 StockWithdrawing {{ stockWithdrawingId }}
   .buttons
     tool-button(tool="add" @click="onAddItem")
-  stock-withdrawing-item-list(:items="stockWithdrawingItems")
+  stock-withdrawing-item-list(:items="stockWithdrawingItems" @click="onItemClick")
   router-view
 
 </template>
@@ -32,8 +32,18 @@ export default {
       this.$router.push({
         name: this.createRoute,
         params: {
-          from: this.$route,
+          // from: this.$route,
           stockWithdrawingId: this.stockWithdrawingId,
+        },
+      });
+    },
+    onItemClick(item) {
+      this.$router.push({
+        name: this.editRoute,
+        params: {
+          // from: this.$route,
+          stockWithdrawingId: this.stockWithdrawingId,
+          stockWithdrawingItemId: item.id,
         },
       });
     },
