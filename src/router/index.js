@@ -1,10 +1,10 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '@/views/HomePage.vue';
-import articlePropsRoute from '@/router/articlePropsRoute';
-import articlesRoute from '@/router/articlesRoute';
-import stockTakingsRoute from '@/router/stockTakingsRoute';
-import storagesRoute from '@/router/storagesRoute';
+// import stockTakingsRoute from '@/router/stockTakingsRoute';
+// import stockWithdrawalsRoute from '@/router/stockWithdrawalsRoute';
+
+import routeMap from '@/router/routeMap';
 
 Vue.use(VueRouter);
 
@@ -14,23 +14,9 @@ export const routes = [
     name: 'home',
     component: Home,
   },
-  // {
-  //   path: '/inventory',
-  //   name: 'inventory',
-  //   component: () => import(/* webpackChunkName: "inventory" */ '../views/InventoryPage.vue'),
-  //   meta: {
-  //     useScanner: true,
-  //   },
-  // },
-  storagesRoute,
-  stockTakingsRoute,
-  articlesRoute,
-  articlePropsRoute,
-  {
-    path: '/about',
-    name: 'about',
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutPage.vue'),
-  },
+  // stockTakingsRoute,
+  // stockWithdrawalsRoute,
+  ...routeMap.routes(),
 ];
 
 const router = new VueRouter({
