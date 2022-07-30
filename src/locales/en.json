@@ -20,7 +20,9 @@
     "articles": "Articles",
     "stockTakings": "Stocktaking",
     "storages": "Storages",
-    "pictures": "Pictures"
+    "pictures": "Pictures",
+    "stockWithdrawals": "Withdrawals from warehouse",
+    "stockWithdrawing": "Stock withdrawing"
   },
   "fields": {
     "name": "Name",
@@ -83,7 +85,8 @@
     "picture": "picture",
     "storage": "storage",
     "stockTaking": "stockTaking",
-    "position": "position"
+    "position": "position",
+    "stockWithdrawing": "withdrawing"
   },
   "genitive": {
     "property": "Property",
@@ -91,7 +94,9 @@
     "option": "Option",
     "storage": "Storage",
     "stockTaking": "Stocktaking",
-    "stockTakingItem": "Stocktaking item"
+    "stockTakingItem": "Stocktaking item",
+    "stockWithdrawing": "Stock withdrawing",
+    "stockWithdrawingItem": "Stock withdrawing item"
   },
   "shortened": {
     "positions": "pos"

@@ -20,7 +20,9 @@
     "articles": "Prekės",
     "stockTakings": "Inventorizavimas",
     "storages": "Sandėliai",
-    "pictures": "Nuotraukos"
+    "pictures": "Nuotraukos",
+    "stockWithdrawals": "Išėmimais iš sandėlio",
+    "stockWithdrawing": "Išėmimas iš sandėlio"
   },
   "fields": {
     "name": "Pavadinimas",
@@ -81,7 +83,8 @@
     "picture": "nuotrauką",
     "storage": "sandėlį",
     "stockTaking": "inventorizaciją",
-    "position": "poziciją"
+    "position": "poziciją",
+    "stockWithdrawing": "išėmimą"
   },
   "genitive": {
     "property": "Ypatybės",
@@ -89,7 +92,9 @@
     "option": "Parinkties",
     "storage": "Sandėlio",
     "stockTaking": "Inventorizacijos",
-    "stockTakingItem": "Inventorizacijos pozicijos"
+    "stockTakingItem": "Inventorizacijos pozicijos",
+    "stockWithdrawing": "Iš sandėlio išėmimo",
+    "stockWithdrawingItem": "Iš sandėlio išėmimo pozicijos"
   },
   "shortened": {
     "positions": "poz"

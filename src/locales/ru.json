@@ -20,7 +20,9 @@
     "articles": "Номенклатура",
     "stockTakings": "Инвентаризация",
     "storages": "Склады",
-    "pictures": "Изображения"
+    "pictures": "Изображения",
+    "stockWithdrawals": "Отгрузки со склада",
+    "stockWithdrawing": "Выдача со склада"
   },
   "fields": {
     "name": "Название",
@@ -81,7 +83,8 @@
     "picture": "картинку",
     "storage": "склад",
     "stockTaking": "инвентаризацию",
-    "position": "позицию"
+    "position": "позицию",
+    "stockWithdrawing": "отгрузку"
   },
   "genitive": {
     "property": "признака",
@@ -89,7 +92,9 @@
     "option": "выбора",
     "storage": "склада",
     "stockTaking": "инвентаризации",
-    "stockTakingItem": "позиции инвентаризации"
+    "stockTakingItem": "позиции инвентаризации",
+    "stockWithdrawing": "отгрузки со склада",
+    "stockWithdrawingItem": "позиции отгрузки со склада"
   },
   "shortened": {
     "positions": "поз"
