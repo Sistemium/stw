@@ -1,6 +1,7 @@
 @import "styles/variables";
 @import "styles/lists";
 @import "styles/element-ui";
+@import "styles/buttons";
 
 .list-group {
   @include list-group($border-radius, $list-cell-borders,
