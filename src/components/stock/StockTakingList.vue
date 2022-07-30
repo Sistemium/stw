@@ -1,9 +1,9 @@
 <template lang="pug">
 
 .stock-taking-list.list-group
-  stock-taking-list-item-view(
+  stock-taking-list-item(
     v-for="item in items" :key="item.id"
-    :stock-taking-item="item"
+    :stock-taking="item"
     @click="$emit('click', item)"
     @positionsClick="$emit('positionsClick', item)"
   )
@@ -11,11 +11,11 @@
 </template>
 <script>
 
-import StockTakingListItemView from '@/components/stock/StockTakingListItemView.vue';
+import StockTakingListItem from '@/components/stock/StockTakingListItem.vue';
 
 export default {
   name: 'StockTakingList',
-  components: { StockTakingListItemView },
+  components: { StockTakingListItem },
   props: {
     items: Array,
   },

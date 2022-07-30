@@ -26,26 +26,5 @@ export default {
 
 </script>
 <style scoped lang="scss">
-@import "../../styles/variables";
-
-.list-group-item {
-  text-align: left;
-  display: flex;
-  justify-content: space-between;
-}
-
-.right {
-  display: flex;
-  justify-content: flex-end;
-  align-items: flex-end;
-  span {
-    margin: 0 $padding;
-  }
-}
-
-.cts {
-  font-size: smaller;
-  color: $gray;
-}
-
+@import "../../styles/stockItemListItem";
 </style>

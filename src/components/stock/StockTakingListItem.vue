@@ -2,10 +2,10 @@
 
 .stock-taking-list-item-view.list-group-item(@click="$emit('click')")
   .title
-    .date {{ $ts(stockTakingItem.date, 'short') }}
+    .date {{ $ts(stockTaking.date, 'short') }}
     .storage {{ storage }}
   .right
-    workflow-processing(:processing="stockTakingItem.processing")
+    workflow-processing(:processing="stockTaking.processing")
     el-button.positions(
       type="text"
       @click.stop="$emit('positionsClick')"
@@ -19,18 +19,18 @@ import Storage from '@/models/Storage';
 import WorkflowProcessing from '@/lib/WorkflowProcessing.vue';
 
 export default {
-  name: 'StockTakingListItemView',
+  name: 'StockTakingListItem',
   components: { WorkflowProcessing },
   props: {
-    stockTakingItem: Object,
+    stockTaking: Object,
   },
   computed: {
     positions() {
-      const { id: stockTakingId } = this.stockTakingItem;
+      const { id: stockTakingId } = this.stockTaking;
       return StockTakingItem.reactiveFilter({ stockTakingId });
     },
     storage() {
-      const { name } = Storage.reactiveGet(this.stockTakingItem.storageId) || {};
+      const { name } = Storage.reactiveGet(this.stockTaking.storageId) || {};
       return name;
     },
   },
@@ -38,19 +38,5 @@ export default {
 
 </script>
 <style scoped lang="scss">
-@import "../../styles/variables";
-
-.list-group-item {
-  display: flex;
-  justify-content: space-between;
-}
-
-.el-button.positions {
-  padding: 0;
-}
-
-.right {
-  margin-left: $margin-right;
-}
-
+@import "../../styles/pageLists";
 </style>
