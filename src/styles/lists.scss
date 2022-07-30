@@ -33,6 +33,10 @@ $gray-background, $dark-gray, $margin-top, $primary-color, $white, $padding) {
     &.active {
       background: $primary-color;
       color: $white;
+
+      .el-button--text {
+        color: $white;
+      }
     }
 
     > i {

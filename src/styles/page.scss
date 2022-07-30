@@ -2,6 +2,9 @@
 
 .buttons {
   text-align: right;
+  + .stm-resize {
+    margin-top: $margin-right;
+  }
 }
 
 .el-alert.empty ::v-deep .el-alert__content {
