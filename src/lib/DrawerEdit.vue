@@ -27,12 +27,9 @@ component.drawer-edit.box-card(
 </template>
 <script>
 
-import log from 'sistemium-debug';
 import FormButtons from 'sistemium-vue/components/FormButtons.vue';
 import matchesDeep from '@bit/sistemium.vue.matches-deep';
 import cloneDeep from 'lodash/cloneDeep';
-
-const { error } = log('DrawerEdit');
 
 export default {
   name: 'DrawerEdit',
@@ -165,13 +162,13 @@ export default {
         return;
       }
       this.$router.replace(this.from)
-        .catch(e => error('handleClose', e));
+        .catch(e => this.$error('handleClose', e));
     },
 
     cancelClick(record) {
       const { drawer } = this.$refs;
       if (!drawer) {
-        error('cancelClick', 'drawer ref is empty');
+        this.$error('cancelClick', 'drawer ref is empty');
         return;
       }
       this.handleClose(record);
