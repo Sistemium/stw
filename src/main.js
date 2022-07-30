@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import { Loading } from 'element-ui';
 import { authorizeAxios } from '@/init/HybridDataModel';
-import { initData } from '@/services/dataSync';
+import { authGuard, initData } from '@/services/dataSync';
 import './init/element-ui';
 import './init/sistemium';
 import App from './App.vue';
@@ -11,6 +11,7 @@ import i18n, { saveLocale } from './i18n';
 import './index.scss';
 
 Vue.config.productionTip = false;
+router.beforeEach(authGuard);
 
 new Vue({
   router,

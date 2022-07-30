@@ -1,8 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '@/views/HomePage.vue';
-// import stockTakingsRoute from '@/router/stockTakingsRoute';
-// import stockWithdrawalsRoute from '@/router/stockWithdrawalsRoute';
+import AuthPage from '@/views/AuthPage.vue';
 
 import routeMap from '@/router/routeMap';
 
@@ -13,10 +12,20 @@ export const routes = [
     path: '/',
     name: 'home',
     component: Home,
+    meta: {
+      public: true,
+    },
   },
-  // stockTakingsRoute,
-  // stockWithdrawalsRoute,
   ...routeMap.routes(),
+  {
+    path: '/auth',
+    name: 'auth',
+    component: AuthPage,
+    meta: {
+      public: true,
+      menuHidden: true,
+    },
+  },
 ];
 
 const router = new VueRouter({
