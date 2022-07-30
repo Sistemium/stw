@@ -1,7 +1,7 @@
 <template lang="pug">
 
 el-alert.alert-empty(
-  :title="title"
+  :title="title || $t('validation.noData')"
   :closable="false"
 )
   el-button(
@@ -17,7 +17,9 @@ el-alert.alert-empty(
 export default {
   name: 'AlertEmpty',
   props: {
-    title: String,
+    title: {
+      type: String,
+    },
     buttonText: String,
   },
 };
