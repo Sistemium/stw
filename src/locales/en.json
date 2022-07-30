@@ -10,8 +10,10 @@
   "loading": "Loading ...",
   "delete": "Delete",
   "reallyDelete": "Sure to delete?",
+  "authorizing": "Authorizing",
   "menu": {
     "about": "About",
+    "auth": "Authorization",
     "barcodes": "Barcodes",
     "home": "Home",
     "inventory": "Inventory",
@@ -77,7 +79,10 @@
     "show": "Show {0}",
     "hide": "Hide {0}",
     "start": "Start {0}",
-    "editing": "{} editing"
+    "editing": "{} editing",
+    "signIn": "Sign in",
+    "welcome": "Welcome, {0}!",
+    "logout": "Sign out"
   },
   "accusative": {
     "property": "property",
