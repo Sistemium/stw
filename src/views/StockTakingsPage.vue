@@ -12,10 +12,12 @@
         @positionsClick="onPositionsClick"
         v-if="stockTakings.length"
       )
-      el-alert.empty(type="info" :title="$t('validation.noData')" :closable="false" v-else)
-        el-button(
-          type="primary" @click="onAdd" :plain="true"
-        ) {{ $tAction('start', 'stockTaking') }}
+      alert-empty(
+        v-else
+        @click="onAdd"
+        :button-text="$tAction('start', 'stockTaking')"
+      )
+
   router-view
 
 </template>
@@ -24,15 +26,13 @@
 import find from 'lodash/find';
 import StockTaking from '@/models/StockTaking';
 import StockTakingList from '@/components/stock/StockTakingList.vue';
-import PageTitle from '@/components/PageTitle.vue';
+import pageMixin from '@/lib/pageMixin';
 
 export default {
   name: 'StockTakingsPage',
-  components: { StockTakingList, PageTitle },
+  mixins: [pageMixin],
+  components: { StockTakingList },
   props: {
-    rootState: String,
-    editRoute: String,
-    createRoute: String,
     progressRoute: String,
   },
   computed: {
@@ -58,11 +58,6 @@ export default {
     },
     onPositionsClick(stockTaking) {
       this.onItemClick(stockTaking, true);
-    },
-    onAdd() {
-      this.$router.push({
-        name: this.createRoute,
-      });
     },
   },
 };

@@ -11,7 +11,7 @@
   el-tabs(tab-position="top" v-model="currentTabData" )
     el-tab-pane(:label="$t('items')" name="items")
       .buttons(v-if="stockTakingItems.length")
-        tool-button(tool="add" @click="onAdd")
+        tool-button(tool="add" @click="onAdd()")
       resize(:padding="20")
         stock-taking-item-list(:items="stockTakingItems" @click="onItemClick")
         alert-empty(
