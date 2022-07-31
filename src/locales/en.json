@@ -29,6 +29,8 @@
   "fields": {
     "name": "Name",
     "type": "Type",
+    "consigneeType": "Consignee type",
+    "consignee": "Consignee",
     "date": "Date",
     "valueType": "Value type",
     "required": "Required",
@@ -37,6 +39,7 @@
       "no": "No"
     },
     "code": "Serial code",
+    "price": "Price",
     "inverse": "Name for value \"no\"",
     "prefix": "Prefix",
     "suffix": "Suffix",
@@ -61,7 +64,10 @@
     "storage": "Storage",
     "image": "Image",
     "settings": "Parameters",
-    "items": "Items"
+    "items": "Items",
+    "person": "Person",
+    "legalEntity": "Legal entity",
+    "unknown": "Unknown"
   },
   "dataTypes": {
     "string": "String",

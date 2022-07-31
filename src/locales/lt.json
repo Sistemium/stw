@@ -30,6 +30,8 @@
     "name": "Pavadinimas",
     "date": "Data",
     "type": "Tipas",
+    "consigneeType": "Gavėjo tipas",
+    "consignee": "Gavėjas",
     "valueType": "Duomenų tipas",
     "required": "Privaloma",
     "bool": {
@@ -37,6 +39,7 @@
       "no": "Ne"
     },
     "code": "Serijinis kodas",
+    "price": "Kaina",
     "inverse": "Reikšmės \"ne\" pavadinimas",
     "prefix": "Priešdėlis",
     "suffix": "Priesaga",
@@ -61,7 +64,10 @@
     "storage": "Sandėlis",
     "image": "Nuotrauka",
     "settings": "Parametetrai",
-    "items": "Pozicijos"
+    "items": "Pozicijos",
+    "person": "Asmuo",
+    "legalEntity": "Imonė",
+    "unknown": "Nėra"
   },
   "dataTypes": {
     "string": "Eilutė",
