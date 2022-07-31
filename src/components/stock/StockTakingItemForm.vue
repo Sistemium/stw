@@ -7,10 +7,14 @@ el-form.stock-taking-item-form(
   :disabled="!editable"
 )
 
-  el-form-item(:label="$t('fields.barcode')" prop="barcode")
-    el-input(v-model="model.barcode" clearable)
-      template(v-slot:prepend)
-        el-button(:icon="barcodeIcon" @click="toggleShowAllArticles")
+  barcode-form-item(v-model="model.barcode")
+    template(v-slot:prepend)
+      el-button(:icon="barcodeIcon" @click="toggleShowAllArticles")
+
+  //el-form-item(:label="$t('fields.barcode')" prop="barcode")
+    el-input(v-model="model.barcode")
+      template(v-slot:append)
+        el-button(icon="el-icon-close" @click="model.barcode = ''")
 
   el-form-item.add-barcode(v-if="canAddBarcode")
     el-button(
@@ -62,6 +66,7 @@ import ArticleView from '@/components/catalogue/ArticleView.vue';
 import ArticleSelect from '@/components/catalogue/ArticleSelect.vue';
 import { addBarcodeToArticle } from '@/services/catalogue';
 import ArticleEdit from '@/components/catalogue/ArticleEdit.vue';
+import BarcodeFormItem from '@/components/BarcodeScanner/BarcodeFormItem.vue';
 
 export default {
   name: 'StockTakingItemForm',
@@ -157,7 +162,12 @@ export default {
       this.mode = model.boxRel > 1 ? 'boxes' : 'units';
     });
   },
-  components: { ArticleEdit, ArticleSelect, ArticleView },
+  components: {
+    BarcodeFormItem,
+    ArticleEdit,
+    ArticleSelect,
+    ArticleView,
+  },
   i18n: {
     messages: {
       en: {
