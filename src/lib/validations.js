@@ -1,10 +1,19 @@
 import Vue from 'vue';
 import orderBy from 'lodash/orderBy';
 import get from 'lodash/get';
+import find from 'lodash/find';
 
 Vue.mixin({
 
+  directives: {
+    cancelReadOnly(el) {
+      const input = el.querySelector('.el-input__inner');
+      input.removeAttribute('readonly');
+    },
+  },
+
   methods: {
+    $find: find,
     $orderBy: orderBy,
     $ts(dateString, key = 'timestamp') {
       return this.$d(new Date(dateString), key);
