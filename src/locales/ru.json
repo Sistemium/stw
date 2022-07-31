@@ -102,7 +102,9 @@
     "stockWithdrawingItem": "позиции отгрузки со склада"
   },
   "shortened": {
-    "positions": "поз"
+    "positions": "поз",
+    "units": "шт",
+    "boxes": "кор"
   },
   "workflow": {
     "finish": "Завершить",

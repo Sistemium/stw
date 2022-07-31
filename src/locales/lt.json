@@ -102,7 +102,9 @@
     "stockWithdrawingItem": "Iš sandėlio išėmimo pozicijos"
   },
   "shortened": {
-    "positions": "poz"
+    "positions": "poz",
+    "units": "vnt",
+    "boxes": "dėž"
   },
   "workflow": {
     "finish": "Užbaigti",

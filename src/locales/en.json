@@ -104,7 +104,9 @@
     "stockWithdrawingItem": "Stock withdrawing item"
   },
   "shortened": {
-    "positions": "pos"
+    "positions": "pos",
+    "units": "unt",
+    "boxes": "bx"
   },
   "workflow": {
     "finish": "Finalize",
