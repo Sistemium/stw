@@ -1,6 +1,6 @@
 <template lang="pug">
 
-drawer-edit(
+drawer-edit.stock-withdrawing-edit(
   :title="$tGen('editing', 'stockWithdrawing')"
   :save-fn="saveFn"
   :destroy-fn="destroyFn"
