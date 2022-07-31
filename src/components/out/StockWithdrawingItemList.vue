@@ -6,11 +6,13 @@
       article-view(:article-id="item.articleId")
       .cts {{ $ts(item.deviceCts || item.cts) }}
     .right
-      .quantity {{ item.quantity }}
-      span x
-      .boxRel {{ item.boxRel }}
-      span &equals;
-      .units {{ item.units }}
+      template(v-if="item.boxRel > 1")
+        .quantity {{ item.quantity }} {{ $t('shortened.boxes') }}
+        template(v-if="item.quantity > 1")
+          span x
+          .boxRel {{ item.boxRel }}
+        span &equals;
+      .units {{ item.units }} {{ $t('shortened.units') }}
 
 </template>
 <script>
