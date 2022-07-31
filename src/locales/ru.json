@@ -59,7 +59,9 @@
     "facility": "Помещение",
     "personal": "Персональный",
     "storage": "Склад",
-    "image": "Фото"
+    "image": "Фото",
+    "settings": "Параметры",
+    "items": "Позиции"
   },
   "dataTypes": {
     "string": "Строка",

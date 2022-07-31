@@ -59,7 +59,9 @@
     "facility": "Facility",
     "personal": "Personal",
     "storage": "Storage",
-    "image": "Image"
+    "image": "Image",
+    "settings": "Parameters",
+    "items": "Items"
   },
   "dataTypes": {
     "string": "String",
@@ -79,7 +81,7 @@
     "show": "Show {0}",
     "hide": "Hide {0}",
     "start": "Start {0}",
-    "editing": "{} editing",
+    "editing": "{0} editing",
     "signIn": "Sign in",
     "welcome": "Welcome, {0}!",
     "logout": "Sign out"

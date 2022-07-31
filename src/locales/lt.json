@@ -23,8 +23,8 @@
     "stockTakings": "Inventorizavimas",
     "storages": "Sandėliai",
     "pictures": "Nuotraukos",
-    "stockWithdrawals": "Išėmimais iš sandėlio",
-    "stockWithdrawing": "Išėmimas iš sandėlio"
+    "stockWithdrawals": "Iškrovimas iš sandėlio",
+    "stockWithdrawing": "Iškrovimas iš sandėlio"
   },
   "fields": {
     "name": "Pavadinimas",
@@ -59,7 +59,9 @@
     "facility": "Patalpos",
     "personal": "Asmeninis",
     "storage": "Sandėlis",
-    "image": "Nuotrauka"
+    "image": "Nuotrauka",
+    "settings": "Parametetrai",
+    "items": "Pozicijos"
   },
   "dataTypes": {
     "string": "Eilutė",
@@ -89,7 +91,7 @@
     "storage": "sandėlį",
     "stockTaking": "inventorizaciją",
     "position": "poziciją",
-    "stockWithdrawing": "išėmimą"
+    "stockWithdrawing": "iškrovimą"
   },
   "genitive": {
     "property": "Ypatybės",
@@ -98,8 +100,8 @@
     "storage": "Sandėlio",
     "stockTaking": "Inventorizacijos",
     "stockTakingItem": "Inventorizacijos pozicijos",
-    "stockWithdrawing": "Iš sandėlio išėmimo",
-    "stockWithdrawingItem": "Iš sandėlio išėmimo pozicijos"
+    "stockWithdrawing": "Iš sandėlio iškrovimo",
+    "stockWithdrawingItem": "Iš sandėlio iškrovimo pozicijos"
   },
   "shortened": {
     "positions": "poz",
