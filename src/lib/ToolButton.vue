@@ -24,10 +24,10 @@ export default {
     tool: {
       type: String,
       required: true,
-      validator(value) {
-        return Object.keys(ICONS)
-          .includes(value);
-      },
+      // validator(value) {
+      //   return Object.keys(ICONS)
+      //     .includes(value);
+      // },
     },
     busy: {
       type: Boolean,
@@ -48,7 +48,7 @@ export default {
       if (this.busy && tool === 'refresh') {
         return ICONS.loading;
       }
-      return ICONS[tool];
+      return ICONS[tool] || `el-icon-${tool}`;
     },
   },
 };
