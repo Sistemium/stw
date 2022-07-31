@@ -1,27 +1,29 @@
 <template lang="pug">
 
-el-container.stock-withdrawals-page
+.stock-withdrawals-page
 
   //el-header
-    page-title(title="menu.stockWithdrawals")
+  page-title(title="menu.stockWithdrawals")
 
-  component(:is="showDetails ? 'el-aside' : 'el-main'")
-    template(v-if="stockWithdrawals.length")
-      .buttons()
-        tool-button(tool="add" @click="onAdd")
-      resize(:padding="20")
-        stock-withdrawing-list(
-          :items="stockWithdrawals"
-          @click="onItemClick"
-          :active-id="$route.params.stockWithdrawingId"
-        )
-    alert-empty(
-      v-else
-      @click="onAdd"
-      :button-text="$tAction('start', 'stockWithdrawing')"
-    )
+  el-container
+    component(:is="showDetails ? 'el-aside' : 'el-main'")
+      template(v-if="stockWithdrawals.length")
+        .buttons()
+          tool-button(tool="back" @click="onBack" v-if="showDetails")
+          tool-button(tool="add" @click="onAdd")
+        resize(:padding="20")
+          stock-withdrawing-list(
+            :items="stockWithdrawals"
+            @click="onItemClick"
+            :active-id="$route.params.stockWithdrawingId"
+          )
+      alert-empty(
+        v-else
+        @click="onAdd"
+        :button-text="$tAction('start', 'stockWithdrawing')"
+      )
 
-  router-view
+    router-view
 
 </template>
 <script>
@@ -52,6 +54,11 @@ export default {
         stockWithdrawingId: item.id,
       }, {}, this.editRoute);
     },
+    onBack() {
+      this.updateRouteParams({
+        stockWithdrawingId: null,
+      }, {}, this.rootState);
+    },
   },
 };
 
@@ -60,13 +67,31 @@ export default {
 @import "../styles/variables";
 
 @include responsive-only(lt-md) {
+  .el-container {
+    flex-direction: column;
+  }
   .el-aside {
-    display: none;
+    width: 100% !important;
+    ::v-deep .stock-withdrawing-list-item:not(.active) {
+      display: none;
+    }
+    margin-bottom: $margin-right;
+  }
+  .el-aside ::v-deep .stock-withdrawing-list-item {
+    background: none;
+    border-top: none;
+    &, .el-button {
+      color: inherit;
+    }
   }
 }
 
 .el-aside {
   margin-right: $margin-right;
+}
+
+.el-main {
+  padding: 0;
 }
 
 </style>

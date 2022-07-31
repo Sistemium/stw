@@ -1,10 +1,16 @@
 <template lang="pug">
 
 .stock-withdrawing
-  h1 StockWithdrawing {{ stockWithdrawingId }}
+  //page-title()
   .buttons
     tool-button(tool="add" @click="onAddItem")
-  stock-withdrawing-item-list(:items="stockWithdrawingItems" @click="onItemClick")
+  resize(:padding="20")
+    stock-withdrawing-item-list(
+      :items="stockWithdrawingItems"
+      @click="onItemClick"
+      v-if="stockWithdrawingItems.length"
+    )
+    alert-empty(v-else @click="onAddItem" :button-text="$tAction('add', 'position')")
   router-view
 
 </template>

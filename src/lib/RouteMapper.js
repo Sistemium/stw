@@ -29,6 +29,7 @@ function configToRoute(name, options) {
   const props = collection ? {
     editRoute: nameEdit(collection, options.edit),
     createRoute: nameCreate(collection),
+    rootState: name,
   } : undefined;
 
   const children = routeChildren(name, options, collection);
