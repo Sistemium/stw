@@ -8,7 +8,7 @@ el-form.stock-withdrawing-form(
 )
 
   el-form-item(:label="$t('fields.date')" prop="date")
-    el-date-picker.date(v-model="model.date")
+    date-string-picker(v-model="model.date")
 
   el-form-item(:label="$t('fields.storage')" prop="storageId")
     el-select(v-model="model.storageId")
@@ -26,10 +26,11 @@ el-form.stock-withdrawing-form(
 import WorkflowButton from '@/lib/WorkflowButton.vue';
 import Storage from '@/models/Storage';
 import { workflow } from '@/models/StockTaking';
+import DateStringPicker from '@/lib/DateStringPicker.vue';
 
 export default {
   name: 'StockWithdrawingForm',
-  components: { WorkflowButton },
+  components: { DateStringPicker, WorkflowButton },
   props: {
     model: Object,
     disabled: Boolean,
