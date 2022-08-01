@@ -40,12 +40,6 @@ export default {
       search: '',
     };
   },
-  directives: {
-    cancelReadOnly(el) {
-      const input = el.querySelector('.el-input__inner');
-      input.removeAttribute('readonly');
-    },
-  },
   computed: {
     options() {
       const { filters } = this;
