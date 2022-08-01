@@ -7,18 +7,20 @@
 
   el-container
     component(:is="showDetails ? 'el-aside' : 'el-main'")
-      template(v-if="stockWithdrawals.length")
+      template
         .buttons()
+          storage-select(v-model="storageId" ref="storageSelect")
           tool-button(tool="back" @click="onBack" v-if="showDetails")
           tool-button(tool="add" @click="onAdd")
         resize(:padding="20")
           stock-withdrawing-list(
+            v-if="stockWithdrawals.length"
             :items="stockWithdrawals"
             @click="onItemClick"
             :active-id="$route.params.stockWithdrawingId"
           )
       alert-empty(
-        v-else
+        v-if="currentStorageId && !stockWithdrawals.length"
         @click="onAdd"
         :button-text="$tAction('start', 'stockWithdrawing')"
       )
@@ -28,27 +30,55 @@
 </template>
 <script>
 
+import { createNamespacedHelpers } from 'vuex';
 import StockWithdrawingList from '@/components/out/StockWithdrawingList.vue';
 import StockWithdrawing from '@/models/StockWithdrawing';
 import pageMixin from '@/lib/pageMixin';
 import find from 'lodash/find';
-// import find from 'lodash/find';
+import StorageSelect from '@/components/stock/StorageSelect.vue';
+import * as g from '@/store/inv/getters';
+import * as m from '@/store/inv/mutations';
+
+const { mapGetters, mapMutations } = createNamespacedHelpers('inv');
 
 export default {
   name: 'StockWithdrawalsPage',
   mixins: [pageMixin],
-  components: { StockWithdrawingList },
+  components: { StorageSelect, StockWithdrawingList },
   computed: {
+    ...mapGetters({
+      currentStorageId: g.CURRENT_STORAGE,
+    }),
     stockWithdrawals() {
-      return this.$orderBy(StockWithdrawing.reactiveFilter(), ['date'], ['desc']);
+      return this.$orderBy(StockWithdrawing.reactiveFilter({
+        storageId: this.storageId,
+      }), ['date', 'cts'], ['desc', 'desc']);
     },
     showDetails() {
       const { name } = this.$route;
       return name === this.editRoute
         || find(this.$router.currentRoute.matched, { name: this.editRoute });
     },
+    storageId: {
+      get() {
+        const { stockWithdrawingId } = this.$route.params;
+        if (stockWithdrawingId) {
+          const { storageId } = StockWithdrawing.reactiveGet(stockWithdrawingId) || {};
+          if (storageId) {
+            return storageId;
+          }
+        }
+        return this.currentStorageId;
+      },
+      set(id) {
+        this.setCurrentStorageId(id);
+      },
+    },
   },
   methods: {
+    ...mapMutations({
+      setCurrentStorageId: m.SET_CURRENT_STORAGE,
+    }),
     onItemClick(item) {
       this.updateRouteParams({
         stockWithdrawingId: item.id,
@@ -59,6 +89,13 @@ export default {
         stockWithdrawingId: null,
       }, {}, this.rootState);
     },
+  },
+  created() {
+    if (!this.storageId) {
+      this.$nextTick(() => {
+        this.$refs.storageSelect.open();
+      });
+    }
   },
 };
 
@@ -72,14 +109,17 @@ export default {
   }
   .el-aside {
     width: 100% !important;
+
     ::v-deep .stock-withdrawing-list-item:not(.active) {
       display: none;
     }
+
     margin-bottom: $margin-right;
   }
   .el-aside ::v-deep .stock-withdrawing-list-item {
     background: none;
     border-top: none;
+
     &, .el-button {
       color: inherit;
     }

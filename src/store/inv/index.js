@@ -7,6 +7,7 @@ export default {
   namespaced: true,
 
   state: {
+    [states.CURRENT_STORAGE]: null,
     [states.ARTICLE_FILTERS]: [],
     [states.SCANNED_BARCODE]: null,
     [states.SCANNER_STATUS]: null,
