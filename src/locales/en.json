@@ -28,6 +28,9 @@
     "stockWithdrawing": "Stock withdrawing"
   },
   "fields": {
+    "address": "Address",
+    "regCode": "Registration number",
+    "vatCode": "VAT number",
     "name": "Name",
     "type": "Type",
     "consigneeType": "Consignee type",
@@ -110,7 +113,8 @@
     "stockTaking": "Stocktaking",
     "stockTakingItem": "Stocktaking item",
     "stockWithdrawing": "Stock withdrawing",
-    "stockWithdrawingItem": "Stock withdrawing item"
+    "stockWithdrawingItem": "Stock withdrawing item",
+    "legalEntity": "Legal entity"
   },
   "shortened": {
     "positions": "pos",

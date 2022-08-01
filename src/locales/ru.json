@@ -28,6 +28,9 @@
     "stockWithdrawing": "Выдача со склада"
   },
   "fields": {
+    "address": "Адрес",
+    "regCode": "Код предприятия",
+    "vatCode": "НСД код",
     "name": "Название",
     "date": "Дата",
     "type": "Тип",
@@ -108,7 +111,8 @@
     "stockTaking": "инвентаризации",
     "stockTakingItem": "позиции инвентаризации",
     "stockWithdrawing": "отгрузки со склада",
-    "stockWithdrawingItem": "позиции отгрузки со склада"
+    "stockWithdrawingItem": "позиции отгрузки со склада",
+    "legalEntity": "юр. лица"
   },
   "shortened": {
     "positions": "поз",

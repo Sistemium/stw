@@ -28,6 +28,9 @@
     "stockWithdrawing": "Iškrovimas iš sandėlio"
   },
   "fields": {
+    "address": "Adresas",
+    "regCode": "Įmonės kodas",
+    "vatCode": "PVM kodas",
     "name": "Pavadinimas",
     "date": "Data",
     "type": "Tipas",
@@ -64,7 +67,7 @@
     "personal": "Asmeninis",
     "storage": "Sandėlis",
     "image": "Nuotrauka",
-    "settings": "Parametetrai",
+    "settings": "Parametrai",
     "items": "Pozicijos",
     "person": "Asmuo",
     "legalEntity": "Imonė",
@@ -108,7 +111,8 @@
     "stockTaking": "Inventorizacijos",
     "stockTakingItem": "Inventorizacijos pozicijos",
     "stockWithdrawing": "Iš sandėlio iškrovimo",
-    "stockWithdrawingItem": "Iš sandėlio iškrovimo pozicijos"
+    "stockWithdrawingItem": "Iš sandėlio iškrovimo pozicijos",
+    "legalEntity": "Įmonės"
   },
   "shortened": {
     "positions": "poz",
