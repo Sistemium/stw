@@ -50,6 +50,8 @@ el-form.stock-taking-item-form(
     )
       el-input-number(v-model="model.quantity" :min="1")
 
+    slot(name="article-extra")
+
   article-edit(
     v-if="showDrawer"
     @saved="articleSaved"
