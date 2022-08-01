@@ -1,7 +1,7 @@
 <template lang="pug">
 
 el-date-picker.date-string-picker(
-  type="datetime"
+  type="date"
   v-model="date"
   :default-time="defaultTime"
 )
