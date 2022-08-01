@@ -94,7 +94,8 @@
     "editing": "{0} editing",
     "signIn": "Sign in",
     "welcome": "Welcome, {0}!",
-    "logout": "Sign out"
+    "logout": "Sign out",
+    "select": "select {0}"
   },
   "accusative": {
     "property": "property",

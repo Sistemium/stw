@@ -92,7 +92,8 @@
     "editing": "{0} redagavimas",
     "signIn": "Prisijungti",
     "welcome": "Sveiki, {0}!",
-    "logout": "Atsijungti"
+    "logout": "Atsijungti",
+    "select": "pasirink {0}"
   },
   "accusative": {
     "property": "ypatybę",
