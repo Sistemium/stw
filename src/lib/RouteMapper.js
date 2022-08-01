@@ -41,7 +41,7 @@ function configToRoute(name, options) {
       children.push(child);
     });
 
-  const meta = {};
+  const { meta = {} } = options;
 
   if (options.public) {
     meta.public = true;
