@@ -27,9 +27,17 @@ el-form.stock-withdrawing-form(
   el-form-item(:label="$t('fields.processing')" prop="processing")
     workflow-button(:workflow="workflow" v-model="model.processing" :disabled="disabled")
 
+  component(
+    :is="consigneeEditComponent"
+    v-if="showDrawer"
+    @saved="consigneeSaved"
+    @closed="consigneeEditClosed"
+    :drawer-style="{ top: '50px' }"
+  )
+
 </template>
 <script>
-
+/* eslint-disable vue/no-mutating-props */
 import WorkflowButton from '@/lib/WorkflowButton.vue';
 import Storage from '@/models/Storage';
 import { workflow } from '@/models/StockTaking';
@@ -37,19 +45,28 @@ import DateStringPicker from '@/lib/DateStringPicker.vue';
 import ConsigneeTypeSwitch from '@/components/ConsigneeTypeSwitch.vue';
 import ConsigneeSelect from '@/components/ConsigneeSelect.vue';
 import PrependSelect from '@/lib/PrependSelect.vue';
+import LegalEntityEdit from '@/components/contacts/LegalEntityEdit.vue';
+import StorageEdit from '@/components/stock/StorageEdit.vue';
 
 export default {
   name: 'StockWithdrawingForm',
   components: {
+    LegalEntityEdit,
     PrependSelect,
     ConsigneeSelect,
     ConsigneeTypeSwitch,
     DateStringPicker,
     WorkflowButton,
+    StorageEdit,
   },
   props: {
     model: Object,
     disabled: Boolean,
+  },
+  data() {
+    return {
+      showDrawer: false,
+    };
   },
   computed: {
     rules() {
@@ -63,9 +80,24 @@ export default {
     workflow() {
       return workflow;
     },
+    consigneeEditComponent() {
+      const { consigneeType } = this.model;
+      return consigneeType ? `${consigneeType}Edit` : 'div';
+    },
   },
   methods: {
     addConsignee() {
+      this.showDrawer = true;
+    },
+    consigneeSaved(consignee) {
+      if (consignee) {
+        setTimeout(() => {
+          this.model.consigneeId = consignee.id;
+        }, 0);
+      }
+    },
+    consigneeEditClosed() {
+      this.showDrawer = false;
     },
   },
 };
