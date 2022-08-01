@@ -11,6 +11,7 @@
   "delete": "Ištrinti",
   "reallyDelete": "Tikrai ištrinti?",
   "authorizing": "Leidimo suteikimas",
+  "typeToSearch": "Įveskite kelias paieškos raides",
   "menu": {
     "about": "Apie",
     "auth": "Prisijungimas",

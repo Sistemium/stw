@@ -11,6 +11,7 @@
   "delete": "Delete",
   "reallyDelete": "Sure to delete?",
   "authorizing": "Authorizing",
+  "typeToSearch": "Please type a keyword",
   "menu": {
     "about": "About",
     "auth": "Authorization",
