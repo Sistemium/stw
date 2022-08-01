@@ -33,4 +33,9 @@ export default {
     text-align: right;
   }
 }
+.alert-empty {
+  max-width: 500px;
+  margin-right: auto;
+  margin-left: auto;
+}
 </style>
