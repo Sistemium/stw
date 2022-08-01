@@ -65,13 +65,21 @@ function childConfig(type, options) {
       component: typed,
     };
   }
-  const { component, children, name } = typed || {};
+  const {
+    component,
+    children,
+    name,
+    beforeEnter,
+  } = typed || {};
   const res = {
     component: component || typed || editing,
     children,
   };
   if (name) {
     res.name = name;
+  }
+  if (beforeEnter) {
+    res.beforeEnter = beforeEnter;
   }
   return res;
 }
