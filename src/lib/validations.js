@@ -2,6 +2,7 @@ import Vue from 'vue';
 import orderBy from 'lodash/orderBy';
 import get from 'lodash/get';
 import find from 'lodash/find';
+import map from 'lodash/map';
 
 Vue.mixin({
 
@@ -13,6 +14,7 @@ Vue.mixin({
   },
 
   methods: {
+    $map: map,
     $find: find,
     $orderBy: orderBy,
     $ts(dateString, key = 'timestamp') {
