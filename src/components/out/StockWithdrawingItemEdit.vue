@@ -11,6 +11,9 @@ drawer-edit.stock-withdrawing-item-edit(
 )
   template(v-slot="{ model }")
     stock-withdrawing-item-form(:model="model" :editable="editable")
+      template(v-slot:article-extra)
+        el-form-item(prop="price" :label="$t('fields.price')")
+          el-input-number(v-model="model.price")
 
 </template>
 <script>
@@ -60,5 +63,9 @@ export default {
 
 </script>
 <style scoped lang="scss">
+
+.el-form-item {
+  text-align: right;
+}
 
 </style>
