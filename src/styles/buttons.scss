@@ -5,4 +5,7 @@
   + div {
     margin-top: $margin-right;
   }
+  > * + * {
+    margin-left: $margin-right;
+  }
 }
