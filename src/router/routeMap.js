@@ -6,6 +6,7 @@ import StockTaking from '@/models/StockTaking';
 import StockWithdrawing from '@/models/StockWithdrawing';
 import StockWithdrawingItem from '@/models/StockWithdrawingItem';
 import { itemRouteHelper } from '@/router/helpers';
+import map from 'lodash/map';
 
 import stockTakingRoute from './stockTakingRoute';
 
@@ -22,6 +23,9 @@ export default new RouteMapper({
     children: {
       progress: stockTakingRoute,
     },
+    meta: {
+      useScanner: true,
+    },
   },
   stockWithdrawals: {
     model: StockWithdrawing,
@@ -31,19 +35,25 @@ export default new RouteMapper({
       name: 'stockWithdrawing',
       model: StockWithdrawingItem,
       component: () => import(/* webpackChunkName: "out" */ '../views/StockWithdrawingPage.vue'),
-      children: itemRouteHelper('stockWithdrawing', () => import('../components/out/StockWithdrawingItemEdit.vue')),
+      children: itemRouteHelper(/* webpackChunkName: "out" */ 'stockWithdrawing', () => import('../components/out/StockWithdrawingItemEdit.vue')),
     },
     async beforeEnter(to, from, next) {
       const data = await StockWithdrawing.findAll({});
-      const ids = data.map(({ id }) => id);
+      const ids = map(data, 'id');
       await StockWithdrawingItem.findByMany(ids, { field: 'stockWithdrawingId' });
       next();
+    },
+    meta: {
+      useScanner: true,
     },
   },
   articles: {
     model: Article,
     component: () => import(/* webpackChunkName: "articles" */ '../views/ArticlesPage.vue'),
     editing: () => import(/* webpackChunkName: "articles" */ '../components/catalogue/ArticleEdit.vue'),
+    meta: {
+      useScanner: true,
+    },
   },
   articleProps: {
     model: ArticleProp,
