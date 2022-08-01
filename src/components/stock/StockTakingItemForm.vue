@@ -25,9 +25,7 @@ el-form.stock-taking-item-form(
 
   el-form-item.article(:label="$t('concepts.article')" prop="articleId")
     .strong(v-if="article") {{ article.code }}
-    .select-button
-      .prepend
-        el-button(icon="el-icon-plus" @click="addArticle")
+    prepend-select(@buttonClick="addArticle")
       article-select(v-model="model.articleId" :filters="articleFilters")
         template(v-slot:empty v-if="model.barcode && !isShowingAllArticles")
           p.el-select-dropdown__empty
@@ -69,6 +67,7 @@ import ArticleSelect from '@/components/catalogue/ArticleSelect.vue';
 import { addBarcodeToArticle } from '@/services/catalogue';
 import ArticleEdit from '@/components/catalogue/ArticleEdit.vue';
 import BarcodeFormItem from '@/components/BarcodeScanner/BarcodeFormItem.vue';
+import PrependSelect from '@/lib/PrependSelect.vue';
 
 export default {
   name: 'StockTakingItemForm',
@@ -165,6 +164,7 @@ export default {
     });
   },
   components: {
+    PrependSelect,
     BarcodeFormItem,
     ArticleEdit,
     ArticleSelect,
@@ -215,31 +215,6 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-.select-button {
-
-  display: flex;
-  width: 100%;
-  align-items: flex-start;
-
-  ::v-deep input {
-    border-bottom-left-radius: 0;
-    border-top-left-radius: 0;
-  }
-
-  .prepend {
-    border: 1px solid #DCDFE6;
-    border-right: none;
-    border-radius: 4px 0 0 4px;
-    line-height: 1;
-  }
-
-  .el-button {
-    line-height: 10px;
-    border: transparent;
-    background-color: #F5F7FA;
-  }
 }
 
 .strong {

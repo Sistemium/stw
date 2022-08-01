@@ -21,7 +21,8 @@ el-form.stock-withdrawing-form(
     consignee-type-switch(v-model="model.consigneeType" @change="model.consigneeId = null")
 
   el-form-item(:label="$t('fields.consignee')" prop="consignee" v-if="model.consigneeType")
-    consignee-select(:type="model.consigneeType" v-model="model.consigneeId")
+    prepend-select(@buttonClick="addConsignee")
+      consignee-select(:type="model.consigneeType" v-model="model.consigneeId")
 
   el-form-item(:label="$t('fields.processing')" prop="processing")
     workflow-button(:workflow="workflow" v-model="model.processing" :disabled="disabled")
@@ -35,10 +36,12 @@ import { workflow } from '@/models/StockTaking';
 import DateStringPicker from '@/lib/DateStringPicker.vue';
 import ConsigneeTypeSwitch from '@/components/ConsigneeTypeSwitch.vue';
 import ConsigneeSelect from '@/components/ConsigneeSelect.vue';
+import PrependSelect from '@/lib/PrependSelect.vue';
 
 export default {
   name: 'StockWithdrawingForm',
   components: {
+    PrependSelect,
     ConsigneeSelect,
     ConsigneeTypeSwitch,
     DateStringPicker,
@@ -61,11 +64,12 @@ export default {
       return workflow;
     },
   },
+  methods: {
+    addConsignee() {
+    },
+  },
 };
 
 </script>
 <style scoped lang="scss">
-.consignee-select {
-  display: block;
-}
 </style>
