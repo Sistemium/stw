@@ -39,7 +39,7 @@ export default {
     isDrawer: { type: Boolean, default: true },
     size: {
       type: String,
-      default: '350px',
+      default: '370px',
     },
     from: Object,
     forceModified: Boolean,
@@ -239,6 +239,11 @@ export default {
 
   ::v-deep .el-card__body, .container {
     padding: 0;
+  }
+  @include responsive-only(gt-xxs) {
+    .form-buttons {
+      justify-content: flex-end;
+    }
   }
 }
 
