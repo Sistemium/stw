@@ -18,6 +18,7 @@ drawer-edit.stock-withdrawing-edit(
 import DrawerEdit from '@/lib/DrawerEdit.vue';
 import StockWithdrawing from '@/models/StockWithdrawing';
 import StockWithdrawingForm from '@/components/out/StockWithdrawingForm.vue';
+// import { stockWithdrawingIdSync } from '@/services/dataSync';
 
 export default {
   name: 'StockWithdrawingEdit',
@@ -35,6 +36,8 @@ export default {
         date: new Date().toJSON(),
         processing: 'progress',
         deviceCts: new Date().toJSON(),
+        consigneeType: null,
+        consigneeId: null,
       };
     },
   },
@@ -56,6 +59,11 @@ export default {
     destroyFn(id) {
       return StockWithdrawing.destroy(id);
     },
+  },
+  beforeRouteUpdate(to, from, next) {
+    // eslint-disable-next-line no-console
+    console.log('before', this.$route.path);
+    next();
   },
 };
 
