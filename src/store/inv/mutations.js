@@ -1,3 +1,4 @@
+import { setLocalStorageItem } from 'sistemium-vue/services/localStorage';
 import * as g from './getters';
 
 export const SET_ARTICLE_FILTERS = 'SET_ARTICLE_FILTERS';
@@ -7,6 +8,7 @@ export const SET_CURRENT_STORAGE = 'SET_CURRENT_STORAGE';
 
 export default {
   [SET_CURRENT_STORAGE](state, storageId) {
+    setLocalStorageItem(g.CURRENT_STORAGE, storageId);
     state[g.CURRENT_STORAGE] = storageId || null;
   },
   [SET_ARTICLE_FILTERS](state, filters) {
