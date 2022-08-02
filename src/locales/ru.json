@@ -121,9 +121,12 @@
     "boxes": "кор"
   },
   "workflow": {
+    "start": "Начать",
     "finish": "Завершить",
     "progress": "В работе",
     "continue": "Продолжить",
-    "finished": "Завершено"
+    "finished": "Завершено",
+    "planned": "Запланировано",
+    "cancel": "Отмена"
   }
 }

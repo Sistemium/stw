@@ -121,9 +121,12 @@
     "boxes": "dėž"
   },
   "workflow": {
+    "start": "Pradėti",
     "finish": "Užbaigti",
     "progress": "Vykdoma",
     "continue": "Tęsti",
-    "finished": "Užbaigta"
+    "finished": "Įvykdyta",
+    "planned": "Suplanuota",
+    "cancel": "Atšaukti"
   }
 }

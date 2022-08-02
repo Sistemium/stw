@@ -123,9 +123,12 @@
     "boxes": "bx"
   },
   "workflow": {
+    "start": "Start",
     "finish": "Finalize",
     "progress": "In progress",
     "continue": "Continue",
-    "finished": "Finished"
+    "finished": "Finished",
+    "planned": "Planned",
+    "cancel": "Cancel"
   }
 }
