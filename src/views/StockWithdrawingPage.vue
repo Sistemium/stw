@@ -2,10 +2,10 @@
 
 .stock-withdrawing
 
-  el-tabs
+  el-tabs(tab-position="top")
     el-tab-pane(:lazy="true" :label="$t('concepts.items')")
       .buttons
-        tool-button(tool="add" @click="onAddItem")
+        tool-button(tool="add" @click="onAddItem" :disabled="disabled")
       resize(:padding="20")
         stock-withdrawing-item-list(
           :items="stockWithdrawingItems"
@@ -23,6 +23,7 @@
 
 </template>
 <script>
+import StockWithdrawing, { workflow } from '@/models/StockWithdrawing';
 import StockWithdrawingItem from '@/models/StockWithdrawingItem';
 import StockWithdrawingItemList from '@/components/out/StockWithdrawingItemList.vue';
 import StockWithdrawingEdit from '@/components/out/StockWithdrawingEdit.vue';
@@ -40,6 +41,10 @@ export default {
     stockWithdrawingItems() {
       const { stockWithdrawingId } = this;
       return StockWithdrawingItem.reactiveFilter({ stockWithdrawingId });
+    },
+    disabled() {
+      const { processing } = StockWithdrawing.reactiveGet(this.stockWithdrawingId) || {};
+      return !workflow.step(processing).editable;
     },
   },
   methods: {

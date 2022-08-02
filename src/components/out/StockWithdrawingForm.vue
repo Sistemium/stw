@@ -40,7 +40,7 @@ el-form.stock-withdrawing-form(
 /* eslint-disable vue/no-mutating-props */
 import WorkflowButton from '@/lib/WorkflowButton.vue';
 import Storage from '@/models/Storage';
-import { workflow } from '@/models/StockTaking';
+import { workflow } from '@/models/StockWithdrawing';
 import DateStringPicker from '@/lib/DateStringPicker.vue';
 import ConsigneeTypeSwitch from '@/components/ConsigneeTypeSwitch.vue';
 import ConsigneeSelect from '@/components/ConsigneeSelect.vue';

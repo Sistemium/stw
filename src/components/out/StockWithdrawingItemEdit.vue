@@ -20,7 +20,7 @@ drawer-edit.stock-withdrawing-item-edit(
 
 import drawerEditMixin from '@/lib/drawerEditMixin';
 import StockWithdrawingItemForm from '@/components/stock/StockTakingItemForm.vue';
-import StockWithdrawing from '@/models/StockWithdrawing';
+import StockWithdrawing, { workflow } from '@/models/StockWithdrawing';
 import StockWithdrawingItem from '@/models/StockWithdrawingItem';
 import { stockWithdrawingItemInstance } from '@/services/warehousing';
 
@@ -48,7 +48,7 @@ export default {
     },
     editable() {
       const { processing } = this.stockWithdrawing || {};
-      return processing === 'progress';
+      return workflow.step(processing).editable;
     },
   },
   methods: {
