@@ -99,13 +99,8 @@ export default {
 <style scoped lang="scss">
 @import "../styles/page";
 
-.buttons {
-  display: flex;
-  align-items: center;
-
-  .search-input {
-    flex: 1;
-    margin-right: $margin-right;
-  }
+.search-input {
+  flex: 1;
 }
+
 </style>
