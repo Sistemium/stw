@@ -88,20 +88,15 @@ export default {
       return this.deletable && !!(this.modelOrigin && this.modelOrigin.id);
     },
     changed() {
-      return this.forceModified || !matchesDeep(this.model, this.modelOrigin);
+      return this.forceModified || this.hasChanges;
     },
-    // hasChanges() {
-    //   return !this.modelOrigin
-    //     || !this.modelOrigin.id
-    //     || !matchesDeep(this.model, this.modelOrigin);
-    // },
+    hasChanges() {
+      return !this.modelOrigin
+        || !this.modelOrigin.id
+        || !matchesDeep(this.model, this.modelOrigin);
+    },
   },
   methods: {
-
-    getPlainInstanceById(model, id) {
-      const action = model.get(id);
-      return action && action.toJSON();
-    },
 
     cloneDeep,
     matchesDeep,
