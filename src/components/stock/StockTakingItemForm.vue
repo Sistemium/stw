@@ -7,7 +7,7 @@ el-form.stock-taking-item-form(
   :disabled="!editable"
 )
 
-  barcode-form-item(v-model="model.barcode")
+  barcode-form-item(v-model.trim="model.barcode")
     template(v-slot:prepend)
       el-button(:icon="barcodeIcon" @click="toggleShowAllArticles")
 

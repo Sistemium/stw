@@ -3,6 +3,7 @@ import orderBy from 'lodash/orderBy';
 import get from 'lodash/get';
 import find from 'lodash/find';
 import map from 'lodash/map';
+import trim from 'lodash/trim';
 
 Vue.mixin({
 
@@ -14,6 +15,7 @@ Vue.mixin({
   },
 
   methods: {
+    $trim: trim,
     $map: map,
     $find: find,
     $orderBy: orderBy,

@@ -8,7 +8,7 @@
   )
 
     el-form-item(:label="$t('fields.name')" prop="name")
-      el-input(v-model="model.name" :readonly="!model.isCustomName")
+      el-input(v-model.trim="model.name" :readonly="!model.isCustomName")
         template(v-slot:append)
           el-button(
             :class="model.isCustomName && 'isCustomName'"
@@ -17,7 +17,7 @@
           )
 
     el-form-item(:label="$t('fields.code')" prop="code")
-      el-input(v-model="model.code")
+      el-input(v-model.trim="model.code")
 
     transition-group(name="flip-list")
       el-form-item(
@@ -142,7 +142,7 @@ export default {
       this.setName();
     },
     onPropInput(prop, value, idx) {
-      this.model.props[idx][prop.component.field] = value;
+      this.model.props[idx][prop.component.field] = this.$trim(value);
       if (prop.type === 'options') {
         this.model.props[idx].stringValue = get(PropOption.getByID(value), 'name');
       }
