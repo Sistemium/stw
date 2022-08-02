@@ -58,8 +58,10 @@ export default {
 
 @import "../styles/variables";
 
-.tool-button:not(.is-disabled) {
-  color: $primary-color;
+.tool-button {
+  &:not(.is-disabled) {
+    color: $primary-color;
+  }
   font-size: 19px;
   padding: 2px;
 }

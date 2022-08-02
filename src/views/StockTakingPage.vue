@@ -9,7 +9,7 @@
     //workflow-button(:workflow="workflow" :value="stockTaking.processing" @input="onProcessing")
 
   el-tabs(tab-position="top" v-model="currentTabData" )
-    el-tab-pane(:label="$t('items')" name="items")
+    el-tab-pane(:label="$t('concepts.items')" name="items")
       .buttons(v-if="stockTakingItems.length")
         tool-button(tool="add" @click="onAdd()")
       resize(:padding="20")
@@ -20,7 +20,7 @@
           @click="onAdd()"
           :button-text="$tAction('add', 'position')"
         )
-    el-tab-pane(:label="$t('settings')" name="settings")
+    el-tab-pane(:label="$t('concepts.settings')" name="settings")
       stock-taking-edit(
         :stockTakingId="stockTakingId"
         :is-drawer="false"

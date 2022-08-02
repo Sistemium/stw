@@ -10,8 +10,10 @@
       template
         .buttons()
           storage-select(v-model="storageId" ref="storageSelect")
-          tool-button(tool="back" @click="onBack" v-if="showDetails")
-          tool-button(tool="add" @click="onAdd")
+          div(v-if="showDetails")
+            tool-button(tool="back" @click="onBack")
+          div
+            tool-button(tool="add" @click="onAdd")
         resize(:padding="20")
           stock-withdrawing-list(
             v-if="stockWithdrawals.length"
@@ -127,11 +129,22 @@ export default {
 }
 
 .el-aside {
-  margin-right: $margin-right;
+  margin-right: $margin-top;
+  .buttons {
+    .storage-select {
+      flex: 1;
+    }
+  }
 }
 
 .el-main {
   padding: 0;
+}
+
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }
 
 </style>

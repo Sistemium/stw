@@ -17,6 +17,7 @@ export default {
 @import "../styles/variables";
 
 h1 {
+  margin-bottom: $margin-top;
   @include responsive-only(xxs) {
     display: none;
   }

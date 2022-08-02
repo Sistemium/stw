@@ -235,10 +235,11 @@ export default {
 }
 
 .el-card {
-  border: none;
-
-  ::v-deep .el-card__body, .container {
-    padding: 0;
+  @include responsive-only(xxs) {
+    border: none;
+    ::v-deep .el-card__body, .container {
+      padding: 0;
+    }
   }
   @include responsive-only(gt-xxs) {
     .form-buttons {

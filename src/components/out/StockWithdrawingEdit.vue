@@ -60,11 +60,6 @@ export default {
       return StockWithdrawing.destroy(id);
     },
   },
-  beforeRouteUpdate(to, from, next) {
-    // eslint-disable-next-line no-console
-    console.log('before', this.$route.path);
-    next();
-  },
 };
 
 </script>

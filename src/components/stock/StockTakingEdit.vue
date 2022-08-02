@@ -58,5 +58,12 @@ export default {
 
 </script>
 <style scoped lang="scss">
+@import "../../styles/variables";
 
+.stock-taking-edit {
+  text-align: left;
+  @include responsive-only(xxs) {
+    text-align: right;
+  }
+}
 </style>
