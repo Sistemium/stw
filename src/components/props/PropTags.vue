@@ -10,7 +10,7 @@
     .empty(v-if="!tags.length" v-t="'emptyTags'")
   tool-button(
     tool="add"
-    @click="onAdd"
+    @click="onAdd()"
   )
 
   article-property-edit(v-if="showDrawer" @closed="showDrawer = false")

@@ -5,7 +5,7 @@
   page-title(title="menu.articlePropsTitle")
 
   .buttons
-    tool-button(tool="add" @click="onAdd")
+    tool-button(tool="add" @click="onAdd()")
 
   resize(:padding="20")
     article-props-list(
@@ -14,7 +14,7 @@
     )
     el-alert.empty(type="info" :title="$t('validation.noData')" :closable="false" v-else)
       el-button(
-        type="primary" @click="onAdd" :plain="true"
+        type="primary" @click="onAdd()" :plain="true"
       ) {{ $tAction('add', 'property') }}
 
   router-view

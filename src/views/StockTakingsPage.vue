@@ -4,7 +4,7 @@
   page-title(title="menu.stockTakings")
   template(v-if="showList")
     .buttons(v-if="stockTakings.length")
-      tool-button(tool="add" @click="onAdd")
+      tool-button(tool="add" @click="pushCreate()")
     resize(:padding="20")
       stock-taking-list(
         :items="stockTakings"
@@ -14,7 +14,7 @@
       )
       alert-empty(
         v-else
-        @click="onAdd"
+        @click="onAdd()"
         :button-text="$tAction('start', 'stockTaking')"
       )
 

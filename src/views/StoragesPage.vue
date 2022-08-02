@@ -3,7 +3,7 @@
 .storages-page.page
   page-title(title="menu.storages")
   .buttons(v-if="storages.length")
-    tool-button(tool="add" @click="onAdd")
+    tool-button(tool="add" @click="onAdd()")
   resize(:padding="20")
     storages-list(
       :storages="storages"
@@ -12,7 +12,7 @@
     )
     el-alert.empty(type="info" :title="$t('validation.noData')" :closable="false" v-else)
       el-button(
-        type="primary" @click="onAdd" :plain="true"
+        type="primary" @click="onAdd()" :plain="true"
       ) {{ $tAction('add', 'storage') }}
   router-view
 

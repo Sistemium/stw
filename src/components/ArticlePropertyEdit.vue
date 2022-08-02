@@ -21,11 +21,11 @@ drawer-edit.article-property-edit(
           .tools
             tool-button(
               tool="add"
-              @click="onAdd"
+              @click="onAdd()"
             )
           resize(:padding="60")
             prop-option-list(:options="options" @click="optionClick" v-if="options.length")
-        el-button.empty(v-else @click="onAdd" type="primary") {{ $tAction('add', 'property') }}
+        el-button.empty(v-else @click="onAdd()" type="primary") {{ $tAction('add', 'property') }}
 
     prop-option-edit(
       :prop-option-id="currentOptionId"

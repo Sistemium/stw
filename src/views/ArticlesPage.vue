@@ -7,7 +7,7 @@
 
   .buttons
     search-input(v-model="search" :disabled="!!barcode")
-    tool-button(tool="add" @click="onAdd")
+    tool-button(tool="add" @click="onAdd()")
 
   resize(:padding="20")
     article-list(
