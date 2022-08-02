@@ -6,7 +6,6 @@ import StockTaking from '@/models/StockTaking';
 import StockWithdrawing from '@/models/StockWithdrawing';
 import StockWithdrawingItem from '@/models/StockWithdrawingItem';
 import { itemRouteHelper } from '@/router/helpers';
-import map from 'lodash/map';
 
 import stockTakingRoute from './stockTakingRoute';
 
@@ -36,12 +35,6 @@ export default new RouteMapper({
       model: StockWithdrawingItem,
       component: () => import(/* webpackChunkName: "out" */ '../views/StockWithdrawingPage.vue'),
       children: itemRouteHelper(/* webpackChunkName: "out" */ 'stockWithdrawing', () => import('../components/out/StockWithdrawingItemEdit.vue')),
-    },
-    async beforeEnter(to, from, next) {
-      const data = await StockWithdrawing.findAll({});
-      const ids = map(data, 'id');
-      await StockWithdrawingItem.findByMany(ids, { field: 'stockWithdrawingId' });
-      next();
     },
     meta: {
       useScanner: true,

@@ -35,3 +35,11 @@ export const CONSIGNEE_TYPES = new Map([
 export function consigneeModel(type) {
   return type && CONSIGNEE_TYPES.get(type);
 }
+
+export function getConsignee({ consigneeType, consigneeId }) {
+  const model = CONSIGNEE_TYPES.get(consigneeType);
+  if (!model) {
+    return null;
+  }
+  return model.reactiveGet(consigneeId);
+}

@@ -2,8 +2,9 @@
 
 .stock-withdrawing-list-item.list-group-item(@click="$emit('click')")
   .title
-    .date {{ $ts(stockWithdrawing.date, 'minutes') }}
-    .storage {{ storage }}
+    .date {{ $ts(stockWithdrawing.date, 'short') }}
+    .consignee(v-if="consignee") {{ consignee.name }}
+    //.storage {{ storage }}
   .right
     workflow-processing(:processing="stockWithdrawing.processing")
     el-button.positions(
@@ -17,6 +18,7 @@
 import StockWithdrawingItem from '@/models/StockWithdrawingItem';
 import Storage from '@/models/Storage';
 import WorkflowProcessing from '@/lib/WorkflowProcessing.vue';
+import { getConsignee } from '@/services/warehousing';
 
 export default {
   name: 'StockWithdrawingListItem',
@@ -32,6 +34,9 @@ export default {
     storage() {
       const { name } = Storage.reactiveGet(this.stockWithdrawing.storageId) || {};
       return name;
+    },
+    consignee() {
+      return getConsignee(this.stockWithdrawing || {});
     },
   },
 };

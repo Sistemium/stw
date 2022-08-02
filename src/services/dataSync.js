@@ -10,12 +10,15 @@ import Picture from '@/models/Picture';
 import StockWithdrawing from '@/models/StockWithdrawing';
 import { consigneeModel } from '@/services/warehousing';
 import StockWithdrawingItem from '@/models/StockWithdrawingItem';
-// import StockWithdrawing from '@/models/StockWithdrawing';
+import map from 'lodash/map';
+import groupBy from 'lodash/groupBy';
+import filter from 'lodash/filter';
+import Loading from 'element-ui/packages/loading';
 
-const { error } = log('dataSync');
+const { error, debug } = log('dataSync');
 
 export async function initData() {
-  // debug('start');
+  debug('initData');
   await ArticleProp.findAll();
   await PropOption.findAll();
   await Article.findAll();
@@ -23,7 +26,6 @@ export async function initData() {
   await Storage.findAll();
   await StockTaking.findAll();
   await Picture.findAll();
-  // await StockWithdrawing.findAll();
 }
 
 export async function stockWithdrawingIdSync(to) {
@@ -53,6 +55,43 @@ export async function stockWithdrawingIdSync(to) {
 
 }
 
+async function stockWithdrawingSync(to, from) {
+
+  const re = /StockWithdraw/i;
+
+  if (!re.test(to.name) || re.test(from.name)) {
+    return;
+  }
+
+  const loading = Loading.service({});
+
+  try {
+    const data = await StockWithdrawing.findAll({});
+    const ids = map(data, 'id');
+    await StockWithdrawingItem.findByMany(ids, { field: 'stockWithdrawingId' });
+
+    const byType = groupBy(filter(data, 'consigneeType'), 'consigneeType');
+    const consigneePromises = map(byType, (items, type) => {
+      const model = consigneeModel(type);
+      if (!model) {
+        error('stockWithdrawingSync:', 'wrong type', type);
+        return null;
+      }
+      return model.findByMany(map(items, 'consigneeId'), { cached: true });
+    });
+
+    await Promise.all(filter(consigneePromises));
+  } catch (e) {
+    error('stockWithdrawingSync:', e);
+  }
+
+  loading.close();
+
+  stockWithdrawingIdSync(to)
+    .catch(error);
+
+}
+
 export async function authGuard(to, from, next) {
 
   const authorized = store.getters['auth/IS_AUTHORIZED'];
@@ -73,8 +112,13 @@ export async function authGuard(to, from, next) {
     return;
   }
 
-  stockWithdrawingIdSync(to)
-    .catch(e => error(e));
+  try {
+    // debug('authGuard', to.name);
+    await stockWithdrawingSync(to, from);
+  } catch (e) {
+    error(e);
+  }
+
   next();
 
 }
