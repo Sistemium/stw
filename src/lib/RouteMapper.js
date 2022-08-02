@@ -116,6 +116,7 @@ function routeChildren(name, options, collection) {
       name: nameCreate(collection),
       props: {
         from: { name },
+        editRoute: nameEdit(collection, options.edit),
         ...childProps('create', options),
       },
       ...childConfig('create', options),
