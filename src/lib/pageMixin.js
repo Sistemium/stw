@@ -9,15 +9,27 @@ export default {
     closeRoute: String,
     // progressRoute: String,
   },
+  data() {
+    return {
+      busy: false,
+    };
+  },
   components: { AlertEmpty, PageTitle },
   methods: {
-    onAdd() {
+    setBusy(promise) {
+      const { busy: wasBusy } = this;
+      this.busy = true;
+      return promise
+        .finally(() => {
+          this.busy = wasBusy || false;
+        });
+    },
+    pushCreate(query) {
       this.$router.push({
         name: this.createRoute,
-        params: {
-          from: this.$route,
-        },
-      });
+        query,
+      })
+        .catch(e => this.$error(e));
     },
   },
 };
