@@ -7,7 +7,9 @@ import { axios } from 'sistemium-data/src/util/axios';
 import noop from 'lodash/noop';
 import flatten from 'lodash/flatten';
 import { isNative } from 'sistemium-data/src/util/native';
-import axiosScriptMessaging, { SOCKET_SOURCE_HEADER } from 'sistemium-data/src/util/axiosScriptMessaging';
+import axiosScriptMessaging, {
+  SOCKET_SOURCE_HEADER,
+} from 'sistemium-data/src/util/axiosScriptMessaging';
 
 const OFFSET_HEADER = 'x-offset';
 const { VUE_APP_API_URL: API_URL } = process.env;
@@ -55,7 +57,9 @@ export default class HybridDataModel extends ReactiveModel {
       field = 'id',
     } = options;
 
-    const chunks = chunk(uniq(ids), chunkSize);
+    const idsUniq = filter(uniq(ids));
+    const toLoad = options.cached ? idsUniq.filter(id => !this.getByID(id)) : idsUniq;
+    const chunks = chunk(toLoad, chunkSize);
 
     const res = await Promise.all(chunks.map(chunkIds => {
       const where = { [field]: { $in: chunkIds } };
