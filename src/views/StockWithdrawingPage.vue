@@ -5,6 +5,12 @@
   el-tabs(tab-position="top")
     el-tab-pane(:lazy="true" :label="$t('concepts.items')")
       .buttons
+        workflow-transitions(
+          :workflow="workflow"
+          :value="stockWithdrawing.processing"
+          @input="onProcessing"
+          :disabled="busy"
+        )
         tool-button(tool="add" @click="onAddItem" :disabled="disabled")
       resize(:padding="20")
         stock-withdrawing-item-list(
@@ -28,22 +34,29 @@ import StockWithdrawingItem from '@/models/StockWithdrawingItem';
 import StockWithdrawingItemList from '@/components/out/StockWithdrawingItemList.vue';
 import StockWithdrawingEdit from '@/components/out/StockWithdrawingEdit.vue';
 import pageMixin from '@/lib/pageMixin';
+import WorkflowTransitions from '@/lib/WorkflowTransitions.vue';
 
 export default {
   name: 'StockWithdrawingPage',
-  components: { StockWithdrawingEdit, StockWithdrawingItemList },
+  components: { WorkflowTransitions, StockWithdrawingEdit, StockWithdrawingItemList },
   mixins: [pageMixin],
   props: {
     stockWithdrawingId: String,
     from: Object,
   },
   computed: {
+    workflow() {
+      return workflow;
+    },
     stockWithdrawingItems() {
       const { stockWithdrawingId } = this;
       return StockWithdrawingItem.reactiveFilter({ stockWithdrawingId });
     },
+    stockWithdrawing() {
+      return StockWithdrawing.reactiveGet(this.stockWithdrawingId) || {};
+    },
     disabled() {
-      const { processing } = StockWithdrawing.reactiveGet(this.stockWithdrawingId) || {};
+      const { processing } = this.stockWithdrawing;
       return !workflow.step(processing).editable;
     },
   },
@@ -52,7 +65,6 @@ export default {
       this.$router.push({
         name: this.createRoute,
         params: {
-          // from: this.$route,
           stockWithdrawingId: this.stockWithdrawingId,
         },
       });
@@ -61,7 +73,6 @@ export default {
       this.$router.push({
         name: this.editRoute,
         params: {
-          // from: this.$route,
           stockWithdrawingId: this.stockWithdrawingId,
           stockWithdrawingItemId: item.id,
         },
@@ -71,6 +82,9 @@ export default {
       if (!record) {
         this.$router.replace({ name: this.from.name });
       }
+    },
+    onProcessing(processing) {
+      this.setBusy(StockWithdrawing.patch(this.stockWithdrawingId, { processing }));
     },
   },
 };
