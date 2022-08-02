@@ -5,6 +5,7 @@ import filter from 'lodash/filter';
 import qs from 'qs';
 import { axios } from 'sistemium-data/src/util/axios';
 import noop from 'lodash/noop';
+import isString from 'lodash/isString';
 import flatten from 'lodash/flatten';
 import { isNative } from 'sistemium-data/src/util/native';
 import axiosScriptMessaging, {
@@ -82,6 +83,21 @@ export default class HybridDataModel extends ReactiveModel {
     noop(this.ts);
     return filter(uniq(ids)
       .map(id => this.getByID(id)));
+  }
+
+  async patch(idOrObj, props) {
+    const { id } = isString(idOrObj) ? { id: idOrObj } : idOrObj;
+    if (!id) {
+      throw new Error('Can not patch: empty id');
+    }
+    const data = await this.findByID(id);
+    if (!data) {
+      throw new Error('Can not patch: not found id');
+    }
+    return this.create({
+      ...data,
+      ...props,
+    });
   }
 
 }
