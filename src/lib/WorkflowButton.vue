@@ -1,7 +1,7 @@
 <template lang="pug">
 
 el-dropdown.workflow-button(@command="onCommand" :trigger="trigger" v-if="step")
-  el-button(:type="step.style" size="mini" :disabled="disabled") {{ $t(step.label) }}
+  el-button(:type="step.style" :size="size" :disabled="disabled") {{ $t(step.label) }}
   template(v-slot:dropdown)
     el-dropdown-menu
       el-dropdown-item(
@@ -12,34 +12,17 @@ el-dropdown.workflow-button(@command="onCommand" :trigger="trigger" v-if="step")
 </template>
 <script>
 
+import workflowMixin from '@/lib/workflowMixin';
+
 export default {
   name: 'WorkflowButton',
   props: {
-    workflow: Object,
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-    value: String,
     trigger: {
       type: String,
       default: 'click',
     },
   },
-  computed: {
-    step() {
-      return this.workflow.step(this.value);
-    },
-    options() {
-      const { step } = this;
-      return (step && step.options) || [];
-    },
-  },
-  methods: {
-    onCommand(to) {
-      this.$emit('input', to);
-    },
-  },
+  mixins: [workflowMixin],
 };
 
 </script>
