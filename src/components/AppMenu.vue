@@ -98,7 +98,7 @@ export default {
 @import "../styles/variables";
 
 .app-menu {
-  padding: 30px;
+  padding: $margin-top;
   text-align: center;
   position: relative;
   @include responsive-only(xxs) {
