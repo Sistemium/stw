@@ -10,10 +10,8 @@
       template
         .buttons()
           storage-select(v-model="storageId" ref="storageSelect")
-          div(v-if="showDetails")
-            tool-button(tool="back" @click="onBack")
-          div
-            tool-button(tool="add" @click="onAdd")
+          tool-button(tool="back" @click="onBack" v-if="showDetails")
+          tool-button(tool="add" @click="onAdd()")
         resize(:padding="20")
           stock-withdrawing-list(
             v-if="stockWithdrawals.length"
@@ -23,7 +21,7 @@
           )
       alert-empty(
         v-if="currentStorageId && !stockWithdrawals.length"
-        @click="onAdd"
+        @click="onAdd()"
         :button-text="$tAction('start', 'stockWithdrawing')"
       )
 
@@ -78,6 +76,9 @@ export default {
     },
   },
   methods: {
+    onAdd() {
+      this.pushCreate({ storageId: this.storageId });
+    },
     ...mapMutations({
       setCurrentStorageId: m.SET_CURRENT_STORAGE,
     }),
@@ -140,11 +141,4 @@ export default {
 .el-main {
   padding: 0;
 }
-
-.buttons {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-}
-
 </style>
