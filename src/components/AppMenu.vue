@@ -95,25 +95,17 @@ export default {
 
 </script>
 <style scoped lang="scss">
-@import "../styles/variables";
+@import "../styles/responsive";
 
 .app-menu {
   padding: $margin-top;
   text-align: center;
   position: relative;
-  @include responsive-only(xxs) {
-    padding: 0 0 10px;
+  @include xxs() {
+    padding: 0 0 $padding;
     display: flex;
     justify-content: space-between;
     align-items: center;
-  }
-  @include responsive-only(xs) {
-    @media (orientation: landscape) {
-      padding: 0 0 10px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
   }
 }
 
@@ -123,12 +115,12 @@ export default {
 }
 
 .lang-menu {
-  @include responsive-only(gt-xxs) {
+  @include gt-xxs() {
     position: absolute;
     top: 0;
     right: 0;
   }
-  @include responsive-only(xxs) {
+  @include xxs() {
     ::v-deep img {
       display: none;
     }
@@ -151,13 +143,8 @@ export default {
   flex-wrap: wrap;
   justify-content: center;
 
-  @include responsive-only(xxs) {
+  @include xxs {
     display: none;
-  }
-  @include responsive-only(xs) {
-    @media (orientation: landscape) {
-      display: none;
-    }
   }
 
   a {
@@ -172,13 +159,8 @@ export default {
 }
 
 strong, .hamburger {
-  @include responsive-only(gt-xs) {
+  @include gt-xxs() {
     display: none;
-  }
-  @include responsive-only(xs) {
-    @media (orientation: portrait) {
-      display: none;
-    }
   }
 }
 
@@ -190,25 +172,13 @@ strong, .hamburger {
 }
 
 .barcode-scanner-status {
-  @include responsive-only(gt-xs) {
+  @include gt-xxs() {
     position: absolute;
     top: 0;
     left: 0;
   }
-  @include responsive-only(xs) {
-    @media (orientation: portrait) {
-      position: absolute;
-      top: 0;
-      left: 0;
-    }
-  }
-  @include responsive-only(xxs) {
+  @include xxs() {
     margin-left: $margin-right;
-  }
-  @include responsive-only(xs) {
-    @media (orientation: landscape) {
-      margin-left: $margin-right;
-    }
   }
 }
 
@@ -217,7 +187,7 @@ strong, .hamburger {
 }
 
 .tab-bar-toggle {
-  @include responsive-only(xxs) {
+  @include xxs() {
     display: none;
   }
   position: absolute;

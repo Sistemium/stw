@@ -14,17 +14,12 @@ export default {
 
 </script>
 <style scoped lang="scss">
-@import "../styles/variables";
+@import "../styles/responsive";
 
 h1 {
   margin-bottom: $margin-top;
-  @include responsive-only(xxs) {
+  @include xxs() {
     display: none;
-  }
-  @include responsive-only(xs) {
-    @media (orientation: landscape) {
-      display: none;
-    }
   }
 }
 </style>

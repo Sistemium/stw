@@ -1,0 +1,9 @@
+@import "variables";
+
+@mixin xxs {
+  @media (max-height: $max-width), (max-width: $max-width) { @content; }
+}
+
+@mixin gt-xxs {
+  @media (min-height: $max-width) and (min-width: $max-width) { @content; }
+}
