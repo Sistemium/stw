@@ -7,6 +7,7 @@
     :key="options.processing"
     @click="onCommand(option.to)"
     :size="size"
+    :type="option.type"
   ) {{ $t(option.label) }}
 
 </template>
