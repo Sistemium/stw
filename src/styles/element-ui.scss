@@ -1,4 +1,4 @@
-@import "~sistemium-vue/styles/responsive";
+@import "variables";
 
 .el-drawer__header {
   font-weight: bold;
@@ -8,4 +8,8 @@
   .el-select-dropdown.el-popper {
     max-width: 350px;
   }
+}
+
+.el-table {
+  color: $black;
 }
