@@ -23,8 +23,7 @@ el-table.stock-withdrawing-table(:data="data" @row-click="row => $emit('click', 
 
 </template>
 <script>
-import { getConsignee } from '@/services/warehousing';
-import StockWithdrawingItem from '@/models/StockWithdrawingItem';
+import stockWithdrawingMixin from '@/components/stock/stockWithdrawingMixin';
 
 export default {
   name: 'StockWithdrawingTable',
@@ -32,23 +31,13 @@ export default {
     items: Array,
     activeId: String,
   },
+  mixins: [stockWithdrawingMixin],
   computed: {
     data() {
       return this.$map(this.items, this.itemToData);
     },
-  },
-  methods: {
-    itemToData(item) {
-      const consignee = getConsignee(item);
-      const positions = StockWithdrawingItem.reactiveFilter({ stockWithdrawingId: item.id });
-      return {
-        ...item,
-        processing: this.$t(`workflow.${item.processing || 'progress'}`),
-        date: this.$ts(item.date, 'short'),
-        consignee,
-        consigneeName: this.$get(consignee, 'name'),
-        positionsCount: positions.length,
-      };
+    columnSize() {
+      return this.size === 'small' ? 120 : 140;
     },
   },
 };

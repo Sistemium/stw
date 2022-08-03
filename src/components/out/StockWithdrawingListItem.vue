@@ -2,38 +2,27 @@
 
 .stock-withdrawing-list-item.list-group-item(@click="$emit('click')")
   .title
-    .date {{ $ts(stockWithdrawing.date, 'short') }}
-    .consignee(v-if="consignee") {{ consignee.name }}
+    .date {{ viewData.date }}
+    .consignee(v-if="viewData.consigneeName") {{ viewData.consigneeName }}
     //.storage {{ storage }}
   .right
-    workflow-processing(:processing="stockWithdrawing.processing")
-    .positions {{ positions.length }} {{ $t('shortened.positions') }}.
+    .processing {{ viewData.processing }}
+    .positions {{ viewData.positionsCount }} {{ $t('shortened.positions') }}.
 
 </template>
 <script>
 
-import StockWithdrawingItem from '@/models/StockWithdrawingItem';
-import Storage from '@/models/Storage';
-import WorkflowProcessing from '@/lib/WorkflowProcessing.vue';
-import { getConsignee } from '@/services/warehousing';
+import stockWithdrawingMixin from '@/components/stock/stockWithdrawingMixin';
 
 export default {
   name: 'StockWithdrawingListItem',
-  components: { WorkflowProcessing },
+  mixins: [stockWithdrawingMixin],
   props: {
     stockWithdrawing: Object,
   },
   computed: {
-    positions() {
-      const { id: stockWithdrawingId } = this.stockWithdrawing;
-      return StockWithdrawingItem.reactiveFilter({ stockWithdrawingId });
-    },
-    storage() {
-      const { name } = Storage.reactiveGet(this.stockWithdrawing.storageId) || {};
-      return name;
-    },
-    consignee() {
-      return getConsignee(this.stockWithdrawing || {});
+    viewData() {
+      return this.itemToData(this.stockWithdrawing);
     },
   },
 };
