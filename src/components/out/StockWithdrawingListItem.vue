@@ -8,6 +8,7 @@
   .right
     .processing {{ viewData.processing }}
     .positions {{ viewData.positionsCount }} {{ $t('shortened.positions') }}.
+    .total-cost(v-if="viewData.totalCost") {{ viewData.totalCost }} &euro;
 
 </template>
 <script>

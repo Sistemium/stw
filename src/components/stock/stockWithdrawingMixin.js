@@ -7,6 +7,7 @@ export default {
     itemToData(item) {
       const consignee = getConsignee(item);
       const positions = StockWithdrawingItem.reactiveFilter({ stockWithdrawingId: item.id });
+      const totalCost = sumBy(positions, p => (p.price || 0) * (p.units || 0));
       return {
         ...item,
         processing: this.$t(`workflow.${item.processing || 'progress'}`),
@@ -15,6 +16,7 @@ export default {
         consigneeName: this.$get(consignee, 'name'),
         positionsCount: positions.length,
         units: sumBy(positions, 'units'),
+        totalCost: totalCost ? this.$n(totalCost) : null,
       };
     },
   },

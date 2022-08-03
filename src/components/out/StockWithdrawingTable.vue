@@ -31,6 +31,12 @@ el-table.stock-withdrawing-table(
     :label="$t('fields.quantity')"
     width="120"
   )
+  el-table-column(
+    align="right"
+    prop="totalCost"
+    :label="$t('fields.totalCost')"
+    width="120"
+  )
 
 </template>
 <script>

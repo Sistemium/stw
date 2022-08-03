@@ -61,7 +61,7 @@ export default {
       return this.$vssWidth < 800 ? 'small' : 'normal';
     },
     showTable() {
-      return this.$vssWidth < 500 || this.showDetails;
+      return this.$vssWidth < 600 || this.showDetails;
     },
     stockWithdrawals() {
       return this.$orderBy(StockWithdrawing.reactiveFilter({

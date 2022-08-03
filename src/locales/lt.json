@@ -44,6 +44,7 @@
     },
     "code": "Serijinis kodas",
     "price": "Kaina",
+    "totalCost": "Kaina iš viso",
     "inverse": "Reikšmės \"ne\" pavadinimas",
     "prefix": "Priešdėlis",
     "suffix": "Priesaga",
