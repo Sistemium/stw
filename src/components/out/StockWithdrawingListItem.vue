@@ -7,10 +7,7 @@
     //.storage {{ storage }}
   .right
     workflow-processing(:processing="stockWithdrawing.processing")
-    el-button.positions(
-      type="text"
-      @click.stop="$emit('positionsClick')"
-    ) {{ positions.length }} {{ $t('shortened.positions') }}.
+    .positions {{ positions.length }} {{ $t('shortened.positions') }}.
 
 </template>
 <script>
