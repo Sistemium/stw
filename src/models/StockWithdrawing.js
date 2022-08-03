@@ -16,6 +16,7 @@ export const workflow = new Workflow({
       options: [{
         to: 'progress',
         label: 'workflow.start',
+        type: 'primary',
       }],
       primaryOption: 'progress',
       editable: true,
@@ -26,9 +27,11 @@ export const workflow = new Workflow({
       options: [{
         to: 'finished',
         label: 'workflow.finish',
+        type: 'primary',
       }, {
         to: 'planned',
         label: 'workflow.cancel',
+        type: 'warning',
       }],
       style: 'primary',
       primaryOption: 'finished',
