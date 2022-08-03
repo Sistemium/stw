@@ -13,12 +13,18 @@
           tool-button(tool="back" @click="onBack" v-if="showDetails")
           tool-button(tool="add" @click="onAdd()")
         resize(:padding="20")
-          stock-withdrawing-list(
-            v-if="stockWithdrawals.length"
-            :items="stockWithdrawals"
-            @click="onItemClick"
-            :active-id="$route.params.stockWithdrawingId"
-          )
+          template(v-if="stockWithdrawals.length")
+            stock-withdrawing-list(
+              v-if="showTable"
+              :items="stockWithdrawals"
+              @click="onItemClick"
+              :active-id="$route.params.stockWithdrawingId"
+            )
+            stock-withdrawing-table(
+              v-else
+              @click="onItemClick"
+              :items="stockWithdrawals"
+            )
       alert-empty(
         v-if="currentStorageId && !stockWithdrawals.length"
         @click="onAdd()"
@@ -29,13 +35,14 @@
 
 </template>
 <script>
-
+import vss from 'vue-screen-size';
 import { createNamespacedHelpers } from 'vuex';
 import StockWithdrawingList from '@/components/out/StockWithdrawingList.vue';
 import StockWithdrawing from '@/models/StockWithdrawing';
 import pageMixin from '@/lib/pageMixin';
 import find from 'lodash/find';
 import StorageSelect from '@/components/stock/StorageSelect.vue';
+import StockWithdrawingTable from '@/components/out/StockWithdrawingTable.vue';
 import * as g from '@/store/inv/getters';
 import * as m from '@/store/inv/mutations';
 
@@ -43,12 +50,15 @@ const { mapGetters, mapMutations } = createNamespacedHelpers('inv');
 
 export default {
   name: 'StockWithdrawalsPage',
-  mixins: [pageMixin],
-  components: { StorageSelect, StockWithdrawingList },
+  mixins: [pageMixin, vss.VueScreenSizeMixin],
+  components: { StockWithdrawingTable, StorageSelect, StockWithdrawingList },
   computed: {
     ...mapGetters({
       currentStorageId: g.CURRENT_STORAGE,
     }),
+    showTable() {
+      return this.$vssWidth < 500 || this.showDetails;
+    },
     stockWithdrawals() {
       return this.$orderBy(StockWithdrawing.reactiveFilter({
         storageId: this.storageId,
@@ -131,6 +141,7 @@ export default {
 
 .el-aside {
   margin-right: $margin-top;
+
   .buttons {
     .storage-select {
       flex: 1;
