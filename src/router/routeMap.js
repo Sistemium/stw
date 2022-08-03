@@ -6,8 +6,8 @@ import StockTaking from '@/models/StockTaking';
 import StockWithdrawing from '@/models/StockWithdrawing';
 import StockWithdrawingItem from '@/models/StockWithdrawingItem';
 import { itemRouteHelper } from '@/router/helpers';
-
-import stockTakingRoute from './stockTakingRoute';
+import articlePicturesRoute from '@/router/articlePicturesRoute';
+import stockTakingRoute from '@/router/stockTakingRoute';
 
 export default new RouteMapper({
   storages: {
@@ -46,6 +46,9 @@ export default new RouteMapper({
     editing: () => import(/* webpackChunkName: "articles" */ '../components/catalogue/ArticleEdit.vue'),
     meta: {
       useScanner: true,
+    },
+    children: {
+      gallery: articlePicturesRoute,
     },
   },
   articleProps: {
