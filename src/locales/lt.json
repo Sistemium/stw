@@ -124,9 +124,9 @@
     "start": "Pradėti",
     "finish": "Užbaigti",
     "progress": "Vykdoma",
-    "continue": "Tęsti",
+    "continue": "Atšaukti įvykdymą",
     "finished": "Įvykdyta",
     "planned": "Suplanuota",
-    "cancel": "Atšaukti"
+    "cancel": "Grįžti į planavimą"
   }
 }
