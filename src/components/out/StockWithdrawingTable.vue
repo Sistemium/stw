@@ -1,24 +1,35 @@
 <template lang="pug">
 
-el-table.stock-withdrawing-table(:data="data" @row-click="row => $emit('click', row)")
+el-table.stock-withdrawing-table(
+  :data="data"
+  @row-click="row => $emit('click', row)"
+  :size="size"
+)
   el-table-column(
     prop="processing"
     :label="$t('fields.processing')"
-    width="120"
+    :width="columnSize"
   )
   el-table-column(
     prop="date"
     :label="$t('fields.date')"
-    width="110"
+    :width="columnSize"
   )
   el-table-column(
     prop="consigneeName"
     :label="$t('fields.consignee')"
   )
   el-table-column(
+    align="right"
     prop="positionsCount"
     :label="$t('concepts.items')"
     width="100"
+  )
+  el-table-column(
+    align="right"
+    prop="units"
+    :label="$t('fields.quantity')"
+    width="120"
   )
 
 </template>
@@ -30,6 +41,7 @@ export default {
   props: {
     items: Array,
     activeId: String,
+    size: String,
   },
   mixins: [stockWithdrawingMixin],
   computed: {

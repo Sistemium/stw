@@ -24,6 +24,7 @@
               v-else
               @click="onItemClick"
               :items="stockWithdrawals"
+              :size="tableSize"
             )
       alert-empty(
         v-if="currentStorageId && !stockWithdrawals.length"
@@ -56,6 +57,9 @@ export default {
     ...mapGetters({
       currentStorageId: g.CURRENT_STORAGE,
     }),
+    tableSize() {
+      return this.$vssWidth < 800 ? 'small' : 'normal';
+    },
     showTable() {
       return this.$vssWidth < 500 || this.showDetails;
     },
