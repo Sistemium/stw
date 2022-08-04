@@ -45,7 +45,7 @@ export default {
       search: '',
     };
   },
-  mixins: [scrollToCreated],
+  mixins: [scrollToCreated({ container: '#articles-page-scroll' })],
   components: {
     SearchInput,
     BarcodeView,
