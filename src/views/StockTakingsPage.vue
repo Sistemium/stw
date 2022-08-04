@@ -37,7 +37,7 @@ export default {
   },
   computed: {
     stockTakings() {
-      return StockTaking.reactiveFilter();
+      return this.$orderBy(StockTaking.reactiveFilter(), ['date'], ['desc']);
     },
     showList() {
       return this.$route.name
