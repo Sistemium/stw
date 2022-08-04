@@ -7,18 +7,6 @@
     :rules="rules"
   )
 
-    el-form-item(:label="$t('fields.name')" prop="name")
-      el-input(v-model.trim="model.name" :readonly="!model.isCustomName")
-        template(v-slot:append)
-          el-button(
-            :class="model.isCustomName && 'isCustomName'"
-            @click="toggleNameLock"
-            :icon="model.isCustomName ? 'el-icon-unlock' : 'el-icon-lock'"
-          )
-
-    el-form-item(:label="$t('fields.code')" prop="code")
-      el-input(v-model.trim="model.code")
-
     transition-group(name="flip-list")
       el-form-item(
         v-for="(prop, idx) in articleProps" :key="prop.propId"
@@ -50,6 +38,18 @@
               :label="name"
             )
     prop-tags(:tags="tags" @click="addProp")
+
+    el-form-item(:label="$t('fields.code')" prop="code")
+      el-input(v-model.trim="model.code")
+
+    el-form-item(:label="$t('fields.name')" prop="name")
+      el-input(v-model.trim="model.name" :readonly="!model.isCustomName")
+        template(v-slot:append)
+          el-button(
+            :class="model.isCustomName && 'isCustomName'"
+            @click="toggleNameLock"
+            :icon="model.isCustomName ? 'el-icon-unlock' : 'el-icon-lock'"
+          )
 
 </template>
 <script>
