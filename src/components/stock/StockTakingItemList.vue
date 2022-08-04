@@ -6,11 +6,12 @@
       article-view(:article-id="item.articleId")
       .cts {{ $ts(item.deviceCts || item.cts) }}
     .right
-      .quantity {{ item.quantity }}
-      span x
-      .boxRel {{ item.boxRel }}
-      span &equals;
-      .units {{ item.units }}
+      .volumes
+        span.quantity {{ item.quantity }}
+        span x
+        span.boxRel {{ item.boxRel }}
+        span &equals;
+        span.units {{ item.units }}
 
 </template>
 <script>
@@ -26,5 +27,5 @@ export default {
 
 </script>
 <style scoped lang="scss">
-@import "../../styles/stockItemListItem";
+@import "../../styles/pageLists";
 </style>

@@ -7,12 +7,12 @@
     .right
       .volume
         template(v-if="item.boxRel > 1")
-          .quantity {{ item.quantity }} {{ $t('shortened.boxes') }}
+          span.quantity {{ item.quantity }} {{ $t('shortened.boxes') }}
           template(v-if="item.quantity > 1")
             span x
-            .boxRel {{ item.boxRel }}
+            span.boxRel {{ item.boxRel }}
           span &equals;
-        .units {{ item.units }} {{ $t('shortened.units') }}
+        span.units {{ item.units }} {{ $t('shortened.units') }}
       .cost(v-if="item.price")
         .price {{ item.price }} &euro;
 
@@ -31,5 +31,5 @@ export default {
 
 </script>
 <style scoped lang="scss">
-@import "../../styles/stockItemListItem";
+@import "../../styles/pageLists";
 </style>
