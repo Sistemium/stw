@@ -42,11 +42,12 @@ el-form.stock-taking-item-form(
       el-form-item(prop="boxRel" :label="$t('fields.boxRel')")
         el-input-number(v-model="model.boxRel" :min="1")
 
-    el-form-item(
-      prop="quantity"
-      :label="$t(mode==='boxes' ? 'fields.boxQuantity' : 'fields.quantity')"
-    )
-      el-input-number(v-model="model.quantity" :min="1")
+  el-form-item(
+    v-if="article"
+    prop="quantity"
+    :label="$t(mode==='boxes' ? 'fields.boxQuantity' : 'fields.quantity')"
+  )
+    el-input-number(v-model="model.quantity" :min="1" @focus="$selectInput")
 
     slot(name="article-extra")
 
