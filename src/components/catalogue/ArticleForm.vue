@@ -43,7 +43,7 @@
       el-input(v-model.trim="model.code")
 
     el-form-item(:label="$t('fields.name')" prop="name")
-      el-input(v-model.trim="model.name" :readonly="!model.isCustomName")
+      el-input(v-model="model.name" :readonly="!model.isCustomName")
         template(v-slot:append)
           el-button(
             :class="model.isCustomName && 'isCustomName'"
@@ -142,7 +142,7 @@ export default {
       this.setName();
     },
     onPropInput(prop, value, idx) {
-      this.model.props[idx][prop.component.field] = this.$trim(value);
+      this.model.props[idx][prop.component.field] = value;
       if (prop.type === 'options') {
         this.model.props[idx].stringValue = get(PropOption.getByID(value), 'name');
       }

@@ -8,16 +8,16 @@ el-form.legal-entity-form(
 )
 
   el-form-item(:label="$t('fields.name')" prop="name")
-    el-input(v-model.trim="model.name")
+    el-input(v-model="model.name")
 
   el-form-item(:label="$t('fields.regCode')" prop="code")
-    el-input(v-model.trim="model.code")
+    el-input(v-model="model.code")
 
   el-form-item(:label="$t('fields.vatCode')" prop="vatCode")
-    el-input(v-model.trim="model.vatCode")
+    el-input(v-model="model.vatCode")
 
   el-form-item(:label="$t('fields.address')" prop="address")
-    el-input(v-model.trim="model.address")
+    el-input(v-model="model.address")
 
 </template>
 <script>

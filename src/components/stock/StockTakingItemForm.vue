@@ -7,7 +7,7 @@ el-form.stock-taking-item-form(
   :disabled="!editable"
 )
 
-  barcode-form-item(v-model.trim="model.barcode")
+  barcode-form-item(v-model="model.barcode")
     template(v-slot:prepend)
       el-button(:icon="barcodeIcon" @click="toggleShowAllArticles")
 
@@ -69,6 +69,7 @@ import { addBarcodeToArticle } from '@/services/catalogue';
 import ArticleEdit from '@/components/catalogue/ArticleEdit.vue';
 import BarcodeFormItem from '@/components/BarcodeScanner/BarcodeFormItem.vue';
 import PrependSelect from '@/lib/PrependSelect.vue';
+import formsMixin from '@/lib/formsMixin';
 
 export default {
   name: 'StockTakingItemForm',
@@ -83,6 +84,7 @@ export default {
       isShowingAllArticles: false,
     };
   },
+  mixins: [formsMixin],
   computed: {
     barcodeIcon() {
       return this.isShowingAllArticles ? 'el-icon-s-release' : 'el-icon-attract';
