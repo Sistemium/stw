@@ -30,6 +30,7 @@ component.drawer-edit.box-card(
 import FormButtons from 'sistemium-vue/components/FormButtons.vue';
 import matchesDeep from '@bit/sistemium.vue.matches-deep';
 import cloneDeep from 'lodash/cloneDeep';
+import merge from 'lodash/merge';
 
 export default {
   name: 'DrawerEdit',
@@ -156,7 +157,8 @@ export default {
         this.$parent.$emit('closed', record);
         return;
       }
-      this.$router.replace(this.from)
+      const query = (record && !this.modelOrigin.id) ? { createdId: record.id } : {};
+      this.$router.replace(merge({ ...this.from }, { query }))
         .catch(e => this.$error('handleClose', e));
     },
 
