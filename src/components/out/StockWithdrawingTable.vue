@@ -40,7 +40,7 @@ el-table.stock-withdrawing-table(
 
 </template>
 <script>
-import stockWithdrawingMixin from '@/components/stock/stockWithdrawingMixin';
+import stockWithdrawingMixin from '@/components/out/stockWithdrawingMixin';
 
 export default {
   name: 'StockWithdrawingTable',
