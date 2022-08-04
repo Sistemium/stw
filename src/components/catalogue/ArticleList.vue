@@ -3,6 +3,7 @@
 .article-list.list-group
   slot(name="header")
   .list-group-item(
+    :id="`id-${article.id}`"
     v-for="article in articles" :key="article.id"
     @click="$emit('click', article)"
   )

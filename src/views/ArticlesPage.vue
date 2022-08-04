@@ -9,7 +9,7 @@
     search-input(v-model="search" :disabled="!!barcode")
     tool-button(tool="add" @click="onAdd()")
 
-  resize(:padding="20")
+  resize#articles-page-scroll(:padding="20")
     article-list(
       :articles="articles"
       v-if="articles.length"
@@ -30,6 +30,7 @@ import PageTitle from '@/components/PageTitle.vue';
 import BarcodeView from '@/components/BarcodeScanner/BarcodeView.vue';
 import SearchInput from '@/lib/SearchInput.vue';
 import { searchArticle } from '@/services/catalogue';
+import scrollToCreated from '@/components/scrollToCreated';
 
 export default {
   name: 'ArticlesPage',
@@ -44,6 +45,7 @@ export default {
       search: '',
     };
   },
+  mixins: [scrollToCreated],
   components: {
     SearchInput,
     BarcodeView,
