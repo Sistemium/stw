@@ -17,6 +17,7 @@ export default {
   name: 'OauthButton',
   props: {
     disabled: Boolean,
+    from: String,
     label: String,
     image: String,
     buttonType: {
@@ -31,8 +32,14 @@ export default {
     },
     href() {
       const url = this.code || toLower(this.label);
+      const redirect = [
+        `redirect_uri=${encodeURIComponent(VUE_APP_OAUTH_REDIRECT_URI)}`,
+        this.from && `?from=${this.from}`,
+      ]
+        .filter(x => x)
+        .join('');
       return `${VUE_APP_OAUTH_URL}/auth/${url}/vfs`
-        + `?redirect_uri=${VUE_APP_OAUTH_REDIRECT_URI}&orgAppId=${VUE_APP_OAUTH_ORG_APP}`;
+        + `?${redirect}&orgAppId=${VUE_APP_OAUTH_ORG_APP}`;
     },
   },
   methods: {

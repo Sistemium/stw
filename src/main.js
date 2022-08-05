@@ -23,17 +23,12 @@ new Vue({
   created() {
     router.onReady(route => {
       this.$debug('router:ready', route);
-      const { 'access-token': token } = route ? route.query : {};
       const loading = Loading.service({});
-      store.dispatch('auth/AUTH_INIT', token)
-        .then(async () => {
-          if (!token) {
-            return;
-          }
-          await this.updateRouteParams({}, { 'access-token': undefined });
-        })
+      store.dispatch('auth/AUTH_INIT')
         .catch(e => {
           this.$error('auth', e);
+        })
+        .finally(() => {
           loading.close();
         });
     });

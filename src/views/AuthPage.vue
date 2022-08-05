@@ -12,6 +12,7 @@
       image="img/icons8-cell_phone"
       button-type="danger"
       code="sms"
+      :from="from"
       :disabled="!!isAuthorizing"
     )
 
@@ -41,7 +42,7 @@ export default {
   name: 'AuthPage',
   props: {
     from: {
-      type: [Object, String],
+      type: String,
       default() {
         return this.$route.query.from;
       },
