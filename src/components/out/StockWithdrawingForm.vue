@@ -44,7 +44,7 @@ import { workflow } from '@/models/StockWithdrawing';
 import DateStringPicker from '@/lib/DateStringPicker.vue';
 import ConsigneeTypeSwitch from '@/components/ConsigneeTypeSwitch.vue';
 import ConsigneeSelect from '@/components/ConsigneeSelect.vue';
-import PrependSelect from '@/lib/PrependSelect.vue';
+import ButtonPrepend from '@/lib/ButtonPrepend.vue';
 import LegalEntityEdit from '@/components/contacts/LegalEntityEdit.vue';
 import StorageEdit from '@/components/stock/StorageEdit.vue';
 
@@ -52,7 +52,7 @@ export default {
   name: 'StockWithdrawingForm',
   components: {
     LegalEntityEdit,
-    PrependSelect,
+    ButtonPrepend,
     ConsigneeSelect,
     ConsigneeTypeSwitch,
     DateStringPicker,
