@@ -10,7 +10,8 @@
 
   el-tabs(tab-position="top" v-model="currentTabData" )
     el-tab-pane(:label="$t('concepts.items')" name="items")
-      .buttons(v-if="stockTakingItems.length")
+      .buttons(v-if="stockTakingItems.length || search")
+        search-input(v-model="search")
         tool-button(tool="add" @click="onAdd()")
       resize(:padding="20")
         stock-taking-item-list(:items="stockTakingItems" @click="onItemClick")
@@ -43,6 +44,8 @@ import StockTakingItemList from '@/components/stock/StockTakingItemList.vue';
 import BarcodeScanner from '@/components/BarcodeScanner/BarcodeScanner';
 import StockTakingEdit from '@/components/stock/StockTakingEdit.vue';
 import AlertEmpty from '@/lib/AlertEmpty.vue';
+import { searchByArticle } from '@/services/catalogue';
+import SearchInput from '@/lib/SearchInput.vue';
 
 const { mapMutations } = createNamespacedHelpers('inv');
 
@@ -56,7 +59,7 @@ export default {
   },
   data() {
     return {
-      // article: null,
+      search: '',
       stockTakingItem: null,
       currentTabData: 'items',
     };
@@ -69,9 +72,10 @@ export default {
       return StockTaking.reactiveGet(this.stockTakingId) || {};
     },
     stockTakingItems() {
-      const { stockTakingId } = this;
+      const { stockTakingId, search } = this;
       const items = StockTakingItem.reactiveFilter({ stockTakingId });
-      return this.$orderBy(items, ['deviceCts', 'cts'], ['desc', 'desc']);
+      const searched = search ? items.filter(searchByArticle(search)) : items;
+      return this.$orderBy(searched, ['deviceCts', 'cts'], ['desc', 'desc']);
     },
   },
   methods: {
@@ -110,6 +114,7 @@ export default {
     },
   },
   components: {
+    SearchInput,
     AlertEmpty,
     StockTakingEdit,
     StockTakingItemList,
@@ -156,6 +161,10 @@ export default {
 .buttons {
   text-align: right;
   margin-bottom: $margin-right;
+}
+
+.search-input {
+  flex: 1;
 }
 
 </style>

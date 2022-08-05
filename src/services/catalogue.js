@@ -79,3 +79,8 @@ export function searchArticle(search) {
   return article => re.test(article.name)
     || re.test(article.code);
 }
+
+export function searchByArticle(search) {
+  const articleFilter = searchArticle(search);
+  return ({ articleId }) => articleId && articleFilter(Article.reactiveGet(articleId));
+}
