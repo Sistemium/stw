@@ -5,11 +5,13 @@ el-form.prop-option-form(
   ref="form"
   :rules="rules"
 )
-  el-form-item(:label="$t('fields.name')" prop="name")
+  el-form-item(:label="property.name" prop="name")
     el-input(v-model="model.name")
 
 </template>
 <script>
+
+import ArticleProp from '@/models/ArticleProp';
 
 export default {
   name: 'PropOptionForm',
@@ -20,6 +22,9 @@ export default {
     },
   },
   computed: {
+    property() {
+      return ArticleProp.reactiveGet(this.model.propId) || {};
+    },
     rules() {
       return {
         ...this.$requiredRule('name'),
