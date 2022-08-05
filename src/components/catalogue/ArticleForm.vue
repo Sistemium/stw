@@ -30,6 +30,7 @@
           :is="prop.component.is"
           :value="model.props[idx][prop.component.field]"
           @input="value => onPropInput(prop, value, idx)"
+          @buttonClick="addOptionClick(prop)"
         )
           template(v-if="prop.options")
             el-option(
@@ -51,6 +52,13 @@
             :icon="model.isCustomName ? 'el-icon-unlock' : 'el-icon-lock'"
           )
 
+  prop-option-edit(
+    :prop-id="editingPropId"
+    v-if="editingPropId"
+    @saved="optionSaved"
+    @closed="editingPropId = null"
+  )
+
 </template>
 <script>
 /* eslint-disable vue/no-mutating-props */
@@ -63,12 +71,15 @@ import OrderingButtons from '@/lib/OrderingButtons.vue';
 import PropTags from '@/components/props/PropTags.vue';
 import find from 'lodash/find';
 import findLastIndex from 'lodash/findLastIndex';
+import PrependSelect from '@/lib/PrependSelect.vue';
+import PropOptionEdit from '@/components/props/PropOptionEdit.vue';
+import findIndex from 'lodash/findIndex';
 
 const INPUTS = new Map([
   ['boolean', { is: 'el-switch', field: 'boolValue' }],
   ['number', { is: 'el-input-number', field: 'numberValue' }],
   ['string', { is: 'el-input', field: 'stringValue' }],
-  ['options', { is: 'el-select', field: 'optionId' }],
+  ['options', { is: 'prepend-select', field: 'optionId' }],
 ]);
 
 export default {
@@ -78,6 +89,11 @@ export default {
       type: Object,
       required: true,
     },
+  },
+  data() {
+    return {
+      editingPropId: null,
+    };
   },
   computed: {
     tags() {
@@ -130,6 +146,18 @@ export default {
     },
   },
   methods: {
+    optionSaved(option) {
+      if (option) {
+        const { editingPropId: propId } = this;
+        this.$debug('optionSaved', propId, option);
+        const idx = findIndex(this.articleProps, { propId });
+        this.onPropInput(this.articleProps[idx], option.id, idx);
+      }
+    },
+    addOptionClick(prop) {
+      this.$debug('addOptionClick:', prop);
+      this.editingPropId = prop.propId;
+    },
     addProp(prop) {
       const modelProp = catalogue.propToArticlePropMap(prop);
       const { ord } = prop;
@@ -166,7 +194,12 @@ export default {
       this.setName();
     },
   },
-  components: { OrderingButtons, PropTags },
+  components: {
+    PropOptionEdit,
+    OrderingButtons,
+    PropTags,
+    PrependSelect,
+  },
 };
 
 </script>
