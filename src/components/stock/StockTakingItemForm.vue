@@ -68,7 +68,7 @@ import ArticleSelect from '@/components/catalogue/ArticleSelect.vue';
 import { addBarcodeToArticle } from '@/services/catalogue';
 import ArticleEdit from '@/components/catalogue/ArticleEdit.vue';
 import BarcodeFormItem from '@/components/BarcodeScanner/BarcodeFormItem.vue';
-import PrependSelect from '@/lib/PrependSelect.vue';
+import ButtonPrepend from '@/lib/ButtonPrepend.vue';
 import formsMixin from '@/lib/formsMixin';
 
 export default {
@@ -167,7 +167,7 @@ export default {
     });
   },
   components: {
-    PrependSelect,
+    ButtonPrepend,
     BarcodeFormItem,
     ArticleEdit,
     ArticleSelect,
