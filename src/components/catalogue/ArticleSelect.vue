@@ -41,11 +41,12 @@ export default {
     };
   },
   computed: {
+    hasBarcodeFilter() {
+      return this.$get(this.filters, 'name') === 'barcodeFilter';
+    },
     options() {
-      const { filters } = this;
-      const all = Article.reactiveFilter(filters);
-      const res = this.$get(filters, 'name') === 'barcodeFilter' ? all
-        : all.filter(searchArticle(this.search));
+      const filtered = Article.reactiveFilter(this.filters);
+      const res = this.hasBarcodeFilter ? filtered : filtered.filter(searchArticle(this.search));
       return this.$orderBy(res, ['name']);
     },
     currentId: {
@@ -59,7 +60,6 @@ export default {
   },
   methods: {
     filterSearch(search) {
-      this.$debug('search', search);
       this.search = search;
     },
   },
@@ -67,6 +67,9 @@ export default {
     options: {
       immediate: true,
       handler(options) {
+        if (!this.hasBarcodeFilter) {
+          return;
+        }
         if (options.length === 1) {
           this.currentId = options[0].id;
           return;
