@@ -63,6 +63,7 @@
     "units": "Штуки"
   },
   "concepts": {
+    "articleProperty": "Свойство",
     "article": "Номенклатура",
     "facility": "Помещение",
     "personal": "Персональный",

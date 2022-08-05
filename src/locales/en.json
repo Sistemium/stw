@@ -63,6 +63,7 @@
     "units": "Units"
   },
   "concepts": {
+    "articleProperty": "Property",
     "article": "Article",
     "facility": "Facility",
     "personal": "Personal",
