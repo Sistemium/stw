@@ -32,7 +32,7 @@ el-form.stock-taking-item-form(
             span {{ $t('notFound') }}
             el-button(@click="toggleShowAllArticles") {{ $t('showAll') }}
 
-  template()
+  template(v-if="article")
     el-form-item.mode(:label="$t('fields.package')")
       el-radio-group(v-model="mode" @change="modeChange")
         el-radio-button(label="boxes") {{ $t('storage.boxes') }}
@@ -42,12 +42,12 @@ el-form.stock-taking-item-form(
       el-form-item(prop="boxRel" :label="$t('fields.boxRel')")
         el-input-number(v-model="model.boxRel" :min="1")
 
-  el-form-item(
-    v-if="article"
-    prop="quantity"
-    :label="$t(mode==='boxes' ? 'fields.boxQuantity' : 'fields.quantity')"
-  )
-    el-input-number(v-model="model.quantity" :min="1" @focus="$selectInput")
+    el-form-item(
+      v-if="article"
+      prop="quantity"
+      :label="$t(mode==='boxes' ? 'fields.boxQuantity' : 'fields.quantity')"
+    )
+      el-input-number(v-model="model.quantity" :min="1" v-select-on-focus)
 
   slot(name="article-extra" v-if="article")
 
