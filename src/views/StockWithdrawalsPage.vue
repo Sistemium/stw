@@ -15,7 +15,7 @@
         resize(:padding="20")
           template(v-if="stockWithdrawals.length")
             stock-withdrawing-list(
-              v-if="showTable"
+              v-if="showList"
               :items="stockWithdrawals"
               @click="onItemClick"
               :active-id="$route.params.stockWithdrawingId"
@@ -36,7 +36,6 @@
 
 </template>
 <script>
-import vss from 'vue-screen-size';
 import { createNamespacedHelpers } from 'vuex';
 import StockWithdrawingList from '@/components/out/StockWithdrawingList.vue';
 import StockWithdrawing from '@/models/StockWithdrawing';
@@ -44,6 +43,7 @@ import pageMixin from '@/lib/pageMixin';
 import find from 'lodash/find';
 import StorageSelect from '@/components/stock/StorageSelect.vue';
 import StockWithdrawingTable from '@/components/out/StockWithdrawingTable.vue';
+import vssMixin from '@/components/vssMixin';
 import * as g from '@/store/inv/getters';
 import * as m from '@/store/inv/mutations';
 
@@ -51,17 +51,14 @@ const { mapGetters, mapMutations } = createNamespacedHelpers('inv');
 
 export default {
   name: 'StockWithdrawalsPage',
-  mixins: [pageMixin, vss.VueScreenSizeMixin],
+  mixins: [pageMixin, vssMixin],
   components: { StockWithdrawingTable, StorageSelect, StockWithdrawingList },
   computed: {
     ...mapGetters({
       currentStorageId: g.CURRENT_STORAGE,
     }),
-    tableSize() {
-      return this.$vssWidth < 800 ? 'small' : 'normal';
-    },
-    showTable() {
-      return this.$vssWidth < 600 || this.showDetails;
+    showList() {
+      return !this.showTable || this.showDetails;
     },
     stockWithdrawals() {
       return this.$orderBy(StockWithdrawing.reactiveFilter({
