@@ -139,6 +139,8 @@ export default {
 
 #nav {
 
+  margin: 0 $margin-top * 2;
+
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
