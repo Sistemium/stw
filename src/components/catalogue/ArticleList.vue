@@ -38,6 +38,7 @@ export default {
 
 .list-group-item {
   display: flex;
+  text-align: left;
   .description {
     margin-left: $padding;
     flex: 1;
