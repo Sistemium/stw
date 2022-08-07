@@ -25,7 +25,7 @@ el-form.stock-taking-item-form(
 
   el-form-item.article(:label="$t('concepts.article')" prop="articleId")
     .strong(v-if="article") {{ article.code }}
-    prepend-select(@buttonClick="addArticle")
+    button-prepend(@buttonClick="addArticle")
       article-select(v-model="model.articleId" :filters="articleFilters")
         template(v-slot:empty v-if="model.barcode && !isShowingAllArticles")
           p.el-select-dropdown__empty
