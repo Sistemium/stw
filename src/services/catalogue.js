@@ -71,13 +71,14 @@ export async function addBarcodeToArticle(barcode, article) {
   return Article.createOne(props);
 }
 
-export function searchArticle(search) {
+export function searchArticle(search, propColumns = []) {
   if (!search) {
     return x => x;
   }
   const re = new RegExp(search, 'i');
   return article => re.test(article.name)
-    || re.test(article.code);
+    || re.test(article.code)
+    || propColumns.find(({ id }) => re.test(article[id]));
 }
 
 export function searchByArticle(search) {
