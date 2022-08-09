@@ -10,7 +10,7 @@ drawer-edit.stock-withdrawing-edit(
   :is-drawer="isDrawer"
 )
   template(v-slot="{ model }")
-    stock-withdrawing-form(ref="form" :model="model")
+    stock-withdrawing-form(ref="form" :model="model" counterparty-role="consignee")
 
 </template>
 <script>

@@ -17,10 +17,14 @@ el-form.stock-withdrawing-form(
         :label="name" :value="id"
       )
 
-  el-form-item(:label="$t('fields.counterpartyType')" prop="counterpartyType")
+  el-form-item(:label="$t(counterpartyLabel.type)" prop="counterpartyType")
     counterparty-type-switch(v-model="model.counterpartyType" @change="model.counterpartyId = null")
 
-  el-form-item(:label="$t('fields.counterparty')" prop="counterparty" v-if="model.counterpartyType")
+  el-form-item(
+    v-if="model.counterpartyType"
+    :label="$t(counterpartyLabel.choice)"
+    prop="counterparty"
+  )
     button-prepend(@buttonClick="addCounterparty")
       counterparty-select(:type="model.counterpartyType" v-model="model.counterpartyId")
 
@@ -62,6 +66,7 @@ export default {
   props: {
     model: Object,
     disabled: Boolean,
+    counterpartyRole: String,
   },
   data() {
     return {
@@ -69,6 +74,13 @@ export default {
     };
   },
   computed: {
+    counterpartyLabel() {
+      const { counterpartyRole } = this;
+      return {
+        type: `fields.${counterpartyRole}Type`,
+        choice: `fields.${counterpartyRole}`,
+      };
+    },
     rules() {
       return {
         ...this.$requiredRule(['date', 'storageId']),
