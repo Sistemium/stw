@@ -8,7 +8,7 @@ import StockTakingItem from '@/models/StockTakingItem';
 import Storage from '@/models/Storage';
 import Picture from '@/models/Picture';
 import StockWithdrawing from '@/models/StockWithdrawing';
-import { consigneeModel } from '@/services/warehousing';
+import { counterpartyModel } from '@/services/warehousing';
 import StockWithdrawingItem from '@/models/StockWithdrawingItem';
 import map from 'lodash/map';
 import groupBy from 'lodash/groupBy';
@@ -42,15 +42,15 @@ export async function stockWithdrawingIdSync(to) {
     return;
   }
 
-  const { consigneeId, consigneeType } = record;
-  if (!consigneeId || !consigneeType) {
+  const { counterpartyId, counterpartyType } = record;
+  if (!counterpartyId || !counterpartyType) {
     return;
   }
 
-  const model = consigneeModel(consigneeType);
+  const model = counterpartyModel(counterpartyType);
 
-  if (!model.getByID(consigneeId)) {
-    await model.findByID(consigneeId);
+  if (!model.getByID(counterpartyId)) {
+    await model.findByID(counterpartyId);
   }
 
 }
@@ -70,17 +70,17 @@ async function stockWithdrawingSync(to, from) {
     const ids = map(data, 'id');
     await StockWithdrawingItem.findByMany(ids, { field: 'stockWithdrawingId' });
 
-    const byType = groupBy(filter(data, 'consigneeType'), 'consigneeType');
-    const consigneePromises = map(byType, (items, type) => {
-      const model = consigneeModel(type);
+    const byType = groupBy(filter(data, 'counterpartyType'), 'counterpartyType');
+    const counterpartyPromises = map(byType, (items, type) => {
+      const model = counterpartyModel(type);
       if (!model) {
         error('stockWithdrawingSync:', 'wrong type', type);
         return null;
       }
-      return model.findByMany(map(items, 'consigneeId'), { cached: true });
+      return model.findByMany(map(items, 'counterpartyId'), { cached: true });
     });
 
-    await Promise.all(filter(consigneePromises));
+    await Promise.all(filter(counterpartyPromises));
   } catch (e) {
     error('stockWithdrawingSync:', e);
   }

@@ -1,6 +1,6 @@
 <template lang="pug">
 
-el-radio-group.consignee-type-switch(v-model="type" @change="x => $emit('change', x)")
+el-radio-group.counterparty-type-switch(v-model="type" @change="x => $emit('change', x)")
   el-radio-button(label="LegalEntity") {{ $t('concepts.legalEntity') }}
   //el-radio-button(label="Person") {{ $t('concepts.person') }}
   el-radio-button(label="Storage") {{ $t('concepts.storage') }}
@@ -10,7 +10,7 @@ el-radio-group.consignee-type-switch(v-model="type" @change="x => $emit('change'
 <script>
 
 export default {
-  name: 'ConsigneeTypeSwitch',
+  name: 'CounterpartyTypeSwitch',
   props: {
     value: { type: String, default: null },
   },

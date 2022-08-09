@@ -16,8 +16,8 @@ el-table.stock-withdrawing-table(
     :width="columnSize"
   )
   el-table-column(
-    prop="consigneeName"
-    :label="$t('fields.consignee')"
+    prop="counterpartyName"
+    :label="$t('fields.counterparty')"
   )
   el-table-column(
     align="right"

@@ -17,21 +17,21 @@ el-form.stock-withdrawing-form(
         :label="name" :value="id"
       )
 
-  el-form-item(:label="$t('fields.consigneeType')" prop="consigneeType")
-    consignee-type-switch(v-model="model.consigneeType" @change="model.consigneeId = null")
+  el-form-item(:label="$t('fields.counterpartyType')" prop="counterpartyType")
+    counterparty-type-switch(v-model="model.counterpartyType" @change="model.counterpartyId = null")
 
-  el-form-item(:label="$t('fields.consignee')" prop="consignee" v-if="model.consigneeType")
-    prepend-select(@buttonClick="addConsignee")
-      consignee-select(:type="model.consigneeType" v-model="model.consigneeId")
+  el-form-item(:label="$t('fields.counterparty')" prop="counterparty" v-if="model.counterpartyType")
+    button-prepend(@buttonClick="addCounterparty")
+      counterparty-select(:type="model.counterpartyType" v-model="model.counterpartyId")
 
   el-form-item(:label="$t('fields.processing')" prop="processing")
     workflow-button(:workflow="workflow" v-model="model.processing" :disabled="disabled")
 
   component(
-    :is="consigneeEditComponent"
+    :is="counterpartyEditComponent"
     v-if="showDrawer"
-    @saved="consigneeSaved"
-    @closed="consigneeEditClosed"
+    @saved="counterpartySaved"
+    @closed="counterpartyEditClosed"
     :drawer-style="{ top: '50px' }"
   )
 
@@ -42,9 +42,9 @@ import WorkflowButton from '@/lib/WorkflowButton.vue';
 import Storage from '@/models/Storage';
 import { workflow } from '@/models/StockWithdrawing';
 import DateStringPicker from '@/lib/DateStringPicker.vue';
-import ConsigneeTypeSwitch from '@/components/ConsigneeTypeSwitch.vue';
-import ConsigneeSelect from '@/components/ConsigneeSelect.vue';
 import ButtonPrepend from '@/lib/ButtonPrepend.vue';
+import CounterpartyTypeSwitch from '@/components/CounterpartyTypeSwitch.vue';
+import CounterpartySelect from '@/components/CounterpartySelect.vue';
 import LegalEntityEdit from '@/components/contacts/LegalEntityEdit.vue';
 import StorageEdit from '@/components/stock/StorageEdit.vue';
 
@@ -53,8 +53,8 @@ export default {
   components: {
     LegalEntityEdit,
     ButtonPrepend,
-    ConsigneeSelect,
-    ConsigneeTypeSwitch,
+    CounterpartySelect,
+    CounterpartyTypeSwitch,
     DateStringPicker,
     WorkflowButton,
     StorageEdit,
@@ -80,23 +80,23 @@ export default {
     workflow() {
       return workflow;
     },
-    consigneeEditComponent() {
-      const { consigneeType } = this.model;
-      return consigneeType ? `${consigneeType}Edit` : 'div';
+    counterpartyEditComponent() {
+      const { counterpartyType } = this.model;
+      return counterpartyType ? `${counterpartyType}Edit` : 'div';
     },
   },
   methods: {
-    addConsignee() {
+    addCounterparty() {
       this.showDrawer = true;
     },
-    consigneeSaved(consignee) {
-      if (consignee) {
+    counterpartySaved(counterparty) {
+      if (counterparty) {
         setTimeout(() => {
-          this.model.consigneeId = consignee.id;
+          this.model.counterpartyId = counterparty.id;
         }, 0);
       }
     },
-    consigneeEditClosed() {
+    counterpartyEditClosed() {
       this.showDrawer = false;
     },
   },

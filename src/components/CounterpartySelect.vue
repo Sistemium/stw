@@ -1,13 +1,13 @@
 <template lang="pug">
 
-el-select.consignee-select(
+el-select.counterparty-select(
   ref="select"
   filterable
   remote
   :placeholder="$t('typeToSearch')"
   :remote-method="remoteMethod"
   :loading="loading"
-  v-model="consigneeId"
+  v-model="counterpartyId"
   v-if="type"
   :debounce="300"
   v-cancel-read-only
@@ -26,7 +26,7 @@ import { CONSIGNEE_TYPES } from '@/services/warehousing';
 import debounce from 'lodash/debounce';
 
 export default {
-  name: 'ConsigneeSelect',
+  name: 'CounterpartySelect',
   props: {
     type: String,
     value: String,
@@ -49,11 +49,11 @@ export default {
         : (this.model && this.model.reactiveFilter({}));
       return this.$orderBy(res, 'name');
     },
-    consignee() {
+    counterparty() {
       const { model } = this;
       return model ? this.model.reactiveGet(this.value) : null;
     },
-    consigneeId: {
+    counterpartyId: {
       get() {
         return this.value;
       },
@@ -63,7 +63,7 @@ export default {
     },
   },
   created() {
-    this.$watchImmediate('consignee.id', id => {
+    this.$watchImmediate('counterparty.id', id => {
       if (id && !this.$find(this.options, { id })) {
         this.remoteOptions = this.model.reactiveFilter();
       }

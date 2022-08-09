@@ -32,14 +32,14 @@ export const CONSIGNEE_TYPES = new Map([
   ['Storage', Storage],
 ]);
 
-export function consigneeModel(type) {
+export function counterpartyModel(type) {
   return type && CONSIGNEE_TYPES.get(type);
 }
 
-export function getConsignee({ consigneeType, consigneeId }) {
-  const model = CONSIGNEE_TYPES.get(consigneeType);
+export function getCounterparty({ counterpartyType, counterpartyId }) {
+  const model = CONSIGNEE_TYPES.get(counterpartyType);
   if (!model) {
     return null;
   }
-  return model.reactiveGet(consigneeId);
+  return model.reactiveGet(counterpartyId);
 }

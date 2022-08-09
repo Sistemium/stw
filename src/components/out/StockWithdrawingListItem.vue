@@ -3,7 +3,7 @@
 .stock-withdrawing-list-item.list-group-item(@click="$emit('click')")
   .title
     .date {{ viewData.date }}
-    .consignee(v-if="viewData.consigneeName") {{ viewData.consigneeName }}
+    .counterparty(v-if="viewData.counterpartyName") {{ viewData.counterpartyName }}
     //.storage {{ storage }}
   .right
     .processing {{ viewData.processing }}

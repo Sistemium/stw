@@ -35,8 +35,8 @@ export default {
         date: new Date().toJSON(),
         processing: 'progress',
         deviceCts: new Date().toJSON(),
-        consigneeType: null,
-        consigneeId: null,
+        counterpartyType: null,
+        counterpartyId: null,
         storageId: this.$route.query.storageId || null,
       };
     },
