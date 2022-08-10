@@ -9,7 +9,7 @@
     component(:is="showDetails ? 'el-aside' : 'el-main'")
       template
         .buttons()
-          storage-select(v-model="storageId" ref="storageSelect")
+          storage-select(v-model="storageId" ref="storageSelect" :disabled="showDetails")
           tool-button(tool="back" @click="onBack" v-if="showDetails")
           tool-button(tool="add" @click="onAdd()")
         resize(:padding="20")
@@ -111,7 +111,7 @@ export default {
     },
     onBack() {
       this.updateRouteParams({
-        stockWithdrawingId: null,
+        stockOperationId: null,
       }, {}, this.rootState);
     },
   },

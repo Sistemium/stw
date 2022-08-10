@@ -4,6 +4,7 @@ el-select.storage-select(
   v-model="storageId"
   :placeholder="$tAction('select', 'storage')"
   ref="select"
+  :disabled="disabled"
 )
   el-option-group(v-for="group in groups" :key="group.type" :label="group.label")
     el-option(
@@ -22,6 +23,7 @@ export default {
   name: 'StorageSelect',
   props: {
     value: String,
+    disabled: Boolean,
   },
   methods: {
     open() {
