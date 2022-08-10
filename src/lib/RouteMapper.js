@@ -22,7 +22,18 @@ function configToRoute(name, options) {
     root,
     model,
     component,
+    config,
   } = options;
+
+  const path = `${root ? '/' : ''}${name}`;
+
+  if (config) {
+    return {
+      name,
+      path,
+      ...config,
+    };
+  }
 
   const { collection } = model || {};
 
@@ -30,6 +41,8 @@ function configToRoute(name, options) {
     editRoute: nameEdit(collection, options.edit),
     createRoute: nameCreate(collection),
     rootState: name,
+    model,
+    ...(options.props || {}),
   } : undefined;
 
   const children = routeChildren(name, options, collection);
@@ -49,7 +62,7 @@ function configToRoute(name, options) {
 
   return {
     name,
-    path: `${root ? '/' : ''}${name}`,
+    path,
     component,
     props,
     children,
@@ -94,9 +107,10 @@ function childProps(type, options, params) {
   const props = {
     editRoute: nameEdit(collection),
     createRoute: nameCreate(collection),
+    ...(options.inheritProps ? options.props : {}),
   };
   if (params) {
-    const keyId = nameId(collection);
+    const keyId = options.parentIdProp || nameId(collection);
     props[keyId] = params[keyId];
   }
   return props;
@@ -108,7 +122,7 @@ function routeChildren(name, options, collection) {
     return undefined;
   }
 
-  const keyId = nameId(collection);
+  const parentKeyId = options.parentIdProp || nameId(collection);
 
   return [
     {
@@ -117,17 +131,21 @@ function routeChildren(name, options, collection) {
       props: {
         from: { name },
         editRoute: nameEdit(collection, options.edit),
+        model: options.model,
         ...childProps('create', options),
+        ...(options.inheritProps ? options.props : {}),
       },
       ...childConfig('create', options),
     },
     {
-      path: `edit/:${nameId(collection)}`,
+      path: `edit/:${parentKeyId}`,
       name: nameEdit(collection),
       props: ({ params }) => ({
-        [keyId]: params[keyId],
+        [parentKeyId]: params[parentKeyId],
         from: { name },
+        model: options.model,
         ...childProps('edit', options, params),
+        ...(options.inheritProps ? options.props : {}),
       }),
       ...childConfig('edit', options),
     },

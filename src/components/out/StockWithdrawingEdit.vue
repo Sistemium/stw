@@ -1,7 +1,7 @@
 <template lang="pug">
 
 drawer-edit.stock-withdrawing-edit(
-  :title="$tGen('editing', 'stockWithdrawing')"
+  :title="$tGen('editing', operationName)"
   :save-fn="saveFn"
   :destroy-fn="destroyFn"
   :model-origin="modelOrigin"
@@ -10,28 +10,34 @@ drawer-edit.stock-withdrawing-edit(
   :is-drawer="isDrawer"
 )
   template(v-slot="{ model }")
-    stock-withdrawing-form(ref="form" :model="model" counterparty-role="consignee")
+    stock-withdrawing-form(
+      ref="form"
+      :model="model"
+      :counterparty-role="counterpartyRole"
+    )
 
 </template>
 <script>
 
 import DrawerEdit from '@/lib/DrawerEdit.vue';
-import StockWithdrawing from '@/models/StockWithdrawing';
 import StockWithdrawingForm from '@/components/out/StockWithdrawingForm.vue';
 
 export default {
   name: 'StockWithdrawingEdit',
   components: { DrawerEdit, StockWithdrawingForm },
   props: {
-    stockWithdrawingId: String,
+    stockOperationId: String,
     from: Object,
     editRoute: String,
     isDrawer: { type: Boolean, default: true },
+    model: { type: Object, required: true },
+    operationName: { type: String, required: true },
+    counterpartyRole: { type: String, required: true },
   },
   computed: {
     modelOrigin() {
-      const { stockWithdrawingId } = this;
-      return stockWithdrawingId ? StockWithdrawing.reactiveGet(stockWithdrawingId) : {
+      const { stockOperationId } = this;
+      return stockOperationId ? this.model.reactiveGet(stockOperationId) : {
         date: new Date().toJSON(),
         processing: 'progress',
         deviceCts: new Date().toJSON(),
@@ -43,21 +49,21 @@ export default {
   },
   methods: {
     async saveFn(props) {
-      const { id: stockWithdrawingId } = await StockWithdrawing.createOne(props);
+      const { id: stockOperationId } = await this.model.createOne(props);
       if (!this.stockWithdrawingId) {
         setTimeout(() => {
           this.$router.push({
             name: this.editRoute,
-            params: { stockWithdrawingId },
+            params: { stockOperationId },
           })
-            .then(res => this.$debug(res))
+            // .then(res => this.$debug(res))
             .catch(e => this.$error(e));
         }, 1);
       }
-      return StockWithdrawing.reactiveGet(stockWithdrawingId);
+      return this.model.reactiveGet(stockOperationId);
     },
     destroyFn(id) {
-      return StockWithdrawing.destroy(id);
+      return this.model.destroy(id);
     },
   },
 };

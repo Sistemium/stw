@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/prefer-default-export
-export function itemRouteHelper(name, component) {
-  const parentId = `${name}Id`;
-  const itemId = `${name}ItemId`;
+export function itemRouteHelper(name, component, parentName = '', props = {}) {
+  const parentId = `${parentName || name}Id`;
+  const itemId = `${parentName || name}ItemId`;
   return [{
     path: `edit/:${itemId}`,
     name: `${name}ItemEdit`,
@@ -15,6 +15,7 @@ export function itemRouteHelper(name, component) {
           [parentId]: parentParam,
         },
       },
+      ...props,
     }),
   }, {
     path: 'create',
@@ -28,6 +29,7 @@ export function itemRouteHelper(name, component) {
           [parentId]: parentParam,
         },
       },
+      ...props,
     }),
   }];
 }

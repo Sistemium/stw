@@ -2,7 +2,7 @@
 
 .stock-withdrawing-list-item.list-group-item(@click="$emit('click')")
   .title
-    .date {{ viewData.date }}
+    .date {{ $ts(viewData.date, 'short') }}
     .counterparty(v-if="viewData.counterpartyName") {{ viewData.counterpartyName }}
     //.storage {{ storage }}
   .right
@@ -13,18 +13,10 @@
 </template>
 <script>
 
-import stockWithdrawingMixin from '@/components/out/stockWithdrawingMixin';
-
 export default {
   name: 'StockWithdrawingListItem',
-  mixins: [stockWithdrawingMixin],
   props: {
-    stockWithdrawing: Object,
-  },
-  computed: {
-    viewData() {
-      return this.itemToData(this.stockWithdrawing);
-    },
+    viewData: { type: Object, required: true },
   },
 };
 

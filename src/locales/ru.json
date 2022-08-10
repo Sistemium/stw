@@ -24,6 +24,7 @@
     "stockTakings": "Инвентаризация",
     "storages": "Склады",
     "pictures": "Изображения",
+    "stockReceivals": "Приход на склад",
     "stockWithdrawals": "Отгрузки со склада",
     "stockWithdrawing": "Выдача со склада"
   },
@@ -36,6 +37,8 @@
     "type": "Тип",
     "consigneeType": "Тип получателя",
     "consignee": "Получатель",
+    "supplierType": "Тип поставщика",
+    "supplier": "Поставщик",
     "valueType": "Тип значений",
     "required": "Обязательно",
     "bool": {
@@ -104,7 +107,8 @@
     "storage": "склад",
     "stockTaking": "инвентаризацию",
     "position": "позицию",
-    "stockWithdrawing": "отгрузку"
+    "stockWithdrawing": "отгрузку",
+    "stockReceiving": "приход на склад"
   },
   "genitive": {
     "property": "признака",
@@ -115,6 +119,8 @@
     "stockTakingItem": "позиции инвентаризации",
     "stockWithdrawing": "отгрузки со склада",
     "stockWithdrawingItem": "позиции отгрузки со склада",
+    "stockReceiving": "прихода на склад",
+    "stockReceivingItem": "позиции прихода на склад",
     "legalEntity": "юр. лица"
   },
   "shortened": {

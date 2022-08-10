@@ -5,9 +5,11 @@ import ArticleProp from '@/models/ArticleProp';
 import StockTaking from '@/models/StockTaking';
 import StockWithdrawing from '@/models/StockWithdrawing';
 import StockWithdrawingItem from '@/models/StockWithdrawingItem';
-import { itemRouteHelper } from '@/router/helpers';
+import StockReceiving from '@/models/StockReceiving';
+import StockReceivingItem from '@/models/StockReceivingItem';
 import articlePicturesRoute from '@/router/articlePicturesRoute';
 import stockTakingRoute from '@/router/stockTakingRoute';
+import stockOperationsRoute from '@/router/stockOperationsRoute';
 
 export default new RouteMapper({
   storages: {
@@ -27,18 +29,22 @@ export default new RouteMapper({
     },
   },
   stockWithdrawals: {
-    model: StockWithdrawing,
-    component: () => import(/* webpackChunkName: "out" */ '../views/StockWithdrawalsPage.vue'),
-    create: () => import(/* webpackChunkName: "out" */ '../components/out/StockWithdrawingEdit.vue'),
-    edit: {
-      name: 'stockWithdrawing',
-      model: StockWithdrawingItem,
-      component: () => import(/* webpackChunkName: "out" */ '../views/StockWithdrawingPage.vue'),
-      children: itemRouteHelper(/* webpackChunkName: "out" */ 'stockWithdrawing', () => import('../components/out/StockWithdrawingItemEdit.vue')),
-    },
-    meta: {
-      useScanner: true,
-    },
+    config: stockOperationsRoute({
+      rootState: 'stockWithdrawals',
+      model: StockWithdrawing,
+      positionsModel: StockWithdrawingItem,
+      operationName: 'stockWithdrawing',
+      counterpartyRole: 'consignee',
+    }),
+  },
+  stockReceivals: {
+    config: stockOperationsRoute({
+      rootState: 'stockReceivals',
+      model: StockReceiving,
+      positionsModel: StockReceivingItem,
+      operationName: 'stockReceiving',
+      counterpartyRole: 'supplier',
+    }),
   },
   articles: {
     model: Article,

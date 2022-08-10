@@ -1,7 +1,7 @@
 <template lang="pug">
 
 el-table.stock-withdrawing-table(
-  :data="data"
+  :data="viewData"
   @row-click="row => $emit('click', row)"
   :size="size"
 )
@@ -14,10 +14,11 @@ el-table.stock-withdrawing-table(
     prop="date"
     :label="$t('fields.date')"
     :width="columnSize"
+    :formatter="(r,c,date) => $ts(date, 'short')"
   )
   el-table-column(
     prop="counterpartyName"
-    :label="$t('fields.counterparty')"
+    :label="counterpartyLabel"
   )
   el-table-column(
     align="right"
@@ -40,23 +41,29 @@ el-table.stock-withdrawing-table(
 
 </template>
 <script>
-import stockWithdrawingMixin from '@/components/out/stockWithdrawingMixin';
 
 export default {
   name: 'StockWithdrawingTable',
   props: {
-    items: Array,
+    viewData: Array,
     activeId: String,
     size: String,
+    positionsModel: Object,
+    counterpartyRole: String,
   },
-  mixins: [stockWithdrawingMixin],
   computed: {
-    data() {
-      return this.$map(this.items, this.itemToData);
+    counterpartyLabel() {
+      return this.$t(`fields.${this.counterpartyRole}`);
     },
+    // data() {
+    //   return this.$map(this.items, this.itemToData);
+    // },
     columnSize() {
       return this.size === 'small' ? 120 : 140;
     },
+    // itemToData() {
+    //   return item => stockOperationToViewData(item, this.positionsModel);
+    // },
   },
 };
 

@@ -24,6 +24,7 @@
     "stockTakings": "Inventorizavimas",
     "storages": "Sandėliai",
     "pictures": "Nuotraukos",
+    "stockReceivals": "Priemimas į sandėlį",
     "stockWithdrawals": "Iškrovimas iš sandėlio",
     "stockWithdrawing": "Iškrovimas iš sandėlio"
   },
@@ -36,6 +37,8 @@
     "type": "Tipas",
     "consigneeType": "Gavėjo tipas",
     "consignee": "Gavėjas",
+    "supplierType": "Tiekėjo tipas",
+    "supplier": "Tiekėjas",
     "valueType": "Duomenų tipas",
     "required": "Privaloma",
     "bool": {
@@ -104,7 +107,8 @@
     "storage": "sandėlį",
     "stockTaking": "inventorizaciją",
     "position": "poziciją",
-    "stockWithdrawing": "iškrovimą"
+    "stockWithdrawing": "iš sandėlio iškrovimą",
+    "stockReceiving": "į sandėlį piemimą"
   },
   "genitive": {
     "property": "Ypatybės",
@@ -115,6 +119,8 @@
     "stockTakingItem": "Inventorizacijos pozicijos",
     "stockWithdrawing": "Iš sandėlio iškrovimo",
     "stockWithdrawingItem": "Iš sandėlio iškrovimo pozicijos",
+    "stockReceiving": "Į sandėlį priemimo",
+    "stockReceivingItem": "Į sandėlį priemimo pozicijos",
     "legalEntity": "Įmonės"
   },
   "shortened": {

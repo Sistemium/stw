@@ -3,7 +3,7 @@
 .stock-withdrawals-page
 
   //el-header
-  page-title(title="menu.stockWithdrawals")
+  page-title(:title="`menu.${rootState}`")
 
   el-container
     component(:is="showDetails ? 'el-aside' : 'el-main'")
@@ -13,23 +13,24 @@
           tool-button(tool="back" @click="onBack" v-if="showDetails")
           tool-button(tool="add" @click="onAdd()")
         resize(:padding="20")
-          template(v-if="stockWithdrawals.length")
+          template(v-if="viewData.length")
             stock-withdrawing-list(
               v-if="showList"
-              :items="stockWithdrawals"
+              :view-data="viewData"
               @click="onItemClick"
-              :active-id="$route.params.stockWithdrawingId"
+              :active-id="$route.params.stockOperationId"
             )
             stock-withdrawing-table(
               v-else
+              :view-data="viewData"
               @click="onItemClick"
-              :items="stockWithdrawals"
               :size="tableSize"
+              :counterparty-role="counterpartyRole"
             )
       alert-empty(
-        v-if="currentStorageId && !stockWithdrawals.length"
+        v-if="currentStorageId && !stockOperations.length"
         @click="onAdd()"
-        :button-text="$tAction('start', 'stockWithdrawing')"
+        :button-text="$tAction('start', operationName)"
       )
 
     router-view
@@ -38,7 +39,6 @@
 <script>
 import { createNamespacedHelpers } from 'vuex';
 import StockWithdrawingList from '@/components/out/StockWithdrawingList.vue';
-import StockWithdrawing from '@/models/StockWithdrawing';
 import pageMixin from '@/lib/pageMixin';
 import find from 'lodash/find';
 import StorageSelect from '@/components/stock/StorageSelect.vue';
@@ -46,6 +46,7 @@ import StockWithdrawingTable from '@/components/out/StockWithdrawingTable.vue';
 import vssMixin from '@/components/vssMixin';
 import * as g from '@/store/inv/getters';
 import * as m from '@/store/inv/mutations';
+import { stockOperationToViewData } from '@/services/warehousing';
 
 const { mapGetters, mapMutations } = createNamespacedHelpers('inv');
 
@@ -53,15 +54,25 @@ export default {
   name: 'StockWithdrawalsPage',
   mixins: [pageMixin, vssMixin],
   components: { StockWithdrawingTable, StorageSelect, StockWithdrawingList },
+  props: {
+    model: Object,
+    positionsModel: Object,
+    operationName: String,
+    counterpartyRole: String,
+  },
   computed: {
+    viewData() {
+      return this.stockOperations
+        .map(o => stockOperationToViewData(o, this.positionsModel, this.operationName));
+    },
     ...mapGetters({
       currentStorageId: g.CURRENT_STORAGE,
     }),
     showList() {
       return !this.showTable || this.showDetails;
     },
-    stockWithdrawals() {
-      return this.$orderBy(StockWithdrawing.reactiveFilter({
+    stockOperations() {
+      return this.$orderBy(this.model.reactiveFilter({
         storageId: this.storageId,
       }), ['date', 'cts'], ['desc', 'desc']);
     },
@@ -72,9 +83,9 @@ export default {
     },
     storageId: {
       get() {
-        const { stockWithdrawingId } = this.$route.params;
-        if (stockWithdrawingId) {
-          const { storageId } = StockWithdrawing.reactiveGet(stockWithdrawingId) || {};
+        const { stockOperationId } = this.$route.params;
+        if (stockOperationId) {
+          const { storageId } = this.model.reactiveGet(stockOperationId) || {};
           if (storageId) {
             return storageId;
           }
@@ -95,7 +106,7 @@ export default {
     }),
     onItemClick(item) {
       this.updateRouteParams({
-        stockWithdrawingId: item.id,
+        stockOperationId: item.id,
       }, {}, this.editRoute);
     },
     onBack() {

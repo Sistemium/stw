@@ -24,6 +24,7 @@
     "stockTakings": "Stocktaking",
     "storages": "Storages",
     "pictures": "Pictures",
+    "stockReceivals": "Receiving to warehouse",
     "stockWithdrawals": "Withdrawals from warehouse",
     "stockWithdrawing": "Stock withdrawing"
   },
@@ -35,6 +36,8 @@
     "type": "Type",
     "consigneeType": "Consignee type",
     "consignee": "Consignee",
+    "supplierType": "Supplier type",
+    "supplier": "Supplier",
     "date": "Date",
     "valueType": "Value type",
     "required": "Required",
@@ -106,7 +109,8 @@
     "storage": "storage",
     "stockTaking": "stockTaking",
     "position": "position",
-    "stockWithdrawing": "withdrawing"
+    "stockWithdrawing": "withdrawing",
+    "stockReceiving": "stock receiving"
   },
   "genitive": {
     "property": "Property",
@@ -117,6 +121,8 @@
     "stockTakingItem": "Stocktaking item",
     "stockWithdrawing": "Stock withdrawing",
     "stockWithdrawingItem": "Stock withdrawing item",
+    "stockReceiving": "Stock receiving",
+    "stockReceivingItem": "Stock receiving item",
     "legalEntity": "Legal entity"
   },
   "shortened": {

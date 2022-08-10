@@ -7,30 +7,32 @@
       .buttons
         workflow-transitions(
           :workflow="workflow"
-          :value="stockWithdrawing.processing"
+          :value="stockOperation.processing"
           @input="onProcessing"
           :disabled="busy"
         )
         tool-button(tool="add" @click="onAddItem" :disabled="disabled")
       resize(:padding="20")
         stock-withdrawing-item-list(
-          :items="stockWithdrawingItems"
+          :items="stockOperationItems"
           @click="onItemClick"
-          v-if="stockWithdrawingItems.length"
+          v-if="stockOperationItems.length"
         )
         alert-empty(v-else @click="onAddItem" :button-text="$tAction('add', 'position')")
     el-tab-pane(:lazy="true" :label="$t('concepts.settings')")
       stock-withdrawing-edit(
         :is-drawer="false"
-        :stock-withdrawing-id="stockWithdrawingId"
+        :stock-operation-id="stockOperationId"
         @closed="onEditClose"
+        :counterparty-role="counterpartyRole"
+        :model="model"
+        :operation-name="operationName"
       )
   router-view
 
 </template>
 <script>
-import StockWithdrawing, { workflow } from '@/models/StockWithdrawing';
-import StockWithdrawingItem from '@/models/StockWithdrawingItem';
+import { workflow } from '@/models/StockWithdrawing';
 import StockWithdrawingItemList from '@/components/out/StockWithdrawingItemList.vue';
 import StockWithdrawingEdit from '@/components/out/StockWithdrawingEdit.vue';
 import pageMixin from '@/lib/pageMixin';
@@ -41,22 +43,28 @@ export default {
   components: { WorkflowTransitions, StockWithdrawingEdit, StockWithdrawingItemList },
   mixins: [pageMixin],
   props: {
-    stockWithdrawingId: String,
+    stockOperationId: String,
     from: Object,
+    model: Object,
+    positionsModel: Object,
+    counterpartyRole: String,
+    operationName: String,
   },
   computed: {
     workflow() {
       return workflow;
     },
-    stockWithdrawingItems() {
-      const { stockWithdrawingId } = this;
-      return StockWithdrawingItem.reactiveFilter({ stockWithdrawingId });
+    stockOperationItems() {
+      const { stockOperationId } = this;
+      return this.positionsModel.reactiveFilter({
+        [`${this.operationName}Id`]: stockOperationId,
+      });
     },
-    stockWithdrawing() {
-      return StockWithdrawing.reactiveGet(this.stockWithdrawingId) || {};
+    stockOperation() {
+      return this.model.reactiveGet(this.stockOperationId) || {};
     },
     disabled() {
-      const { processing } = this.stockWithdrawing;
+      const { processing } = this.stockOperation;
       return !workflow.step(processing).editable;
     },
   },
@@ -65,7 +73,7 @@ export default {
       this.$router.push({
         name: this.createRoute,
         params: {
-          stockWithdrawingId: this.stockWithdrawingId,
+          stockOperationId: this.stockOperationId,
         },
       });
     },
@@ -73,8 +81,8 @@ export default {
       this.$router.push({
         name: this.editRoute,
         params: {
-          stockWithdrawingId: this.stockWithdrawingId,
-          stockWithdrawingItemId: item.id,
+          stockOperationId: this.stockOperationId,
+          stockOperationItemId: item.id,
         },
       });
     },
@@ -84,7 +92,7 @@ export default {
       }
     },
     onProcessing(processing) {
-      this.setBusy(StockWithdrawing.patch(this.stockWithdrawingId, { processing }));
+      this.setBusy(this.model.patch(this.stockOperationId, { processing }));
     },
   },
 };

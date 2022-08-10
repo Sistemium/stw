@@ -1,7 +1,7 @@
 <template lang="pug">
 
 drawer-edit.stock-withdrawing-item-edit(
-  :title="$tGen('editing', 'stockWithdrawingItem')"
+  :title="$tGen('editing', `${operationName}Item`)"
   :save-fn="saveFn"
   :destroy-fn="destroyFn"
   :model-origin="modelOrigin"
@@ -20,43 +20,45 @@ drawer-edit.stock-withdrawing-item-edit(
 
 import drawerEditMixin from '@/lib/drawerEditMixin';
 import StockWithdrawingItemForm from '@/components/stock/StockTakingItemForm.vue';
-import StockWithdrawing, { workflow } from '@/models/StockWithdrawing';
-import StockWithdrawingItem from '@/models/StockWithdrawingItem';
-import { stockWithdrawingItemInstance } from '@/services/warehousing';
+import { workflow } from '@/models/StockWithdrawing';
+import { stockOperationItemInstance } from '@/services/warehousing';
 
 export default {
   name: 'StockWithdrawingItemEdit',
   mixins: [drawerEditMixin],
   components: { StockWithdrawingItemForm },
   props: {
-    stockWithdrawingId: { type: String, required: true },
-    stockWithdrawingItemId: String,
+    stockOperationId: { type: String, required: true },
+    stockOperationItemId: String,
     barcode: String,
+    operationName: { type: String, required: true },
+    model: Object,
+    positionsModel: Object,
   },
   computed: {
-    stockWithdrawing() {
-      return StockWithdrawing.reactiveGet(this.stockWithdrawingId);
+    stockOperation() {
+      return this.model.reactiveGet(this.stockOperationId);
     },
     modelOrigin() {
-      const { stockWithdrawingItemId: id, stockWithdrawingId, barcode = null } = this;
-      return id ? StockWithdrawingItem.reactiveGet(id)
-        : stockWithdrawingItemInstance({
-          stockWithdrawingId,
+      const { stockOperationItemId: id, stockOperationId, barcode = null } = this;
+      return id ? this.positionsModel.reactiveGet(id)
+        : stockOperationItemInstance(this.operationName, {
+          stockOperationId,
           barcode,
           articleId: null,
         });
     },
     editable() {
-      const { processing } = this.stockWithdrawing || {};
+      const { processing } = this.stockOperation || {};
       return workflow.step(processing).editable;
     },
   },
   methods: {
     saveFn(props) {
-      return StockWithdrawingItem.createOne(props);
+      return this.positionsModel.createOne(props);
     },
     destroyFn(id) {
-      return StockWithdrawingItem.destroy(id);
+      return this.positionsModel.destroy(id);
     },
   },
 };

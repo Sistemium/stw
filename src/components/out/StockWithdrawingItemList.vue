@@ -23,7 +23,7 @@ import ArticleView from '@/components/catalogue/ArticleView.vue';
 export default {
   name: 'StockWithdrawingItemList',
   props: {
-    stockWithdrawingId: String,
+    stockOperationId: String,
     items: Array,
   },
   components: { ArticleView },

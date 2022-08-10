@@ -2,11 +2,11 @@
 
 .stock-withdrawing-list.list-group
   stock-withdrawing-list-item(
-    v-for="item in items"
+    v-for="item in viewData"
     :key="item.id"
-    :stock-withdrawing="item"
     @click="$emit('click', item)"
     :class="{ active: activeId === item.id }"
+    :view-data="item"
   )
 
 </template>
@@ -18,7 +18,7 @@ export default {
   name: 'StockWithdrawingList',
   components: { StockWithdrawingListItem },
   props: {
-    items: Array,
+    viewData: Array,
     activeId: String,
   },
 };
