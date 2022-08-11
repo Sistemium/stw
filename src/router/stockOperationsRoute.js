@@ -47,6 +47,9 @@ export default function stockOperationsRoute(options) {
             createRoute: `${operationName}ItemCreate`,
             stockOperationId,
             ...commonProps,
+            from: {
+              name: rootState,
+            },
           };
         },
         children: itemRouteHelper(
