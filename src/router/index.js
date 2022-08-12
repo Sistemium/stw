@@ -28,8 +28,6 @@ export const routes = [
   },
 ];
 
-console.info(routes);
-
 const router = new VueRouter({
   routes,
 });
