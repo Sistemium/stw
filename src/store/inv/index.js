@@ -12,6 +12,7 @@ export default {
     [states.ARTICLE_FILTERS]: [],
     [states.SCANNED_BARCODE]: null,
     [states.SCANNER_STATUS]: null,
+    [states.SOCKET_IS_READY]: false,
   },
   mutations,
   getters,

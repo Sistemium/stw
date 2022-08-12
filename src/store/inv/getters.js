@@ -3,8 +3,12 @@ export const SCANNED_BARCODE = 'SCANNED_BARCODE';
 export const SCANNER_STATUS = 'SCANNER_STATUS';
 export const SCANNER_IS_CONNECTED = 'SCANNER_IS_CONNECTED';
 export const CURRENT_STORAGE = 'CURRENT_STORAGE';
+export const SOCKET_IS_READY = 'SOCKET_IS_READY';
 
 export default {
+  [SOCKET_IS_READY](state) {
+    return state[SOCKET_IS_READY];
+  },
   [CURRENT_STORAGE](state) {
     return state[CURRENT_STORAGE];
   },
