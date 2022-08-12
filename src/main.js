@@ -1,3 +1,4 @@
+import log from 'sistemium-debug';
 import Vue from 'vue';
 import { Loading } from 'element-ui';
 import { authorizeAxios } from '@/init/HybridDataModel';
@@ -9,6 +10,7 @@ import store from './store';
 import i18n, { saveLocale } from './i18n';
 import './index.scss';
 
+const { debug } = log('main');
 Vue.config.productionTip = false;
 router.beforeEach(authGuard);
 
@@ -25,6 +27,7 @@ new Vue({
       this.$debug('router:ready', route);
       const loading = Loading.service({});
       store.dispatch('auth/AUTH_INIT')
+        .then(() => store.dispatch('inv/SUBSCRIBE_SOCKET_STATUS'))
         .catch(e => {
           this.$error('auth', e);
         })
@@ -36,11 +39,11 @@ new Vue({
 }).$mount('#app');
 
 const unsubscribe = store.subscribe(mutation => {
-  // eslint-disable-next-line no-console
-  console.log(mutation.type);
+  debug(mutation.type, mutation.payload);
   if (mutation.type === 'auth/SET_AUTHORIZED') {
-    unsubscribe();
     authorizeAxios(mutation.payload.token);
+  } else if (mutation.type === 'inv/SET_SOCKET_IS_READY' && mutation.payload) {
+    unsubscribe();
     const loading = Loading.service({});
     initData()
       .catch(e => this.$error(e))
