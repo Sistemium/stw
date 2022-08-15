@@ -1,9 +1,11 @@
 import LegalEntity from '@/models/LegalEntity';
 import Storage from '@/models/Storage';
 import Person from '@/models/Person';
+import Configuration from '@/models/Configuration';
 import sumBy from 'lodash/sumBy';
 import get from 'lodash/get';
 import i18n from '@/i18n';
+import omit from 'lodash/omit';
 
 export function stockTakingItemInstance({ stockTakingId, articleId, barcode }) {
   return {
@@ -65,4 +67,14 @@ export function stockOperationToViewData(item, positionsModel, operationName) {
     units: sumBy(positions, 'units'),
     totalCost: totalCost ? i18n.n(totalCost) : null,
   };
+}
+
+export function vatConfig(date = new Date()) {
+  const stringDate = date.toISOString();
+  const [config] = Configuration.reactiveFilter({
+    type: 'vat',
+    dateB: { $lte: stringDate },
+    dateE: { $gte: stringDate },
+  });
+  return config;
 }

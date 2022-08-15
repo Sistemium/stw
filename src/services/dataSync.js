@@ -1,5 +1,6 @@
 import log from 'sistemium-debug';
 import store from '@/store';
+import Configuration from '@/models/Configuration';
 import ArticleProp from '@/models/ArticleProp';
 import PropOption from '@/models/PropOption';
 import Article from '@/models/Article';
@@ -21,6 +22,7 @@ const { error, debug } = log('dataSync');
 
 export async function initData() {
   debug('initData');
+  await Configuration.findAll();
   await ArticleProp.findAll();
   await PropOption.findAll();
   await Article.findAll();
