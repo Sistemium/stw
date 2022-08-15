@@ -8,7 +8,7 @@ export default function stockOperationsRoute(options) {
     positionsModel,
     operationName,
     counterpartyRole,
-    rootComponent = () => import(/* webpackChunkName: "out" */ '../views/StockWithdrawalsPage.vue'),
+    rootComponent = () => import(/* webpackChunkName: "out" */ '../views/StockOperationsPage.vue'),
     editComponent = () => import(/* webpackChunkName: "out" */ '../components/out/StockOperationEdit.vue'),
   } = options;
 
@@ -40,7 +40,7 @@ export default function stockOperationsRoute(options) {
       {
         name: operationName,
         path: 'details/:stockOperationId',
-        component: () => import(/* webpackChunkName: "out" */ '../views/StockWithdrawingPage.vue'),
+        component: () => import(/* webpackChunkName: "out" */ '../views/StockOperationPage.vue'),
         props({ params: { stockOperationId } }) {
           return {
             editRoute: `${operationName}ItemEdit`,

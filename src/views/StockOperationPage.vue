@@ -39,7 +39,7 @@ import StockOperationItemList from '@/components/out/StockOperationItemList.vue'
 import StockOperationEdit from '@/components/out/StockOperationEdit.vue';
 
 export default {
-  name: 'StockWithdrawingPage',
+  name: 'StockOperationPage',
   components: { WorkflowTransitions, StockOperationEdit, StockOperationItemList },
   mixins: [pageMixin],
   props: {

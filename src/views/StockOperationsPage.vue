@@ -51,7 +51,7 @@ import * as m from '@/store/inv/mutations';
 const { mapGetters, mapMutations } = createNamespacedHelpers('inv');
 
 export default {
-  name: 'StockWithdrawalsPage',
+  name: 'StockOperationsPage',
   mixins: [pageMixin, vssMixin],
   components: { StockOperationTable, StorageSelect, StockOperationList },
   props: {
