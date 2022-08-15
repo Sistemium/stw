@@ -47,6 +47,8 @@
     },
     "code": "Serial code",
     "price": "Price",
+    "vatPrice": "Price with VAT",
+    "vatRate": "VAT",
     "totalCost": "Cost",
     "inverse": "Name for value \"no\"",
     "prefix": "Prefix",

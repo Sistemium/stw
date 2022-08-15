@@ -47,6 +47,8 @@
     },
     "code": "Serijinis kodas",
     "price": "Kaina",
+    "vatPrice": "Kaina su PVM",
+    "vatRate": "PVM",
     "totalCost": "Kaina iš viso",
     "inverse": "Reikšmės \"ne\" pavadinimas",
     "prefix": "Priešdėlis",
