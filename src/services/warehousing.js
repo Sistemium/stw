@@ -6,6 +6,7 @@ import sumBy from 'lodash/sumBy';
 import get from 'lodash/get';
 import i18n from '@/i18n';
 import omit from 'lodash/omit';
+import isDate from 'lodash/isDate';
 
 export function stockTakingItemInstance({ stockTakingId, articleId, barcode }) {
   return {
@@ -56,7 +57,8 @@ export function getCounterparty({ counterpartyType, counterpartyId }) {
 export function stockOperationToViewData(item, positionsModel, operationName) {
   const counterparty = getCounterparty(item);
   const positions = positionsModel.reactiveFilter({ [`${operationName}Id`]: item.id });
-  const totalCost = sumBy(positions, p => (p.price || 0) * (p.units || 0));
+  const priceField = configPriceField(operationName);
+  const totalCost = sumBy(positions, p => (p[priceField] || 0) * (p.units || 0));
   return {
     ...item,
     processing: i18n.t(`workflow.${item.processing || 'progress'}`),
@@ -70,11 +72,17 @@ export function stockOperationToViewData(item, positionsModel, operationName) {
 }
 
 export function vatConfig(date = new Date()) {
-  const stringDate = date.toISOString();
+  const stringDate = isDate(date) ? date.toISOString() : date;
   const [config] = Configuration.reactiveFilter({
     type: 'vat',
     dateB: { $lte: stringDate },
     dateE: { $gte: stringDate },
   });
   return config;
+}
+
+export function configPriceField(operationName, date = new Date()) {
+  const { rules } = vatConfig(date);
+  const vatPrices = rules.vatPrices[operationName];
+  return vatPrices ? 'vatPrice' : 'price';
 }

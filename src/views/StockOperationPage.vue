@@ -17,6 +17,7 @@
           :items="stockOperationItems"
           @click="onItemClick"
           v-if="stockOperationItems.length"
+          :price-field="priceField"
         )
         alert-empty(v-else @click="onAddItem" :button-text="$tAction('add', 'position')")
     el-tab-pane(:lazy="true" :label="$t('concepts.settings')")
@@ -37,6 +38,7 @@ import WorkflowTransitions from '@/lib/WorkflowTransitions.vue';
 import pageMixin from '@/lib/pageMixin';
 import StockOperationItemList from '@/components/out/StockOperationItemList.vue';
 import StockOperationEdit from '@/components/out/StockOperationEdit.vue';
+import { configPriceField } from '@/services/warehousing';
 
 export default {
   name: 'StockOperationPage',
@@ -53,6 +55,9 @@ export default {
   computed: {
     workflow() {
       return workflow;
+    },
+    priceField() {
+      return configPriceField(this.operationName, this.stockOperation.date);
     },
     stockOperationItems() {
       const { stockOperationId } = this;

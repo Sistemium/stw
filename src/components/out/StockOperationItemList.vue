@@ -14,7 +14,7 @@
           span &equals;
         span.units {{ item.units }} {{ $t('shortened.units') }}
       .cost(v-if="item.price")
-        .price {{ item.price }} &euro;
+        .price {{ item[priceField] }} &euro;
 
 </template>
 <script>
@@ -25,6 +25,7 @@ export default {
   props: {
     stockOperationId: String,
     items: Array,
+    priceField: { type: String, default: 'price' },
   },
   components: { ArticleView },
 };
