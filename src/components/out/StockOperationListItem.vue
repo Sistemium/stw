@@ -1,6 +1,6 @@
 <template lang="pug">
 
-.stock-withdrawing-list-item.list-group-item(@click="$emit('click')")
+.stock-operation-list-item.list-group-item(@click="$emit('click')")
   .title
     .date {{ $ts(viewData.date, 'short') }}
     .counterparty(v-if="viewData.counterpartyName") {{ viewData.counterpartyName }}
@@ -14,7 +14,7 @@
 <script>
 
 export default {
-  name: 'StockWithdrawingListItem',
+  name: 'StockOperationListItem',
   props: {
     viewData: { type: Object, required: true },
   },

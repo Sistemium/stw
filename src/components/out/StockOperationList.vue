@@ -1,7 +1,7 @@
 <template lang="pug">
 
-.stock-withdrawing-list.list-group
-  stock-withdrawing-list-item(
+.stock-operation-list.list-group
+  stock-operation-list-item(
     v-for="item in viewData"
     :key="item.id"
     @click="$emit('click', item)"
@@ -12,11 +12,11 @@
 </template>
 <script>
 
-import StockWithdrawingListItem from '@/components/out/StockWithdrawingListItem.vue';
+import StockOperationListItem from '@/components/out/StockOperationListItem.vue';
 
 export default {
-  name: 'StockWithdrawingList',
-  components: { StockWithdrawingListItem },
+  name: 'StockOperationList',
+  components: { StockOperationListItem },
   props: {
     viewData: Array,
     activeId: String,

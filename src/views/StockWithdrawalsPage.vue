@@ -14,13 +14,13 @@
           tool-button(tool="add" @click="onAdd()")
         resize(:padding="20")
           template(v-if="viewData.length")
-            stock-withdrawing-list(
+            stock-operation-list(
               v-if="showList"
               :view-data="viewData"
               @click="onItemClick"
               :active-id="$route.params.stockOperationId"
             )
-            stock-withdrawing-table(
+            stock-operation-table(
               v-else
               :view-data="viewData"
               @click="onItemClick"
@@ -38,22 +38,22 @@
 </template>
 <script>
 import { createNamespacedHelpers } from 'vuex';
-import StockWithdrawingList from '@/components/out/StockWithdrawingList.vue';
+import StockOperationList from '@/components/out/StockOperationList.vue';
 import pageMixin from '@/lib/pageMixin';
 import find from 'lodash/find';
+import { stockOperationToViewData } from '@/services/warehousing';
 import StorageSelect from '@/components/stock/StorageSelect.vue';
-import StockWithdrawingTable from '@/components/out/StockWithdrawingTable.vue';
+import StockOperationTable from '@/components/out/StockOperationTable.vue';
 import vssMixin from '@/components/vssMixin';
 import * as g from '@/store/inv/getters';
 import * as m from '@/store/inv/mutations';
-import { stockOperationToViewData } from '@/services/warehousing';
 
 const { mapGetters, mapMutations } = createNamespacedHelpers('inv');
 
 export default {
   name: 'StockWithdrawalsPage',
   mixins: [pageMixin, vssMixin],
-  components: { StockWithdrawingTable, StorageSelect, StockWithdrawingList },
+  components: { StockOperationTable, StorageSelect, StockOperationList },
   props: {
     model: Object,
     positionsModel: Object,
@@ -79,7 +79,7 @@ export default {
     showDetails() {
       const { name } = this.$route;
       return name === this.editRoute
-        || find(this.$router.currentRoute.matched, { name: this.editRoute });
+        || !!find(this.$router.currentRoute.matched, { name: this.editRoute });
     },
     storageId: {
       get() {
@@ -135,13 +135,13 @@ export default {
   .el-aside {
     width: 100% !important;
 
-    ::v-deep .stock-withdrawing-list-item:not(.active) {
+    ::v-deep .stock-operation-list-item:not(.active) {
       display: none;
     }
 
     margin-bottom: $margin-right;
   }
-  .el-aside ::v-deep .stock-withdrawing-list-item {
+  .el-aside ::v-deep .stock-operation-list-item {
     background: none;
     border-top: none;
 

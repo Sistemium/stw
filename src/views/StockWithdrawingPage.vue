@@ -13,14 +13,14 @@
         )
         tool-button(tool="add" @click="onAddItem" :disabled="disabled")
       resize(:padding="20")
-        stock-withdrawing-item-list(
+        stock-operation-item-list(
           :items="stockOperationItems"
           @click="onItemClick"
           v-if="stockOperationItems.length"
         )
         alert-empty(v-else @click="onAddItem" :button-text="$tAction('add', 'position')")
     el-tab-pane(:lazy="true" :label="$t('concepts.settings')")
-      stock-withdrawing-edit(
+      stock-operation-edit(
         :is-drawer="false"
         :stock-operation-id="stockOperationId"
         @closed="onEditClose"
@@ -33,14 +33,14 @@
 </template>
 <script>
 import { workflow } from '@/models/StockWithdrawing';
-import StockWithdrawingItemList from '@/components/out/StockWithdrawingItemList.vue';
-import StockWithdrawingEdit from '@/components/out/StockWithdrawingEdit.vue';
-import pageMixin from '@/lib/pageMixin';
 import WorkflowTransitions from '@/lib/WorkflowTransitions.vue';
+import pageMixin from '@/lib/pageMixin';
+import StockOperationItemList from '@/components/out/StockOperationItemList.vue';
+import StockOperationEdit from '@/components/out/StockOperationEdit.vue';
 
 export default {
   name: 'StockWithdrawingPage',
-  components: { WorkflowTransitions, StockWithdrawingEdit, StockWithdrawingItemList },
+  components: { WorkflowTransitions, StockOperationEdit, StockOperationItemList },
   mixins: [pageMixin],
   props: {
     stockOperationId: String,
@@ -105,7 +105,7 @@ export default {
   flex: 1;
 }
 
-.stock-withdrawing-edit {
+.stock-operation-edit {
   text-align: left;
   @include responsive-only(xxs) {
     text-align: right;

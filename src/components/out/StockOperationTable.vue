@@ -1,6 +1,6 @@
 <template lang="pug">
 
-el-table.stock-withdrawing-table(
+el-table.stock-operation-table(
   :data="viewData"
   @row-click="row => $emit('click', row)"
   :size="size"
@@ -43,7 +43,7 @@ el-table.stock-withdrawing-table(
 <script>
 
 export default {
-  name: 'StockWithdrawingTable',
+  name: 'StockOperationTable',
   props: {
     viewData: Array,
     activeId: String,

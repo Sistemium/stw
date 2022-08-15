@@ -1,6 +1,6 @@
 <template lang="pug">
 
-drawer-edit.stock-withdrawing-item-edit(
+drawer-edit.stock-operation-item-edit(
   :title="$tGen('editing', `${operationName}Item`)"
   :save-fn="saveFn"
   :destroy-fn="destroyFn"
@@ -10,7 +10,7 @@ drawer-edit.stock-withdrawing-item-edit(
   :is-drawer="isDrawer"
 )
   template(v-slot="{ model }")
-    stock-withdrawing-item-form(:model="model" :editable="editable")
+    stock-taking-item-form(:model="model" :editable="editable")
       template(v-slot:article-extra)
         el-form-item(prop="price" :label="$t('fields.price')")
           el-input-number(v-model="model.price")
@@ -19,14 +19,14 @@ drawer-edit.stock-withdrawing-item-edit(
 <script>
 
 import drawerEditMixin from '@/lib/drawerEditMixin';
-import StockWithdrawingItemForm from '@/components/stock/StockTakingItemForm.vue';
+import StockTakingItemForm from '@/components/stock/StockTakingItemForm.vue';
 import { workflow } from '@/models/StockWithdrawing';
-import { stockOperationItemInstance } from '@/services/warehousing';
+import { stockOperationItemInstance, vatConfig } from '@/services/warehousing';
 
 export default {
-  name: 'StockWithdrawingItemEdit',
+  name: 'StockOperationItemEdit',
   mixins: [drawerEditMixin],
-  components: { StockWithdrawingItemForm },
+  components: { StockTakingItemForm },
   props: {
     stockOperationId: { type: String, required: true },
     stockOperationItemId: String,
@@ -36,6 +36,9 @@ export default {
     positionsModel: Object,
   },
   computed: {
+    vatConfig() {
+      return vatConfig();
+    },
     stockOperation() {
       return this.model.reactiveGet(this.stockOperationId);
     },

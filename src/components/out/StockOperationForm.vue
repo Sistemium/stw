@@ -1,6 +1,6 @@
 <template lang="pug">
 
-el-form.stock-withdrawing-form(
+el-form.stock-operation-form(
   :model="model"
   ref="form"
   :rules="rules"
@@ -53,7 +53,7 @@ import LegalEntityEdit from '@/components/contacts/LegalEntityEdit.vue';
 import StorageEdit from '@/components/stock/StorageEdit.vue';
 
 export default {
-  name: 'StockWithdrawingForm',
+  name: 'StockOperationForm',
   components: {
     LegalEntityEdit,
     ButtonPrepend,

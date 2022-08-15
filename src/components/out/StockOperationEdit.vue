@@ -1,6 +1,6 @@
 <template lang="pug">
 
-drawer-edit.stock-withdrawing-edit(
+drawer-edit.stock-operation-edit(
   :title="$tGen('editing', operationName)"
   :save-fn="saveFn"
   :destroy-fn="destroyFn"
@@ -10,7 +10,7 @@ drawer-edit.stock-withdrawing-edit(
   :is-drawer="isDrawer"
 )
   template(v-slot="{ model }")
-    stock-withdrawing-form(
+    stock-operation-form(
       ref="form"
       :model="model"
       :counterparty-role="counterpartyRole"
@@ -20,11 +20,11 @@ drawer-edit.stock-withdrawing-edit(
 <script>
 
 import DrawerEdit from '@/lib/DrawerEdit.vue';
-import StockWithdrawingForm from '@/components/out/StockWithdrawingForm.vue';
+import StockOperationForm from '@/components/out/StockOperationForm.vue';
 
 export default {
-  name: 'StockWithdrawingEdit',
-  components: { DrawerEdit, StockWithdrawingForm },
+  name: 'StockOperationEdit',
+  components: { DrawerEdit, StockOperationForm },
   props: {
     stockOperationId: String,
     from: Object,

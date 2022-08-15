@@ -9,7 +9,7 @@ export default function stockOperationsRoute(options) {
     operationName,
     counterpartyRole,
     rootComponent = () => import(/* webpackChunkName: "out" */ '../views/StockWithdrawalsPage.vue'),
-    editComponent = () => import(/* webpackChunkName: "out" */ '../components/out/StockWithdrawingEdit.vue'),
+    editComponent = () => import(/* webpackChunkName: "out" */ '../components/out/StockOperationEdit.vue'),
   } = options;
 
   const commonProps = {
@@ -54,7 +54,7 @@ export default function stockOperationsRoute(options) {
         },
         children: itemRouteHelper(
           operationName,
-          () => import(/* webpackChunkName: "out" */ '../components/out/StockWithdrawingItemEdit.vue'),
+          () => import(/* webpackChunkName:"out" */ '../components/out/StockOperationItemEdit.vue'),
           'stockOperation',
           commonProps,
         ),

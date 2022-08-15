@@ -1,6 +1,6 @@
 <template lang="pug">
 
-.stock-withdrawing-item-list.list-group
+.stock-operation-item-list.list-group
   .list-group-item(v-for="item in items" :key="item.id" @click="$emit('click', item)")
     .title
       article-view(:article-id="item.articleId")
@@ -21,7 +21,7 @@
 import ArticleView from '@/components/catalogue/ArticleView.vue';
 
 export default {
-  name: 'StockWithdrawingItemList',
+  name: 'StockOperationItemList',
   props: {
     stockOperationId: String,
     items: Array,
