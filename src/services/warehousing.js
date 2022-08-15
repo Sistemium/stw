@@ -18,15 +18,18 @@ export function stockTakingItemInstance({ stockTakingId, articleId, barcode }) {
 }
 
 export function stockOperationItemInstance(operationName, props) {
-  const { stockOperationId, articleId, barcode } = props;
+  const { stockOperationId } = props;
   return {
     [`${operationName}Id`]: stockOperationId,
-    articleId,
-    barcode,
+    articleId: null,
+    barcode: null,
     quantity: 1,
     boxRel: 1,
     units: 1,
     deviceCts: new Date().toJSON(),
+    price: null,
+    vatPrice: null,
+    ...omit(props, 'stockOperationId'),
   };
 }
 
