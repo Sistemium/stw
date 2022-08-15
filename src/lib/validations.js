@@ -4,6 +4,7 @@ import get from 'lodash/get';
 import find from 'lodash/find';
 import map from 'lodash/map';
 import trim from 'lodash/trim';
+import i18n from '@/i18n';
 
 Vue.mixin({
 
@@ -11,6 +12,12 @@ Vue.mixin({
     cancelReadOnly(el) {
       const input = el.querySelector('.el-input__inner');
       input.removeAttribute('readonly');
+    },
+  },
+
+  filters: {
+    percent(value) {
+      return `${i18n.n(value * 100.0)}%`;
     },
   },
 
