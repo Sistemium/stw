@@ -66,5 +66,7 @@ export default {
 
 </script>
 <style scoped lang="scss">
-
+.el-form-item {
+  text-align: right;
+}
 </style>
