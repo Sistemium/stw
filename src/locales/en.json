@@ -30,6 +30,7 @@
   },
   "fields": {
     "address": "Address",
+    "commentText": "Commentary",
     "regCode": "Registration number",
     "vatCode": "VAT number",
     "name": "Name",

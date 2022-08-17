@@ -30,6 +30,7 @@
   },
   "fields": {
     "address": "Adresas",
+    "commentText": "Pastaba",
     "regCode": "Įmonės kodas",
     "vatCode": "PVM kodas",
     "name": "Pavadinimas",

@@ -30,6 +30,7 @@
   },
   "fields": {
     "address": "Адрес",
+    "commentText": "Комментарий",
     "regCode": "Код предприятия",
     "vatCode": "НСД код",
     "name": "Название",

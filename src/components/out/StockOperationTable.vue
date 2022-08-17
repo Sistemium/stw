@@ -20,6 +20,9 @@ el-table.stock-operation-table(
     prop="counterpartyName"
     :label="counterpartyLabel"
   )
+    template(v-slot="{ row }")
+      .name(v-if="row.counterpartyName") {{ row.counterpartyName }}
+      .comment(v-if="row.commentText") {{ row.commentText }}
   el-table-column(
     align="right"
     prop="positionsCount"

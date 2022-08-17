@@ -29,7 +29,14 @@ el-form.stock-operation-form(
       counterparty-select(:type="model.counterpartyType" v-model="model.counterpartyId")
 
   el-form-item(:label="$t('fields.processing')" prop="processing")
-    workflow-button(:workflow="workflow" v-model="model.processing" :disabled="disabled")
+    workflow-button(:workflow="workflow" v-model="model.processing")
+
+  el-form-item(
+    :label="$t('fields.commentText')"
+    prop="commentText"
+    v-if="!disabled || model.commentText"
+  )
+    el-input(v-model="model.commentText" type="textarea" :autosize="{ minRows: 2 }")
 
   component(
     :is="counterpartyEditComponent"
