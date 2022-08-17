@@ -62,5 +62,7 @@ export default {
 
 </script>
 <style scoped lang="scss">
-
+.el-icon-edit {
+  cursor: pointer;
+}
 </style>
