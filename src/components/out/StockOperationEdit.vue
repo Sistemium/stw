@@ -14,6 +14,7 @@ drawer-edit.stock-operation-edit(
       ref="form"
       :model="model"
       :counterparty-role="counterpartyRole"
+      :disabled="disabled"
     )
 
 </template>
@@ -35,6 +36,9 @@ export default {
     counterpartyRole: { type: String, required: true },
   },
   computed: {
+    disabled() {
+      return this.modelOrigin.processing === 'finished';
+    },
     modelOrigin() {
       const { stockOperationId } = this;
       return stockOperationId ? this.model.reactiveGet(stockOperationId) : {
@@ -44,13 +48,14 @@ export default {
         counterpartyType: null,
         counterpartyId: null,
         storageId: this.$route.query.storageId || null,
+        commentText: null,
       };
     },
   },
   methods: {
     async saveFn(props) {
       const { id: stockOperationId } = await this.model.createOne(props);
-      if (!this.stockWithdrawingId) {
+      if (!this.stockOperationId) {
         setTimeout(() => {
           this.$router.push({
             name: this.editRoute,
