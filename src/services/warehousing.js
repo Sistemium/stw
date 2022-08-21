@@ -26,9 +26,17 @@ export function stockOperationItemInstance(operationName, props) {
     [`${operationName}Id`]: stockOperationId,
     articleId: null,
     barcode: null,
-    quantity: 1,
-    boxRel: 1,
+    // quantity: 1,
+    // boxRel: 1,
     units: 1,
+
+    packages: null,
+    packageTypeId: null,
+    unitsInPackage: 1,
+
+    measureId: null,
+    measureUnitId: null,
+
     deviceCts: new Date().toJSON(),
     price: null,
     vatPrice: null,

@@ -13,7 +13,9 @@ drawer-edit.article-edit(
     el-tabs(v-model="currentTab")
       el-tab-pane(:label="$t('menu.articleProps')")
         article-form(ref="form" :model="model")
-      el-tab-pane(:label="$t('menu.barcodes')")
+      el-tab-pane(:label="$t('menu.measurements')")
+        article-measurement-form(:model="model" ref="measurementForm")
+      //el-tab-pane(:label="$t('menu.barcodes')")
         .list-group
           .list-group-item(
             v-if="!model.barcodes || !model.barcodes.length"
@@ -36,6 +38,7 @@ import TakePhotoButton from '@/lib/TakePhotoButton.vue';
 import Picture, { mapPictureInfo } from '@/models/Picture';
 import find from 'lodash/find';
 import ArticlePictures from '@/components/catalogue/ArticlePictures.vue';
+import ArticleMeasurementForm from '@/components/catalogue/ArticleMeasurementForm.vue';
 
 export default {
   name: 'ArticleEdit',
@@ -50,6 +53,7 @@ export default {
     };
   },
   components: {
+    ArticleMeasurementForm,
     ArticlePictures,
     TakePhotoButton,
     ArticleForm,
@@ -96,13 +100,6 @@ export default {
       } catch (e) {
         this.$error('onPictureDone', e);
       }
-    },
-  },
-  i18n: {
-    messages: {
-      en: {},
-      ru: {},
-      lt: {},
     },
   },
 };

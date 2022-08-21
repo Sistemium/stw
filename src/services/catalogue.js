@@ -6,8 +6,8 @@ import uniq from 'lodash/uniq';
 import ArticleProp, { TYPES_DEFAULTS, VALUE_TYPES } from '@/models/ArticleProp';
 import orderBy from 'lodash/orderBy';
 import Article from '@/models/Article';
+import * as PackageType from '@/models/PackageType';
 
-// eslint-disable-next-line import/prefer-default-export
 export function compoundName(filters) {
   const res = map(filters, filter => {
     const { stringValue, numberValue } = filter;
@@ -56,6 +56,14 @@ export function articleInstance() {
     props,
     boxes: [],
     isCustomName: false,
+    measureId: null,
+    measureUnitId: null,
+    unitPackageTypeId: null, // optional
+
+    // packages: [{
+    packageTypeId: null,
+    unitsInPackage: null,
+    // }],
   };
 }
 
@@ -84,4 +92,17 @@ export function searchArticle(search, propColumns = []) {
 export function searchByArticle(search) {
   const articleFilter = searchArticle(search);
   return ({ articleId }) => articleId && articleFilter(Article.reactiveGet(articleId));
+}
+
+export function articlePackages(article) {
+  const { packageTypeId, unitsInPackage } = article;
+  if (!packageTypeId) {
+    return [];
+  }
+  return [{
+    packageTypeId,
+    unitsInPackage,
+    ...(PackageType.getById(packageTypeId) || {}),
+    id: `${packageTypeId}|${unitsInPackage}`,
+  }];
 }
