@@ -79,7 +79,8 @@
     "items": "Pozicijos",
     "person": "Asmuo",
     "legalEntity": "Imonė",
-    "unknown": "Nėra"
+    "unknown": "Nėra",
+    "unitPackageType": "Vienetų tipas"
   },
   "dataTypes": {
     "string": "Eilutė",

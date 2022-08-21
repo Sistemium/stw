@@ -26,7 +26,8 @@
     "pictures": "Pictures",
     "stockReceivals": "Receiving to warehouse",
     "stockWithdrawals": "Withdrawals from warehouse",
-    "stockWithdrawing": "Stock withdrawing"
+    "stockWithdrawing": "Stock withdrawing",
+    "measurements": "Measurements"
   },
   "fields": {
     "address": "Address",
@@ -58,11 +59,42 @@
     "boxRel": "Units in box",
     "quantity": "Quantity",
     "boxQuantity": "Number of boxes",
+    "packages": "Number of packages",
+    "notPackaged": "Not packaged units",
+    "units": "Units quantity",
     "package": "Package",
     "processing": "Status",
     "storage": "Storage",
     "naming": "Part of name",
-    "ord": "Order number"
+    "ord": "Order number",
+    "measure": "Measure",
+    "measureUnit": "Unit of measure",
+    "unitsInPackage": "Units in a package",
+    "value": "Value"
+  },
+  "measures": {
+    "weight": "Weight",
+    "length": "Length",
+    "volume": "Volume",
+    "quantity": "Quantity"
+  },
+  "units": {
+    "kilogram": "Kilogram",
+    "gram": "Gram",
+    "litre": "Litre",
+    "millilitre": "Millilitre",
+    "metre": "Metre",
+    "centimetre": "Centimetre",
+    "tonne": "Tonne",
+    "piece": "Piece"
+  },
+  "packages": {
+    "pack": "Pack",
+    "piece": "Piece",
+    "bottle": "Bottle",
+    "reel": "Reel",
+    "bag": "Bag",
+    "can": "Can"
   },
   "storage": {
     "boxes": "Boxes",
@@ -79,7 +111,10 @@
     "items": "Items",
     "person": "Person",
     "legalEntity": "Legal entity",
-    "unknown": "Unknown"
+    "unknown": "Unknown",
+    "unitPackageType": "Unit package type",
+    "packageType": "Package type",
+    "other": "Other"
   },
   "dataTypes": {
     "string": "String",

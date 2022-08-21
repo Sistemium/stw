@@ -79,7 +79,8 @@
     "items": "Позиции",
     "person": "Физлицо",
     "legalEntity": "Юрлицо",
-    "unknown": "Не известно"
+    "unknown": "Не известно",
+    "unitPackageType": "Тип изделия"
   },
   "dataTypes": {
     "string": "Строка",
