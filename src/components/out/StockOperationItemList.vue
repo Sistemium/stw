@@ -6,13 +6,13 @@
       article-view(:article-id="item.articleId")
     .right
       .volume
-        template(v-if="item.boxRel > 1")
-          span.quantity {{ item.quantity }} {{ $t('shortened.boxes') }}
-          template(v-if="item.quantity > 1")
+        template(v-if="item.packages")
+          span {{ item.packages }} {{ $t('shortened.boxes') }}
+          template(v-if="item.packages > 1")
             span x
-            span.boxRel {{ item.boxRel }}
+            span {{ item.unitsInPackage }}
           span &equals;
-        span.units {{ item.units }} {{ $t('shortened.units') }}
+        span {{ item.units }} {{ $t('shortened.units') }}
       .cost(v-if="item.price")
         .price {{ item[priceField] }} &euro;
 
