@@ -32,9 +32,9 @@ el-form.stock-taking-item-form(
 
   template(v-if="article")
 
-    el-form-item.mode(:label="$t('fields.package')")
+    el-form-item.mode(:label="$t('fields.package')" v-if="editable")
       el-radio-group(v-model="mode" @change="modeChange")
-        template(v-if="editable")
+        template
           el-radio-button(label="other") {{ $t('concepts.other') }}
           el-radio-button(
             v-for="p in packageOptions"
@@ -43,7 +43,7 @@ el-form.stock-taking-item-form(
           ) {{ p.name }} x {{ p.unitsInPackage }}
         el-radio-button(:label="defaultMode") {{ $t(`units.${measureUnitId}`) }}
 
-    template(v-if="mode === 'other'")
+    template(v-if="mode === 'other' || (!editable && model.packageTypeId)")
       el-form-item(
         prop="packageTypeId"
         :label="$t('concepts.packageType')"
@@ -69,6 +69,7 @@ el-form.stock-taking-item-form(
         el-input-number(v-model="model.packages" :min="1" v-select-on-focus)
 
       el-form-item(
+        v-if="editable || spareUnits"
         :label="$t('fields.notPackaged', [$t(`units.genitive.${this.measureUnitId}`)])"
       )
         el-input-number(v-model="spareUnits" :min="0" v-select-on-focus)
