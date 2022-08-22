@@ -64,7 +64,7 @@ el-form.stock-taking-item-form(
     template(v-if="mode !== defaultMode")
       el-form-item(
         prop="packages"
-        :label="$t('fields.packages')"
+        :label="numberOfPackages"
       )
         el-input-number(v-model="model.packages" :min="1" v-select-on-focus)
 
@@ -95,7 +95,7 @@ el-form.stock-taking-item-form(
 <script>
 /* eslint-disable vue/no-mutating-props */
 import Article from '@/models/Article';
-import { packageTypes, unitsInPackageLabel } from '@/models/PackageType';
+import * as PackageType from '@/models/PackageType';
 import * as Measure from '@/models/Measure';
 import ArticleView from '@/components/catalogue/ArticleView.vue';
 import ArticleSelect from '@/components/catalogue/ArticleSelect.vue';
@@ -123,8 +123,11 @@ export default {
   },
   mixins: [formsMixin],
   computed: {
+    numberOfPackages() {
+      return PackageType.numberOf(this.model.packageTypeId);
+    },
     unitsInPackageLabel() {
-      return unitsInPackageLabel(this.measureUnitId);
+      return PackageType.unitsInPackageLabel(this.measureUnitId);
     },
     defaultMode() {
       return DEFAULT_MODE;
@@ -139,7 +142,7 @@ export default {
       return measureId || Measure.DEFAULT_MEASURE_ID;
     },
     packageTypes() {
-      return packageTypes();
+      return PackageType.packageTypes();
     },
     barcodeIcon() {
       return this.isShowingAllArticles ? 'el-icon-s-release' : 'el-icon-attract';
@@ -216,6 +219,7 @@ export default {
         });
       } else if (mode === 'other') {
         this.spareUnits = 0;
+        this.model.packageTypeId = PackageType.DEFAULT_PACKAGE_TYPE_ID;
       } else {
         const { packageTypeId, unitsInPackage } = this.$find(this.packageOptions, { id: mode });
         Object.assign(this.model, {
