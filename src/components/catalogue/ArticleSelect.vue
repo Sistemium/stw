@@ -6,6 +6,7 @@ el-select.article-select(
   :filter-method="filterSearch"
   :debounce="300"
   v-cancel-read-only
+  :clearable="true"
 )
   el-option(
     v-for="article in options"
