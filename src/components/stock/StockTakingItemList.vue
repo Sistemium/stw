@@ -7,21 +7,26 @@
       .cts {{ $ts(item.deviceCts || item.cts) }}
     .right
       .volumes
-        span.quantity {{ item.quantity }}
-        span x
-        span.boxRel {{ item.boxRel }}
-        span &equals;
-        span.units {{ item.units }}
+        template(v-if="item.packages")
+          span.quantity {{ item.packages }} {{ shortenedPackage(item.packageTypeId) }}
+          span x
+          span.boxRel {{ item.unitsInPackage }}
+          span &equals;
+        span.units {{ item.units }} {{ $t(`units.short.${item.measureUnitId}`) }}
 
 </template>
 <script>
 import ArticleView from '@/components/catalogue/ArticleView.vue';
+import { shortenedPackage } from '@/models/PackageType';
 
 export default {
   name: 'StockTakingItemList',
   components: { ArticleView },
   props: {
     items: Array,
+  },
+  methods: {
+    shortenedPackage,
   },
 };
 
