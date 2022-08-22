@@ -15,7 +15,7 @@ el-form.article-measurement-form
     measure-unit-select(:measure-id="model.measureId" v-model="model.measureUnitId")
 
   el-form-item(:label="$t('concepts.packageType')")
-    el-select(v-model="model.packageTypeId")
+    el-select(v-model="model.packageTypeId" :clearable="true" @change="packageTypeChange")
       el-option(
         v-for="{id, name} in packageTypes"
         :key="id"
@@ -23,8 +23,15 @@ el-form.article-measurement-form
         :label="name"
       )
 
-  el-form-item(:label="unitsInPackageLabel")
-    el-input-number(v-model="model.unitsInPackage")
+  el-form-item(
+    :label="unitsInPackageLabel"
+    v-if="model.packageTypeId"
+  )
+    el-input-number(
+      v-model="model.unitsInPackage"
+      v-select-on-focus
+      :min="1"
+    )
 
 </template>
 <script>
@@ -50,14 +57,16 @@ export default {
     packageTypes() {
       return packageTypes();
     },
-    unitIds() {
-      return Object.keys();
-    },
     defaultUnitId() {
       return this.$get(this.$find(this.measureUnits, { ratio: 1 }), 'id') || null;
     },
   },
   methods: {
+    packageTypeChange(packageTypeId) {
+      if (!packageTypeId) {
+        this.model.unitsInPackage = null;
+      }
+    },
     onAdd() {
       if (!this.model.measures) {
         this.model.measures = [];
@@ -68,9 +77,8 @@ export default {
         units: null,
       });
     },
-    onChange(measureId) {
+    onChange() {
       const { measureUnitId } = this.model;
-      this.$debug('onChange', measureId, measureUnitId, this.model.measureId, this.defaultUnitId);
       if (!measureUnitId || !this.$find(this.measureUnits, { id: measureUnitId })) {
         this.$set(this.model, 'measureUnitId', this.defaultUnitId);
       }
