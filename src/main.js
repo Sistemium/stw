@@ -10,7 +10,7 @@ import store from './store';
 import i18n, { saveLocale } from './i18n';
 import './index.scss';
 
-const { debug } = log('main');
+const { debug, error } = log('main');
 Vue.config.productionTip = false;
 router.beforeEach(authGuard);
 
@@ -30,8 +30,6 @@ new Vue({
         .then(() => store.dispatch('inv/SUBSCRIBE_SOCKET_STATUS'))
         .catch(e => {
           this.$error('auth', e);
-        })
-        .finally(() => {
           loading.close();
         });
     });
@@ -46,7 +44,7 @@ const unsubscribe = store.subscribe(mutation => {
     unsubscribe();
     const loading = Loading.service({});
     initData()
-      .catch(e => this.$error(e))
+      .catch(e => error(e))
       .finally(() => {
         loading.close();
       });
