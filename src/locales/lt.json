@@ -26,7 +26,8 @@
     "pictures": "Nuotraukos",
     "stockReceivals": "Priemimas į sandėlį",
     "stockWithdrawals": "Iškrovimas iš sandėlio",
-    "stockWithdrawing": "Iškrovimas iš sandėlio"
+    "stockWithdrawing": "Iškrovimas iš sandėlio",
+    "measurements": "Išmatavimai"
   },
   "fields": {
     "address": "Adresas",
@@ -58,11 +59,44 @@
     "boxRel": "Vienetai dėžėje",
     "quantity": "Kiekis",
     "boxQuantity": "Dėžų kiekis",
+    "packages": "Pakuočių skaičius",
+    "notPackaged": "{0} be pakuotės",
+    "units": "Vienetų kiekis",
     "package": "Pakavimas",
     "processing": "Būsena",
     "storage": "Sandėlis",
     "naming": "Pavadinimo dalis",
+    "measure": "Matavimas",
+    "measureUnit": "Matavimo vienetas",
+    "unitsInPackage": "{0} pakuotėje",
     "ord": "Eilės numeris"
+  },
+  "measures": {
+    "weight": "Svoris",
+    "length": "Ilgis",
+    "volume": "Tūris",
+    "quantity": "Kiekis"
+  },
+  "units": {
+    "kilogram": "Kilogramai",
+    "gram": "Gramai",
+    "litre": "Litrai",
+    "millilitre": "Mililitrai",
+    "metre": "Metrai",
+    "centimetre": "Centimetrai",
+    "tonne": "Tonos",
+    "piece": "Vienetai",
+    "quantityOf": "{0} kiekis",
+    "genitive": {
+      "kilogram": "Kilogramų",
+      "gram": "Gramų",
+      "litre": "Litrų",
+      "millilitre": "Mililitrų",
+      "metre": "Metrų",
+      "centimetre": "Centimetrų",
+      "tonne": "Tonų",
+      "piece": "Vienetų"
+    }
   },
   "storage": {
     "boxes": "Dėžės",
@@ -80,7 +114,9 @@
     "person": "Asmuo",
     "legalEntity": "Imonė",
     "unknown": "Nėra",
-    "unitPackageType": "Vienetų tipas"
+    "unitPackageType": "Vienetų tipas",
+    "packageType": "Pakuotės tipas",
+    "other": "Kita"
   },
   "dataTypes": {
     "string": "Eilutė",

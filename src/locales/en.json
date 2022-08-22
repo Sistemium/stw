@@ -60,7 +60,7 @@
     "quantity": "Quantity",
     "boxQuantity": "Number of boxes",
     "packages": "Number of packages",
-    "notPackaged": "Not packaged units",
+    "notPackaged": "Not packaged {0}",
     "units": "Units quantity",
     "package": "Package",
     "processing": "Status",
@@ -69,7 +69,7 @@
     "ord": "Order number",
     "measure": "Measure",
     "measureUnit": "Unit of measure",
-    "unitsInPackage": "Units in a package",
+    "unitsInPackage": "{0} in a package",
     "value": "Value"
   },
   "measures": {
@@ -79,22 +79,25 @@
     "quantity": "Quantity"
   },
   "units": {
-    "kilogram": "Kilogram",
-    "gram": "Gram",
-    "litre": "Litre",
-    "millilitre": "Millilitre",
-    "metre": "Metre",
-    "centimetre": "Centimetre",
-    "tonne": "Tonne",
-    "piece": "Piece"
-  },
-  "packages": {
-    "pack": "Pack",
-    "piece": "Piece",
-    "bottle": "Bottle",
-    "reel": "Reel",
-    "bag": "Bag",
-    "can": "Can"
+    "kilogram": "Kilograms",
+    "gram": "Grams",
+    "litre": "Litres",
+    "millilitre": "Millilitres",
+    "metre": "Metres",
+    "centimetre": "Centimetres",
+    "tonne": "Tonnes",
+    "piece": "Pieces",
+    "quantityOf": "Number of {0}",
+    "genitive": {
+      "kilogram": "kilograms",
+      "gram": "grams",
+      "litre": "litres",
+      "millilitre": "millilitres",
+      "metre": "metres",
+      "centimetre": "centimetres",
+      "tonne": "tonnes",
+      "piece": "pieces"
+    }
   },
   "storage": {
     "boxes": "Boxes",

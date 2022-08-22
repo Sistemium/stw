@@ -23,14 +23,14 @@ el-form.article-measurement-form
         :label="name"
       )
 
-  el-form-item(:label="$t('fields.unitsInPackage')")
+  el-form-item(:label="unitsInPackageLabel")
     el-input-number(v-model="model.unitsInPackage")
 
 </template>
 <script>
 /* eslint-disable vue/no-mutating-props */
-import { measures, measureUnits } from '@/models/Measure';
-import { packageTypes } from '@/models/PackageType';
+import { measures, measureUnits, DEFAULT_MEASURE_UNIT_ID } from '@/models/Measure';
+import { packageTypes, unitsInPackageLabel } from '@/models/PackageType';
 import MeasureUnitSelect from '@/components/select/MeasureUnitSelect.vue';
 
 export default {
@@ -41,6 +41,9 @@ export default {
   },
   computed: {
     measures,
+    unitsInPackageLabel() {
+      return unitsInPackageLabel(this.model.measureUnitId || DEFAULT_MEASURE_UNIT_ID);
+    },
     measureUnits() {
       return measureUnits(this.model.measureId);
     },
@@ -67,7 +70,7 @@ export default {
     },
     onChange(measureId) {
       const { measureUnitId } = this.model;
-      this.$debug('onChange', measureId, measureUnitId, this.model.measureId);
+      this.$debug('onChange', measureId, measureUnitId, this.model.measureId, this.defaultUnitId);
       if (!measureUnitId || !this.$find(this.measureUnits, { id: measureUnitId })) {
         this.$set(this.model, 'measureUnitId', this.defaultUnitId);
       }

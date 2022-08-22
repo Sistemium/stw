@@ -57,7 +57,7 @@ el-form.stock-taking-item-form(
           )
       el-form-item(
         prop="unitsInPackage"
-        :label="$t('fields.unitsInPackage')"
+        :label="unitsInPackageLabel"
       )
         el-input-number(v-model="model.unitsInPackage" :min="1")
 
@@ -69,14 +69,14 @@ el-form.stock-taking-item-form(
         el-input-number(v-model="model.packages" :min="1" v-select-on-focus)
 
       el-form-item(
-        :label="$t('fields.notPackaged')"
+        :label="$t('fields.notPackaged', [$t(`units.genitive.${this.measureUnitId}`)])"
       )
         el-input-number(v-model="spareUnits" :min="0" v-select-on-focus)
 
     el-form-item(
       v-else
       prop="units"
-      :label="$t('fields.units')"
+      :label="$t('units.quantityOf', [$t(`units.genitive.${this.measureUnitId}`)])"
     )
       el-input-number(v-model="spareUnits" :min="0" v-select-on-focus)
 
@@ -94,7 +94,7 @@ el-form.stock-taking-item-form(
 <script>
 /* eslint-disable vue/no-mutating-props */
 import Article from '@/models/Article';
-import { packageTypes } from '@/models/PackageType';
+import { packageTypes, unitsInPackageLabel } from '@/models/PackageType';
 import * as Measure from '@/models/Measure';
 import ArticleView from '@/components/catalogue/ArticleView.vue';
 import ArticleSelect from '@/components/catalogue/ArticleSelect.vue';
@@ -122,6 +122,9 @@ export default {
   },
   mixins: [formsMixin],
   computed: {
+    unitsInPackageLabel() {
+      return unitsInPackageLabel(this.measureUnitId);
+    },
     defaultMode() {
       return DEFAULT_MODE;
     },

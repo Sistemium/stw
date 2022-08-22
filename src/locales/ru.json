@@ -26,7 +26,8 @@
     "pictures": "Изображения",
     "stockReceivals": "Приход на склад",
     "stockWithdrawals": "Отгрузки со склада",
-    "stockWithdrawing": "Выдача со склада"
+    "stockWithdrawing": "Выдача со склада",
+    "measurements": "Измерения"
   },
   "fields": {
     "address": "Адрес",
@@ -58,11 +59,44 @@
     "boxRel": "Штук в коробке",
     "quantity": "Количество",
     "boxQuantity": "Количество коробок",
+    "packages": "Количество упаковок",
+    "notPackaged": "Без упаковки {0}",
+    "units": "Количество единиц",
     "package": "Упаковка",
     "processing": "Статус",
     "storage": "Склад",
     "naming": "Часть названия",
+    "measure": "Мера",
+    "measureUnit": "Единица измерения",
+    "unitsInPackage": "{0} в упаковке",
     "ord": "Порядковый номер"
+  },
+  "measures": {
+    "weight": "Вес",
+    "length": "Длина",
+    "volume": "Объем",
+    "quantity": "Количество"
+  },
+  "units": {
+    "kilogram": "Килограммы",
+    "gram": "Граммы",
+    "litre": "Литры",
+    "millilitre": "Миллилитры",
+    "metre": "Метры",
+    "centimetre": "Сантиметры",
+    "tonne": "Тонны",
+    "piece": "Штуки",
+    "quantityOf": "Кол-во {0}",
+    "genitive": {
+      "kilogram": "килограмм",
+      "gram": "грамм",
+      "litre": "литров",
+      "millilitre": "Ммллилитроы",
+      "metre": "метров",
+      "centimetre": "сантиметров",
+      "tonne": "тонн",
+      "piece": "штук"
+    }
   },
   "storage": {
     "boxes": "Коробки",
@@ -80,7 +114,9 @@
     "person": "Физлицо",
     "legalEntity": "Юрлицо",
     "unknown": "Не известно",
-    "unitPackageType": "Тип изделия"
+    "unitPackageType": "Тип изделия",
+    "packageType": "Тип упаковки",
+    "other": "Другое"
   },
   "dataTypes": {
     "string": "Строка",
