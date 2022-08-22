@@ -95,6 +95,16 @@
       "centimetre": "centimetres",
       "tonne": "tonnes",
       "piece": "pieces"
+    },
+    "short": {
+      "kilogram": "kg",
+      "gram": "g",
+      "litre": "l",
+      "millilitre": "ml",
+      "metre": "m",
+      "centimetre": "cm",
+      "tonne": "t",
+      "piece": "pcs"
     }
   },
   "storage": {

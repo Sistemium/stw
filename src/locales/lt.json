@@ -94,6 +94,16 @@
       "centimetre": "Centimetrų",
       "tonne": "Tonų",
       "piece": "Vienetų"
+    },
+    "short": {
+      "kilogram": "kg",
+      "gram": "g",
+      "litre": "l",
+      "millilitre": "ml",
+      "metre": "m",
+      "centimetre": "cm",
+      "tonne": "t",
+      "piece": "vnt"
     }
   },
   "storage": {

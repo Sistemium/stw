@@ -94,6 +94,16 @@
       "centimetre": "сантиметров",
       "tonne": "тонн",
       "piece": "штук"
+    },
+    "short": {
+      "kilogram": "кг",
+      "gram": "г",
+      "litre": "л",
+      "millilitre": "мл",
+      "metre": "м",
+      "centimetre": "см",
+      "tonne": "т",
+      "piece": "шт"
     }
   },
   "storage": {
