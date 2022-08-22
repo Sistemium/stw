@@ -214,9 +214,7 @@ export default {
           unitsInPackage: null,
         });
       } else if (mode === 'other') {
-        // this.model.packageTypeId = null;
-        // this.model.packages = 1;
-        // this.model.unitsInPackage = 1;
+        this.spareUnits = 0;
       } else {
         const { packageTypeId, unitsInPackage } = this.$find(this.packageOptions, { id: mode });
         Object.assign(this.model, {
@@ -224,6 +222,7 @@ export default {
           packages: this.model.packages || 1,
           unitsInPackage,
         });
+        this.spareUnits = 0;
       }
     },
     packageByProps(packageTypeId, unitsInPackage) {
