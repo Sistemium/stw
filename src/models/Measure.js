@@ -1,4 +1,8 @@
 import keyBy from 'lodash/keyBy';
+import i18n from '@/i18n';
+
+export const DEFAULT_MEASURE_ID = 'quantity';
+export const DEFAULT_MEASURE_UNIT_ID = 'piece';
 
 export const Measure = [
   {
@@ -12,8 +16,8 @@ export const Measure = [
     measureType: '3d',
   },
   {
-    id: 'quantity',
-    unit: { piece: 1 },
+    id: DEFAULT_MEASURE_ID,
+    unit: { [DEFAULT_MEASURE_UNIT_ID]: 1 },
     measureType: 'discreet',
   },
   {
@@ -30,5 +34,8 @@ export function keyedMeasures() {
 }
 
 export function measures() {
-  return Measure;
+  return Measure.map(measure => ({
+    ...measure,
+    name: i18n.t(`measures.${measure.id}`),
+  }));
 }
