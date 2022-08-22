@@ -11,11 +11,6 @@ el-form.stock-taking-item-form(
     template(v-slot:prepend)
       el-button(:icon="barcodeIcon" @click="toggleShowAllArticles")
 
-  //el-form-item(:label="$t('fields.barcode')" prop="barcode")
-    el-input(v-model="model.barcode")
-      template(v-slot:append)
-        el-button(icon="el-icon-close" @click="model.barcode = ''")
-
   el-form-item.add-barcode(v-if="canAddBarcode")
     el-button(
       type="warning"
@@ -25,7 +20,10 @@ el-form.stock-taking-item-form(
 
   el-form-item.article(:label="$t('concepts.article')" prop="articleId")
     .strong(v-if="article") {{ article.code }}
-    button-prepend(@buttonClick="addArticle")
+    button-prepend(
+      @buttonClick="addArticle"
+      :button-icon="`el-icon-${article ? 'edit' : 'plus'}`"
+    )
       article-select(v-model="model.articleId" :filters="articleFilters")
         template(v-slot:empty v-if="model.barcode && !isShowingAllArticles")
           p.el-select-dropdown__empty
@@ -36,13 +34,14 @@ el-form.stock-taking-item-form(
 
     el-form-item.mode(:label="$t('fields.package')")
       el-radio-group(v-model="mode" @change="modeChange")
-        el-radio-button(label="other") {{ $t('concepts.other') }}
-        el-radio-button(
-          v-for="p in packageOptions"
-          :key="p.id"
-          :label="p.id"
-        ) {{ p.name }} x {{ p.unitsInPackage }}
-        el-radio-button(label="units") {{ $t('storage.units') }}
+        template(v-if="editable")
+          el-radio-button(label="other") {{ $t('concepts.other') }}
+          el-radio-button(
+            v-for="p in packageOptions"
+            :key="p.id"
+            :label="p.id"
+          ) {{ p.name }} x {{ p.unitsInPackage }}
+        el-radio-button(:label="defaultMode") {{ $t(`units.${measureUnitId}`) }}
 
     template(v-if="mode === 'other'")
       el-form-item(
@@ -62,7 +61,7 @@ el-form.stock-taking-item-form(
       )
         el-input-number(v-model="model.unitsInPackage" :min="1")
 
-    template(v-if="mode !== 'units'")
+    template(v-if="mode !== defaultMode")
       el-form-item(
         prop="packages"
         :label="$t('fields.packages')"
@@ -88,6 +87,7 @@ el-form.stock-taking-item-form(
     @saved="articleSaved"
     @closed="articleEditClosed"
     :drawer-style="{ top: '50px' }"
+    :article-id="model.articleId"
   )
 
 </template>
@@ -95,6 +95,7 @@ el-form.stock-taking-item-form(
 /* eslint-disable vue/no-mutating-props */
 import Article from '@/models/Article';
 import { packageTypes } from '@/models/PackageType';
+import * as Measure from '@/models/Measure';
 import ArticleView from '@/components/catalogue/ArticleView.vue';
 import ArticleSelect from '@/components/catalogue/ArticleSelect.vue';
 import { addBarcodeToArticle, articlePackages } from '@/services/catalogue';
@@ -102,6 +103,8 @@ import ArticleEdit from '@/components/catalogue/ArticleEdit.vue';
 import BarcodeFormItem from '@/components/BarcodeScanner/BarcodeFormItem.vue';
 import ButtonPrepend from '@/lib/ButtonPrepend.vue';
 import formsMixin from '@/lib/formsMixin';
+
+const DEFAULT_MODE = 'units';
 
 export default {
   name: 'StockTakingItemForm',
@@ -114,11 +117,23 @@ export default {
       showDrawer: false,
       spareUnits: 0,
       isShowingAllArticles: false,
-      mode: 'units',
+      mode: DEFAULT_MODE,
     };
   },
   mixins: [formsMixin],
   computed: {
+    defaultMode() {
+      return DEFAULT_MODE;
+    },
+    // measures: Measure.measures,
+    measureUnitId() {
+      const { measureUnitId } = this.article || {};
+      return measureUnitId || Measure.DEFAULT_MEASURE_UNIT_ID;
+    },
+    measureId() {
+      const { measureId } = this.article || {};
+      return measureId || Measure.DEFAULT_MEASURE_ID;
+    },
     packageTypes() {
       return packageTypes();
     },
@@ -140,8 +155,8 @@ export default {
     },
     rules() {
       const fields = ['articleId'];
-      if (this.mode === 'units') {
-        fields.push('units');
+      if (this.mode === DEFAULT_MODE) {
+        fields.push(DEFAULT_MODE);
       } else {
         fields.push('packages', 'unitsInPackage');
       }
@@ -189,19 +204,23 @@ export default {
       this.isShowingAllArticles = !this.isShowingAllArticles;
     },
     modeChange(mode) {
-      if (mode === 'units') {
-        this.model.packageTypeId = null;
-        this.model.packages = 0;
-        this.model.unitsInPackage = null;
+      if (mode === DEFAULT_MODE) {
+        Object.assign(this.model, {
+          packageTypeId: null,
+          packages: 0,
+          unitsInPackage: null,
+        });
       } else if (mode === 'other') {
         // this.model.packageTypeId = null;
         // this.model.packages = 1;
         // this.model.unitsInPackage = 1;
       } else {
-        this.model.packages = this.model.packages || 1;
         const { packageTypeId, unitsInPackage } = this.$find(this.packageOptions, { id: mode });
-        this.model.packageTypeId = packageTypeId;
-        this.model.unitsInPackage = unitsInPackage;
+        Object.assign(this.model, {
+          packageTypeId,
+          packages: this.model.packages || 1,
+          unitsInPackage,
+        });
       }
     },
     packageByProps(packageTypeId, unitsInPackage) {
@@ -210,7 +229,7 @@ export default {
     getMode() {
       const { packages, unitsInPackage, packageTypeId } = this.model;
       if (!packages) {
-        return 'units';
+        return DEFAULT_MODE;
       }
       const packageType = this.packageByProps(packageTypeId, unitsInPackage);
       return packageType ? packageType.id : 'other';
@@ -222,14 +241,17 @@ export default {
       this.isShowingAllArticles = true;
     }
     this.$watchImmediate('model', () => {
-      // this.$debug('watch:model', this.model.units);
       const { packages, unitsInPackage, units } = this.model;
       this.spareUnits = (units || 0) - (packages || 0) * (unitsInPackage || 0);
       this.mode = this.getMode();
     });
-    this.$watchImmediate('units', units => {
-      // this.$debug('watch:units', units, this.model.units);
+    this.$watchImmediate(DEFAULT_MODE, units => {
       this.model.units = units;
+    });
+    this.$watchImmediate('article', () => {
+      this.model.measureUnitId = this.measureUnitId;
+      this.model.measureId = this.measureId;
+      this.mode = this.getMode() || DEFAULT_MODE;
     });
   },
   components: {
