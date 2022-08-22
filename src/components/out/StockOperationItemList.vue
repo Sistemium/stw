@@ -11,6 +11,10 @@
           template(v-if="item.packages > 1")
             span x
             span {{ item.unitsInPackage }}
+          template(v-if="item.units > item.packages * item.unitsInPackage")
+            span +
+            span {{ item.units - item.packages * item.unitsInPackage }}
+            span {{ $t(`units.short.${item.measureUnitId}`) }}
           span &equals;
         span {{ item.units }} {{ $t(`units.short.${item.measureUnitId}`) }}
       .cost(v-if="item.price")

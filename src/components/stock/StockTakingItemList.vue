@@ -11,6 +11,10 @@
           span.quantity {{ item.packages }} {{ shortenedPackage(item.packageTypeId) }}
           span x
           span.boxRel {{ item.unitsInPackage }}
+          template(v-if="item.units > item.packages * item.unitsInPackage")
+            span +
+            span {{ item.units - item.packages * item.unitsInPackage }}
+            span {{ $t(`units.short.${item.measureUnitId}`) }}
           span &equals;
         span.units {{ item.units }} {{ $t(`units.short.${item.measureUnitId}`) }}
 
