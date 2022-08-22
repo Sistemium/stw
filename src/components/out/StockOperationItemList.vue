@@ -7,18 +7,19 @@
     .right
       .volume
         template(v-if="item.packages")
-          span {{ item.packages }} {{ $t('shortened.boxes') }}
+          span {{ item.packages }} {{ shortenedPackage(item.packageTypeId) }}
           template(v-if="item.packages > 1")
             span x
             span {{ item.unitsInPackage }}
           span &equals;
-        span {{ item.units }} {{ $t('shortened.units') }}
+        span {{ item.units }} {{ $t(`units.short.${item.measureUnitId}`) }}
       .cost(v-if="item.price")
         .price {{ item[priceField] }} &euro;
 
 </template>
 <script>
 import ArticleView from '@/components/catalogue/ArticleView.vue';
+import { shortenedPackage } from '@/models/PackageType';
 
 export default {
   name: 'StockOperationItemList',
@@ -28,6 +29,9 @@ export default {
     priceField: { type: String, default: 'price' },
   },
   components: { ArticleView },
+  methods: {
+    shortenedPackage,
+  },
 };
 
 </script>
