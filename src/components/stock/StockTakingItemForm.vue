@@ -219,7 +219,8 @@ export default {
         });
       } else if (mode === 'other') {
         this.spareUnits = 0;
-        this.model.packageTypeId = PackageType.DEFAULT_PACKAGE_TYPE_ID;
+        const { packageTypeId } = this.article;
+        this.model.packageTypeId = packageTypeId || PackageType.DEFAULT_PACKAGE_TYPE_ID;
       } else {
         const { packageTypeId, unitsInPackage } = this.$find(this.packageOptions, { id: mode });
         Object.assign(this.model, {
