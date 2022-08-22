@@ -11,14 +11,8 @@ el-form.article-measurement-form
         :label="$t(`measures.${id}`)"
       )
 
-  el-form-item(:label="$t('fields.measureUnit')")
-    el-select.measure-unit(v-model="model.measureUnitId")
-      el-option(
-        v-for="{id, name} in measureUnits"
-        :key="id"
-        :value="id"
-        :label="name"
-      )
+  el-form-item(:label="$t('fields.measureUnit')" v-if="model.measureId")
+    measure-unit-select(:measure-id="model.measureId" v-model="model.measureUnitId")
 
   el-form-item(:label="$t('concepts.packageType')")
     el-select(v-model="model.packageTypeId")
@@ -35,35 +29,26 @@ el-form.article-measurement-form
 </template>
 <script>
 /* eslint-disable vue/no-mutating-props */
-import { measures, keyedMeasures } from '@/models/Measure';
+import { measures, measureUnits } from '@/models/Measure';
 import { packageTypes } from '@/models/PackageType';
+import MeasureUnitSelect from '@/components/select/MeasureUnitSelect.vue';
 
 export default {
   name: 'ArticleMeasurementForm',
+  components: { MeasureUnitSelect },
   props: {
     model: Object,
   },
   computed: {
-    keyedMeasures,
     measures,
+    measureUnits() {
+      return measureUnits(this.model.measureId);
+    },
     packageTypes() {
       return packageTypes();
     },
     unitIds() {
       return Object.keys();
-    },
-    measureUnits() {
-      const { measureId } = this.model;
-      if (!measureId) {
-        return [];
-      }
-      const { unit } = this.keyedMeasures[measureId];
-      return Object.keys(unit)
-        .map(id => ({
-          id,
-          name: this.$t(`units.${id}`),
-          ratio: unit[id],
-        }));
     },
     defaultUnitId() {
       return this.$get(this.$find(this.measureUnits, { ratio: 1 }), 'id') || null;
