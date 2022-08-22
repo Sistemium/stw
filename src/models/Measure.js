@@ -39,3 +39,16 @@ export function measures() {
     name: i18n.t(`measures.${measure.id}`),
   }));
 }
+
+export function measureUnits(measureId) {
+  if (!measureId) {
+    return [];
+  }
+  const { unit = {} } = keyedMeasures()[measureId] || {};
+  return Object.keys(unit)
+    .map(id => ({
+      id,
+      name: i18n.t(`units.${id}`),
+      ratio: unit[id],
+    }));
+}
