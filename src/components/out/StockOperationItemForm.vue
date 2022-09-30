@@ -37,7 +37,7 @@ export default {
     validate(cb) {
       const { itemForm } = this.$refs;
       const { form } = itemForm.$refs;
-      this.$debug(form, itemForm);
+      // this.$debug('validate:', form, itemForm);
       if (!form) {
         cb(false);
         return;
