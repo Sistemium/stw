@@ -1,12 +1,15 @@
 import LegalEntity from '@/models/LegalEntity';
 import Storage from '@/models/Storage';
 import Person from '@/models/Person';
+import StockPeriod from '@/models/StockPeriod';
 import Configuration from '@/models/Configuration';
+import Article from '@/models/Article';
 import sumBy from 'lodash/sumBy';
 import get from 'lodash/get';
 import i18n from '@/i18n';
 import omit from 'lodash/omit';
 import isDate from 'lodash/isDate';
+import orderBy from 'lodash/orderBy';
 
 export function stockTakingItemInstance({ stockTakingId, articleId, barcode }) {
   return {
@@ -96,4 +99,21 @@ export function configPriceField(operationName, date = new Date()) {
   const { rules } = vatConfig(date);
   const vatPrices = rules.vatPrices[operationName];
   return vatPrices ? 'vatPrice' : 'price';
+}
+
+export async function findStockPeriod(storageId, dateB, dateE) {
+  const data = await StockPeriod.find({
+    storageId,
+    dateB,
+    dateE,
+  }, { cacheResponse: false });
+  const res = data.map(item => {
+    const article = Article.getByID(item.articleId);
+    return {
+      ...item,
+      article,
+      articleName: get(article, 'name'),
+    };
+  });
+  return orderBy(res, 'articleName');
 }

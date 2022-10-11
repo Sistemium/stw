@@ -27,6 +27,7 @@
     "stockReceivals": "Приход на склад",
     "stockWithdrawals": "Отгрузки со склада",
     "stockWithdrawing": "Выдача со склада",
+    "stockPeriod": "Остатки",
     "measurements": "Измерения"
   },
   "fields": {
@@ -64,6 +65,11 @@
     "processing": "Статус",
     "storage": "Склад",
     "naming": "Часть названия",
+    "initUnits": "Вх. остаток",
+    "remains": "Остаток",
+    "unitsIn": "Приход",
+    "unitsOut": "Расход",
+    "unitsSur": "Инвентаризация",
     "measure": "Мера",
     "measureUnit": "Единица измерения",
     "unitsInPackage": "{0} в упаковке",

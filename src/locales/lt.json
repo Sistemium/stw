@@ -27,6 +27,7 @@
     "stockReceivals": "Priemimas į sandėlį",
     "stockWithdrawals": "Iškrovimas iš sandėlio",
     "stockWithdrawing": "Iškrovimas iš sandėlio",
+    "stockPeriod": "Likučiai",
     "measurements": "Išmatavimai"
   },
   "fields": {
@@ -64,6 +65,11 @@
     "processing": "Būsena",
     "storage": "Sandėlis",
     "naming": "Pavadinimo dalis",
+    "initUnits": "Pradinis",
+    "remains": "Likutis",
+    "unitsIn": "Atėjo",
+    "unitsOut": "Išėjo",
+    "unitsSur": "Inventorizavo",
     "measure": "Matavimas",
     "measureUnit": "Matavimo vienetas",
     "unitsInPackage": "{0} pakuotėje",

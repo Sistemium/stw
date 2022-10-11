@@ -11,6 +11,8 @@ import articlePicturesRoute from '@/router/articlePicturesRoute';
 import stockTakingRoute from '@/router/stockTakingRoute';
 import stockOperationsRoute from '@/router/stockOperationsRoute';
 
+import { initGuard } from '@/services/dataSync';
+
 export default new RouteMapper({
   storages: {
     model: Storage,
@@ -45,6 +47,10 @@ export default new RouteMapper({
       operationName: 'stockReceiving',
       counterpartyRole: 'supplier',
     }),
+  },
+  stockPeriod: {
+    component: () => import(/* webpackChunkName: "stock" */ '../views/StockPeriodPage.vue'),
+    beforeEnter: initGuard,
   },
   articles: {
     model: Article,

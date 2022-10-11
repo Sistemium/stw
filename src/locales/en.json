@@ -27,6 +27,7 @@
     "stockReceivals": "Receiving to warehouse",
     "stockWithdrawals": "Withdrawals from warehouse",
     "stockWithdrawing": "Stock withdrawing",
+    "stockPeriod": "Stock remains",
     "measurements": "Measurements"
   },
   "fields": {
@@ -65,6 +66,11 @@
     "storage": "Storage",
     "naming": "Part of name",
     "ord": "Order number",
+    "initUnits": "Units at start",
+    "remains": "Remains",
+    "unitsIn": "Units in",
+    "unitsOut": "Units out",
+    "unitsSur": "Stocktaking",
     "measure": "Measure",
     "measureUnit": "Unit of measure",
     "unitsInPackage": "{0} in a package",

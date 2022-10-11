@@ -20,6 +20,17 @@ import Loading from 'element-ui/packages/loading';
 
 const { error, debug } = log('dataSync');
 
+const initPromiseInfo = {};
+
+const initPromise = new Promise((resolve, reject) => {
+  initPromiseInfo.resolve = resolve;
+  initPromiseInfo.reject = reject;
+});
+
+export function initGuard(to, from, next) {
+  initPromise.then(() => next());
+}
+
 export async function initData() {
   debug('initData');
   await Configuration.findAll();
@@ -30,6 +41,7 @@ export async function initData() {
   await Storage.findAll();
   await StockTaking.findAll();
   await Picture.findAll();
+  initPromiseInfo.resolve();
 }
 
 export async function stockWithdrawingIdSync(to, model, positionsModel, field) {
