@@ -2,10 +2,9 @@
 
 el-table.stock-period-table(:data="data")
   el-table-column(
-    prop="articleName"
     :label="$t('concepts.article')"
   )
-    //template(v-slot="{ row }")
+    template(v-slot="{ row }")
       article-view(:article-id="row.articleId")
   el-table-column(
     prop="initUnits"
