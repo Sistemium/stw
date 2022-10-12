@@ -31,4 +31,8 @@ export default {
   color: $gray;
 }
 
+.name, .code {
+  line-height: 15px;
+}
+
 </style>
