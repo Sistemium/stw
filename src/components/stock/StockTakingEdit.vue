@@ -6,17 +6,17 @@ drawer-edit.stock-taking-edit(
   :destroy-fn="destroyFn"
   :model-origin="modelOrigin"
   :from="from"
-  :deletable="true"
+  :deletable="editable"
   :is-drawer="isDrawer"
 )
   template(v-slot="{ model }")
-    stock-taking-form(ref="form" :model="model")
+    stock-taking-form(ref="form" :model="model" :disabled="!editable")
 
 </template>
 <script>
 
 import DrawerEdit from '@/lib/DrawerEdit.vue';
-import StockTaking from '@/models/StockTaking';
+import StockTaking, { workflow } from '@/models/StockTaking';
 import StockTakingForm from '@/components/stock/StockTakingForm.vue';
 
 export default {
@@ -35,6 +35,10 @@ export default {
         processing: 'progress',
         deviceCts: new Date().toJSON(),
       };
+    },
+    editable() {
+      const { processing } = this.modelOrigin;
+      return workflow.step(processing).editable;
     },
   },
   methods: {

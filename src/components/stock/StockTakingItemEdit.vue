@@ -16,7 +16,7 @@ drawer-edit.stock-taking-item-edit(
 
 import DrawerEdit from '@/lib/DrawerEdit.vue';
 import StockTakingItem from '@/models/StockTakingItem';
-import StockTaking from '@/models/StockTaking';
+import StockTaking, { workflow } from '@/models/StockTaking';
 import StockTakingItemForm from '@/components/stock/StockTakingItemForm.vue';
 import { stockTakingItemInstance } from '@/services/warehousing';
 
@@ -44,7 +44,7 @@ export default {
     },
     editable() {
       const { processing } = this.stockTaking || {};
-      return processing === 'progress';
+      return workflow.step(processing).editable;
     },
   },
   methods: {

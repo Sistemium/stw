@@ -6,7 +6,7 @@ drawer-edit.stock-operation-edit(
   :destroy-fn="destroyFn"
   :model-origin="modelOrigin"
   :from="from"
-  :deletable="true"
+  :deletable="!disabled"
   :is-drawer="isDrawer"
 )
   template(v-slot="{ model }")

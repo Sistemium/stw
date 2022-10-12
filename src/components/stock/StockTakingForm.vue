@@ -18,7 +18,7 @@ el-form.stock-taking-form(
       )
 
   el-form-item(:label="$t('fields.processing')" prop="processing")
-    workflow-button(:workflow="workflow" v-model="model.processing" :disabled="disabled")
+    workflow-button(:workflow="workflow" v-model="model.processing")
 
 </template>
 <script>
