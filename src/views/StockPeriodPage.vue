@@ -81,7 +81,6 @@ export default {
   },
   watch: {
     queryParams: {
-      deep: true,
       immediate: true,
       handler({ storageId, dateB, dateE }) {
         if (!storageId || !dateB || !dateE) {
