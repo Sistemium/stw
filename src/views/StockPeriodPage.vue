@@ -9,7 +9,8 @@
       type="daterange"
     )
     search-input(v-model="search")
-  stock-period-table(:data="filteredData")
+  resize(:padding="20")
+    stock-period-table(:data="filteredData")
 
 </template>
 <script>
@@ -101,6 +102,10 @@ export default {
   > * + * {
     margin-left: $margin-right;
   }
+}
+
+.stm-resize {
+  margin-top: $margin-top;
 }
 
 </style>
