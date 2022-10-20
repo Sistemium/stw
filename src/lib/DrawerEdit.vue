@@ -111,9 +111,6 @@ export default {
       this.performOperation(() => this.destroyFn(id)
         .then(() => {
           this.$emit('deleted', id);
-        })
-        .catch(e => {
-          this.$emit('error', e);
         }));
     },
 
@@ -144,10 +141,6 @@ export default {
           // if (this.$refs.drawer) {
           //   this.cancelClick(record);
           // }
-        })
-        .catch(e => {
-          this.$message.error(e.message);
-          this.$emit('error', e);
         });
     },
 
@@ -181,6 +174,7 @@ export default {
         this.cancelClick(res);
       } catch (e) {
         this.hideLoading();
+        this.$emit('error', e);
         this.showError(e);
       }
 
