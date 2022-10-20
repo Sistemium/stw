@@ -12,10 +12,12 @@ import StockWithdrawing from '@/models/StockWithdrawing';
 import StockWithdrawingItem from '@/models/StockWithdrawingItem';
 import StockReceiving from '@/models/StockReceiving';
 import StockReceivingItem from '@/models/StockReceivingItem';
+import Recipe from '@/models/Recipe';
 import { counterpartyModel } from '@/services/warehousing';
 import map from 'lodash/map';
 import groupBy from 'lodash/groupBy';
 import filter from 'lodash/filter';
+import find from 'lodash/find';
 import Loading from 'element-ui/packages/loading';
 
 const { error, debug } = log('dataSync');
@@ -37,14 +39,12 @@ export async function initData() {
   await ArticleProp.findAll();
   await PropOption.findAll();
   await Article.findAll();
-  await StockTakingItem.findAll();
   await Storage.findAll();
-  await StockTaking.findAll();
   await Picture.findAll();
   initPromiseInfo.resolve();
 }
 
-export async function stockWithdrawingIdSync(to, model, positionsModel, field) {
+async function stockWithdrawingIdSync(to, model, positionsModel, field) {
 
   const { [field]: stockOperationId } = to.params;
   if (!stockOperationId) {
@@ -73,15 +73,10 @@ export async function stockWithdrawingIdSync(to, model, positionsModel, field) {
 
 async function stockWithdrawingSync(to, from, options) {
   const {
-    re,
     model,
     positionsModel,
     field,
   } = options;
-
-  if (!re.test(to.name) || re.test(from.name)) {
-    return;
-  }
 
   const loading = Loading.service({});
 
@@ -112,6 +107,11 @@ async function stockWithdrawingSync(to, from, options) {
 
 }
 
+async function stockTakingSync() {
+  await StockTakingItem.findAll();
+  await StockTaking.findAll();
+}
+
 export async function authGuard(to, from, next) {
 
   const authorized = store.getters['auth/IS_AUTHORIZED'];
@@ -134,22 +134,40 @@ export async function authGuard(to, from, next) {
 
   try {
     // debug('authGuard', to.name);
-    await stockWithdrawingSync(to, from, {
-      re: /StockWithdraw/i,
-      model: StockWithdrawing,
-      positionsModel: StockWithdrawingItem,
-      field: 'stockWithdrawingId',
-    });
-    await stockWithdrawingSync(to, from, {
-      re: /StockReceiv/i,
-      model: StockReceiving,
-      positionsModel: StockReceivingItem,
-      field: 'stockReceivingId',
-    });
+    await switchLoad(to, from);
   } catch (e) {
     error(e);
   }
 
   next();
 
+}
+
+const LOADERS = new Map([
+  [/Recipe/i, () => Recipe.findAll()],
+  [/StockTaking/i, stockTakingSync],
+  [/StockWithdraw/i, (to, from) => stockWithdrawingSync(to, from, {
+    model: StockWithdrawing,
+    positionsModel: StockWithdrawingItem,
+    field: 'stockWithdrawingId',
+  })],
+  [/StockReceiv/i, (to, from) => stockWithdrawingSync(to, from, {
+    model: StockReceiving,
+    positionsModel: StockReceivingItem,
+    field: 'stockReceivingId',
+  })],
+]);
+
+const LOADER_KEYS = Array.from(LOADERS.keys());
+
+async function switchLoad(to, from) {
+  const key = find(LOADER_KEYS, needLoading);
+
+  if (key) {
+    await LOADERS.get(key)(to, from);
+  }
+
+  function needLoading(re) {
+    return re.test(to.name) && !re.test(from.name);
+  }
 }
