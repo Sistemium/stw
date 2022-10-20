@@ -18,6 +18,7 @@
     "barcodes": "Barcodes",
     "home": "Home",
     "inventory": "Inventory",
+    "recipes": "Recipes",
     "articleProps": "Properties",
     "articlePropsTitle": "Article properties",
     "articles": "Articles",
@@ -165,7 +166,8 @@
     "stockTaking": "stockTaking",
     "position": "position",
     "stockWithdrawing": "withdrawing",
-    "stockReceiving": "stock receiving"
+    "stockReceiving": "stock receiving",
+    "recipe": "recipe"
   },
   "genitive": {
     "property": "Property",
@@ -178,7 +180,8 @@
     "stockWithdrawingItem": "Stock withdrawing item",
     "stockReceiving": "Stock receiving",
     "stockReceivingItem": "Stock receiving item",
-    "legalEntity": "Legal entity"
+    "legalEntity": "Legal entity",
+    "recipe": "Recipe"
   },
   "shortened": {
     "positions": "pos",

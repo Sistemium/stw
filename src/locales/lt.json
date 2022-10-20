@@ -18,6 +18,7 @@
     "barcodes": "Brūkš. kodai",
     "home": "Pradžia",
     "inventory": "Inventorizacija",
+    "recipes": "Receptai",
     "articleProps": "Ypatybės",
     "articlePropsTitle": "Prekių ypatybės",
     "articles": "Prekės",
@@ -162,7 +163,8 @@
     "stockTaking": "inventorizaciją",
     "position": "poziciją",
     "stockWithdrawing": "iš sandėlio iškrovimą",
-    "stockReceiving": "į sandėlį piemimą"
+    "stockReceiving": "į sandėlį piemimą",
+    "recipe": "receptą"
   },
   "genitive": {
     "property": "Ypatybės",
@@ -175,7 +177,8 @@
     "stockWithdrawingItem": "Iš sandėlio iškrovimo pozicijos",
     "stockReceiving": "Į sandėlį priemimo",
     "stockReceivingItem": "Į sandėlį priemimo pozicijos",
-    "legalEntity": "Įmonės"
+    "legalEntity": "Įmonės",
+    "recipe": "Recepto"
   },
   "shortened": {
     "positions": "poz",

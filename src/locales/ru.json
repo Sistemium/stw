@@ -18,6 +18,7 @@
     "barcodes": "Штрих-коды",
     "home": "Начало",
     "inventory": "Инвентаризация",
+    "recipes": "Рецепты",
     "articleProps": "Свойства",
     "articlePropsTitle": "Свойства номенклатуры",
     "articles": "Номенклатура",
@@ -162,7 +163,8 @@
     "stockTaking": "инвентаризацию",
     "position": "позицию",
     "stockWithdrawing": "отгрузку",
-    "stockReceiving": "приход на склад"
+    "stockReceiving": "приход на склад",
+    "recipe": "рецепт"
   },
   "genitive": {
     "property": "признака",
@@ -175,7 +177,8 @@
     "stockWithdrawingItem": "позиции отгрузки со склада",
     "stockReceiving": "прихода на склад",
     "stockReceivingItem": "позиции прихода на склад",
-    "legalEntity": "юр. лица"
+    "legalEntity": "юр. лица",
+    "recipe": "рецепта"
   },
   "shortened": {
     "positions": "поз",
