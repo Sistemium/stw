@@ -10,6 +10,7 @@ import Storage from '@/models/Storage';
 import Picture from '@/models/Picture';
 import StockWithdrawing from '@/models/StockWithdrawing';
 import StockWithdrawingItem from '@/models/StockWithdrawingItem';
+import StockWithdrawingProduct from '@/models/StockWithdrawingProduct';
 import StockReceiving from '@/models/StockReceiving';
 import StockReceivingItem from '@/models/StockReceivingItem';
 import Recipe from '@/models/Recipe';
@@ -39,6 +40,7 @@ export async function initData() {
   await ArticleProp.findAll();
   await PropOption.findAll();
   await Article.findAll();
+  await Recipe.findAll();
   await Storage.findAll();
   await Picture.findAll();
   initPromiseInfo.resolve();
@@ -84,6 +86,9 @@ async function stockWithdrawingSync(to, from, options) {
     const data = await model.findAll({});
     const ids = map(data, 'id');
     await positionsModel.findByMany(ids, { field });
+    if (field === 'stockWithdrawingId') {
+      await StockWithdrawingProduct.findByMany(ids, { field });
+    }
 
     const byType = groupBy(filter(data, 'counterpartyType'), 'counterpartyType');
     const counterpartyPromises = map(byType, (items, type) => {
