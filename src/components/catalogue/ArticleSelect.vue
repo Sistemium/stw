@@ -7,6 +7,7 @@ el-select.article-select(
   :debounce="300"
   v-cancel-read-only
   :clearable="true"
+  @change="changes => $emit('change', changes)"
 )
   el-option(
     v-for="article in options"
