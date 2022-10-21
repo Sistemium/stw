@@ -26,7 +26,7 @@ export default {
   mixins: [pageMixin],
   computed: {
     recipes() {
-      return Recipe.reactiveFilter();
+      return this.$orderBy(Recipe.reactiveFilter(), 'name');
     },
   },
   methods: {
