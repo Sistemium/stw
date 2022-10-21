@@ -3,13 +3,7 @@
 el-form.article-measurement-form
 
   el-form-item(:label="$t('fields.measure')")
-    el-select.measure(v-model="model.measureId" @change="onChange")
-      el-option(
-        v-for="{id} in measures"
-        :key="id"
-        :value="id"
-        :label="$t(`measures.${id}`)"
-      )
+    measure-select(v-model="model.measureId" @change="onChange")
 
   el-form-item(:label="$t('fields.measureUnit')" v-if="model.measureId")
     measure-unit-select(:measure-id="model.measureId" v-model="model.measureUnitId")
@@ -36,18 +30,18 @@ el-form.article-measurement-form
 </template>
 <script>
 /* eslint-disable vue/no-mutating-props */
-import { measures, measureUnits, DEFAULT_MEASURE_UNIT_ID } from '@/models/Measure';
+import { measureUnits, DEFAULT_MEASURE_UNIT_ID } from '@/models/Measure';
 import { packageTypes, unitsInPackageLabel } from '@/models/PackageType';
 import MeasureUnitSelect from '@/components/select/MeasureUnitSelect.vue';
+import MeasureSelect from '@/components/select/MeasureSelect.vue';
 
 export default {
   name: 'ArticleMeasurementForm',
-  components: { MeasureUnitSelect },
+  components: { MeasureSelect, MeasureUnitSelect },
   props: {
     model: Object,
   },
   computed: {
-    measures,
     unitsInPackageLabel() {
       return unitsInPackageLabel(this.model.measureUnitId || DEFAULT_MEASURE_UNIT_ID);
     },
