@@ -46,5 +46,7 @@ export default {
 
 </script>
 <style scoped lang="scss">
-
+.recipe-form {
+  margin-bottom: 60px;
+}
 </style>

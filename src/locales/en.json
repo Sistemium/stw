@@ -167,7 +167,8 @@
     "position": "position",
     "stockWithdrawing": "withdrawing",
     "stockReceiving": "stock receiving",
-    "recipe": "recipe"
+    "recipe": "recipe",
+    "material": "material"
   },
   "genitive": {
     "property": "Property",

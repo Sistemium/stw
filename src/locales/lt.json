@@ -164,7 +164,8 @@
     "position": "poziciją",
     "stockWithdrawing": "iš sandėlio iškrovimą",
     "stockReceiving": "į sandėlį piemimą",
-    "recipe": "receptą"
+    "recipe": "receptą",
+    "material": "sudedamojį dalį"
   },
   "genitive": {
     "property": "Ypatybės",

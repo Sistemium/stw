@@ -164,7 +164,8 @@
     "position": "позицию",
     "stockWithdrawing": "отгрузку",
     "stockReceiving": "приход на склад",
-    "recipe": "рецепт"
+    "recipe": "рецепт",
+    "material": "компонент"
   },
   "genitive": {
     "property": "признака",
