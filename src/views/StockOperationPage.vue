@@ -3,6 +3,7 @@
 .stock-withdrawing
 
   el-tabs(tab-position="top")
+
     el-tab-pane(:lazy="true" :label="$t('concepts.items')")
       .buttons
         workflow-transitions(
@@ -20,6 +21,24 @@
           :price-field="priceField"
         )
         alert-empty(v-else @click="onAddItem" :button-text="$tAction('add', 'position')")
+
+    el-tab-pane(:lazy="true" :label="$t('concepts.production')" v-if="productionItems")
+      .buttons
+        workflow-transitions(
+          :workflow="workflow"
+          :value="stockOperation.processing"
+          @input="onProcessing"
+          :disabled="busy"
+        )
+        tool-button(tool="add" @click="onAddProduct" :disabled="disabled")
+      resize(:padding="20")
+        production-item-list(
+          :items="productionItems"
+          v-if="productionItems.length"
+          @click="onProductClick"
+        )
+        alert-empty(v-else @click="onAddProduct" :button-text="$tAction('add', 'productItem')")
+
     el-tab-pane(:lazy="true" :label="$t('concepts.settings')")
       stock-operation-edit(
         :is-drawer="false"
@@ -38,11 +57,18 @@ import WorkflowTransitions from '@/lib/WorkflowTransitions.vue';
 import pageMixin from '@/lib/pageMixin';
 import StockOperationItemList from '@/components/out/StockOperationItemList.vue';
 import StockOperationEdit from '@/components/out/StockOperationEdit.vue';
+import ProductionItemList from '@/components/production/ProductionItemList.vue';
+import StockWithdrawingProduct from '@/models/StockWithdrawingProduct';
 import { configPriceField } from '@/services/warehousing';
 
 export default {
   name: 'StockOperationPage',
-  components: { WorkflowTransitions, StockOperationEdit, StockOperationItemList },
+  components: {
+    ProductionItemList,
+    WorkflowTransitions,
+    StockOperationEdit,
+    StockOperationItemList,
+  },
   mixins: [pageMixin],
   props: {
     stockOperationId: String,
@@ -58,6 +84,13 @@ export default {
     },
     priceField() {
       return configPriceField(this.operationName, this.stockOperation.date);
+    },
+    productionItems() {
+      if (this.operationName !== 'stockWithdrawing') {
+        return null;
+      }
+      const { stockOperationId: stockWithdrawingId } = this;
+      return StockWithdrawingProduct.reactiveFilter({ stockWithdrawingId });
     },
     stockOperationItems() {
       const { stockOperationId } = this;
@@ -79,6 +112,23 @@ export default {
         name: this.createRoute,
         params: {
           stockOperationId: this.stockOperationId,
+        },
+      });
+    },
+    onAddProduct() {
+      this.$router.push({
+        name: 'stockWithdrawingProductCreate',
+        params: {
+          stockWithdrawingId: this.stockOperationId,
+        },
+      });
+    },
+    onProductClick(item) {
+      this.$router.push({
+        name: 'stockWithdrawingProductEdit',
+        params: {
+          stockOperationId: this.stockOperationId,
+          stockOperationItemId: item.id,
         },
       });
     },

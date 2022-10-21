@@ -21,6 +21,22 @@ export default function stockOperationsRoute(options) {
 
   const editRoute = operationName;
   const createRoute = `${operationName}Create`;
+  const children = itemRouteHelper(
+    operationName,
+    () => import(/* webpackChunkName:"out" */ '../components/out/StockOperationItemEdit.vue'),
+    'stockOperation',
+    commonProps,
+  );
+
+  if (operationName === 'stockWithdrawing') {
+    children.push(...itemRouteHelper(
+      operationName,
+      () => import(/* webpackChunkName:"out" */ '../components/production/StockWithdrawingProductEdit.vue'),
+      'stockOperation',
+      commonProps,
+      'Product',
+    ));
+  }
 
   return {
     component: rootComponent,
@@ -52,12 +68,7 @@ export default function stockOperationsRoute(options) {
             },
           };
         },
-        children: itemRouteHelper(
-          operationName,
-          () => import(/* webpackChunkName:"out" */ '../components/out/StockOperationItemEdit.vue'),
-          'stockOperation',
-          commonProps,
-        ),
+        children,
       },
     ],
     props: {
