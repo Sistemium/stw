@@ -127,11 +127,13 @@
     "image": "Image",
     "settings": "Parameters",
     "items": "Items",
+    "production": "Production",
     "person": "Person",
     "legalEntity": "Legal entity",
     "unknown": "Unknown",
     "unitPackageType": "Unit package type",
     "packageType": "Package type",
+    "recipe": "Recipe",
     "other": "Other"
   },
   "dataTypes": {
@@ -168,7 +170,8 @@
     "stockWithdrawing": "withdrawing",
     "stockReceiving": "stock receiving",
     "recipe": "recipe",
-    "material": "material"
+    "material": "material",
+    "productItem": "production item"
   },
   "genitive": {
     "property": "Property",
@@ -182,7 +185,8 @@
     "stockReceiving": "Stock receiving",
     "stockReceivingItem": "Stock receiving item",
     "legalEntity": "Legal entity",
-    "recipe": "Recipe"
+    "recipe": "Recipe",
+    "productionItem": "Production item"
   },
   "shortened": {
     "positions": "pos",

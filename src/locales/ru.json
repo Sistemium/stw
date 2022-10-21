@@ -126,11 +126,13 @@
     "image": "Фото",
     "settings": "Параметры",
     "items": "Позиции",
+    "production": "Производство",
     "person": "Физлицо",
     "legalEntity": "Юрлицо",
     "unknown": "Не известно",
     "unitPackageType": "Тип изделия",
     "packageType": "Тип упаковки",
+    "recipe": "Рецепт",
     "other": "Другое"
   },
   "dataTypes": {
@@ -165,7 +167,8 @@
     "stockWithdrawing": "отгрузку",
     "stockReceiving": "приход на склад",
     "recipe": "рецепт",
-    "material": "компонент"
+    "material": "компонент",
+    "productItem": "позицию производства"
   },
   "genitive": {
     "property": "признака",
@@ -179,7 +182,8 @@
     "stockReceiving": "прихода на склад",
     "stockReceivingItem": "позиции прихода на склад",
     "legalEntity": "юр. лица",
-    "recipe": "рецепта"
+    "recipe": "рецепта",
+    "productionItem": "позиции производства"
   },
   "shortened": {
     "positions": "поз",

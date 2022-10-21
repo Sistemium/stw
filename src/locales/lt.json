@@ -126,11 +126,13 @@
     "image": "Nuotrauka",
     "settings": "Parametrai",
     "items": "Pozicijos",
+    "production": "Gamyba",
     "person": "Asmuo",
     "legalEntity": "Imonė",
     "unknown": "Nėra",
     "unitPackageType": "Vienetų tipas",
     "packageType": "Pakuotės tipas",
+    "recipe": "Receptas",
     "other": "Kita"
   },
   "dataTypes": {
@@ -165,7 +167,8 @@
     "stockWithdrawing": "iš sandėlio iškrovimą",
     "stockReceiving": "į sandėlį piemimą",
     "recipe": "receptą",
-    "material": "sudedamojį dalį"
+    "material": "sudedamojį dalį",
+    "productItem": "gamybos poziciją"
   },
   "genitive": {
     "property": "Ypatybės",
@@ -179,7 +182,8 @@
     "stockReceiving": "Į sandėlį priemimo",
     "stockReceivingItem": "Į sandėlį priemimo pozicijos",
     "legalEntity": "Įmonės",
-    "recipe": "Recepto"
+    "recipe": "Recepto",
+    "productionItem": "Gamybos pozicijos"
   },
   "shortened": {
     "positions": "poz",
