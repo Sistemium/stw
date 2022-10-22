@@ -7,6 +7,7 @@ el-select.article-select(
   :debounce="300"
   v-cancel-read-only
   :clearable="true"
+  :placeholder="placeholder"
   @change="changes => $emit('change', changes)"
 )
   el-option(
@@ -25,6 +26,8 @@ el-select.article-select(
 
 import Article from '@/models/Article';
 import { searchArticle } from '@/services/catalogue';
+import i18n from '@/i18n';
+import upperFirst from 'lodash/upperFirst';
 
 export default {
   name: 'ArticleSelect',
@@ -34,6 +37,13 @@ export default {
       type: [Object, Function],
       default() {
         return {};
+      },
+    },
+    placeholder: {
+      type: String,
+      default() {
+        const string = i18n.t('actions.select', [i18n.t('accusative.article')]);
+        return upperFirst(string.toString());
       },
     },
   },
