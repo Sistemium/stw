@@ -189,7 +189,8 @@
   "shortened": {
     "positions": "poz",
     "units": "vnt",
-    "boxes": "dėž"
+    "boxes": "dėž",
+    "products": "gam"
   },
   "workflow": {
     "start": "Pradėti",

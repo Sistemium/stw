@@ -7,7 +7,12 @@
     //.storage {{ storage }}
   .right
     .processing {{ viewData.processing }}
-    .positions {{ viewData.positionsCount }} {{ $t('shortened.positions') }}.
+    .positions(
+      v-if="viewData.positionsCount"
+    ) {{ viewData.positionsCount }} {{ $t('shortened.positions') }}.
+    .products(
+      v-if="viewData.productsCount"
+    ) {{ viewData.productsCount }} {{ $t('shortened.products') }}.
     .total-cost(v-if="viewData.totalCost") {{ viewData.totalCost }} &euro;
 
 </template>

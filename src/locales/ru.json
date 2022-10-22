@@ -189,7 +189,8 @@
   "shortened": {
     "positions": "поз",
     "units": "шт",
-    "boxes": "кор"
+    "boxes": "кор",
+    "products": "изд"
   },
   "workflow": {
     "start": "Начать",
