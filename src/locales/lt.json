@@ -168,7 +168,8 @@
     "stockReceiving": "į sandėlį piemimą",
     "recipe": "receptą",
     "material": "sudedamojį dalį",
-    "productItem": "gamybos poziciją"
+    "productItem": "gamybos poziciją",
+    "article": "prekę"
   },
   "genitive": {
     "property": "Ypatybės",

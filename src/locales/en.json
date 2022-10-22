@@ -171,7 +171,8 @@
     "stockReceiving": "stock receiving",
     "recipe": "recipe",
     "material": "material",
-    "productItem": "production item"
+    "productItem": "production item",
+    "article": "article"
   },
   "genitive": {
     "property": "Property",
