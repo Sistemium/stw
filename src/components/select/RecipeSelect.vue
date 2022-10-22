@@ -1,6 +1,10 @@
 <template lang="pug">
 
-el-select.recipe-select(:value="value" @input="v => $emit('input', v)")
+el-select.recipe-select(
+  :value="value"
+  @input="v => $emit('input', v)"
+  @change="v => $emit('change', v)"
+)
   el-option(
     v-for="{id, name} in recipes"
     :key="id"
