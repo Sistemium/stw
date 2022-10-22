@@ -7,6 +7,8 @@
     @click="$emit('click', recipe)"
   )
     .name {{ recipe.name }}
+    .materials(v-if="recipe.materials")
+      el-badge(:value="recipe.materials.length" type="info")
 
 </template>
 <script>
@@ -23,5 +25,10 @@ export default {
 
 </script>
 <style scoped lang="scss">
-
+.list-group-item {
+  display: flex;
+}
+.name {
+  flex: 1;
+}
 </style>
