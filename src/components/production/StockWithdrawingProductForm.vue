@@ -29,15 +29,12 @@ export default {
     rules() {
       return {};
     },
-    // recipe() {
-    //   return Recipe.reactiveGet(this.model.recipeId);
-    // },
   },
   methods: {
     onRecipeChange(recipeId) {
-      const recipe = Recipe.reactiveGet(recipeId);
+      const { materials = [] } = Recipe.reactiveGet(recipeId) || {};
       // eslint-disable-next-line vue/no-mutating-props
-      this.model.materials = cloneDeep(recipe.materials);
+      this.model.materials = cloneDeep(materials);
     },
   },
 };
