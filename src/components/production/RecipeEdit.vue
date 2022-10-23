@@ -6,6 +6,7 @@ drawer-edit.recipe-edit(
   :destroy-fn="destroyFn"
   :model-origin="modelOrigin"
   :from="from"
+  :deletable="true"
 )
   template(v-slot="{ model }")
     recipe-form(:model="model")
