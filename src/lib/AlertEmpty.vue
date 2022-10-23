@@ -5,7 +5,7 @@ el-alert.alert-empty(
   :closable="false"
 )
   el-button(
-    v-if="buttonText"
+    v-if="buttonText && !disabled"
     @click="$emit('click')"
     type="primary"
     :plain="true"
@@ -21,6 +21,7 @@ export default {
       type: String,
     },
     buttonText: String,
+    disabled: Boolean,
   },
 };
 

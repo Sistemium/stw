@@ -20,7 +20,12 @@
           v-if="stockOperationItems.length"
           :price-field="priceField"
         )
-        alert-empty(v-else @click="onAddItem" :button-text="$tAction('add', 'position')")
+        alert-empty(
+          v-else
+          @click="onAddItem"
+          :button-text="$tAction('add', 'position')"
+          :disabled="disabled"
+        )
 
     el-tab-pane(:lazy="true" :label="$t('concepts.production')" v-if="productionItems")
       .buttons
@@ -38,7 +43,12 @@
           @click="onProductClick"
           :price-field="priceField"
         )
-        alert-empty(v-else @click="onAddProduct" :button-text="$tAction('add', 'productItem')")
+        alert-empty(
+          v-else
+          @click="onAddProduct"
+          :button-text="$tAction('add', 'productItem')"
+          :disabled="disabled"
+        )
 
     el-tab-pane(:lazy="true" :label="$t('concepts.settings')")
       stock-operation-edit(
