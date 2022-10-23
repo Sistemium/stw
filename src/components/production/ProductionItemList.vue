@@ -5,7 +5,9 @@
     .title
       recipe-view(:recipe-id="item.recipeId")
     .right
-      span {{ item.units }} {{ $t('units.short.piece') }}
+      .units {{ item.units }} {{ $t('units.short.piece') }}
+      .cost(v-if="item.price")
+        .price {{ item[priceField] }} &euro;
 
 </template>
 <script>
@@ -17,6 +19,7 @@ export default {
   components: { RecipeView },
   props: {
     items: Array,
+    priceField: { type: String, required: true },
   },
 };
 

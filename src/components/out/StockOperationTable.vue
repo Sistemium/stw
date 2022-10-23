@@ -25,10 +25,13 @@ el-table.stock-operation-table(
       .comment(v-if="row.commentText") {{ row.commentText }}
   el-table-column(
     align="right"
-    prop="positionsCount"
     :label="$t('concepts.items')"
     width="100"
   )
+    template(v-slot="{ row }")
+      span(v-if="row.positionsCount") {{ row.positionsCount }}
+      span(v-if="row.productsCount && row.positionsCount") +
+      span(v-if="row.productsCount") {{ row.productsCount }}
   el-table-column(
     align="right"
     prop="units"

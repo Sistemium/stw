@@ -23,12 +23,13 @@ drawer-edit.stock-operation-item-edit(
 
 import drawerEditMixin from '@/lib/drawerEditMixin';
 import { workflow } from '@/models/StockWithdrawing';
-import { stockOperationItemInstance, vatConfig } from '@/services/warehousing';
+import { stockOperationItemInstance } from '@/services/warehousing';
 import StockOperationItemForm from '@/components/out/StockOperationItemForm.vue';
+import vatConfigMixin from '@/components/etc/vatConfigMixin';
 
 export default {
   name: 'StockOperationItemEdit',
-  mixins: [drawerEditMixin],
+  mixins: [drawerEditMixin, vatConfigMixin],
   components: { StockOperationItemForm },
   props: {
     stockOperationId: { type: String, required: true },
@@ -39,17 +40,6 @@ export default {
     positionsModel: Object,
   },
   computed: {
-    vatConfig() {
-      return vatConfig();
-    },
-    vatOperationConfig() {
-      const { vatConfig: { rules }, operationName } = this;
-      const { vatPrices = {}, defaultRate: vatRate = 0 } = rules;
-      return {
-        vatRate,
-        vatPrices: vatPrices[operationName] || false,
-      };
-    },
     stockOperation() {
       return this.model.reactiveGet(this.stockOperationId);
     },

@@ -36,6 +36,7 @@
           :items="productionItems"
           v-if="productionItems.length"
           @click="onProductClick"
+          :price-field="priceField"
         )
         alert-empty(v-else @click="onAddProduct" :button-text="$tAction('add', 'productItem')")
 

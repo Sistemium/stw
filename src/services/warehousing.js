@@ -74,9 +74,10 @@ export function stockOperationToViewData(item, positionsModel, operationName) {
   const counterparty = getCounterparty(item);
   const positions = positionsModel.reactiveFilter(childFilter);
   const priceField = configPriceField(operationName);
-  const totalCost = sumBy(positions, p => (p[priceField] || 0) * (p.units || 0));
+  const costFn = p => (p[priceField] || 0) * (p.units || 0);
   const products = operationName === 'stockWithdrawing'
     ? StockWithdrawingProduct.reactiveFilter(childFilter) : [];
+  const totalCost = sumBy(positions, costFn) + sumBy(products, costFn);
   return {
     ...item,
     processing: i18n.t(`workflow.${item.processing || 'progress'}`),
@@ -85,7 +86,7 @@ export function stockOperationToViewData(item, positionsModel, operationName) {
     counterpartyName: get(counterparty, 'name'),
     positionsCount: positions.length,
     productsCount: products.length,
-    units: sumBy(positions, 'units'),
+    units: sumBy(positions, 'units') + sumBy(products, 'units'),
     totalCost: totalCost ? i18n.n(totalCost) : null,
   };
 }

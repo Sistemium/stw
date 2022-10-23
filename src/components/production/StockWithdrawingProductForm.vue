@@ -9,6 +9,7 @@ el-form.stock-withdrawing-product-form(
     recipe-select(v-model="model.recipeId" @change="onRecipeChange")
   el-form-item(prop="units" :label="$t('fields.units')")
     el-input-number(v-model="model.units" :min="1")
+  price-form(:model="model" :vat-prices="vatPrices")
   materials-form(:materials="model.materials" v-if="model.recipeId")
 
 </template>
@@ -18,12 +19,14 @@ import Recipe from '@/models/Recipe';
 import RecipeSelect from '@/components/select/RecipeSelect.vue';
 import MaterialsForm from '@/components/production/MaterialsForm.vue';
 import cloneDeep from 'lodash/cloneDeep';
+import PriceForm from '@/components/out/PriceForm.vue';
 
 export default {
   name: 'StockWithdrawingProductForm',
-  components: { MaterialsForm, RecipeSelect },
+  components: { PriceForm, MaterialsForm, RecipeSelect },
   props: {
     model: Object,
+    vatPrices: Boolean,
   },
   computed: {
     rules() {
