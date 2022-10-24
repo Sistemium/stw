@@ -12,7 +12,7 @@ import stockTakingRoute from '@/router/stockTakingRoute';
 import stockOperationsRoute from '@/router/stockOperationsRoute';
 
 import { initGuard } from '@/services/dataSync';
-import Recipe from '@/models/Recipe';
+// import Recipe from '@/models/Recipe';
 
 export default new RouteMapper({
   storages: {
@@ -64,11 +64,12 @@ export default new RouteMapper({
       gallery: articlePicturesRoute,
     },
   },
-  recipes: {
-    model: Recipe,
-    component: () => import(/* webpackChunkName: "stock" */ '../views/RecipesPage.vue'),
-    editing: () => import(/* webpackChunkName: "stock" */ '../components/production/RecipeEdit.vue'),
-  },
+  // recipes: {
+  //   model: Recipe,
+  //   component: () => import(/* webpackChunkName: "stock" */ '../views/RecipesPage.vue'),
+  //   editing:
+  //   () => import(/* webpackChunkName: "stock" */ '../components/production/RecipeEdit.vue'),
+  // },
   articleProps: {
     model: ArticleProp,
     component: () => import(/* webpackChunkName: "articles" */ '../views/ArticlePropsPage.vue'),

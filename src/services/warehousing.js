@@ -2,7 +2,7 @@ import LegalEntity from '@/models/LegalEntity';
 import Storage from '@/models/Storage';
 import Person from '@/models/Person';
 import StockPeriod from '@/models/StockPeriod';
-import StockWithdrawingProduct from '@/models/StockWithdrawingProduct';
+// import StockWithdrawingProduct from '@/models/StockWithdrawingProduct';
 import Configuration from '@/models/Configuration';
 import Article from '@/models/Article';
 import sumBy from 'lodash/sumBy';
@@ -75,9 +75,9 @@ export function stockOperationToViewData(item, positionsModel, operationName) {
   const positions = positionsModel.reactiveFilter(childFilter);
   const priceField = configPriceField(operationName);
   const costFn = p => (p[priceField] || 0) * (p.units || 0);
-  const products = operationName === 'stockWithdrawing'
-    ? StockWithdrawingProduct.reactiveFilter(childFilter) : [];
-  const totalCost = sumBy(positions, costFn) + sumBy(products, costFn);
+  // const products = operationName === 'stockWithdrawing'
+  //   ? StockWithdrawingProduct.reactiveFilter(childFilter) : [];
+  const totalCost = sumBy(positions, costFn);
   return {
     ...item,
     processing: i18n.t(`workflow.${item.processing || 'progress'}`),
@@ -85,8 +85,8 @@ export function stockOperationToViewData(item, positionsModel, operationName) {
     counterparty,
     counterpartyName: get(counterparty, 'name'),
     positionsCount: positions.length,
-    productsCount: products.length,
-    units: sumBy(positions, 'units') + sumBy(products, 'units'),
+    // productsCount: products.length,
+    units: sumBy(positions, 'units'),
     totalCost: totalCost ? i18n.n(totalCost) : null,
   };
 }

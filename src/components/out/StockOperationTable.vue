@@ -30,8 +30,8 @@ el-table.stock-operation-table(
   )
     template(v-slot="{ row }")
       span(v-if="row.positionsCount") {{ row.positionsCount }}
-      span(v-if="row.productsCount && row.positionsCount") +
-      span(v-if="row.productsCount") {{ row.productsCount }}
+      //span(v-if="row.productsCount && row.positionsCount") +
+      //span(v-if="row.productsCount") {{ row.productsCount }}
   el-table-column(
     align="right"
     prop="units"

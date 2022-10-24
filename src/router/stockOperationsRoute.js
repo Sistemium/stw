@@ -28,15 +28,16 @@ export default function stockOperationsRoute(options) {
     commonProps,
   );
 
-  if (operationName === 'stockWithdrawing') {
-    children.push(...itemRouteHelper(
-      operationName,
-      () => import(/* webpackChunkName:"out" */ '../components/production/StockWithdrawingProductEdit.vue'),
-      'stockOperation',
-      commonProps,
-      'Product',
-    ));
-  }
+  // if (operationName === 'stockWithdrawing') {
+  //   children.push(...itemRouteHelper(
+  //     operationName,
+  //     () => import(/* webpackChunkName:"out" */
+  //     '../components/production/StockWithdrawingProductEdit.vue'),
+  //     'stockOperation',
+  //     commonProps,
+  //     'Product',
+  //   ));
+  // }
 
   return {
     component: rootComponent,
