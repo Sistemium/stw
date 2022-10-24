@@ -1,20 +1,20 @@
 <template lang="pug">
 
-.recipe-form
-  el-form.article-form(
-    :model="model"
-    ref="form"
-    :rules="rules"
-  )
-    el-form-item(:label="$t('fields.name')" prop="name")
-      el-input(v-model="model.name")
+el-form.recipe-form(
+  :model="model"
+  ref="form"
+  :rules="rules"
+)
+  //el-form-item(:label="$t('fields.name')" prop="name")
+    el-input(v-model="model.name")
 
-    materials-form(:materials="model.materials")
+  materials-form(:materials="model.materials || null" @create="onCreate")
 
 </template>
 <script>
 
 import MaterialsForm from '@/components/production/MaterialsForm.vue';
+import Vue from 'vue';
 
 export default {
   name: 'RecipeForm',
@@ -22,9 +22,15 @@ export default {
   props: {
     model: Object,
   },
+  methods: {
+    onCreate(materials) {
+      Vue.set(this.model, 'materials', materials);
+    },
+  },
   computed: {
     rules() {
-      return this.$requiredRule('name');
+      // return this.$requiredRule('name');
+      return {};
     },
   },
 };

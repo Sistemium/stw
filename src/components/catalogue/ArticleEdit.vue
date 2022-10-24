@@ -8,6 +8,7 @@ drawer-edit.article-edit(
   :from="from"
   :deletable="currentTab ==='0'"
   :drawer-style="drawerStyle"
+  :size="drawerWidth"
 )
   template(v-slot="{ model }")
     el-tabs(v-model="currentTab")
@@ -15,6 +16,8 @@ drawer-edit.article-edit(
         article-form(ref="form" :model="model")
       el-tab-pane(:label="$t('menu.measurements')")
         article-measurement-form(:model="model" ref="measurementForm")
+      el-tab-pane(:label="$t('concepts.recipe')")
+        recipe-form(:model="model" ref="recipeForm")
       //el-tab-pane(:label="$t('menu.barcodes')")
         .list-group
           .list-group-item(
@@ -30,6 +33,7 @@ drawer-edit.article-edit(
 </template>
 <script>
 
+import vss from 'vue-screen-size';
 import DrawerEdit from '@/lib/DrawerEdit.vue';
 import Article from '@/models/Article';
 import ArticleForm from '@/components/catalogue/ArticleForm.vue';
@@ -39,9 +43,11 @@ import Picture, { mapPictureInfo } from '@/models/Picture';
 import find from 'lodash/find';
 import ArticlePictures from '@/components/catalogue/ArticlePictures.vue';
 import ArticleMeasurementForm from '@/components/catalogue/ArticleMeasurementForm.vue';
+import RecipeForm from '@/components/production/RecipeForm.vue';
 
 export default {
   name: 'ArticleEdit',
+  mixins: [vss.VueScreenSizeMixin],
   props: {
     articleId: String,
     from: Object,
@@ -53,6 +59,7 @@ export default {
     };
   },
   components: {
+    RecipeForm,
     ArticleMeasurementForm,
     ArticlePictures,
     TakePhotoButton,
@@ -60,6 +67,9 @@ export default {
     DrawerEdit,
   },
   computed: {
+    drawerWidth() {
+      return this.$vssWidth > 450 ? '450px' : '370px';
+    },
     modelOrigin() {
       const { articleId } = this;
       return articleId ? Article.reactiveGet(articleId) : articleInstance();

@@ -39,13 +39,18 @@ export default {
       materials.splice(idx, 1);
     },
     onAddMaterial() {
-      this.materials.push({
+      const material = {
         id: v4(),
         articleId: null,
         measureId: null,
         measureUnitId: null,
         units: null,
-      });
+      };
+      if (this.materials) {
+        this.materials.push(material);
+      } else {
+        this.$emit('create', [material]);
+      }
     },
   },
 };
