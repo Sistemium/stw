@@ -37,6 +37,9 @@ export default {
         return;
       }
       materials.splice(idx, 1);
+      if (!materials.length) {
+        this.$emit('create', null);
+      }
     },
     onAddMaterial() {
       const material = {
