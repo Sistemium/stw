@@ -25,11 +25,14 @@ export default function scrollToCreated({ container }) {
         this.$scrollTo(id, SCROLL_DURATION, {
           container,
           easing: 'ease',
+          offset: -30,
           onDone(e) {
             if (e) {
-              e.classList.add(BLINK_CLASS);
+              const toBlink = e.closest('tr') || e;
+              console.info(toBlink);
+              toBlink.classList.add(BLINK_CLASS);
               setTimeout(() => {
-                e.classList.remove(BLINK_CLASS);
+                toBlink.classList.remove(BLINK_CLASS);
               }, REMOVE_BLINK_AFTER);
             }
           },
