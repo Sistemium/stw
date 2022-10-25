@@ -1,6 +1,7 @@
 @import "variables";
+@import "bounce";
 
-.blink {
+.blink, tr.blink > td {
   animation: blinking ease-in 1.5s 2;
 }
 
