@@ -6,6 +6,7 @@ el-avatar.article-avatar(
   :size="size"
   shape="square"
   fit="cover"
+  :id="id"
 )
 
 </template>
@@ -18,6 +19,7 @@ export default {
   props: {
     article: Object,
     size: String,
+    id: String,
   },
   computed: {
     picture() {
