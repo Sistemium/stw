@@ -60,7 +60,7 @@ export default {
     queryParams() {
       const [dateB, dateE] = this.dateRange;
       return {
-        dateB: dayjs(dateB).endOf('day').toJSON(),
+        dateB: dayjs(dateB).startOf('day').toJSON(),
         dateE: dayjs(dateE).endOf('day').toJSON(),
         storageId: this.storageId,
       };
