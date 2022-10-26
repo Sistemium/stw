@@ -146,7 +146,7 @@ export default {
     onCopy() {
       this.$router.push({
         name: this.createRoute,
-        query: { paste: this.selectedArticle.id },
+        query: { copyId: this.selectedArticle.id },
       });
     },
     setBarcode(barcode) {
