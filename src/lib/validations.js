@@ -5,6 +5,7 @@ import find from 'lodash/find';
 import map from 'lodash/map';
 import trim from 'lodash/trim';
 import i18n from '@/i18n';
+import cloneDeep from 'lodash/cloneDeep';
 
 Vue.mixin({
 
@@ -22,6 +23,16 @@ Vue.mixin({
   },
 
   methods: {
+    $cloneInstance(res) {
+      return res && {
+        ...cloneDeep(res),
+        cts: undefined,
+        ts: undefined,
+        deviceCts: undefined,
+        _id: undefined,
+        id: undefined,
+      };
+    },
     $trim: trim,
     $map: map,
     $find: find,
