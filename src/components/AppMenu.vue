@@ -1,23 +1,91 @@
 <template lang="pug">
 
-  .app-menu
-    #nav
-      router-link(to="/" v-t="'menu.home'")
-      = ' | '
-      router-link(to="/about" v-t="'menu.about'")
-    lang-menu(:languages="languages")
+.app-menu
+
+  el-dropdown.hamburger(@command="onCommand" trigger="click" size="normal")
+    el-button(circle icon="el-icon-menu")
+    template(v-slot:dropdown)
+      el-dropdown-menu()
+        el-dropdown-item(
+          v-for="{ t, name } in menu" :key="t" :command="name" v-t="t"
+          :disabled="name === $route.name"
+        )
+        el-dropdown-item(
+          v-if="isNative"
+          command="toggleTabBar"
+          :icon="tabBarIcon"
+        ) {{ $tAction(tabBarShown ? 'hide' : 'show', 'profile') }}
+
+  slot(name="left")
+    el-button.tab-bar-toggle(
+      circle
+      :icon="tabBarIcon"
+      v-if="isNative"
+      @click="onCommand('toggleTabBar')"
+    )
+
+  .title
+    strong {{ title }}
+
+  #nav
+    router-link(v-for="{ t, name } in menu" :key="t" :to="{ name }" v-t="t")
+
+  lang-menu(:languages="languages" trigger="click" size="normal")
 
 </template>
 <script>
 
-import LangMenu from '@bit/sistemium.vue.lang-menu';
+import LangMenu from 'sistemium-vue/components/LangMenu.vue';
 import Language from '@/models/Language';
+import { toggleTabBar, isNative } from 'sistemium-data/src/util/native';
+import { routes } from '@/router';
 
 export default {
   name: 'AppMenu',
+  data() {
+    return { tabBarShown: isNative() ? toggleTabBar() : null };
+  },
   computed: {
     languages() {
       return [...Language];
+    },
+    menu() {
+      return routes
+        .filter(({ meta }) => !meta || !meta.menuHidden)
+        .map(({ name }) => ({
+          name,
+          t: `menu.${name}`,
+        }));
+    },
+    isNative() {
+      return isNative();
+    },
+    tabBarIcon() {
+      return this.tabBarShown ? 'el-icon-user' : 'el-icon-user-solid';
+    },
+    title() {
+      return this.routeTitle(this.$route)
+        || this.routeTitle(this.$router.currentRoute.matched[0]);
+    },
+  },
+  methods: {
+    onCommand(name) {
+      if (name === 'toggleTabBar') {
+        this.tabBarShown = toggleTabBar();
+        return;
+      }
+      if (this.$route.name !== name) {
+        this.$router.push({ name });
+      }
+    },
+    routeTitle(route) {
+      const { name } = route || {};
+      if (!name) {
+        return null;
+      }
+      const key = `menu.${name}`;
+      const hasTitle = this.$te(key);
+      return hasTitle && this.$t(key);
     },
   },
   components: {
@@ -27,30 +95,106 @@ export default {
 
 </script>
 <style scoped lang="scss">
-
-@import "../styles/variables";
+@import "../styles/responsive";
 
 .app-menu {
-  padding: 30px;
+  padding: $margin-top;
   text-align: center;
   position: relative;
+  @include xxs() {
+    padding: 0 0 $padding;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.title {
+  flex: 1;
+  font-size: 18px;
 }
 
 .lang-menu {
-  position: absolute;
-  top: 0;
-  right: 0;
+  @include gt-xxs() {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+  @include xxs() {
+    ::v-deep img {
+      display: none;
+    }
+  }
 }
 
-#nav {
+#nav, .el-dropdown-menu {
   a {
-    font-weight: bold;
     color: $black;
 
     &.router-link-exact-active {
       color: $green;
     }
   }
+}
+
+#nav {
+
+  margin: 0 $margin-top * 2;
+
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  @include xxs {
+    display: none;
+  }
+
+  a {
+    font-weight: bold;
+    line-height: 25px;
+  }
+
+  a + a:before {
+    content: "|";
+    padding: 0 $margin-right;
+  }
+}
+
+strong, .hamburger {
+  @include gt-xxs() {
+    display: none;
+  }
+}
+
+.hamburger {
+  strong {
+    text-align: left;
+    flex: 1;
+  }
+}
+
+.barcode-scanner-status {
+  @include gt-xxs() {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  @include xxs() {
+    margin-left: $margin-right;
+  }
+}
+
+#nav > a {
+  white-space: nowrap;
+}
+
+.tab-bar-toggle {
+  @include xxs() {
+    display: none;
+  }
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 </style>

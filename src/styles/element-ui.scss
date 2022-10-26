@@ -1,0 +1,29 @@
+@import "variables";
+
+.el-drawer__header {
+  font-weight: bold;
+}
+
+@include responsive-only(xxs) {
+  .el-select-dropdown.el-popper {
+    max-width: 350px;
+  }
+}
+
+.el-table {
+  color: $black;
+}
+
+.el-input.is-disabled .el-input__inner,
+.el-textarea.is-disabled .el-textarea__inner,
+.el-radio-button__orig-radio:disabled:checked + .el-radio-button__inner {
+  color: inherit;
+}
+
+.el-table__body tr.current-row > td.el-table__cell {
+  color: $primary-color;
+}
+
+.el-table.el-table--enable-row-hover tr:hover > td.el-table__cell {
+  color: $primary-hover-color;
+}

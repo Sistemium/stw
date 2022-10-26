@@ -1,0 +1,13 @@
+@import "variables";
+
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  + div {
+    margin-top: $margin-right;
+  }
+  > * + * {
+    margin-left: $margin-right;
+  }
+}

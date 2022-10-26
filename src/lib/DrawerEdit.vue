@@ -1,47 +1,53 @@
 <template lang="pug">
 
-  el-drawer.drawer-edit(
-    :title="title"
-    :visible="true"
-    :append-to-body="true"
-    :destroy-on-close="true"
-    ref="drawer"
-    :size="size"
-    @close="$parent.$emit('closed')"
+component.drawer-edit.box-card(
+  :is="drawerComponent"
+  shadow="never"
+  :title="title"
+  :visible="true"
+  :append-to-body="true"
+  :destroy-on-close="true"
+  ref="drawer"
+  :size="size"
+  @close="handleClose"
+  :style="drawerStyle"
+)
+
+  .resize.container(:padding="60")
+    slot(v-bind:model="model")
+
+  form-buttons(
+    :changed="changed"
+    :deletable="isDeletable"
+    @saveClick="onSaveClick"
+    @cancelClick="cancelClick"
+    @deleteClick="onDeleteClick"
   )
-
-    .resize.container(:padding="60")
-      slot(v-bind:model="model")
-
-    form-buttons(
-      :changed="changed"
-      :deletable="false"
-      @saveClick="onSaveClick"
-      @cancelClick="cancelClick"
-      @deleteClick="onDeleteClick"
-    )
 
 </template>
 <script>
 
-import log from 'sistemium-debug';
-import FormButtons from '@bit/sistemium.vue.form-buttons/FormButtons.vue';
+import FormButtons from 'sistemium-vue/components/FormButtons.vue';
 import matchesDeep from '@bit/sistemium.vue.matches-deep';
 import cloneDeep from 'lodash/cloneDeep';
-
-const { error } = log('DrawerEdit');
+import merge from 'lodash/merge';
 
 export default {
   name: 'DrawerEdit',
   components: { FormButtons },
   props: {
     title: String,
+    isDrawer: { type: Boolean, default: true },
     size: {
       type: String,
-      default: '450px',
+      default: '370px',
     },
     from: Object,
     forceModified: Boolean,
+    deletable: {
+      type: Boolean,
+      default: false,
+    },
     modelOrigin: {
       type: Object,
       default: null,
@@ -58,6 +64,7 @@ export default {
         this.$error('destroyFn not implemented', id);
       },
     },
+    drawerStyle: Object,
   },
   data() {
     return {
@@ -72,24 +79,25 @@ export default {
     });
   },
   computed: {
+    drawerComponent() {
+      return this.isDrawer ? 'el-drawer' : 'el-card';
+    },
     loading() {
       return !!this.loadingMessage;
     },
-    changed() {
-      return this.forceModified || !matchesDeep(this.model, this.modelOrigin);
+    isDeletable() {
+      return this.deletable && !!(this.modelOrigin && this.modelOrigin.id);
     },
-    // hasChanges() {
-    //   return !this.modelOrigin
-    //     || !this.modelOrigin.id
-    //     || !matchesDeep(this.model, this.modelOrigin);
-    // },
+    changed() {
+      return this.forceModified || this.hasChanges;
+    },
+    hasChanges() {
+      return !this.modelOrigin
+        || !this.modelOrigin.id
+        || !matchesDeep(this.model, this.modelOrigin);
+    },
   },
   methods: {
-
-    getPlainInstanceById(model, id) {
-      const action = model.get(id);
-      return action && action.toJSON();
-    },
 
     cloneDeep,
     matchesDeep,
@@ -100,13 +108,10 @@ export default {
         this.$emit('deleted');
         return;
       }
-      this.destroyFn(id)
+      this.performOperation(() => this.destroyFn(id)
         .then(() => {
-          this.$emit('deleted');
-        })
-        .catch(e => {
-          this.$emit('error', e);
-        });
+          this.$emit('deleted', id);
+        }));
     },
 
     getValidateForm(parent = this.$parent) {
@@ -121,45 +126,42 @@ export default {
     onSaveClick() {
       this.getValidateForm()(valid => {
         if (valid) {
-          this.save();
+          this.performOperation(this.save);
         } else {
-          this.$message.warning(String(this.$t('validation.formInvalid')));
+          this.$message.warning(this.$t('validation.formInvalid').toString());
         }
       });
     },
 
     save() {
-      this.saveFn(this.model)
+      return this.saveFn(this.model)
         .then(record => {
-          this.$emit('saved', record);
-          this.cancelClick();
-        })
-        .catch(e => {
-          this.$message.error(e.message);
-          this.$emit('error', e);
+          this.$parent.$emit('saved', record);
+          return record;
+          // if (this.$refs.drawer) {
+          //   this.cancelClick(record);
+          // }
         });
     },
 
-    handleClose() {
+    handleClose(record) {
       if (!this.from) {
         this.drawerOpen = false;
+        this.$parent.$emit('closed', record);
         return;
       }
-      this.$router.replace(this.from)
-        .catch(e => error('handleClose', e));
+      const query = (record && !this.modelOrigin.id) ? { createdId: record.id } : {};
+      this.$router.replace(merge({ ...this.from }, { query }))
+        .catch(e => this.$error('handleClose', e));
     },
 
-    cancelClick() {
+    cancelClick(record) {
       const { drawer } = this.$refs;
       if (!drawer) {
-        error('cancelClick', 'drawer ref is empty');
+        this.$error('cancelClick', 'drawer ref is empty');
         return;
       }
-      if (drawer.closeDrawer) {
-        drawer.closeDrawer();
-      } else {
-        drawer.handleClose();
-      }
+      this.handleClose(record);
     },
 
     async performOperation(op) {
@@ -167,11 +169,12 @@ export default {
       this.showLoading();
 
       try {
-        await op();
+        const res = await op();
         this.hideLoading();
-        this.cancelClick();
+        this.cancelClick(res);
       } catch (e) {
         this.hideLoading();
+        this.$emit('error', e);
         this.showError(e);
       }
 
@@ -220,6 +223,20 @@ export default {
 
 .container {
   padding: $margin-right;
+}
+
+.el-card {
+  @include responsive-only(xxs) {
+    border: none;
+    ::v-deep .el-card__body, .container {
+      padding: 0;
+    }
+  }
+  @include responsive-only(gt-xxs) {
+    .form-buttons {
+      justify-content: flex-end;
+    }
+  }
 }
 
 </style>

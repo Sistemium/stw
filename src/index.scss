@@ -1,0 +1,26 @@
+@import "styles/variables";
+@import "styles/lists";
+@import "styles/element-ui";
+@import "styles/buttons";
+@import "styles/animations";
+
+.list-group {
+  @include list-group($border-radius, $list-cell-borders,
+          $gray-background, $dark-gray, $margin-top, $primary-color, $white, $padding);
+}
+
+// fix for double tap to select option bug
+.el-scrollbar {
+  > .el-scrollbar__bar {
+    opacity: 1;
+  }
+}
+
+.el-drawer__body .container.resize {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.el-drawer__header {
+  margin-bottom: 20px;
+}

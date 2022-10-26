@@ -1,19 +1,30 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Home from '../views/Home.vue';
+import Home from '@/views/HomePage.vue';
+import AuthPage from '@/views/AuthPage.vue';
+
+import routeMap from '@/router/routeMap';
 
 Vue.use(VueRouter);
 
-const routes = [
+export const routes = [
   {
     path: '/',
-    name: 'Home',
+    name: 'home',
     component: Home,
+    meta: {
+      public: true,
+    },
   },
+  ...routeMap.routes(),
   {
-    path: '/about',
-    name: 'About',
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
+    path: '/auth',
+    name: 'auth',
+    component: AuthPage,
+    meta: {
+      public: true,
+      menuHidden: true,
+    },
   },
 ];
 

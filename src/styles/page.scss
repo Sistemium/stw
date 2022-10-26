@@ -1,0 +1,32 @@
+@import "variables";
+
+.buttons {
+  text-align: right;
+  + .stm-resize {
+    margin-top: $margin-right;
+  }
+}
+
+.el-alert.empty ::v-deep .el-alert__content {
+  flex: 1;
+
+  .el-alert__description {
+    text-align: right;
+  }
+}
+
+.page {
+  max-width: $max-height;
+  @include responsive-only(xxs, portrait) {
+    max-width: $max-width;
+  }
+  margin: 0 auto;
+  text-align: left;
+
+  > * {
+    margin-bottom: $margin-right;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}

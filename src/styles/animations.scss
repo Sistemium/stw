@@ -1,0 +1,18 @@
+@import "variables";
+@import "bounce";
+
+.blink, tr.blink > td {
+  animation: blinking ease-in 1.5s 2;
+}
+
+@keyframes blinking {
+  0% {
+    background-color: #FFFFFF;
+  }
+  50% {
+    background-color: $light-green;
+  }
+  100% {
+    background-color: #FFFFFF;
+  }
+}

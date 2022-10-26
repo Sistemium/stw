@@ -1,0 +1,24 @@
+@import "variables";
+
+.list-group-item {
+  display: flex;
+  text-align: left;
+  justify-content: space-between;
+  .cts {
+    font-size: smaller;
+    color: $gray;
+  }
+}
+
+.el-button.positions {
+  padding: 0;
+}
+
+.right {
+  text-align: right;
+  margin-left: $margin-right;
+  white-space: nowrap;
+  span + span {
+    margin-left: $padding;
+  }
+}
