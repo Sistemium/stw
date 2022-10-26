@@ -7,6 +7,10 @@
 
   .buttons
     search-input(v-model="search" :disabled="!!barcode")
+    transition(name="bounce")
+      el-tooltip(v-if="selectedArticle")
+        div(slot="content") {{ copyTip }}
+        el-button(icon="el-icon-document-copy" @click="onCopy()" circle size="mini")
     tool-button(tool="add" @click="onAdd()")
 
   resize#articles-page-scroll(:padding="20" ref="resize")
@@ -18,6 +22,7 @@
         :prop-columns="tableData.propColumns"
         :size="tableSize"
         :articles="articles"
+        @current-change="handleCurrentChange"
         @click="onArticleClick"
         @avatarClick="avatarClick"
       )
@@ -53,6 +58,7 @@ export default {
     return {
       barcode: null,
       search: '',
+      selectedArticle: null,
     };
   },
   mixins: [
@@ -67,6 +73,10 @@ export default {
     ArticleList,
   },
   computed: {
+    copyTip() {
+      const { code, name } = this.selectedArticle || {};
+      return this.$t('copyTip', [code || name]);
+    },
     viewComponent() {
       return this.showTable ? 'article-table' : 'article-list';
     },
@@ -114,10 +124,29 @@ export default {
     //   },
     // },
   },
+  i18n: {
+    messages: {
+      en: {
+        copyTip: 'Click to copy "{0}" article',
+      },
+      lt: {
+        copyTip: 'Spustelkite kad nukopijuoti "{0}" prekę',
+      },
+      ru: {
+        copyTip: 'Нажмите, чтобы скопировать номенклатуру "{0}"',
+      },
+    },
+  },
   methods: {
     onAdd() {
       this.$router.push({
         name: this.createRoute,
+      });
+    },
+    onCopy() {
+      this.$router.push({
+        name: this.createRoute,
+        query: { paste: this.selectedArticle.id },
       });
     },
     setBarcode(barcode) {
@@ -130,6 +159,9 @@ export default {
           articleId: article.id,
         },
       });
+    },
+    handleCurrentChange(row) {
+      this.selectedArticle = row;
     },
     avatarClick(article) {
       this.$router.push({

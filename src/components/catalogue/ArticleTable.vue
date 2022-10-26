@@ -6,14 +6,17 @@ el-table.article-table(
   :data="articles"
   :height="height"
   @row-click="rowClick"
+  highlight-current-row
+  @current-change="handleCurrentChange"
   row-key="id"
+  ref="table"
 )
   el-table-column(
     column-key="avatar"
     :width="60"
   )
     template(v-slot="{ row }")
-      article-avatar(:article="row" size="medium")
+      article-avatar(:article="row" size="medium" :id="`id-${row.id}`")
   el-table-column(
     prop="name"
     :label="$t('fields.name')"
@@ -47,7 +50,14 @@ export default {
     height: Number,
   },
   methods: {
-    rowClick(row, { columnKey }) {
+    handleCurrentChange(current, old) {
+      this.$emit('current-change', current, old);
+    },
+    rowClick(row, column) {
+      if (!column) {
+        return;
+      }
+      const { columnKey } = column;
       // eslint-disable-next-line default-case
       switch (columnKey) {
         case 'buttons':
@@ -55,6 +65,7 @@ export default {
           break;
         case 'avatar':
           this.$emit('avatarClick', row);
+          break;
       }
     },
   },

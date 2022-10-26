@@ -70,9 +70,16 @@ export default {
     drawerWidth() {
       return this.$vssWidth > 450 ? '450px' : '370px';
     },
+    copyArticle() {
+      const { copyId } = this.$route.query;
+      return this.$cloneInstance(Article.reactiveGet(copyId));
+    },
     modelOrigin() {
       const { articleId } = this;
-      return articleId ? Article.reactiveGet(articleId) : articleInstance();
+      if (articleId) {
+        return Article.reactiveGet(articleId);
+      }
+      return this.copyArticle || articleInstance();
     },
     pictures() {
       return Picture.reactiveFilter({ ownerXid: this.articleId })
