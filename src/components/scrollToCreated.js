@@ -29,7 +29,7 @@ export default function scrollToCreated({ container }) {
           onDone(e) {
             if (e) {
               const toBlink = e.closest('tr') || e;
-              console.info(toBlink);
+              // console.info(toBlink);
               toBlink.classList.add(BLINK_CLASS);
               setTimeout(() => {
                 toBlink.classList.remove(BLINK_CLASS);
