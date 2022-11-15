@@ -7,6 +7,7 @@
 
   .buttons
     search-input(v-model="search" :disabled="!!barcode")
+    download-excel-button(:data-fn="downloadExcelData" :name="downloadExcelName")
     transition(name="bounce")
       el-tooltip(v-if="selectedArticle")
         div(slot="content") {{ copyTip }}
@@ -34,6 +35,7 @@
 <script>
 
 import each from 'lodash/each';
+import pick from 'lodash/pick';
 import orderBy from 'lodash/orderBy';
 import filter from 'lodash/filter';
 import Article from '@/models/Article';
@@ -46,6 +48,7 @@ import ArticleList from '@/components/catalogue/ArticleList.vue';
 import ArticleTable from '@/components/catalogue/ArticleTable.vue';
 import scrollToCreated from '@/components/scrollToCreated';
 import vssMixin from '@/components/vssMixin';
+import DownloadExcelButton from '@/lib/DownloadExcelButton.vue';
 
 export default {
   name: 'ArticlesPage',
@@ -66,6 +69,7 @@ export default {
     vssMixin,
   ],
   components: {
+    DownloadExcelButton,
     SearchInput,
     BarcodeView,
     PageTitle,
@@ -73,6 +77,9 @@ export default {
     ArticleList,
   },
   computed: {
+    downloadExcelName() {
+      return this.$t('menu.articles');
+    },
     copyTip() {
       const { code, name } = this.selectedArticle || {};
       return this.$t('copyTip', [code || name]);
@@ -138,6 +145,32 @@ export default {
     },
   },
   methods: {
+    downloadSchema() {
+      return {
+        columns: [
+          {
+            key: 'name',
+            title: this.$t('fields.name'),
+            width: 50,
+          }, {
+            key: 'code',
+            title: this.$t('fields.code'),
+            width: 25,
+          },
+          ...this.tableData.propColumns
+            .map(({ id, name }) => ({ key: id, title: name, width: 25 })),
+        ],
+      };
+    },
+    downloadExcelData() {
+      const schema = this.downloadSchema();
+      const columns = this.$map(schema.columns, 'key');
+      const data = this.articles.map(a => pick(a, columns));
+      return {
+        schema,
+        data,
+      };
+    },
     onAdd() {
       this.$router.push({
         name: this.createRoute,
