@@ -28,6 +28,10 @@ module.exports = defineConfig({
         //   // '^/ims/dr50': '',
         // },
       },
+      '/xlsx': {
+        // target: 'http://localhost:3300',
+        target: 'https://stw.sistemium.com',
+      },
     },
   },
 });
