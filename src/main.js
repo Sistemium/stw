@@ -27,7 +27,12 @@ new Vue({
       this.$debug('router:ready', route);
       const loading = Loading.service({});
       store.dispatch('auth/AUTH_INIT')
-        .then(() => store.dispatch('inv/SUBSCRIBE_SOCKET_STATUS'))
+        .then(authorized => {
+          if (authorized) {
+            return store.dispatch('inv/SUBSCRIBE_SOCKET_STATUS');
+          }
+          return loading.close();
+        })
         .catch(e => {
           this.$error('auth', e);
           loading.close();
@@ -40,6 +45,8 @@ const unsubscribe = store.subscribe(mutation => {
   debug(mutation.type, mutation.payload);
   if (mutation.type === 'auth/SET_AUTHORIZED') {
     authorizeAxios(mutation.payload.token);
+    store.dispatch('inv/SUBSCRIBE_SOCKET_STATUS')
+      .catch(error);
   } else if (mutation.type === 'inv/SET_SOCKET_IS_READY' && mutation.payload) {
     unsubscribe();
     const loading = Loading.service({});
