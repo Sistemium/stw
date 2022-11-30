@@ -30,10 +30,12 @@ export default {
   computed: {
     modelOrigin() {
       const { stockTakingId } = this;
+      const { storageId } = this.$route.query;
       return stockTakingId ? StockTaking.reactiveGet(stockTakingId) : {
         date: new Date().toJSON(),
         processing: 'progress',
         deviceCts: new Date().toJSON(),
+        storageId,
       };
     },
     editable() {

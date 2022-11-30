@@ -6,7 +6,7 @@
     storage-select(v-model="storageId" ref="storageSelect")
   template(v-if="showList")
     .buttons(v-if="stockTakings.length")
-      tool-button(tool="add" @click="pushCreate()")
+      tool-button(tool="add" @click="onAdd")
     resize(:padding="20" v-if="storageId")
       stock-taking-list(
         :items="stockTakings"
@@ -16,7 +16,7 @@
       )
       alert-empty(
         v-else
-        @click="pushCreate()"
+        @click="onAdd"
         :button-text="$tAction('start', 'stockTaking')"
       )
 
@@ -65,6 +65,9 @@ export default {
     },
   },
   methods: {
+    onAdd() {
+      this.pushCreate({ storageId: this.storageId });
+    },
     ...mapMutations({
       setCurrentStorageId: m.SET_CURRENT_STORAGE,
     }),
