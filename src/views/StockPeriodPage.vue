@@ -3,7 +3,7 @@
 .stock-date-page
   page-title(title="menu.stockPeriod")
   .filters
-    storage-select(v-model="storageId")
+    storage-select(v-model="storageId" ref="storageSelect")
     el-date-picker(
       v-model="dateRange"
       type="daterange"
@@ -18,22 +18,22 @@
 import { createNamespacedHelpers } from 'vuex';
 import PageTitle from '@/components/PageTitle.vue';
 import dayjs from 'sistemium-dates';
-import StorageSelect from '@/components/stock/StorageSelect.vue';
 import * as g from '@/store/inv/getters';
 import * as m from '@/store/inv/mutations';
 import { findStockPeriod } from '@/services/warehousing';
 import StockPeriodTable from '@/components/stock/StockPeriodTable.vue';
 import SearchInput from '@/lib/SearchInput.vue';
 import { searchArticle } from '@/services/catalogue';
+import storageSelectMixin from '@/components/storageSelectMixin';
 
 const { mapGetters, mapMutations } = createNamespacedHelpers('inv');
 
 export default {
   name: 'StockPeriodPage',
+  mixins: [storageSelectMixin],
   components: {
     SearchInput,
     StockPeriodTable,
-    StorageSelect,
     PageTitle,
   },
   data() {

@@ -42,18 +42,18 @@ import StockOperationList from '@/components/out/StockOperationList.vue';
 import pageMixin from '@/lib/pageMixin';
 import find from 'lodash/find';
 import { stockOperationToViewData } from '@/services/warehousing';
-import StorageSelect from '@/components/stock/StorageSelect.vue';
 import StockOperationTable from '@/components/out/StockOperationTable.vue';
 import vssMixin from '@/components/vssMixin';
 import * as g from '@/store/inv/getters';
 import * as m from '@/store/inv/mutations';
+import storageSelectMixin from '@/components/storageSelectMixin';
 
 const { mapGetters, mapMutations } = createNamespacedHelpers('inv');
 
 export default {
   name: 'StockOperationsPage',
-  mixins: [pageMixin, vssMixin],
-  components: { StockOperationTable, StorageSelect, StockOperationList },
+  mixins: [pageMixin, vssMixin, storageSelectMixin],
+  components: { StockOperationTable, StockOperationList },
   props: {
     model: Object,
     positionsModel: Object,
@@ -72,6 +72,10 @@ export default {
       return !this.showTable || this.showDetails;
     },
     stockOperations() {
+      const { storageId } = this;
+      if (!storageId) {
+        return [];
+      }
       return this.$orderBy(this.model.reactiveFilter({
         storageId: this.storageId,
       }), ['date', 'cts'], ['desc', 'desc']);
@@ -114,13 +118,6 @@ export default {
         stockOperationId: null,
       }, {}, this.rootState);
     },
-  },
-  created() {
-    if (!this.storageId) {
-      this.$nextTick(() => {
-        this.$refs.storageSelect.open();
-      });
-    }
   },
 };
 
