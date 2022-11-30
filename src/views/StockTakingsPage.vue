@@ -16,7 +16,7 @@
       )
       alert-empty(
         v-else
-        @click="onAdd()"
+        @click="pushCreate()"
         :button-text="$tAction('start', 'stockTaking')"
       )
 
