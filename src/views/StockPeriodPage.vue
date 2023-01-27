@@ -68,7 +68,7 @@ export default {
     filteredData() {
       const { search, data } = this;
       const searcher = searchArticle(search);
-      return search ? data.filter(({ article }) => searcher(article)) : data;
+      return search ? data.filter(({ article }) => article && searcher(article)) : data;
     },
   },
   methods: {

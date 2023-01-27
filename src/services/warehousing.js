@@ -120,6 +120,7 @@ export async function findStockPeriod(storageId, dateB, dateE) {
       article,
       articleName: get(article, 'name'),
     };
-  });
+  })
+    .filter(({ article }) => article);
   return orderBy(res, 'articleName');
 }
