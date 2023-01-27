@@ -31,6 +31,7 @@ import FormButtons from 'sistemium-vue/components/FormButtons.vue';
 import matchesDeep from '@bit/sistemium.vue.matches-deep';
 import cloneDeep from 'lodash/cloneDeep';
 import merge from 'lodash/merge';
+import { localizedDeleteError } from '@/services/erroring';
 
 export default {
   name: 'DrawerEdit',
@@ -111,6 +112,8 @@ export default {
       this.performOperation(() => this.destroyFn(id)
         .then(() => {
           this.$emit('deleted', id);
+        }).catch(e => {
+          throw localizedDeleteError(e);
         }));
     },
 

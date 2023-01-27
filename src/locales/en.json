@@ -137,6 +137,9 @@
     "recipe": "Recipe",
     "other": "Other"
   },
+  "models": {
+    "StockArticleDate": "Warehouse operations"
+  },
   "dataTypes": {
     "string": "String",
     "options": "Options",
@@ -148,6 +151,7 @@
   "validation": {
     "required": "{0} is required",
     "formInvalid": "The form is filled out with errors",
+    "constrainedDelete": "Can't delete this record because there are \"{0}\"",
     "noData": "No data"
   },
   "actions": {

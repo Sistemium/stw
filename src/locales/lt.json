@@ -77,6 +77,9 @@
     "unitsInPackage": "{0} pakuotėje",
     "ord": "Eilės numeris"
   },
+  "models": {
+    "StockArticleDate": "Sandėlio operacijos"
+  },
   "measures": {
     "weight": "Svoris",
     "length": "Ilgis",
@@ -145,6 +148,7 @@
   "validation": {
     "required": "{0} yra privalomas",
     "formInvalid": "Klaidingai užpildyta forma",
+    "constrainedDelete": "Negalima ištrinti šio įrašo, nes yra \"{0}\"",
     "noData": "Nėra duomenų"
   },
   "actions": {

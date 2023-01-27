@@ -77,6 +77,9 @@
     "unitsInPackage": "{0} в упаковке",
     "ord": "Порядковый номер"
   },
+  "models": {
+    "StockArticleDate": "Складские операции"
+  },
   "measures": {
     "weight": "Вес",
     "length": "Длина",
@@ -145,6 +148,7 @@
   "validation": {
     "required": "{0} не может быть не не указано",
     "formInvalid": "Форма заполнена с ошибками",
+    "constrainedDelete": "Невозможно удалить эту запись, потому что существуют \"{0}\"",
     "noData": "Нет данных"
   },
   "actions": {
