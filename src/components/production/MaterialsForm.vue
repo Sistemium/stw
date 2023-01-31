@@ -1,8 +1,8 @@
 <template lang="pug">
 
 .materials-form
-  //template(v-if="model.materials.length")
-  //  tool-button(tool="add" @click="onAddMaterial")
+  //template(v-if="materials.length")
+    tool-button(tool="add" @click="onAddMaterial")
   .materials
     .material(
       v-for="(material, idx) in materials"
@@ -63,4 +63,9 @@ export default {
 .idx {
   flex: 1;
 }
+
+.materials-form {
+  padding-bottom: 60px;
+}
+
 </style>
