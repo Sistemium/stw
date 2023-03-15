@@ -91,7 +91,13 @@ export default {
       setCurrentStorageId: m.SET_CURRENT_STORAGE,
     }),
     async refresh(storageId, dateB, dateE) {
-      this.data = await findStockPeriod(storageId, dateB, dateE);
+      const loading = this.$loading({});
+      try {
+        this.data = await findStockPeriod(storageId, dateB, dateE);
+      } catch (e) {
+        this.$error('refresh', e);
+      }
+      loading.close();
     },
     rowClick(row) {
       this.showDetails = true;
