@@ -7,13 +7,13 @@
 </template>
 <script>
 
-import { version } from '../../package.json';
+import packageJson from '../../package.json';
 
 export default {
   name: 'AboutPage',
   computed: {
     version() {
-      return version;
+      return packageJson.version;
     },
   },
 };
