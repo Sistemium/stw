@@ -10,7 +10,18 @@
     )
     search-input(v-model="search")
   resize(:padding="20")
-    stock-period-table(:data="filteredData")
+    stock-period-table(
+      :data="filteredData"
+      @row-click="rowClick"
+    )
+  stock-article-details-view(
+    v-if="showDetails"
+    v-model="showDetails"
+    :article-id="articleId"
+    :storage-id="storageId"
+    :date-b="queryParams.dateB"
+    :date-e="queryParams.dateE"
+  )
 
 </template>
 <script>
@@ -25,6 +36,7 @@ import StockPeriodTable from '@/components/stock/StockPeriodTable.vue';
 import SearchInput from '@/lib/SearchInput.vue';
 import { searchArticle } from '@/services/catalogue';
 import storageSelectMixin from '@/components/storageSelectMixin';
+import StockArticleDetailsView from '@/components/stock/StockArticleDetailsView.vue';
 
 const { mapGetters, mapMutations } = createNamespacedHelpers('inv');
 
@@ -32,6 +44,7 @@ export default {
   name: 'StockPeriodPage',
   mixins: [storageSelectMixin],
   components: {
+    StockArticleDetailsView,
     SearchInput,
     StockPeriodTable,
     PageTitle,
@@ -43,6 +56,8 @@ export default {
       dateRange: [monthAgo, today],
       data: [],
       search: '',
+      showDetails: false,
+      articleId: null,
     };
   },
   computed: {
@@ -77,6 +92,10 @@ export default {
     }),
     async refresh(storageId, dateB, dateE) {
       this.data = await findStockPeriod(storageId, dateB, dateE);
+    },
+    rowClick(row) {
+      this.showDetails = true;
+      this.articleId = row.articleId;
     },
   },
   watch: {

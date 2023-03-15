@@ -1,6 +1,9 @@
 <template lang="pug">
 
-el-table.stock-period-table(:data="data")
+el-table.stock-period-table(
+  :data="data"
+  @row-click="(row, column) => $emit('row-click', row, column)"
+)
   el-table-column(
     :label="$t('concepts.article')"
   )
@@ -54,6 +57,10 @@ export default {
 
 .stock-period-table ::v-deep .cell {
   word-break: normal;
+}
+
+.el-table ::v-deep td {
+  cursor: pointer;
 }
 
 </style>
