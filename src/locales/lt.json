@@ -39,6 +39,8 @@
     "vatCode": "PVM kodas",
     "name": "Pavadinimas",
     "date": "Data",
+    "dateB": "Data nuo",
+    "toDate": "iki",
     "type": "Tipas",
     "consigneeType": "Gavėjo tipas",
     "consignee": "Gavėjas",

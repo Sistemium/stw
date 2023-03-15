@@ -39,6 +39,8 @@
     "vatCode": "НСД код",
     "name": "Название",
     "date": "Дата",
+    "dateB": "Дата с",
+    "toDate": "по",
     "type": "Тип",
     "consigneeType": "Тип получателя",
     "consignee": "Получатель",

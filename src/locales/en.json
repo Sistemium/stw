@@ -44,6 +44,8 @@
     "supplierType": "Supplier type",
     "supplier": "Supplier",
     "date": "Date",
+    "dateB": "Date from",
+    "toDate": "to",
     "valueType": "Value type",
     "required": "Required",
     "bool": {
