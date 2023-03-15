@@ -3,6 +3,7 @@
 el-table.stock-period-table(
   :data="data"
   @row-click="(row, column) => $emit('row-click', row, column)"
+  :height="height"
 )
   el-table-column(
     :label="$t('concepts.article')"
@@ -45,6 +46,7 @@ export default {
   components: { ArticleView },
   props: {
     data: Array,
+    height: Number,
     columnWidth: {
       type: Number,
       default: 120,

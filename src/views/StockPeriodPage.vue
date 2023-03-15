@@ -9,10 +9,11 @@
       type="daterange"
     )
     search-input(v-model="search")
-  resize(:padding="20")
+  resize(:padding="20" @resized="setHeight")
     stock-period-table(
       :data="filteredData"
       @row-click="rowClick"
+      :height="tableHeight"
     )
   stock-article-details-view(
     v-if="showDetails"
@@ -58,6 +59,7 @@ export default {
       search: '',
       showDetails: false,
       articleId: null,
+      tableHeight: undefined,
     };
   },
   computed: {
@@ -90,6 +92,9 @@ export default {
     ...mapMutations({
       setCurrentStorageId: m.SET_CURRENT_STORAGE,
     }),
+    setHeight(height) {
+      this.tableHeight = height;
+    },
     async refresh(storageId, dateB, dateE) {
       const loading = this.$loading({});
       try {
@@ -130,6 +135,7 @@ export default {
 
 .stm-resize {
   margin-top: $margin-top;
+  overflow-y: hidden;
 }
 
 </style>
