@@ -19,7 +19,8 @@ el-table.stock-article-operations-table(
     :label="$t(counterparty)"
   )
     template(v-slot="{ row }")
-      span(v-if="row.counterParty" ) {{ row.counterParty.name }}
+      .name(v-if="row.counterParty") {{ row.counterParty.name }}
+      .comment-text(v-if="row.commentText" ) {{ row.commentText }}
 
 </template>
 <script>

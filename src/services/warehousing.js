@@ -176,15 +176,17 @@ async function loadOperationsInOut(operations, itemsModel, parentModel, relation
   const parentIds = uniq(filter(map(items, relation)));
   const parents = parentModel.filter({ id: { $in: parentIds } });
   await loadCounterparty(parents);
-  return items.map(operation => {
+  const res = items.map(operation => {
     const parent = parentModel.getByID(operation[relation]);
     return {
       ...operation,
       date: get(parent, 'date'),
       counterParty: getCounterparty(parent),
       parentId: parent.id,
+      commentText: parent.commentText,
     };
   });
+  return orderBy(res, 'date');
 }
 
 async function loadCounterparty(records = []) {

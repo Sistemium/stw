@@ -9,7 +9,17 @@ el-dialog.stock-article-details-view(
   @closed="handleClose()"
   :append-to-body="true"
 )
-  el-tabs(v-model="currentTab")
+
+  .filters
+    label {{ $t('fields.dateB') }}
+    el-date-picker(v-model="period.dateB")
+    label {{ $t('fields.toDate') }}
+    el-date-picker(v-model="period.dateE")
+
+  el-tabs(
+    v-model="currentTab"
+    v-loading="loading"
+  )
     el-tab-pane(
       v-for="tab in tabs"
       :key="tab.id"
@@ -41,8 +51,13 @@ export default {
   components: { StockArticleOperationsTable },
   data() {
     return {
+      loading: false,
       data: {},
       currentTab: null,
+      period: {
+        dateB: new Date(this.dateB),
+        dateE: new Date(this.dateE),
+      },
     };
   },
   props: {
@@ -51,12 +66,6 @@ export default {
     storageId: String,
     dateB: String,
     dateE: String,
-    // from: {
-    //   type: Object,
-    //   default: () => ({
-    //     name: 'stockPeriod',
-    //   }),
-    // },
   },
   computed: {
     title() {
@@ -107,9 +116,7 @@ export default {
     },
   },
   created() {
-    this.$nextTick(() => {
-      this.refresh();
-    });
+    this.$watchImmediate('period', this.refresh, { deep: true });
   },
   methods: {
     operationClick(tab, row) {
@@ -123,9 +130,9 @@ export default {
     handleClose() {
       this.visible = false;
     },
-    refresh() {
-      const loading = this.$loading({ fullscreen: true });
-      findStockPeriodOperations(this.articleId, this.storageId, this.dateB, this.dateE)
+    refresh({ dateB, dateE }) {
+      this.loading = true;
+      findStockPeriodOperations(this.articleId, this.storageId, dateB, dateE)
         .then(res => {
           this.data = res;
           const tab = this.tabs.find(({ operations }) => operations.length);
@@ -134,7 +141,7 @@ export default {
           }
         })
         .finally(() => {
-          loading.close();
+          this.loading = false;
         });
     },
   },
@@ -147,4 +154,18 @@ export default {
 .el-badge {
   margin-left: $padding;
 }
+
+.filters {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  label {
+    padding: $padding;
+  }
+  margin-bottom: $margin-top;
+  .el-date-editor {
+    flex: 1;
+  }
+}
+
 </style>
