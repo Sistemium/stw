@@ -4,7 +4,12 @@ const MAX_WAIT_FOR = 50;
 const BLINK_CLASS = 'blink';
 const REMOVE_BLINK_AFTER = 4000;
 
-export default function scrollToCreated({ container }) {
+export default function scrollToCreated(config) {
+  const {
+    container,
+    blink = true,
+    watchFor = '$route.query.createdId',
+  } = config;
   return {
     data() {
       return {
@@ -12,7 +17,7 @@ export default function scrollToCreated({ container }) {
       };
     },
     mounted() {
-      this.$watchImmediate('$route.query.createdId', id => {
+      this.$watchImmediate(watchFor, id => {
         if (!id) {
           return;
         }
@@ -29,7 +34,9 @@ export default function scrollToCreated({ container }) {
           onDone(e) {
             if (e) {
               const toBlink = e.closest('tr') || e;
-              // console.info(toBlink);
+              if (!blink) {
+                return;
+              }
               toBlink.classList.add(BLINK_CLASS);
               setTimeout(() => {
                 toBlink.classList.remove(BLINK_CLASS);
