@@ -22,7 +22,7 @@
     "element-ui": "^2.15.10",
     "lodash": "^4.17.21",
     "qs": "^6.11.0",
-    "sistemium-data": "^1.7.6",
+    "sistemium-data": "^1.9.1",
     "sistemium-data-vue": "^0.2.8",
     "sistemium-dates": "^1.1.0",
     "sistemium-debug": "^1.0.1",
