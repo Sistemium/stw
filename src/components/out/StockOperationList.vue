@@ -2,6 +2,7 @@
 
 .stock-operation-list.list-group
   stock-operation-list-item(
+    :id="`id-${item.id}`"
     v-for="item in viewData"
     :key="item.id"
     @click="$emit('click', item)"

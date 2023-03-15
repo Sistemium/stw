@@ -12,7 +12,7 @@
           storage-select(v-model="storageId" ref="storageSelect" :disabled="showDetails")
           tool-button(tool="back" @click="onBack" v-if="showDetails")
           tool-button(tool="add" @click="onAdd()")
-        resize(:padding="20")
+        resize#stock-operation-scroll(:padding="20")
           template(v-if="viewData.length")
             stock-operation-list(
               v-if="showList"
@@ -47,12 +47,22 @@ import vssMixin from '@/components/vssMixin';
 import * as g from '@/store/inv/getters';
 import * as m from '@/store/inv/mutations';
 import storageSelectMixin from '@/components/storageSelectMixin';
+import scrollToCreated from '@/components/scrollToCreated';
 
 const { mapGetters, mapMutations } = createNamespacedHelpers('inv');
 
 export default {
   name: 'StockOperationsPage',
-  mixins: [pageMixin, vssMixin, storageSelectMixin],
+  mixins: [
+    pageMixin,
+    vssMixin,
+    storageSelectMixin,
+    scrollToCreated({
+      container: '#stock-operation-scroll',
+      blink: false,
+      watchFor: '$route.params.stockOperationId',
+    }),
+  ],
   components: { StockOperationTable, StockOperationList },
   props: {
     model: Object,
