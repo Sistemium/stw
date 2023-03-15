@@ -1,6 +1,9 @@
 <template lang="pug">
 
-el-table.stock-article-operations-table(:data="operations")
+el-table.stock-article-operations-table(
+  :data="operations"
+  @row-click="(row, column) => $emit('row-click', row, column)"
+)
   el-table-column(
     :label="$t('fields.date')"
   )
@@ -34,5 +37,7 @@ export default {
 
 </script>
 <style scoped lang="scss">
-
+.el-table ::v-deep td {
+  cursor: pointer;
+}
 </style>

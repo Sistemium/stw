@@ -182,6 +182,7 @@ async function loadOperationsInOut(operations, itemsModel, parentModel, relation
       ...operation,
       date: get(parent, 'date'),
       counterParty: getCounterparty(parent),
+      parentId: parent.id,
     };
   });
 }

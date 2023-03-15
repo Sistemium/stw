@@ -26,6 +26,7 @@ el-dialog.stock-article-details-view(
       stock-article-operations-table(
         :operations="tab.operations"
         :counterparty="tab.counterparty"
+        @row-click="(row, column) => operationClick(tab, row, column)"
       )
 
 </template>
@@ -72,18 +73,24 @@ export default {
           badge: fix.length || null,
           operations: fix,
           counterparty: null,
+          route: 'stockTakingProgress',
+          routeParam: 'stockTakingId',
         },
         {
           id: 'fields.unitsIn',
           badge: incoming.length || null,
           operations: incoming,
           counterparty: 'fields.supplier',
+          route: 'stockReceiving',
+          routeParam: 'stockOperationId',
         },
         {
           id: 'fields.unitsOut',
           badge: out.length || null,
           operations: out,
           counterparty: 'fields.consignee',
+          route: 'stockWithdrawing',
+          routeParam: 'stockOperationId',
         },
       ];
     },
@@ -100,15 +107,24 @@ export default {
     },
   },
   created() {
-    this.refresh();
+    this.$nextTick(() => {
+      this.refresh();
+    });
   },
   methods: {
+    operationClick(tab, row) {
+      const to = {
+        name: tab.route,
+        params: { [tab.routeParam]: row.parentId },
+      };
+      this.$router.push(to)
+        .catch(e => this.$error('operationClick', e));
+    },
     handleClose() {
       this.visible = false;
-      // this.$router.push(this.from)
-      //   .catch(e => this.$error('handleClose', e));
     },
     refresh() {
+      const loading = this.$loading({ fullscreen: true });
       findStockPeriodOperations(this.articleId, this.storageId, this.dateB, this.dateE)
         .then(res => {
           this.data = res;
@@ -116,6 +132,9 @@ export default {
           if (tab) {
             this.currentTab = tab.id;
           }
+        })
+        .finally(() => {
+          loading.close();
         });
     },
   },
