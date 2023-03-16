@@ -4,7 +4,7 @@
   .title
     .date {{ $ts(viewData.date, 'short') }}
     .counterparty(v-if="viewData.counterpartyName") {{ viewData.counterpartyName }}
-    //.storage {{ storage }}
+    .comment-text(v-if="viewData.commentText") {{ viewData.commentText }}
   .right
     .processing {{ viewData.processing }}
     .positions(
@@ -28,4 +28,8 @@ export default {
 </script>
 <style scoped lang="scss">
 @import "../../styles/pageLists";
+.comment-text {
+  color: $gray;
+  font-size: smaller;
+}
 </style>
