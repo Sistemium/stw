@@ -8,6 +8,7 @@ el-dialog.stock-article-details-view(
   custom-class="el-dialog-tabs"
   @closed="handleClose()"
   :append-to-body="true"
+  width="75%"
 )
 
   .filters

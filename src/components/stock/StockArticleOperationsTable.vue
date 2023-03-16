@@ -6,12 +6,26 @@ el-table.stock-article-operations-table(
 )
   el-table-column(
     :label="$t('fields.date')"
+    :width="columnWidth"
   )
     template(v-slot="{ row }")
       span {{ $ts(row.date, 'short') }}
   el-table-column(
     prop="units"
+    align="right"
     :label="$t('fields.units')"
+    :width="columnWidth"
+  )
+  el-table-column(
+    prop="price"
+    align="right"
+    :label="$t('fields.price')"
+    :width="columnWidth"
+  )
+  el-table-column(
+    prop="vatPrice"
+    align="right"
+    :label="$t('fields.vatPrice')"
     :width="columnWidth"
   )
   el-table-column(
