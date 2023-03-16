@@ -4,6 +4,7 @@ el-table.stock-operation-table(
   :data="viewData"
   @row-click="row => $emit('click', row)"
   :size="size"
+  :height="height"
 )
   el-table-column(
     prop="processing"
@@ -55,6 +56,7 @@ export default {
     activeId: String,
     size: String,
     positionsModel: Object,
+    height: Number,
     counterpartyRole: String,
   },
   computed: {

@@ -14,7 +14,7 @@
         el-button(icon="el-icon-document-copy" @click="onCopy()" circle size="mini")
     tool-button(tool="add" @click="onAdd()")
 
-  resize#articles-page-scroll(:padding="20" ref="resize")
+  resize#articles-page-scroll(:padding="20" ref="resize" @resized="setHeight")
     template(
       v-if="articles.length"
     )
@@ -26,6 +26,7 @@
         @current-change="handleCurrentChange"
         @click="onArticleClick"
         @avatarClick="avatarClick"
+        :height="tableHeight"
       )
     el-alert.empty(type="info" :title="$t('validation.noData')" :closable="false" v-else)
 
@@ -145,6 +146,9 @@ export default {
     },
   },
   methods: {
+    setHeight(height) {
+      this.tableHeight = height;
+    },
     downloadSchema() {
       return {
         columns: [
@@ -214,6 +218,10 @@ export default {
 
 .search-input {
   flex: 1;
+}
+
+.stm-resize {
+  overflow-y: hidden;
 }
 
 </style>

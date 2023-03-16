@@ -22,6 +22,7 @@
             )
             stock-operation-table(
               v-else
+              :height="tableHeight"
               :view-data="viewData"
               @click="onItemClick"
               :size="tableSize"
@@ -48,6 +49,7 @@ import * as g from '@/store/inv/getters';
 import * as m from '@/store/inv/mutations';
 import storageSelectMixin from '@/components/storageSelectMixin';
 import scrollToCreated from '@/components/scrollToCreated';
+import SearchInput from '@/lib/SearchInput.vue';
 
 const { mapGetters, mapMutations } = createNamespacedHelpers('inv');
 
@@ -69,6 +71,11 @@ export default {
     positionsModel: Object,
     operationName: String,
     counterpartyRole: String,
+  },
+  data() {
+    return {
+      tableHeight: undefined,
+    };
   },
   computed: {
     viewData() {
@@ -112,6 +119,9 @@ export default {
     },
   },
   methods: {
+    setHeight(height) {
+      this.tableHeight = height;
+    },
     onAdd() {
       this.pushCreate({ storageId: this.storageId });
     },
@@ -166,6 +176,10 @@ export default {
       flex: 1;
     }
   }
+}
+
+.stm-resize {
+  overflow-y: hidden;
 }
 
 .el-main {
