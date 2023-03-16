@@ -86,7 +86,8 @@ export function searchArticle(search, propColumns = []) {
   const re = new RegExp(search, 'i');
   return article => re.test(article.name)
     || re.test(article.code)
-    || propColumns.find(({ id }) => re.test(article[id]));
+    || propColumns.find(({ id }) => re.test(article[id]))
+    || article.props.find(({ stringValue }) => re.test(stringValue));
 }
 
 export function searchByArticle(search) {

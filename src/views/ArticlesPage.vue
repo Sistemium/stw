@@ -41,7 +41,7 @@ import orderBy from 'lodash/orderBy';
 import filter from 'lodash/filter';
 import Article from '@/models/Article';
 import ArticleProp from '@/models/ArticleProp';
-import { searchArticle } from '@/services/catalogue';
+import { articlePropertySort, searchArticle } from '@/services/catalogue';
 import PageTitle from '@/components/PageTitle.vue';
 import BarcodeView from '@/components/BarcodeScanner/BarcodeView.vue';
 import SearchInput from '@/lib/SearchInput.vue';
@@ -62,6 +62,7 @@ export default {
     return {
       barcode: null,
       search: '',
+      tableHeight: undefined,
       selectedArticle: null,
     };
   },
@@ -107,20 +108,21 @@ export default {
         });
         return res;
       });
+      const propColumns = Array.from(allProps.keys())
+        .map(id => {
+          const prop = ArticleProp.reactiveGet(id);
+          if (prop.isNaming) {
+            return false;
+          }
+          return {
+            ...prop,
+            align: prop.type === 'number' ? 'right' : 'left',
+          };
+        })
+        .filter(x => x);
       return {
         rows: orderBy(rows, 'name'),
-        propColumns: Array.from(allProps.keys())
-          .map(id => {
-            const prop = ArticleProp.reactiveGet(id);
-            if (prop.isNaming) {
-              return false;
-            }
-            return {
-              ...prop,
-              align: prop.type === 'number' ? 'right' : 'left',
-            };
-          })
-          .filter(x => x),
+        propColumns: articlePropertySort(propColumns),
       };
     },
     // search: {
