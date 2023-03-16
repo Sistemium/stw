@@ -8,7 +8,8 @@ el-tabs.stock-operation-item-form(:class="tabClass")
       ref="itemForm"
     )
       template(v-slot:article-extra)
-        price-form(:model="model" :vat-prices="vatPrices")
+        vat-mode-switch(v-model="formVatPrices" v-if="editable")
+        price-form(:model="model" :vat-prices="formVatPrices")
   el-tab-pane(:label="$t('menu.materials')" v-if="model.materials")
     el-form(:model="model" :disabled="!editable")
       materials-form(:materials="model.materials")
@@ -22,14 +23,25 @@ import StockTakingItemForm from '@/components/stock/StockTakingItemForm.vue';
 import MaterialsForm from '@/components/production/MaterialsForm.vue';
 import PriceForm from '@/components/out/PriceForm.vue';
 import Article from '@/models/Article';
+import VatModeSwitch from '@/components/out/VatModeSwitch.vue';
 
 export default {
   name: 'StockOperationItemForm',
-  components: { PriceForm, StockTakingItemForm, MaterialsForm },
+  components: {
+    VatModeSwitch,
+    PriceForm,
+    StockTakingItemForm,
+    MaterialsForm,
+  },
   props: {
     editable: Boolean,
     model: Object,
     vatPrices: Boolean,
+  },
+  data() {
+    return {
+      formVatPrices: this.vatPrices,
+    };
   },
   methods: {
     validate(cb) {
