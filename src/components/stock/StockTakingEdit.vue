@@ -8,6 +8,7 @@ drawer-edit.stock-taking-edit(
   :from="from"
   :deletable="editable"
   :is-drawer="isDrawer"
+  :after-close-to="afterCloseTo"
 )
   template(v-slot="{ model }")
     stock-taking-form(ref="form" :model="model" :disabled="!editable")
@@ -24,8 +25,13 @@ export default {
   props: {
     stockTakingId: String,
     from: Object,
-    progressRoute: String,
+    editRoute: String,
     isDrawer: { type: Boolean, default: true },
+  },
+  data() {
+    return {
+      afterCloseTo: null,
+    };
   },
   computed: {
     modelOrigin() {
@@ -39,19 +45,18 @@ export default {
       };
     },
     editable() {
-      const { processing } = this.modelOrigin;
+      const { processing } = this.modelOrigin || {};
       return workflow.step(processing).editable;
     },
   },
   methods: {
     async saveFn(props) {
       const { id: stockTakingId, processing } = await StockTaking.createOne(props);
-      const { progressRoute } = this;
-      if (progressRoute && processing === 'progress') {
-        await this.$router.push({
-          name: this.progressRoute,
+      if (processing === 'progress') {
+        this.afterCloseTo = {
+          name: 'stockTakingProgress',
           params: { stockTakingId },
-        });
+        };
       }
       return StockTaking.reactiveGet(stockTakingId);
     },

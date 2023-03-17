@@ -1,6 +1,6 @@
 <template lang="pug">
 
-.stock-taking-page.page
+el-main.stock-taking-page.page
 
   barcode-scanner(@scan="onScan")
 
@@ -11,7 +11,7 @@
   el-tabs(tab-position="top" v-model="currentTabData" )
     el-tab-pane(:label="$t('concepts.items')" name="items")
       .buttons(v-if="stockTakingItems.length || search")
-        search-input(v-model="search")
+        //search-input(v-model="search")
         tool-button(tool="add" @click="onAdd()")
       resize(:padding="20")
         stock-taking-item-list(:items="stockTakingItems" @click="onItemClick")
@@ -59,12 +59,15 @@ export default {
   },
   data() {
     return {
-      search: '',
+      // search: '',
       stockTakingItem: null,
       currentTabData: 'items',
     };
   },
   computed: {
+    search() {
+      return this.$route.query.search || '';
+    },
     workflow() {
       return workflow;
     },
@@ -95,22 +98,15 @@ export default {
     }),
     onAdd(barcode) {
       const query = barcode ? { barcode } : {};
-      this.$router.push({
-        name: this.createItemRoute,
-        params: {
-          stockTakingId: this.stockTakingId,
-        },
-        query,
-      });
+      this.updateRouteParams({
+        stockTakingId: this.stockTakingId,
+      }, query, this.createItemRoute);
     },
     onItemClick(item) {
-      this.$router.push({
-        name: this.editItemRoute,
-        params: {
-          stockTakingItemId: item.id,
-          stockTakingId: this.stockTakingId,
-        },
-      });
+      this.updateRouteParams({
+        stockTakingItemId: item.id,
+        stockTakingId: this.stockTakingId,
+      }, {}, this.editItemRoute);
     },
   },
   components: {

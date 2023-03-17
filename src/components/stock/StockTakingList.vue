@@ -4,6 +4,7 @@
   stock-taking-list-item(
     v-for="item in items" :key="item.id"
     :stock-taking="item"
+    :class="{ active: activeId === item.id }"
     @click="$emit('click', item)"
     @positionsClick="$emit('positionsClick', item)"
   )
@@ -18,6 +19,7 @@ export default {
   components: { StockTakingListItem },
   props: {
     items: Array,
+    activeId: String,
   },
   methods: {},
 };
