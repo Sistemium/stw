@@ -25,10 +25,7 @@ export default {
         });
     },
     pushCreate(query) {
-      this.$router.push({
-        name: this.createRoute,
-        query,
-      })
+      this.updateRouteParams({}, query, this.createRoute)
         .catch(e => this.$error(e));
     },
   },
