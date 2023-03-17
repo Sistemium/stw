@@ -65,6 +65,9 @@ export default {
       container: '#stock-operation-scroll',
       blink: false,
       watchFor: '$route.params.stockOperationId',
+      watchToRepeat() {
+        return !!this.$route.query.search;
+      },
     }),
   ],
   components: { SearchInput, StockOperationTable, StockOperationList },

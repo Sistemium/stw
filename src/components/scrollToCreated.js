@@ -1,3 +1,5 @@
+import get from 'lodash/get';
+
 const SCROLL_DURATION = 500;
 const WAIT_FOR_TIMEOUT = 200;
 const MAX_WAIT_FOR = 50;
@@ -9,6 +11,7 @@ export default function scrollToCreated(config) {
     container,
     blink = true,
     watchFor = '$route.query.createdId',
+    watchToRepeat = null,
   } = config;
   return {
     data() {
@@ -24,6 +27,15 @@ export default function scrollToCreated(config) {
         this.waitCount = 0;
         this.waitUntilId(`#id-${id}`);
       });
+      if (watchToRepeat) {
+        this.$watch(watchToRepeat, () => {
+          const id = get(this, watchFor);
+          this.$debug('watchToRepeat', id);
+          if (id) {
+            this.scrollToId(`#id-${id}`);
+          }
+        });
+      }
     },
     methods: {
       scrollToId(id) {

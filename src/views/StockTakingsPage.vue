@@ -52,6 +52,9 @@ export default {
       container: '#stock-takings-scroll',
       blink: false,
       watchFor: '$route.params.stockTakingId',
+      watchToRepeat() {
+        return !!this.$route.query.search;
+      },
     }),
   ],
   components: { SearchInput, StockTakingList },
