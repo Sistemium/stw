@@ -2,6 +2,7 @@
 
 .stock-taking-list.list-group
   stock-taking-list-item(
+    :id="`id-${item.id}`"
     v-for="item in items" :key="item.id"
     :stock-taking="item"
     :class="{ active: activeId === item.id }"

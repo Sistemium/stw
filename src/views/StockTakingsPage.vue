@@ -10,7 +10,7 @@
           storage-select(v-model="storageId" ref="storageSelect")
           tool-button(tool="back" @click="onBack" v-if="showDetails")
           tool-button(tool="add" @click="onAdd")
-      resize(:padding="20" v-if="storageId")
+      resize#stock-takings-scroll(:padding="20" v-if="storageId")
         stock-taking-list(
           :items="stockTakings"
           @click="onPositionsClick"
@@ -39,12 +39,21 @@ import * as m from '@/store/inv/mutations';
 import storageSelectMixin from '@/components/storageSelectMixin';
 import { searchOperations } from '@/services/warehousing';
 import StockTakingItem from '@/models/StockTakingItem';
+import scrollToCreated from '@/components/scrollToCreated';
 
 const { mapGetters, mapMutations } = createNamespacedHelpers('inv');
 
 export default {
   name: 'StockTakingsPage',
-  mixins: [pageMixin, storageSelectMixin],
+  mixins: [
+    pageMixin,
+    storageSelectMixin,
+    scrollToCreated({
+      container: '#stock-takings-scroll',
+      blink: false,
+      watchFor: '$route.params.stockTakingId',
+    }),
+  ],
   components: { SearchInput, StockTakingList },
   props: {
     progressRoute: String,
