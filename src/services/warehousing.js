@@ -23,6 +23,7 @@ import StockWithdrawingItem from '@/models/StockWithdrawingItem';
 import StockWithdrawing from '@/models/StockWithdrawing';
 import StockTakingItem from '@/models/StockTakingItem';
 import StockTaking from '@/models/StockTaking';
+import { testArticle } from '@/services/catalogue';
 
 export function stockTakingItemInstance({ stockTakingId, articleId, barcode }) {
   return {
@@ -111,6 +112,31 @@ export function vatConfig(date = new Date()) {
     dateE: { $gte: stringDate },
   });
   return config;
+}
+
+export function searchOperations(search, itemsModel, parentKey) {
+  if (!search) {
+    return () => true;
+  }
+  const re = new RegExp(search, 'i');
+  return operation => {
+    const { commentText, counterpartyId, counterpartyType } = operation;
+    return re.test(commentText)
+      || (counterpartyType === 'LegalEntity' && counterPartyTest(LegalEntity, counterpartyId, re))
+      || (counterpartyType === 'Storage' && counterPartyTest(Storage, counterpartyId, re))
+      || positionsTest(itemsModel.reactiveManyByIndex(parentKey, operation.id), re);
+  };
+}
+
+function counterPartyTest(model, id, re) {
+  return re.test(get(model.reactiveGet(id), 'name'));
+}
+
+function positionsTest(positions, re) {
+  if (!positions) {
+    return false;
+  }
+  return positions.find(({ articleId }) => testArticle(Article.reactiveGet(articleId), re));
 }
 
 export function configPriceField(operationName, date = new Date()) {

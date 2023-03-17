@@ -3,7 +3,9 @@ import Workflow from '@/lib/Workflow';
 
 export default new Model({
   collection: 'StockWithdrawing',
-  schema: {},
+  schema: {
+    storageId: String,
+  },
   methods: {},
 });
 

@@ -84,7 +84,14 @@ export function searchArticle(search, propColumns = []) {
     return x => x;
   }
   const re = new RegExp(search, 'i');
-  return article => re.test(article.name)
+  return article => testArticle(article, re, propColumns);
+}
+
+export function testArticle(article, re, propColumns = []) {
+  if (!article) {
+    return false;
+  }
+  return re.test(article.name)
     || re.test(article.code)
     || propColumns.find(({ id }) => re.test(article[id]))
     || article.props.find(({ stringValue }) => re.test(stringValue));

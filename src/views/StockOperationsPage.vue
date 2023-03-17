@@ -8,11 +8,13 @@
   el-container
     component(:is="showDetails ? 'el-aside' : 'el-main'")
       template
-        .buttons()
-          storage-select(v-model="storageId" ref="storageSelect" :disabled="showDetails")
-          tool-button(tool="back" @click="onBack" v-if="showDetails")
-          tool-button(tool="add" @click="onAdd()")
-        resize#stock-operation-scroll(:padding="20")
+        .filters
+          search-input(v-model="search")
+          .buttons()
+            storage-select(v-model="storageId" ref="storageSelect" :disabled="showDetails")
+            tool-button(tool="back" @click="onBack" v-if="showDetails")
+            tool-button(tool="add" @click="onAdd()")
+        resize#stock-operation-scroll(:padding="20" @resized="setHeight")
           template(v-if="viewData.length")
             stock-operation-list(
               v-if="showList"
@@ -42,7 +44,7 @@ import { createNamespacedHelpers } from 'vuex';
 import StockOperationList from '@/components/out/StockOperationList.vue';
 import pageMixin from '@/lib/pageMixin';
 import find from 'lodash/find';
-import { stockOperationToViewData } from '@/services/warehousing';
+import { stockOperationToViewData, searchOperations } from '@/services/warehousing';
 import StockOperationTable from '@/components/out/StockOperationTable.vue';
 import vssMixin from '@/components/vssMixin';
 import * as g from '@/store/inv/getters';
@@ -65,7 +67,7 @@ export default {
       watchFor: '$route.params.stockOperationId',
     }),
   ],
-  components: { StockOperationTable, StockOperationList },
+  components: { SearchInput, StockOperationTable, StockOperationList },
   props: {
     model: Object,
     positionsModel: Object,
@@ -78,6 +80,14 @@ export default {
     };
   },
   computed: {
+    search: {
+      get() {
+        return this.$route.query.search || '';
+      },
+      set(search) {
+        this.updateRouteParams({}, { search: search || undefined });
+      },
+    },
     viewData() {
       return this.stockOperations
         .map(o => stockOperationToViewData(o, this.positionsModel, this.operationName));
@@ -89,13 +99,15 @@ export default {
       return !this.showTable || this.showDetails;
     },
     stockOperations() {
-      const { storageId } = this;
+      const { storageId, search } = this;
       if (!storageId) {
         return [];
       }
-      return this.$orderBy(this.model.reactiveFilter({
-        storageId: this.storageId,
-      }), ['date', 'cts'], ['desc', 'desc']);
+      const data = this.model.reactiveManyByIndex('storageId', this.storageId);
+      const filtered = search
+        ? data.filter(searchOperations(search, this.positionsModel, `${this.operationName}Id`))
+        : data;
+      return this.$orderBy(filtered, ['date', 'cts'], ['desc', 'desc']);
     },
     showDetails() {
       const { name } = this.$route;
@@ -168,8 +180,24 @@ export default {
   }
 }
 
+.filters {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: $padding;
+}
+
 .el-aside {
   margin-right: $margin-top;
+
+  .filters {
+    flex-direction: column;
+  }
+
+  .search-input {
+    width: 100%;
+    margin-bottom: $padding;
+  }
 
   .buttons {
     .storage-select {
@@ -178,7 +206,7 @@ export default {
   }
 }
 
-.stm-resize {
+.el-main > .stm-resize {
   overflow-y: hidden;
 }
 
