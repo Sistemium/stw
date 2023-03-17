@@ -44,6 +44,12 @@ export default {
     this.$watch('searchText', debounce(value => this.$emit('input', value), this.debounce));
   },
 
+  watch: {
+    value(newValue) {
+      this.searchText = newValue || '';
+    },
+  },
+
 };
 
 </script>
