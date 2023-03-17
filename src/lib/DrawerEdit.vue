@@ -30,6 +30,7 @@ component.drawer-edit.box-card(
 import FormButtons from 'sistemium-vue/components/FormButtons.vue';
 import matchesDeep from '@bit/sistemium.vue.matches-deep';
 import cloneDeep from 'lodash/cloneDeep';
+import pick from 'lodash/pick';
 import merge from 'lodash/merge';
 import { localizedDeleteError } from '@/services/erroring';
 
@@ -66,6 +67,7 @@ export default {
       },
     },
     drawerStyle: Object,
+    afterCloseTo: Object,
   },
   data() {
     return {
@@ -148,13 +150,17 @@ export default {
     },
 
     handleClose(record) {
+      this.$debug(this.afterCloseTo);
       if (!this.from) {
         this.drawerOpen = false;
         this.$parent.$emit('closed', record);
         return;
       }
-      const query = (record && !this.modelOrigin.id) ? { createdId: record.id } : {};
-      this.$router.replace(merge({ ...this.from }, { query }))
+      const query = pick(this.$route.query, 'search');
+      if (record && !this.modelOrigin.id) {
+        query.createdId = record.id;
+      }
+      this.$router.replace(merge({ ...(this.afterCloseTo || this.from) }, { query }))
         .catch(e => this.$error('handleClose', e));
     },
 
