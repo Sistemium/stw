@@ -1,7 +1,28 @@
 const { defineConfig } = require('@vue/cli-service');
+const SentryWebpackPlugin = require('@sentry/webpack-plugin');
+
+const plugins = process.env.NODE_ENV === 'production' ? [
+  new SentryWebpackPlugin({
+    org: 'sistemium',
+    project: 'stw',
+    release: `${process.env.npm_package_name}@${process.env.npm_package_version}`,
+
+    // Specify the directory containing build artifacts
+    include: './dist',
+    // ignore: ['node_modules', 'webpack.config.js'],
+
+    // Auth tokens can be obtained from https://sentry.io/settings/account/api/auth-tokens/
+    // and needs the `project:releases` and `org:read` scopes
+    authToken: process.env.SENTRY_AUTH_TOKEN,
+
+    // Optionally uncomment the line below to override automatic release name detection
+    // release: process.env.RELEASE,
+  }),
+] : [];
 
 module.exports = defineConfig({
   transpileDependencies: true,
+  parallel: !plugins.length,
   pluginOptions: {
     i18n: {
       locale: 'en',
@@ -10,6 +31,10 @@ module.exports = defineConfig({
       enableInSFC: true,
       enableBridge: false,
     },
+  },
+  configureWebpack: {
+    devtool: 'source-map',
+    plugins,
   },
   devServer: {
     port: 8890,
