@@ -16,20 +16,19 @@ const { debug, error } = log('main');
 Vue.config.productionTip = false;
 router.beforeEach(authGuard);
 
+const { NODE_ENV: environment, VUE_APP_SENTRY_DSN: dsn } = process.env;
+
 Sentry.init({
   Vue,
-  dsn: process.env.VUE_APP_SENTRY_DSN,
+  dsn,
+  environment,
   integrations: [
     new BrowserTracing({
       routingInstrumentation: Sentry.vueRouterInstrumentation(router),
       tracePropagationTargets: ['localhost', 'stw.sistemium.com', /^\//],
     }),
   ],
-  environment: process.env.NODE_ENV,
-  // Set tracesSampleRate to 1.0 to capture 100%
-  // of transactions for performance monitoring.
-  // We recommend adjusting this value in production
-  tracesSampleRate: 1.0,
+  tracesSampleRate: environment === 'production' ? 0.1 : 1,
 });
 
 new Vue({
