@@ -24,6 +24,7 @@ import StockWithdrawing from '@/models/StockWithdrawing';
 import StockTakingItem from '@/models/StockTakingItem';
 import StockTaking from '@/models/StockTaking';
 import { testArticle } from '@/services/catalogue';
+import { likeLt } from '@/services/lt';
 
 export function stockTakingItemInstance({ stockTakingId, articleId, barcode }) {
   return {
@@ -118,7 +119,7 @@ export function searchOperations(search, itemsModel, parentKey) {
   if (!search) {
     return () => true;
   }
-  const re = new RegExp(search, 'i');
+  const re = likeLt(search);
   return operation => {
     const { commentText, counterpartyId, counterpartyType } = operation;
     return re.test(commentText)

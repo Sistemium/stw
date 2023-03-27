@@ -7,6 +7,7 @@ import ArticleProp, { TYPES_DEFAULTS, VALUE_TYPES } from '@/models/ArticleProp';
 import orderBy from 'lodash/orderBy';
 import Article from '@/models/Article';
 import * as PackageType from '@/models/PackageType';
+import { likeLt } from '@/services/lt';
 
 export function compoundName(filters) {
   const res = map(filters, filter => {
@@ -83,8 +84,7 @@ export function searchArticle(search, propColumns = []) {
   if (!search) {
     return x => x;
   }
-  const re = new RegExp(search, 'i');
-  return article => testArticle(article, re, propColumns);
+  return article => testArticle(article, likeLt(search), propColumns);
 }
 
 export function testArticle(article, re, propColumns = []) {
