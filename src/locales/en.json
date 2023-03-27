@@ -48,6 +48,7 @@
     "toDate": "to",
     "valueType": "Value type",
     "required": "Required",
+    "isSKU": "Is an SKU",
     "bool": {
       "yes": "Yes",
       "no": "No"

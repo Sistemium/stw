@@ -48,6 +48,7 @@
     "supplier": "Tiekėjas",
     "valueType": "Duomenų tipas",
     "required": "Privaloma",
+    "isSKU": "Skaičiuoti likutį",
     "bool": {
       "yes": "Taip",
       "no": "Ne"

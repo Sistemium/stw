@@ -5,8 +5,8 @@ el-form.recipe-form(
   ref="form"
   :rules="rules"
 )
-  //el-form-item(:label="$t('fields.name')" prop="name")
-    el-input(v-model="model.name")
+  el-form-item(:label="$t('fields.isSKU')" prop="isSKU")
+    el-switch(v-model="model.isSKU")
 
   materials-form(:materials="model.materials || null" @create="onCreate")
 
