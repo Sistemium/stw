@@ -112,7 +112,7 @@ export function vatConfig(date = new Date()) {
     dateB: { $lte: stringDate },
     dateE: { $gte: stringDate },
   });
-  return config;
+  return config || {};
 }
 
 export function searchOperations(search, itemsModel, parentKey) {
@@ -142,7 +142,7 @@ function positionsTest(positions, re) {
 
 export function configPriceField(operationName, date = new Date()) {
   const { rules } = vatConfig(date);
-  const vatPrices = rules.vatPrices[operationName];
+  const vatPrices = rules && rules.vatPrices[operationName];
   return vatPrices ? 'vatPrice' : 'price';
 }
 
