@@ -1,12 +1,12 @@
 <template lang="pug">
 
-  el-button.tool-button(
-    :icon="icon"
-    :size="size"
-    :disabled="disabled"
-    circle
-    @click="$emit('click')"
-  )
+el-button.tool-button(
+  :icon="icon"
+  :size="size"
+  :disabled="disabled"
+  circle
+  @click="$emit('click')"
+)
 
 </template>
 <script>
@@ -62,6 +62,7 @@ export default {
   &:not(.is-disabled) {
     color: $primary-color;
   }
+
   font-size: 19px;
   padding: 2px;
 }

@@ -237,7 +237,7 @@ export default {
 .el-card {
   @include responsive-only(xxs) {
     border: none;
-    ::v-deep .el-card__body, .container {
+    :deep(.el-card__body), .container {
       padding: 0;
     }
   }

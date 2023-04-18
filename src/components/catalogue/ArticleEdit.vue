@@ -136,7 +136,7 @@ export default {
 .take-photo-button {
   margin-top: $margin-right;
 
-  ::v-deep .el-badge {
+  :deep(.el-badge) {
     width: 100%;
   }
 }

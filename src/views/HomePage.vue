@@ -1,9 +1,9 @@
 <template lang="pug">
 
-  .home
-    img(alt="Vue logo" src="../assets/logo.png")
-    hello-world(:msg="$t('message')")
-  </div>
+.home
+  img(alt="Vue logo" src="../assets/logo.png")
+  hello-world(:msg="$t('message')")
+</div>
 
 </template>
 <script>

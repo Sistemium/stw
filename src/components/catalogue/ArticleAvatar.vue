@@ -32,7 +32,7 @@ export default {
 </script>
 <style scoped lang="scss">
 
-.article-avatar ::v-deep img {
+.article-avatar :deep(img) {
   width: 100%;
 }
 

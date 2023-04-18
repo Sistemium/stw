@@ -7,7 +7,7 @@
   }
 }
 
-.el-alert.empty ::v-deep .el-alert__content {
+.el-alert.empty :deep(.el-alert__content) {
   flex: 1;
 
   .el-alert__description {

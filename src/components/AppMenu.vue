@@ -121,7 +121,7 @@ export default {
     right: 0;
   }
   @include xxs() {
-    ::v-deep img {
+    :deep(img) {
       display: none;
     }
   }

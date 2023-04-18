@@ -57,11 +57,11 @@ export default {
 </script>
 <style scoped lang="scss">
 
-.stock-period-table ::v-deep .cell {
+.stock-period-table :deep(.cell) {
   word-break: normal;
 }
 
-.el-table ::v-deep td {
+.el-table :deep(td) {
   cursor: pointer;
 }
 

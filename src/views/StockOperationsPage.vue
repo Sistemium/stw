@@ -167,13 +167,13 @@ export default {
   .el-aside {
     width: 100% !important;
 
-    ::v-deep .stock-operation-list-item:not(.active) {
+    :deep(.stock-operation-list-item:not(.active)) {
       display: none;
     }
 
     margin-bottom: $margin-right;
   }
-  .el-aside ::v-deep .stock-operation-list-item {
+  .el-aside :deep(.stock-operation-list-item) {
     background: none;
     border-top: none;
 

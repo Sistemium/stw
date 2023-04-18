@@ -219,7 +219,7 @@ export default {
   text-align: right;
 }
 
-.isCustomName ::v-deep i {
+.isCustomName :deep(i) {
   color: $red;
 }
 

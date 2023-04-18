@@ -52,7 +52,7 @@ export default {
 
 </script>
 <style scoped lang="scss">
-.el-table ::v-deep td {
+.el-table :deep(td) {
   cursor: pointer;
 }
 </style>

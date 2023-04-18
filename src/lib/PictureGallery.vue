@@ -246,7 +246,7 @@ export default {
     display: flex;
     justify-content: space-around;
     @include responsive-only(xxs) {
-      ::v-deep button {
+      :deep(button) {
         padding: 6px;
         white-space: normal;
         span {

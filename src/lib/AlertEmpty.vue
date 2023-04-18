@@ -27,7 +27,7 @@ export default {
 
 </script>
 <style scoped lang="scss">
-.el-alert ::v-deep .el-alert__content {
+.el-alert :deep(.el-alert__content) {
   flex: 1;
 
   .el-alert__description {

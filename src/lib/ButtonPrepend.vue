@@ -27,7 +27,7 @@ export default {
   width: 100%;
   align-items: flex-start;
 
-  ::v-deep input {
+  :deep(input) {
     border-bottom-left-radius: 0;
     border-top-left-radius: 0;
   }

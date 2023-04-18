@@ -1,6 +1,5 @@
 import Vue from 'vue';
 
-import '@bit/sistemium.vue.mixins.debug';
 import Resize from '@/lib/Resize.vue';
 import '@bit/sistemium.vue.update-route-params';
 

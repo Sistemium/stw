@@ -76,7 +76,7 @@ export default {
 
 </script>
 <style scoped lang="scss">
-.el-tabs.single ::v-deep .el-tabs__header {
+.el-tabs.single :deep(.el-tabs__header) {
   display: none;
 }
 </style>
