@@ -11,7 +11,7 @@
 
 import toLower from 'lodash/toLower';
 
-const { VUE_APP_OAUTH_URL, VUE_APP_OAUTH_REDIRECT_URI, VUE_APP_OAUTH_ORG_APP } = process.env;
+const { VITE_OAUTH_URL, VITE_OAUTH_REDIRECT_URI, VITE_OAUTH_ORG_APP } = import.meta.env;
 
 export default {
   name: 'OauthButton',

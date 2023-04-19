@@ -85,7 +85,7 @@ export default {
 </script>
 <style scoped lang="scss">
 
-@import "~@bit/sistemium.vue.style.variables";
+@import "@bit/sistemium.vue.style.variables";
 
 svg {
   //display: inline-block;

@@ -57,7 +57,7 @@ export default {
 
 </script>
 <style scoped lang="scss">
-@import "~sistemium-vue/styles/variables";
+@import "sistemium-vue/styles/variables";
 
 svg {
   width: 25px;
