@@ -40,16 +40,11 @@ const {
 
 export default {
   name: 'AuthPage',
-  props: {
-    from: {
-      type: String,
-      default() {
-        return this.$route.query.from;
-      },
-    },
-  },
   components: { OauthButton, PageTitle, HelloWorld },
   computed: {
+    from() {
+      return this.$route.query.from;
+    },
     accessToken() {
       return this.$route.query['access-token'];
     },
