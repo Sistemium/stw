@@ -1,5 +1,5 @@
 <template lang="pug">
-
+// eslint-disable vue/no-mutating-props
 el-form.article-measurement-form
 
   el-form-item(:label="$t('fields.measure')")

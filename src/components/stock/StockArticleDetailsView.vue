@@ -4,7 +4,7 @@ el-dialog.stock-article-details-view(
   :title="title"
   :fullscreen="fullscreen"
   :show-close="true"
-  :visible.sync="visible"
+  v-model="visible"
   custom-class="el-dialog-tabs"
   @closed="handleClose()"
   :append-to-body="true"
@@ -27,7 +27,7 @@ el-dialog.stock-article-details-view(
       :lazy="true"
       :name="tab.id"
     )
-      template(v-slot:label)
+      template(#label)
         span {{ $t(tab.id) }}
         el-badge(
           type="info"

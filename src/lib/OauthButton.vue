@@ -1,7 +1,12 @@
 <template lang="pug">
 
 .oauth-button
-  el-button(:type="buttonType" @click="onClick" :disabled="disabled")
+  el-button(
+    size="large"
+    :type="buttonType"
+    @click="onClick"
+    :disabled="disabled"
+  )
     .button-content
       img(:src="src")
       span {{ label }}
@@ -33,13 +38,13 @@ export default {
     href() {
       const url = this.code || toLower(this.label);
       const redirect = [
-        `redirect_uri=${encodeURIComponent(VUE_APP_OAUTH_REDIRECT_URI)}`,
+        `redirect_uri=${encodeURIComponent(VITE_OAUTH_REDIRECT_URI)}`,
         this.from && `?from=${this.from}`,
       ]
         .filter(x => x)
         .join('');
-      return `${VUE_APP_OAUTH_URL}/auth/${url}/vfs`
-        + `?${redirect}&orgAppId=${VUE_APP_OAUTH_ORG_APP}`;
+      return `${VITE_OAUTH_URL}/auth/${url}/vfs`
+        + `?${redirect}&orgAppId=${VITE_OAUTH_ORG_APP}`;
     },
   },
   methods: {

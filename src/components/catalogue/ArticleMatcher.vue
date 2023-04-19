@@ -10,16 +10,16 @@
       :articles="filteredArticles"
       @click="article => $emit('found', article)"
     )
-      template(v-slot:header)
+      template(#header)
         .list-group-header
           .compound-name
             simple-label(text="fields.name")
             strong {{ compoundName }}
           .create(v-if="allowCreate")
-            el-button.create(type="success" v-t="'createArticle'" @click="onCreateClick")
-      template(v-slot:footer)
+            el-button.create(type="success" @click="onCreateClick") {{ $t(createArticle) }}
+      template(#footer)
         .list-group-item.no-articles(v-if="!filteredArticles.length")
-          .no-matches(v-t="'noMatches'")
+          .no-matches {{ $t('noMatches') }}
 
 </template>
 <script>
@@ -34,6 +34,8 @@ import { ARTICLE_FILTERS } from '@/store/inv/getters';
 import { SET_ARTICLE_FILTERS } from '@/store/inv/mutations';
 import { VALUE_TYPES } from '@/models/ArticleProp';
 import ArticleList from '@/components/catalogue/ArticleList.vue';
+import Resize from '@/lib/Resize.vue';
+import SimpleLabel from '@/lib/SimpleLabel.vue';
 
 const { mapGetters, mapMutations } = createNamespacedHelpers('inv');
 
@@ -105,6 +107,8 @@ export default {
     };
   },
   components: {
+    SimpleLabel,
+    Resize,
     ArticleList,
     PropertyMatcher,
   },

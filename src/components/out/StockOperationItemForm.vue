@@ -7,7 +7,7 @@ el-tabs.stock-operation-item-form(:class="tabClass")
       :editable="editable"
       ref="itemForm"
     )
-      template(v-slot:article-extra)
+      template(#article-extra)
         vat-mode-switch(v-model="formVatPrices" v-if="editable")
         price-form(:model="model" :vat-prices="formVatPrices")
   el-tab-pane(:label="$t('menu.materials')" v-if="model.materials")

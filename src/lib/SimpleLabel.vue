@@ -1,6 +1,6 @@
 <template lang="pug">
 
-.simple-label(v-t="text")
+.simple-label {{ $t(text) }}
 
 </template>
 <script>

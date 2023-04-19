@@ -4,14 +4,14 @@
   el-button(
     type="text"
     @click.prevent.stop="reorder(-1)"
-    :disabled = "index === 0"
+    :disabled="index === 0"
   )
     i.el-icon-arrow-up
 
   el-button(
     type="text"
     @click.prevent.stop="reorder(1)"
-    :disabled = "index === length - 1"
+    :disabled="index === length - 1"
   )
     i.el-icon-arrow-down
 

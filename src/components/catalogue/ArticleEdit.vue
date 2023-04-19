@@ -10,7 +10,7 @@ drawer-edit.article-edit(
   :drawer-style="drawerStyle"
   :size="drawerWidth"
 )
-  template(v-slot="{ model }")
+  template(#default="{ model }")
     el-tabs(v-model="currentTab")
       el-tab-pane(:label="$t('menu.articleProps')")
         article-form(ref="form" :model="model")

@@ -8,7 +8,7 @@ drawer-edit.article-property-edit(
   :from="from"
   :deletable="currentTab ==='0'"
 )
-  template(v-slot="{ model }")
+  template(#default="{ model }")
     el-tabs(v-model="currentTab")
       el-tab-pane(:label="$t('form')")
         article-property-form(ref="form" :model="model")
@@ -44,6 +44,8 @@ import PropOption from '@/models/PropOption';
 import PropOptionList from '@/components/catalogue/PropOptionList.vue';
 import PropOptionEdit from '@/components/props/PropOptionEdit.vue';
 import orderBy from 'lodash/orderBy';
+import ToolButton from '@/lib/ToolButton.vue';
+import Resize from '@/lib/Resize.vue';
 
 export default {
   name: 'ArticlePropertyEdit',
@@ -72,6 +74,8 @@ export default {
     },
   },
   components: {
+    Resize,
+    ToolButton,
     PropOptionEdit,
     PropOptionList,
     ArticlePropertyForm,

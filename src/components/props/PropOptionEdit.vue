@@ -9,7 +9,7 @@ drawer-edit.prop-option-edit(
   :drawer-style="{ top: '65px' }"
   :deletable="true"
 )
-  template(v-slot="{ model }")
+  template(#default="{ model }")
     prop-option-form(ref="form" :model="model")
 
 </template>

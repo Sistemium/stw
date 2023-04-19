@@ -1,11 +1,8 @@
-import Vue from 'vue';
-import VueRouter from 'vue-router';
+import * as VueRouter from 'vue-router';
 import Home from '@/views/HomePage.vue';
 import AuthPage from '@/views/AuthPage.vue';
 
 import routeMap from '@/router/routeMap';
-
-Vue.use(VueRouter);
 
 export const routes = [
   {
@@ -28,8 +25,7 @@ export const routes = [
   },
 ];
 
-const router = new VueRouter({
+export default VueRouter.createRouter({
+  history: VueRouter.createWebHashHistory(),
   routes,
 });
-
-export default router;

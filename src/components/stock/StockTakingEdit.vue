@@ -10,7 +10,7 @@ drawer-edit.stock-taking-edit(
   :is-drawer="isDrawer"
   :after-close-to="afterCloseTo"
 )
-  template(v-slot="{ model }")
+  template(#default="{ model }")
     stock-taking-form(ref="form" :model="model" :disabled="!editable")
 
 </template>

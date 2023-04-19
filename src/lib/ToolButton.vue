@@ -39,7 +39,7 @@ export default {
     },
     size: {
       type: String,
-      default: 'mini',
+      default: 'small',
     },
   },
   computed: {

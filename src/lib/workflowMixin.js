@@ -8,7 +8,7 @@ export default {
     value: String,
     size: {
       type: String,
-      default: 'mini',
+      default: 'small',
     },
   },
   computed: {

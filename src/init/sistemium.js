@@ -1,15 +1,18 @@
-import Vue from 'vue';
-
 import Resize from '@/lib/Resize.vue';
 import '@bit/sistemium.vue.update-route-params';
 
-import '@/lib/validations';
+import validations from '@/lib/validations';
 import ToolButton from '@/lib/ToolButton.vue';
 import SimpleLabel from '@/lib/SimpleLabel.vue';
 import SelectOnFocus from '@/lib/SelectOnFocus';
+import debug from '@/lib/debug';
 
-Vue.component(ToolButton.name, ToolButton);
-Vue.component(SimpleLabel.name, SimpleLabel);
-Vue.component(Resize.name, Resize);
-
-Vue.directive('selectOnFocus', SelectOnFocus);
+// eslint-disable-next-line func-names
+export default function (app) {
+  app.component(ToolButton.name, ToolButton);
+  app.component(SimpleLabel.name, SimpleLabel);
+  app.component(Resize.name, Resize);
+  app.directive('selectOnFocus', SelectOnFocus);
+  app.mixin(validations);
+  app.mixin(debug);
+}

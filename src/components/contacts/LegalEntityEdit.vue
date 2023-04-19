@@ -9,7 +9,7 @@ drawer-edit.legal-entity-edit(
   :deletable="true"
   :is-drawer="isDrawer"
 )
-  template(v-slot="{ model }")
+  template(#default="{ model }")
     legal-entity-form(:model="model")
 
 </template>

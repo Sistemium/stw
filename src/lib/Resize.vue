@@ -10,6 +10,7 @@ import debounce from 'lodash/debounce';
 
 export default {
 
+  // eslint-disable-next-line vue/multi-word-component-names
   name: 'Resize',
 
   props: {
@@ -33,7 +34,7 @@ export default {
     });
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     window.removeEventListener('resize', this.handleResize);
   },
 

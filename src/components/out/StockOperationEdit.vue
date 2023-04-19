@@ -9,10 +9,10 @@ drawer-edit.stock-operation-edit(
   :deletable="!disabled"
   :is-drawer="isDrawer"
 )
-  template(v-slot="{ model }")
+  template(#default="{ model: drawerModel }")
     stock-operation-form(
       ref="form"
-      :model="model"
+      :model="drawerModel"
       :counterparty-role="counterpartyRole"
       :disabled="disabled"
     )

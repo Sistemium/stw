@@ -1,6 +1,6 @@
 <template lang="pug">
 
-button-prepend.prepend-select(@buttonClick="$emit('buttonClick')")
+button-prepend.prepend-select(@button-click="$emit('buttonClick')")
   el-select(:value="value" @input="v => $emit('input', v)")
     slot
 

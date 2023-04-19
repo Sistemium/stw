@@ -4,7 +4,7 @@ component.drawer-edit.box-card(
   :is="drawerComponent"
   shadow="never"
   :title="title"
-  :visible="true"
+  :model-value="true"
   :append-to-body="true"
   :destroy-on-close="true"
   ref="drawer"
@@ -14,14 +14,14 @@ component.drawer-edit.box-card(
 )
 
   .resize.container(:padding="60")
-    slot(v-bind:model="model")
+    slot(:model="model")
 
   form-buttons(
     :changed="changed"
     :deletable="isDeletable"
-    @saveClick="onSaveClick"
-    @cancelClick="cancelClick"
-    @deleteClick="onDeleteClick"
+    @save-click="onSaveClick"
+    @cancel-click="cancelClick"
+    @delete-click="onDeleteClick"
   )
 
 </template>

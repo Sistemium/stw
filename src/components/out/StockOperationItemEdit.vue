@@ -9,11 +9,11 @@ drawer-edit.stock-operation-item-edit(
   :deletable="editable"
   :is-drawer="isDrawer"
 )
-  template(v-slot="{ model }")
+  template(#default="{ model: drawerModel }")
     stock-operation-item-form(
       ref="form"
       :editable="editable"
-      :model="model"
+      :model="drawerModel"
       :vat-prices="vatOperationConfig.vatPrices"
       :vat-rate="vatOperationConfig.vatRate"
     )

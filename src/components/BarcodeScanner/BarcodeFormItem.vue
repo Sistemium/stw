@@ -2,9 +2,9 @@
 
 el-form-item.barcode-form-item(:label="label" :prop="prop")
   el-input(v-model="barcode")
-    template(v-slot:prepend)
+    template(#prepend)
       slot(name="prepend")
-    template(v-slot:append)
+    template(#append)
       el-button(icon="el-icon-close" @click="barcode = ''")
 
 </template>
@@ -13,12 +13,6 @@ el-form-item.barcode-form-item(:label="label" :prop="prop")
 export default {
   name: 'BarcodeFormItem',
   props: {
-    label: {
-      type: String,
-      default() {
-        return this.$t('fields.barcode');
-      },
-    },
     prop: {
       type: String,
       default: 'barcode',
@@ -26,6 +20,9 @@ export default {
     value: String,
   },
   computed: {
+    label() {
+      return this.$t('fields.barcode');
+    },
     barcode: {
       get() {
         return this.value;

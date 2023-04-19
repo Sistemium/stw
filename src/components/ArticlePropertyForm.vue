@@ -1,9 +1,9 @@
 <template lang="pug">
-
+// eslint-disable vue/no-mutating-props
 el-form.article-property-form(
   :model="model"
   ref="form"
-  :rules="rules"
+  :rules="formRules"
   :status-icon="false"
 )
 
@@ -42,6 +42,7 @@ el-form.article-property-form(
 <script>
 import { VALUE_TYPES } from '@/models/ArticleProp';
 
+/* eslint-disable vue/no-mutating-props */
 export default {
   name: 'ArticlePropertyForm',
   props: {
@@ -54,7 +55,7 @@ export default {
     types() {
       return Object.keys(VALUE_TYPES);
     },
-    rules() {
+    formRules() {
       return {
         ...this.$requiredRule('name'),
         ...this.$requiredRule('type'),

@@ -21,7 +21,7 @@ el-table.stock-operation-table(
     prop="counterpartyName"
     :label="counterpartyLabel"
   )
-    template(v-slot="{ row }")
+    template(#default="{ row }")
       .name(v-if="row.counterpartyName") {{ row.counterpartyName }}
       .comment(v-if="row.commentText") {{ row.commentText }}
   el-table-column(
@@ -29,7 +29,7 @@ el-table.stock-operation-table(
     :label="$t('concepts.items')"
     width="100"
   )
-    template(v-slot="{ row }")
+    template(#default="{ row }")
       span(v-if="row.positionsCount") {{ row.positionsCount }}
       //span(v-if="row.productsCount && row.positionsCount") +
       //span(v-if="row.productsCount") {{ row.productsCount }}

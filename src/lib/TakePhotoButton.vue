@@ -6,7 +6,7 @@
     id="take-photo-button-drop-zone"
     :options="dzOptions"
     :destroy-dropzone="true"
-    :useCustomSlot="true"
+    :use-custom-slot="true"
     :include-styling="false"
     @vdropzone-success="onDropzoneSuccess"
     @vdropzone-total-upload-progress="uploadProgress"

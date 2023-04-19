@@ -1,5 +1,5 @@
 <template lang="pug">
-
+// eslint-disable vue/no-mutating-props
 el-form.legal-entity-form(
   :model="model"
   ref="form"

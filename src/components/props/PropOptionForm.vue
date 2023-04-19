@@ -6,11 +6,12 @@ el-form.prop-option-form(
   :rules="rules"
 )
   el-form-item(:label="property.name" prop="name")
+    // eslint-disable-next-line vue/no-mutating-props
     el-input(v-model="model.name")
 
 </template>
 <script>
-
+/* eslint-disable vue/no-mutating-props */
 import ArticleProp from '@/models/ArticleProp';
 
 export default {

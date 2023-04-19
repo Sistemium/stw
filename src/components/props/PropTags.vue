@@ -7,7 +7,7 @@
       :size="size"
       @click="$emit('click', tag)"
     ) {{ tag.name }}
-    .empty(v-if="!tags.length" v-t="'emptyTags'")
+    .empty(v-if="!tags.length") {{ $t('emptyTags') }}
   tool-button(
     tool="add"
     @click="onAdd()"

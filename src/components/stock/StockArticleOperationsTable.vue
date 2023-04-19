@@ -8,7 +8,7 @@ el-table.stock-article-operations-table(
     :label="$t('fields.date')"
     :width="columnWidth"
   )
-    template(v-slot="{ row }")
+    template(#default="{ row }")
       span {{ $ts(row.date, 'short') }}
   el-table-column(
     prop="units"
@@ -32,7 +32,7 @@ el-table.stock-article-operations-table(
     v-if="counterparty"
     :label="$t(counterparty)"
   )
-    template(v-slot="{ row }")
+    template(#default="{ row }")
       .name(v-if="row.counterParty") {{ row.counterParty.name }}
       .comment-text(v-if="row.commentText" ) {{ row.commentText }}
 

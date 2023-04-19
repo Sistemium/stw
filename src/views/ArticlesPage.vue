@@ -10,7 +10,7 @@
     download-excel-button(:data-fn="downloadExcelData" :name="downloadExcelName")
     transition(name="bounce")
       el-tooltip(v-if="selectedArticle")
-        div(slot="content") {{ copyTip }}
+        template(#content) {{ copyTip }}
         el-button(icon="el-icon-document-copy" @click="onCopy()" circle size="mini")
     tool-button(tool="add" @click="onAdd()")
 
@@ -25,7 +25,7 @@
         :articles="articles"
         @current-change="handleCurrentChange"
         @click="onArticleClick"
-        @avatarClick="avatarClick"
+        @avatar-click="avatarClick"
         :height="tableHeight"
       )
     el-alert.empty(type="info" :title="$t('validation.noData')" :closable="false" v-else)
@@ -50,6 +50,8 @@ import ArticleTable from '@/components/catalogue/ArticleTable.vue';
 import scrollToCreated from '@/components/scrollToCreated';
 import vssMixin from '@/components/vssMixin';
 import DownloadExcelButton from '@/lib/DownloadExcelButton.vue';
+import Resize from '@/lib/Resize.vue';
+import ToolButton from '@/lib/ToolButton.vue';
 
 export default {
   name: 'ArticlesPage',
@@ -71,6 +73,8 @@ export default {
     vssMixin,
   ],
   components: {
+    ToolButton,
+    Resize,
     DownloadExcelButton,
     SearchInput,
     BarcodeView,

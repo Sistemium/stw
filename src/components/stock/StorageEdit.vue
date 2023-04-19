@@ -8,7 +8,7 @@ drawer-edit.storage-edit(
   :from="from"
   :deletable="true"
 )
-  template(v-slot="{ model }")
+  template(#default="{ model }")
     storage-form(ref="form" :model="model")
 
 </template>

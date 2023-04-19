@@ -24,15 +24,16 @@ export default {
       type: String,
     },
     value: String,
-    placeholder: {
-      default() {
-        return this.$t('search');
-      },
-      type: String,
-    },
+    // placeholder: String,
     debounce: {
       type: Number,
       default: 500,
+    },
+  },
+
+  computed: {
+    placeholder() {
+      return this.$t('search');
     },
   },
 

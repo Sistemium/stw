@@ -1,5 +1,5 @@
 <template lang="pug">
-
+// eslint-disable vue/no-mutating-props
 el-form.stock-taking-item-form(
   :model="model"
   ref="form"
@@ -8,7 +8,7 @@ el-form.stock-taking-item-form(
 )
 
   barcode-form-item(v-model="model.barcode" v-if="model.barcode")
-    template(v-slot:prepend)
+    template(#default:prepend)
       el-button(:icon="barcodeIcon" @click="toggleShowAllArticles")
 
   el-form-item.add-barcode(v-if="canAddBarcode")
@@ -21,11 +21,11 @@ el-form.stock-taking-item-form(
   el-form-item.article(:label="$t('concepts.article')" prop="articleId")
     .strong(v-if="article") {{ article.code }}
     button-prepend(
-      @buttonClick="addArticle"
+      @button-click="addArticle"
       :button-icon="`el-icon-${article ? 'edit' : 'plus'}`"
     )
       article-select(v-model="model.articleId" :filters="articleFilters")
-        template(v-slot:empty v-if="model.barcode && !isShowingAllArticles")
+        template(#empty v-if="model.barcode && !isShowingAllArticles")
           p.el-select-dropdown__empty
             span {{ $t('notFound') }}
             el-button(@click="toggleShowAllArticles") {{ $t('showAll') }}
@@ -34,13 +34,12 @@ el-form.stock-taking-item-form(
 
     el-form-item.mode(:label="$t('fields.package')" v-if="editable")
       el-radio-group(v-model="mode" @change="modeChange")
-        template
-          el-radio-button(label="other") {{ $t('concepts.other') }}
-          el-radio-button(
-            v-for="p in packageOptions"
-            :key="p.id"
-            :label="p.id"
-          ) {{ p.name }} x {{ p.unitsInPackage }}
+        el-radio-button(label="other") {{ $t('concepts.other') }}
+        el-radio-button(
+          v-for="p in packageOptions"
+          :key="p.id"
+          :label="p.id"
+        ) {{ p.name }} x {{ p.unitsInPackage }}
         el-radio-button(:label="defaultMode") {{ $t(`units.${measureUnitId}`) }}
 
     template(v-if="mode === 'other' || (!editable && model.packageTypeId)")
@@ -70,14 +69,14 @@ el-form.stock-taking-item-form(
 
       el-form-item(
         v-if="editable || spareUnits"
-        :label="$t('fields.notPackaged', [$t(`units.genitive.${this.measureUnitId}`)])"
+        :label="$t('fields.notPackaged', [$t(`units.genitive.${measureUnitId}`)])"
       )
         el-input-number(v-model="spareUnits" :min="0" v-select-on-focus)
 
     el-form-item(
       v-else
       prop="units"
-      :label="$t('units.quantityOf', [$t(`units.genitive.${this.measureUnitId}`)])"
+      :label="$t('units.quantityOf', [$t(`units.genitive.${measureUnitId}`)])"
     )
       el-input-number(v-model="spareUnits" :min="0" v-select-on-focus)
 
@@ -97,7 +96,7 @@ el-form.stock-taking-item-form(
 import Article from '@/models/Article';
 import * as PackageType from '@/models/PackageType';
 import * as Measure from '@/models/Measure';
-import ArticleView from '@/components/catalogue/ArticleView.vue';
+// import ArticleView from '@/components/catalogue/ArticleView.vue';
 import ArticleSelect from '@/components/catalogue/ArticleSelect.vue';
 import { addBarcodeToArticle, articlePackages } from '@/services/catalogue';
 import ArticleEdit from '@/components/catalogue/ArticleEdit.vue';
@@ -267,7 +266,7 @@ export default {
     BarcodeFormItem,
     ArticleEdit,
     ArticleSelect,
-    ArticleView,
+    // ArticleView,
   },
   i18n: {
     messages: {

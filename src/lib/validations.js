@@ -1,4 +1,4 @@
-import Vue from 'vue';
+// import Vue from 'vue';
 import orderBy from 'lodash/orderBy';
 import get from 'lodash/get';
 import find from 'lodash/find';
@@ -7,7 +7,7 @@ import trim from 'lodash/trim';
 import i18n from '@/i18n';
 import cloneDeep from 'lodash/cloneDeep';
 
-Vue.mixin({
+export default {
 
   directives: {
     cancelReadOnly(el) {
@@ -16,13 +16,10 @@ Vue.mixin({
     },
   },
 
-  filters: {
-    percent(value) {
-      return `${i18n.n(value * 100.0)}%`;
-    },
-  },
-
   methods: {
+    $percent(value) {
+      return `${i18n.global.n(value * 100.0)}%`;
+    },
     $cloneInstance(res) {
       return res && {
         ...cloneDeep(res),
@@ -38,7 +35,7 @@ Vue.mixin({
     $find: find,
     $orderBy: orderBy,
     $ts(dateString, key = 'timestamp') {
-      return this.$d(new Date(dateString), key);
+      return i18n.global.d(new Date(dateString), key);
     },
     $requiredRule(fieldOrArray) {
       const res = {};
@@ -83,4 +80,4 @@ Vue.mixin({
       return this.$watch(expOrFn, callback, { immediate: true, ...options });
     },
   },
-});
+};

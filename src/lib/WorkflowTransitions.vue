@@ -4,7 +4,7 @@
   el-button(
     :disabled="disabled"
     v-for="option in options"
-    :key="options.processing"
+    :key="option.processing"
     @click="onCommand(option.to)"
     :size="size"
     :type="option.type"

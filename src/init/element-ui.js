@@ -1,6 +1,7 @@
-import Vue from 'vue';
-import ElementUI from 'element-ui';
-import 'element-ui/lib/theme-chalk/index.css';
-import 'element-ui/lib/theme-chalk/reset.css';
+import ElementPlus from 'element-plus';
+import 'element-plus/theme-chalk/index.css';
 
-Vue.use(ElementUI, { size: 'small' });
+// eslint-disable-next-line func-names
+export default function (app) {
+  app.use(ElementPlus, { size: 'small' });
+}

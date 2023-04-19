@@ -18,7 +18,7 @@ el-select.article-select(
   )
     .name {{ article.name }}
     .code(v-if="article.code") {{ article.code }}
-  template(v-slot:empty)
+  template(#empty)
     slot(name="empty")
 
 </template>
@@ -42,7 +42,7 @@ export default {
     placeholder: {
       type: String,
       default() {
-        const string = i18n.t('actions.select', [i18n.t('accusative.article')]);
+        const string = i18n.global.t('actions.select', [i18n.global.t('accusative.article')]);
         return upperFirst(string.toString());
       },
     },

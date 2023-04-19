@@ -1,5 +1,5 @@
 <template lang="pug">
-
+// eslint-disable vue/no-mutating-props
 .article-form
   el-form.article-form(
     :model="model"
@@ -30,7 +30,7 @@
           :is="prop.component.is"
           :value="model.props[idx][prop.component.field]"
           @input="value => onPropInput(prop, value, idx)"
-          @buttonClick="addOptionClick(prop)"
+          @button-click="addOptionClick(prop)"
         )
           template(v-if="prop.options")
             el-option(
@@ -45,7 +45,7 @@
 
     el-form-item(:label="$t('fields.name')" prop="name")
       el-input(v-model="model.name" :readonly="!model.isCustomName")
-        template(v-slot:append)
+        template(#append)
           el-button(
             :class="model.isCustomName && 'isCustomName'"
             @click="toggleNameLock"

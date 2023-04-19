@@ -1,5 +1,5 @@
 <template lang="pug">
-
+// eslint-disable vue/no-mutating-props
 el-form.storage-form(:model="model" ref="form" :rules="rules")
 
   el-form-item(prop="type" :label="$t('fields.type')")

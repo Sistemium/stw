@@ -2,7 +2,7 @@
 
 #app
   app-menu
-    template(v-slot:left)
+    template(#left)
       barcode-scanner-status(v-if="showBarcodeStatus")
   barcode-input(v-if="showBarcodeInput" :lock="false")
   router-view

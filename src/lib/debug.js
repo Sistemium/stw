@@ -1,8 +1,6 @@
-import Vue from 'vue';
-
 import log from 'sistemium-debug';
 
-Vue.mixin({
+export default {
 
   computed: {
     $log() {
@@ -19,4 +17,4 @@ Vue.mixin({
     },
   },
 
-});
+};

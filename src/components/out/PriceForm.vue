@@ -1,5 +1,5 @@
 <template lang="pug">
-
+// eslint-disable vue/no-mutating-props
 .price-form
   el-form-item(prop="price" :label="$t('fields.price')")
     el-input-number(
@@ -7,7 +7,7 @@
       :disabled="vatPrices"
     )
   el-form-item(prop="vatRate" :label="$t('fields.vatRate')")
-    span {{ model.vatRate | percent }}
+    span {{ $percent(model.vatRate) }}
   el-form-item(prop="vatPrice" :label="$t('fields.vatPrice')")
     el-input-number(
       v-model="model.vatPrice"

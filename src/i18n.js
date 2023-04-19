@@ -64,19 +64,19 @@ const i18n = createI18n({
   locale: getSavedLocale() || process.env.VITE_I18N_LOCALE || 'en',
   fallbackLocale: process.env.VITE_I18N_FALLBACK_LOCALE || 'en',
   messages: {
-    en,
-    ru,
-    lt,
+    en: { ...en, ...uiEn },
+    ru: { ...ru, ...uiRu },
+    lt: { ...lt, ...uiLt },
   },
   silentFallbackWarn: true,
-  dateTimeFormats: {
+  datetimeFormats: {
     en: dateTimeFormatGeneric,
     ru: dateTimeFormatGeneric,
     lt: dateTimeFormatGeneric,
   },
 });
 
-// ElementLocale.i18n((key, value) => i18n.t(key, value));
+// ElementLocale.i18n((key, value) => i18n.global.t(key, value));
 
 export default i18n;
 

@@ -1,5 +1,5 @@
 <template lang="pug">
-
+// eslint-disable vue/no-mutating-props
 el-form.stock-operation-form(
   :model="model"
   ref="form"
@@ -25,7 +25,7 @@ el-form.stock-operation-form(
     :label="$t(counterpartyLabel.choice)"
     prop="counterparty"
   )
-    button-prepend(@buttonClick="addCounterparty")
+    button-prepend(@button-click="addCounterparty")
       counterparty-select(:type="model.counterpartyType" v-model="model.counterpartyId")
 
   el-form-item(:label="$t('fields.processing')" prop="processing")

@@ -1,6 +1,6 @@
 <template lang="pug">
 
-h1.page-title(v-t="title")
+h1.page-title {{ $t(title) }}
 
 </template>
 <script>

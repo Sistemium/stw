@@ -4,12 +4,12 @@
 
   el-dropdown.hamburger(@command="onCommand" trigger="click" size="normal")
     el-button(circle icon="el-icon-menu")
-    template(v-slot:dropdown)
+    template(#dropdown)
       el-dropdown-menu()
         el-dropdown-item(
-          v-for="{ t, name } in menu" :key="t" :command="name" v-t="t"
+          v-for="{ t, name } in menu" :key="t" :command="name"
           :disabled="name === $route.name"
-        )
+        ) {{ $t(t) }}
         el-dropdown-item(
           v-if="isNative"
           command="toggleTabBar"
@@ -28,7 +28,7 @@
     strong {{ title }}
 
   #nav
-    router-link(v-for="{ t, name } in menu" :key="t" :to="{ name }" v-t="t")
+    router-link(v-for="{ t, name } in menu" :key="t" :to="{ name }") {{ $t(t) }}
 
   lang-menu(:languages="languages" trigger="click" size="normal")
 
@@ -39,6 +39,7 @@ import LangMenu from 'sistemium-vue/components/LangMenu.vue';
 import Language from '@/models/Language';
 import { toggleTabBar, isNative } from 'sistemium-data/src/util/native';
 import { routes } from '@/router';
+import i18n from '@/i18n';
 
 export default {
   name: 'AppMenu',
@@ -64,8 +65,8 @@ export default {
       return this.tabBarShown ? 'el-icon-user' : 'el-icon-user-solid';
     },
     title() {
-      return this.routeTitle(this.$route)
-        || this.routeTitle(this.$router.currentRoute.matched[0]);
+      return this.routeTitle(this.$route);
+      // || this.routeTitle(this.$router.currentRoute.matched[0]);
     },
   },
   methods: {
@@ -84,8 +85,8 @@ export default {
         return null;
       }
       const key = `menu.${name}`;
-      const hasTitle = this.$te(key);
-      return hasTitle && this.$t(key);
+      const hasTitle = i18n.global.te(key);
+      return hasTitle && i18n.global.t(key);
     },
   },
   components: {

@@ -1,10 +1,10 @@
 <template lang="pug">
-
+// eslint-disable vue/no-mutating-props
 .recipe-material-form
   el-form-item(prop="articleId")
     article-select(v-model="model.articleId")
   el-form-item(
-    :label="$t('units.quantityOf', [$t(`units.genitive.${this.measureUnitId}`)])"
+    :label="$t('units.quantityOf', [$t(`units.genitive.${measureUnitId}`)])"
     prop="units"
   )
     el-input-number(v-model="model.units" :min="0")

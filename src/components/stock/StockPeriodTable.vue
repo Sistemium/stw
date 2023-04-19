@@ -8,7 +8,7 @@ el-table.stock-period-table(
   el-table-column(
     :label="$t('concepts.article')"
   )
-    template(v-slot="{ row }")
+    template(#default="{ row }")
       article-view(:article-id="row.articleId")
   el-table-column(
     prop="initUnits"

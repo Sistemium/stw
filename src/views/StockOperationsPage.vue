@@ -7,29 +7,28 @@
 
   el-container
     component(:is="showDetails ? 'el-aside' : 'el-main'")
-      template
-        .filters
-          search-input(v-model="search")
-          .buttons()
-            storage-select(v-model="storageId" ref="storageSelect" :disabled="showDetails")
-            tool-button(tool="back" @click="onBack" v-if="showDetails")
-            tool-button(tool="add" @click="onAdd()")
-        resize#stock-operation-scroll(:padding="20" @resized="setHeight")
-          template(v-if="viewData.length")
-            stock-operation-list(
-              v-if="showList"
-              :view-data="viewData"
-              @click="onItemClick"
-              :active-id="$route.params.stockOperationId"
-            )
-            stock-operation-table(
-              v-else
-              :height="tableHeight"
-              :view-data="viewData"
-              @click="onItemClick"
-              :size="tableSize"
-              :counterparty-role="counterpartyRole"
-            )
+      .filters
+        search-input(v-model="search")
+        .buttons()
+          storage-select(v-model="storageId" ref="storageSelect" :disabled="showDetails")
+          tool-button(tool="back" @click="onBack" v-if="showDetails")
+          tool-button(tool="add" @click="onAdd()")
+      resize#stock-operation-scroll(:padding="20" @resized="setHeight")
+        template(v-if="viewData.length")
+          stock-operation-list(
+            v-if="showList"
+            :view-data="viewData"
+            @click="onItemClick"
+            :active-id="$route.params.stockOperationId"
+          )
+          stock-operation-table(
+            v-else
+            :height="tableHeight"
+            :view-data="viewData"
+            @click="onItemClick"
+            :size="tableSize"
+            :counterparty-role="counterpartyRole"
+          )
       alert-empty(
         v-if="currentStorageId && !stockOperations.length"
         @click="onAdd()"
@@ -52,6 +51,8 @@ import * as m from '@/store/inv/mutations';
 import storageSelectMixin from '@/components/storageSelectMixin';
 import scrollToCreated from '@/components/scrollToCreated';
 import SearchInput from '@/lib/SearchInput.vue';
+import Resize from '@/lib/Resize.vue';
+import ToolButton from '@/lib/ToolButton.vue';
 
 const { mapGetters, mapMutations } = createNamespacedHelpers('inv');
 
@@ -70,7 +71,7 @@ export default {
       },
     }),
   ],
-  components: { SearchInput, StockOperationTable, StockOperationList },
+  components: { ToolButton, Resize, SearchInput, StockOperationTable, StockOperationList },
   props: {
     model: Object,
     positionsModel: Object,

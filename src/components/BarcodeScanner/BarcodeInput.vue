@@ -6,11 +6,11 @@ el-input.barcode-input(
   ref="wrapper"
   @blur="onBlur"
 )
-  //template(v-slot:prepend)
+  //template(#default:prepend)
     el-button(@click="toggleScanner")
      svg
       use(xlink:href="/img/icons8-barcode.svg#iconRoot")
-  //template(v-slot:append)
+  //template(#default:append)
 
 </template>
 <script>

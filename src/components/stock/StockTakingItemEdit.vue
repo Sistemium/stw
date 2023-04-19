@@ -8,7 +8,7 @@ drawer-edit.stock-taking-item-edit(
   :from="from"
   :deletable="editable"
 )
-  template(v-slot="{ model }")
+  template(#default="{ model }")
     stock-taking-item-form(ref="form" :model="model" :editable="editable")
 
 </template>

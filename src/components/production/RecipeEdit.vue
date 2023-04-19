@@ -8,7 +8,7 @@ drawer-edit.recipe-edit(
   :from="from"
   :deletable="true"
 )
-  template(v-slot="{ model }")
+  template(#default="{ model }")
     recipe-form(:model="model")
 
 </template>

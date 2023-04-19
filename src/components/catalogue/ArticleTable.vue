@@ -15,7 +15,7 @@ el-table.article-table(
     column-key="avatar"
     :width="60"
   )
-    template(v-slot="{ row }")
+    template(#default="{ row }")
       article-avatar(:article="row" size="medium" :id="`id-${row.id}`")
   el-table-column(
     prop="name"

@@ -3,7 +3,7 @@
 el-dialog.article-pictures-page(
   :fullscreen="true"
   :show-close="true"
-  :visible.sync="visible"
+  v-model="visible"
   custom-class="el-dialog-gallery"
   @closed="handleClose()"
   :append-to-body="true"
