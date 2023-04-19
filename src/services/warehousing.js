@@ -94,14 +94,14 @@ export function stockOperationToViewData(item, positionsModel, operationName) {
   const totalCost = sumBy(positions, costFn);
   return {
     ...item,
-    processing: i18n.t(`workflow.${item.processing || 'progress'}`),
+    processing: i18n.global.t(`workflow.${item.processing || 'progress'}`),
     // date: this.$ts(item.date, 'short'),
     counterparty,
     counterpartyName: get(counterparty, 'name'),
     positionsCount: positions.length,
     // productsCount: products.length,
     units: sumBy(positions, 'units'),
-    totalCost: totalCost ? i18n.n(totalCost) : null,
+    totalCost: totalCost ? i18n.global.n(totalCost) : null,
   };
 }
 

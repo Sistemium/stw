@@ -43,7 +43,7 @@ export const PackageType = [
   },
 ];
 
-export function packageTypes(locale = i18n.locale, fallbackLocale = i18n.fallbackLocale) {
+export function packageTypes(locale = i18n.global.locale, fallbackLocale = i18n.fallbackLocale) {
   return PackageType.map(packageType => ({
     ...packageType,
     name: packageType.name[locale] || packageType.name[fallbackLocale],
@@ -54,13 +54,13 @@ export function packageTypes(locale = i18n.locale, fallbackLocale = i18n.fallbac
 
 const BY_ID = mapValues(keyBy(['en', 'lt', 'ru']), locale => keyBy(packageTypes(locale), 'id'));
 
-export function getById(id, locale = i18n.locale) {
+export function getById(id, locale = i18n.global.locale) {
   return BY_ID[locale][id];
 }
 
 export function unitsInPackageLabel(measureUnitId) {
-  const units = i18n.t(`units.genitive.${measureUnitId}`);
-  return upperFirst(i18n.t('fields.unitsInPackage', [units]).toString());
+  const units = i18n.global.t(`units.genitive.${measureUnitId}`);
+  return upperFirst(i18n.global.t('fields.unitsInPackage', [units]).toString());
 }
 
 export function shortenedPackage(packageTypeId) {
@@ -74,5 +74,5 @@ export function shortenedPackage(packageTypeId) {
 export function numberOf(packageTypeId) {
   const packageType = getById(packageTypeId);
   const gen = packageType ? packageType.genitive : packageTypeId;
-  return upperFirst(i18n.t('units.quantityOf', [gen]).toString());
+  return upperFirst(i18n.global.t('units.quantityOf', [gen]).toString());
 }

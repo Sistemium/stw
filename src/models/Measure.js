@@ -36,7 +36,7 @@ export function keyedMeasures() {
 export function measures() {
   return Measure.map(measure => ({
     ...measure,
-    name: i18n.t(`measures.${measure.id}`),
+    name: i18n.global.t(`measures.${measure.id}`),
   }));
 }
 
@@ -48,7 +48,7 @@ export function measureUnits(measureId) {
   return Object.keys(unit)
     .map(id => ({
       id,
-      name: i18n.t(`units.${id}`),
+      name: i18n.global.t(`units.${id}`),
       ratio: unit[id],
     }));
 }

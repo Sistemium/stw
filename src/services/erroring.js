@@ -10,8 +10,8 @@ export function localizedDeleteError(e) {
   if (isString(data)) {
     const [, constrained] = data.match(CONSTRAINED_RE) || [];
     if (constrained) {
-      const localizedEntity = i18n.t(`models.${constrained}`).toString();
-      return Error(i18n.t('validation.constrainedDelete', [localizedEntity]).toString());
+      const localizedEntity = i18n.global.t(`models.${constrained}`).toString();
+      return Error(i18n.global.t('validation.constrainedDelete', [localizedEntity]).toString());
     }
   }
   return e;
