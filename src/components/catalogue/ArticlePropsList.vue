@@ -1,7 +1,11 @@
 <template lang="pug">
 
 .article-props-list.list-group
-  .list-group-item(v-for="prop in articleProps" @click="$emit('click', prop)" :key="prop.id")
+  .list-group-item(
+    v-for="prop in articleProps"
+    @click="$emit('click', prop)"
+    :key="prop.id"
+  )
     .title
       .ord(v-if="prop.ord") {{ prop.ord }}:
       .name

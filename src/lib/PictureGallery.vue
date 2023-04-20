@@ -33,7 +33,7 @@
   .buttons(v-if="model && hasAuthoring")
 
     el-button.make-avatar(
-      v-if="this.avatars && images.length > 1"
+      v-if="avatars && images.length > 1"
       @click="setAvatarClick"
       :disabled="isAvatar"
     ) {{ buttonText }}

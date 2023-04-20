@@ -9,8 +9,6 @@ export default {
   props: {
     emitOnCreate: Boolean,
   },
-  render() {
-  },
   computed: {
     ...mapGetters({
       scannedBarCode: g.SCANNED_BARCODE,

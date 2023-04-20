@@ -52,8 +52,6 @@ export default {
       clearScannedBarcode: m.SET_SCANNED_BARCODE,
       setArticleFilters: m.SET_ARTICLE_FILTERS,
     }),
-    init() {
-    },
     onAddBarcodeClick() {
       const { barcodes } = this.article;
       const props = {

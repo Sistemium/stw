@@ -7,7 +7,7 @@
     :stock-taking="item"
     :class="{ active: activeId === item.id }"
     @click="$emit('click', item)"
-    @positionsClick="$emit('positionsClick', item)"
+    @positions-click="$emit('positionsClick', item)"
   )
 
 </template>

@@ -19,7 +19,7 @@ import map from 'lodash/map';
 import groupBy from 'lodash/groupBy';
 import filter from 'lodash/filter';
 import find from 'lodash/find';
-import Loading from 'element-ui/packages/loading';
+import { ElLoading } from 'element-plus';
 
 const { error, debug } = log('dataSync');
 
@@ -80,7 +80,7 @@ async function stockWithdrawingSync(to, from, options) {
     field,
   } = options;
 
-  const loading = Loading.service({});
+  const loading = ElLoading.service({});
 
   try {
     const data = await model.findAll({});

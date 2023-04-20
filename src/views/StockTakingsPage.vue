@@ -14,7 +14,7 @@
         stock-taking-list(
           :items="stockTakings"
           @click="onPositionsClick"
-          @positionsClick="onPositionsClick"
+          @positions-click="onPositionsClick"
           v-if="stockTakings.length"
           :active-id="$route.params.stockTakingId"
         )

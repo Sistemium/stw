@@ -23,7 +23,7 @@ el-main.stock-taking-page.page
         )
     el-tab-pane(:label="$t('concepts.settings')" name="settings")
       stock-taking-edit(
-        :stockTakingId="stockTakingId"
+        :stock-taking-id="stockTakingId"
         :is-drawer="false"
         @closed="onClose"
       )
@@ -35,9 +35,6 @@ el-main.stock-taking-page.page
 
 import { createNamespacedHelpers } from 'vuex';
 import StockTaking, { workflow } from '@/models/StockTaking';
-import WorkflowButton from '@/lib/WorkflowButton.vue';
-import InventoryPage from '@/views/InventoryPage.vue';
-import StockTakingItemForm from '@/components/stock/StockTakingItemForm.vue';
 import StockTakingItem from '@/models/StockTakingItem';
 import * as m from '@/store/inv/mutations';
 import StockTakingItemList from '@/components/stock/StockTakingItemList.vue';
@@ -45,7 +42,8 @@ import BarcodeScanner from '@/components/BarcodeScanner/BarcodeScanner';
 import StockTakingEdit from '@/components/stock/StockTakingEdit.vue';
 import AlertEmpty from '@/lib/AlertEmpty.vue';
 import { searchByArticle } from '@/services/catalogue';
-import SearchInput from '@/lib/SearchInput.vue';
+import ToolButton from '@/lib/ToolButton.vue';
+import Resize from '@/lib/Resize.vue';
 
 const { mapMutations } = createNamespacedHelpers('inv');
 
@@ -110,13 +108,11 @@ export default {
     },
   },
   components: {
-    SearchInput,
+    Resize,
+    ToolButton,
     AlertEmpty,
     StockTakingEdit,
     StockTakingItemList,
-    StockTakingItemForm,
-    InventoryPage,
-    WorkflowButton,
     BarcodeScanner,
   },
   i18n: {
