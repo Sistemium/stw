@@ -37,19 +37,7 @@ export default {
     $ts(dateString, key = 'timestamp') {
       return i18n.global.d(new Date(dateString), key);
     },
-    $requiredRule(fieldOrArray) {
-      const res = {};
-      const fields = Array.isArray(fieldOrArray) ? fieldOrArray : [fieldOrArray];
-      fields.forEach(field => {
-        const [, concept] = field.match(/(.+)Id$/) || [];
-        const label = `${concept ? 'concepts' : 'fields'}.${concept || field}`;
-        res[field] = [{
-          required: true,
-          message: this.$t('validation.required', [this.$t(label)]),
-        }];
-      });
-      return res;
-    },
+    $requiredRule,
     $tAction(action, name) {
       return this.$t(`actions.${action}`, [this.$t(`accusative.${name}`)]);
     },
@@ -81,3 +69,17 @@ export default {
     },
   },
 };
+
+export function $requiredRule(fieldOrArray) {
+  const res = {};
+  const fields = Array.isArray(fieldOrArray) ? fieldOrArray : [fieldOrArray];
+  fields.forEach(field => {
+    const [, concept] = field.match(/(.+)Id$/) || [];
+    const label = `${concept ? 'concepts' : 'fields'}.${concept || field}`;
+    res[field] = [{
+      required: true,
+      message: i18n.global.t('validation.required', [i18n.global.t(label)]),
+    }];
+  });
+  return res;
+}
