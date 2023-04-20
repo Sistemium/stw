@@ -9,7 +9,8 @@
 
   resize(:padding="20")
     article-props-list(
-      :article-props="articleProps" @click="onPropClick"
+      :article-props="articleProps"
+      @click="onPropClick"
       v-if="articleProps.length"
     )
     el-alert.empty(type="info" :title="$t('validation.noData')" :closable="false" v-else)
@@ -20,41 +21,42 @@
   router-view
 
 </template>
-<script>
+<script setup>
 import ArticleProp from '@/models/ArticleProp';
 import ArticlePropsList from '@/components/catalogue/ArticlePropsList.vue';
 import PageTitle from '@/components/PageTitle.vue';
 import { articlePropertySort } from '@/services/catalogue';
+import Resize from '@/lib/Resize.vue';
+import ToolButton from '@/lib/ToolButton.vue';
+import { useRouter } from 'vue-router';
+import { computed } from 'vue';
 
-export default {
-  name: 'ArticlePropsPage',
-  props: {
-    editRoute: String,
-    createRoute: String,
-  },
-  computed: {
-    articleProps() {
-      const items = ArticleProp.reactiveFilter({});
-      return articlePropertySort(items);
+const router = useRouter();
+
+const props = defineProps({
+  editRoute: String,
+  createRoute: String,
+});
+
+const articleProps = computed(() => {
+    const items = ArticleProp.reactiveFilter({});
+    return articlePropertySort(items);
+  });
+
+function onPropClick(prop) {
+  router.push({
+    name: props.editRoute,
+    params: {
+      articlePropId: prop.id,
     },
-  },
-  methods: {
-    onPropClick(prop) {
-      this.$router.push({
-        name: this.editRoute,
-        params: {
-          articlePropId: prop.id,
-        },
-      });
-    },
-    onAdd() {
-      this.$router.push({
-        name: this.createRoute,
-      });
-    },
-  },
-  components: { PageTitle, ArticlePropsList },
-};
+  });
+}
+
+function onAdd() {
+  router.push({
+    name: props.createRoute,
+  });
+}
 
 </script>
 <style scoped lang="scss">
