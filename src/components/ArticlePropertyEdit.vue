@@ -55,7 +55,7 @@ const props = defineProps({
 });
 
 const currentOptionId = ref(null);
-const currentTab = ref(null);
+const currentTab = ref('0');
 
 const modelOrigin = computed(() => {
   const { articlePropId } = props;
