@@ -5,58 +5,59 @@
     el-tag(
       v-for="tag in tags" :key="tag.id"
       :size="size"
-      @click="$emit('click', tag)"
+      @click="emit('click', tag)"
     ) {{ tag.name }}
-    .empty(v-if="!tags.length") {{ $t('emptyTags') }}
+    .empty(v-if="!tags.length") {{ t('emptyTags') }}
   tool-button(
     tool="add"
-    @click="onAdd()"
+    @click="onAdd"
   )
 
-  article-property-edit(v-if="showDrawer" @closed="showDrawer = false")
+  article-property-edit(
+    v-if="showDrawer"
+    @closed="showDrawer = false"
+  )
 
 </template>
-<script>
+<script setup>
 
 import ArticlePropertyEdit from '@/components/ArticlePropertyEdit.vue';
+import ToolButton from '@/lib/ToolButton.vue';
+import { ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 
-export default {
-  name: 'PropTags',
-  components: { ArticlePropertyEdit },
-  props: {
-    size: {
-      type: String,
-      // default: 'mini',
-    },
-    tags: {
-      type: Array,
-      default: () => [],
-    },
+defineProps({
+  size: {
+    type: String,
+    default: 'default',
   },
-  data() {
-    return {
-      showDrawer: false,
-    };
+  tags: {
+    type: Array,
+    default: () => [],
   },
-  methods: {
-    onAdd() {
-      this.showDrawer = true;
+});
+
+const emit = defineEmits(['click']);
+
+const showDrawer = ref(false);
+
+function onAdd() {
+  showDrawer.value = true;
+}
+
+const { t } = useI18n({
+  messages: {
+    en: {
+      emptyTags: 'Add property',
     },
-  },
-  i18n: {
-    messages: {
-      en: {
-        emptyTags: 'Add property',
-      },
-      ru: {
-        emptyTags: 'Добавить свойство',
-      },
-      lt: {
-        emptyTags: 'Pridėti ypatybę',
-      },
+    ru: {
+      emptyTags: 'Добавить свойство',
+    },
+    lt: {
+      emptyTags: 'Pridėti ypatybę',
     },
   },
-};
+});
 
 </script>
 <style scoped lang="scss">
@@ -95,6 +96,7 @@ export default {
   padding-bottom: $padding;
   white-space: nowrap;
   overflow-x: scroll;
+
   > .el-tag + .el-tag {
     margin-left: $padding;
   }
