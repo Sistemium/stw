@@ -39,30 +39,24 @@ el-form.article-property-form(
     el-input-number(v-model="model.ord")
 
 </template>
-<script>
+<script setup>
 import { VALUE_TYPES } from '@/models/ArticleProp';
+import { computed } from 'vue';
+import { $requiredRule } from '@/lib/validations';
 
-/* eslint-disable vue/no-mutating-props */
-export default {
-  name: 'ArticlePropertyForm',
-  props: {
-    model: {
-      type: Object,
-      required: true,
-    },
+defineProps({
+  model: {
+    type: Object,
+    required: true,
   },
-  computed: {
-    types() {
-      return Object.keys(VALUE_TYPES);
-    },
-    formRules() {
-      return {
-        ...this.$requiredRule('name'),
-        ...this.$requiredRule('type'),
-      };
-    },
-  },
-};
+});
+
+const types = computed(() => Object.keys(VALUE_TYPES));
+
+const formRules = computed(() => ({
+  ...$requiredRule('name'),
+  ...$requiredRule('type'),
+}));
 
 </script>
 <style scoped lang="scss">
