@@ -1,40 +1,32 @@
 <template lang="pug">
-
+// eslint-disable vue/no-mutating-props
 el-form.prop-option-form(
-  :model="model"
   ref="form"
+  :model="model"
   :rules="rules"
 )
   el-form-item(:label="property.name" prop="name")
-    // eslint-disable-next-line vue/no-mutating-props
     el-input(v-model="model.name")
 
 </template>
-<script>
+<script setup>
 /* eslint-disable vue/no-mutating-props */
+import { computed } from 'vue';
 import ArticleProp from '@/models/ArticleProp';
+import { $requiredRule } from '@/lib/validations';
 
-export default {
-  name: 'PropOptionForm',
-  props: {
-    model: {
-      type: Object,
-      required: true,
-    },
+const props = defineProps({
+  model: {
+    type: Object,
+    required: true,
   },
-  computed: {
-    property() {
-      return ArticleProp.reactiveGet(this.model.propId) || {};
-    },
-    rules() {
-      return {
-        ...this.$requiredRule('name'),
-      };
-    },
-  },
-};
+});
+
+const property = computed(() => {
+  const { propId } = props.model;
+  return ArticleProp.reactiveGet(propId);
+});
+
+const rules = computed(() => $requiredRule('name'));
 
 </script>
-<style scoped lang="scss">
-
-</style>
