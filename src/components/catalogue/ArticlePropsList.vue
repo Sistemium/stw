@@ -3,7 +3,7 @@
 .article-props-list.list-group
   .list-group-item(
     v-for="prop in articleProps"
-    @click="$emit('click', prop)"
+    @click="emit('click', prop)"
     :key="prop.id"
   )
     .title
@@ -18,17 +18,16 @@
     el-tag.type(type="info") {{ $t(`dataTypes.${prop.type}`) }}
 
 </template>
-<script>
+<script setup>
 
-export default {
-  name: 'ArticlePropsList',
-  props: {
-    articleProps: {
-      type: Array,
-      required: true,
-    },
+defineProps({
+  articleProps: {
+    type: Array,
+    required: true,
   },
-};
+});
+
+const emit = defineEmits(['click']);
 
 </script>
 <style scoped lang="scss">
