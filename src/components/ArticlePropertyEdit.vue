@@ -1,7 +1,7 @@
 <template lang="pug">
 
 drawer-edit.article-property-edit(
-  :title="$t('title')"
+  :title="t('title')"
   :save-fn="saveFn"
   :destroy-fn="destroyFn"
   :model-origin="modelOrigin"
@@ -10,10 +10,10 @@ drawer-edit.article-property-edit(
 )
   template(#default="{ model }")
     el-tabs(v-model="currentTab")
-      el-tab-pane(:label="$t('form')")
+      el-tab-pane(:label="t('form')")
         article-property-form(ref="form" :model="model")
       el-tab-pane(
-        :label="$t('options')"
+        :label="t('options')"
         v-if="articlePropId && model.type === 'options'"
         :lazy="true"
       )
@@ -35,7 +35,7 @@ drawer-edit.article-property-edit(
     )
 
 </template>
-<script>
+<script setup>
 
 import DrawerEdit from '@/lib/DrawerEdit.vue';
 import ArticlePropertyForm from '@/components/ArticlePropertyForm.vue';
@@ -46,75 +46,66 @@ import PropOptionEdit from '@/components/props/PropOptionEdit.vue';
 import orderBy from 'lodash/orderBy';
 import ToolButton from '@/lib/ToolButton.vue';
 import Resize from '@/lib/Resize.vue';
+import { computed, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 
-export default {
-  name: 'ArticlePropertyEdit',
-  props: {
-    articlePropId: String,
-    from: Object,
-  },
-  data() {
-    return {
-      currentOptionId: null,
-      currentTab: null,
-    };
-  },
-  computed: {
-    modelOrigin() {
-      const { articlePropId } = this;
-      return articlePropId ? ArticleProp.reactiveGet(articlePropId) : {
-        isRequired: false,
-        isNaming: true,
-        ord: 0,
-      };
+const props = defineProps({
+  articlePropId: String,
+  from: Object,
+});
+
+const currentOptionId = ref('');
+const currentTab = ref(null);
+
+const modelOrigin = computed(() => {
+  const { articlePropId } = props;
+  return articlePropId ? ArticleProp.reactiveGet(articlePropId) : {
+    isRequired: false,
+    isNaming: true,
+    ord: 0,
+  };
+});
+
+const options = computed(() => {
+  const { articlePropId: propId } = props;
+  return propId ? orderBy(PropOption.reactiveFilter({ propId }), 'name') : [];
+});
+
+function saveFn(item) {
+  return ArticleProp.createOne(item);
+}
+
+function destroyFn(id) {
+  return ArticleProp.destroy(id);
+}
+
+function optionClick(option) {
+  currentOptionId.value = option.id;
+}
+
+function onAdd() {
+  currentOptionId.value = '';
+}
+
+const { t } = useI18n({
+  messages: {
+    en: {
+      title: 'Property edit',
+      form: 'Parameters',
+      options: 'Options',
     },
-    options() {
-      const { articlePropId: propId } = this;
-      return propId ? orderBy(PropOption.reactiveFilter({ propId }), 'name') : [];
+    ru: {
+      title: 'Редактирование признака',
+      form: 'Параметры',
+      options: 'Опции выбора',
     },
-  },
-  components: {
-    Resize,
-    ToolButton,
-    PropOptionEdit,
-    PropOptionList,
-    ArticlePropertyForm,
-    DrawerEdit,
-  },
-  methods: {
-    saveFn(props) {
-      return ArticleProp.createOne(props);
-    },
-    destroyFn(id) {
-      return ArticleProp.destroy(id);
-    },
-    optionClick(option) {
-      this.currentOptionId = option.id;
-    },
-    onAdd() {
-      this.currentOptionId = '';
-    },
-  },
-  i18n: {
-    messages: {
-      en: {
-        title: 'Property edit',
-        form: 'Parameters',
-        options: 'Options',
-      },
-      ru: {
-        title: 'Редактирование признака',
-        form: 'Параметры',
-        options: 'Опции выбора',
-      },
-      lt: {
-        title: 'Ypatybės redagavimas',
-        form: 'Parametrai',
-        options: 'Pasirinkimai',
-      },
+    lt: {
+      title: 'Ypatybės redagavimas',
+      form: 'Parametrai',
+      options: 'Pasirinkimai',
     },
   },
-};
+});
 
 </script>
 <style lang="scss" scoped>
