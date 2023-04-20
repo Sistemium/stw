@@ -30,7 +30,12 @@
   #nav
     router-link(v-for="{ t, name } in menu" :key="t" :to="{ name }") {{ $t(t) }}
 
-  lang-menu(:languages="languages" trigger="click" size="normal")
+  lang-menu(
+    :languages="languages"
+    trigger="click"
+    size="default"
+    v-model="$i18n.locale"
+  )
 
 </template>
 <script>
