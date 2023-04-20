@@ -5,18 +5,9 @@
   hello-world(:msg="$t('message')")
 
 </template>
-<script>
+<script setup>
 
 import HelloWorld from '@/components/HelloWorld.vue';
 
-export default {
-  name: 'HomePage',
-  components: {
-    HelloWorld,
-  },
-  created() {
-    this.$debug('home');
-  },
-};
-
+// this.$debug('home');
 </script>
