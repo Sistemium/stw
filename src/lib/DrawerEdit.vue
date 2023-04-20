@@ -19,6 +19,7 @@ component.drawer-edit.box-card(
   form-buttons(
     :changed="changed"
     :deletable="isDeletable"
+    size="default"
     @save-click="onSaveClick"
     @cancel-click="cancelClick"
     @delete-click="onDeleteClick"
