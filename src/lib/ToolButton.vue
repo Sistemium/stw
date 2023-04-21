@@ -3,13 +3,15 @@
 el-button.tool-button(
   :icon="icon"
   :size="size"
-  :disabled="disabled"
+  :disabled="disabled || null"
   circle
-  @click="$emit('click')"
+  @click="emit('click')"
 )
 
 </template>
-<script>
+<script setup>
+
+import { computed } from 'vue';
 
 const ICONS = {
   add: 'el-icon-circle-plus',
@@ -18,40 +20,38 @@ const ICONS = {
   loading: 'el-icon-loading',
 };
 
-export default {
-  name: 'ToolButton',
-  props: {
-    tool: {
-      type: String,
-      required: true,
-      // validator(value) {
-      //   return Object.keys(ICONS)
-      //     .includes(value);
-      // },
-    },
-    busy: {
-      type: Boolean,
-      default: false,
-    },
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-    size: {
-      type: String,
-      default: 'small',
-    },
+const props = defineProps({
+  tool: {
+    type: String,
+    required: true,
+    // validator(value) {
+    //   return Object.keys(ICONS)
+    //     .includes(value);
+    // },
   },
-  computed: {
-    icon() {
-      const { tool } = this;
-      if (this.busy && tool === 'refresh') {
-        return ICONS.loading;
-      }
-      return ICONS[tool] || `el-icon-${tool}`;
-    },
+  busy: {
+    type: Boolean,
+    default: false,
   },
-};
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
+  size: {
+    type: String,
+    default: 'small',
+  },
+});
+
+const emit = defineEmits(['click']);
+
+const icon = computed(() => {
+  const { tool, busy } = props;
+  if (busy && tool === 'refresh') {
+    return ICONS.loading;
+  }
+  return ICONS[tool] || `el-icon-${tool}`;
+});
 
 </script>
 <style scoped lang="scss">
