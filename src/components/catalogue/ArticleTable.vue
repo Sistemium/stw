@@ -1,79 +1,89 @@
 <template lang="pug">
 
 el-table.article-table(
-  :size="size"
-  stripe
+  ref="table"
   :data="articles"
   :height="height"
-  @row-click="rowClick"
   highlight-current-row
-  @current-change="handleCurrentChange"
   row-key="id"
-  ref="table"
+  :size="size"
+  stripe
+  @row-click="rowClick"
+  @current-change="handleCurrentChange"
 )
   el-table-column(
     column-key="avatar"
     :width="60"
   )
     template(#default="{ row }")
-      article-avatar(:article="row" size="medium" :id="`id-${row.id}`")
+      article-avatar(
+        :article="row"
+        :id="`id-${row.id}`"
+        size="medium"
+      )
   el-table-column(
-    prop="name"
     :label="$t('fields.name')"
+    prop="name"
   )
   el-table-column(
-    prop="code"
     :label="$t('fields.code')"
+    prop="code"
   )
   el-table-column(
     v-for="prop in propColumns"
-    :key="prop.id"
-    :prop="prop.id"
-    :label="prop.name"
     :align="prop.align"
+    :key="prop.id"
+    :label="prop.name"
+    :prop="prop.id"
   )
-  el-table-column(column-key="buttons" :width="50" align="center")
+  el-table-column(
+    align="center"
+    column-key="buttons"
+    :width="50"
+  )
     i.el-icon-edit
 
 </template>
-<script>
+<script setup>
 
+import { ref } from 'vue';
 import ArticleAvatar from '@/components/catalogue/ArticleAvatar.vue';
 
-export default {
-  name: 'ArticleTable',
-  components: { ArticleAvatar },
-  props: {
-    articles: Array,
-    propColumns: Array,
-    size: String,
-    height: Number,
-  },
-  methods: {
-    handleCurrentChange(current, old) {
-      this.$emit('current-change', current, old);
-    },
-    rowClick(row, column) {
-      if (!column) {
-        return;
-      }
-      const { columnKey } = column;
-      // eslint-disable-next-line default-case
-      switch (columnKey) {
-        case 'buttons':
-          this.$emit('click', row);
-          break;
-        case 'avatar':
-          this.$emit('avatarClick', row);
-          break;
-      }
-    },
-  },
-};
+defineProps({
+  articles: Array,
+  propColumns: Array,
+  size: String,
+  height: Number,
+});
+
+const emit = defineEmits(['currentChange', 'click', 'avatarClick']);
+const table = ref(null);
+
+function handleCurrentChange(current, old) {
+  emit('currentChange', current, old);
+}
+
+function rowClick(row, column) {
+  if (!column) {
+    return;
+  }
+  const { columnKey } = column;
+  // eslint-disable-next-line default-case
+  switch (columnKey) {
+    case 'buttons':
+      emit('click', row);
+      break;
+    case 'avatar':
+      emit('avatarClick', row);
+      break;
+  }
+}
 
 </script>
 <style scoped lang="scss">
+
 .el-icon-edit {
   cursor: pointer;
 }
+
 </style>
