@@ -6,7 +6,11 @@ el-select.storage-select(
   ref="select"
   :disabled="disabled"
 )
-  el-option-group(v-for="group in groups" :key="group.type" :label="group.label")
+  el-option-group(
+    v-for="group in groups"
+    :key="group.type"
+    :label="group.label"
+  )
     el-option(
       v-for="storage in group.options"
       :key="storage.id"
@@ -15,41 +19,44 @@ el-select.storage-select(
     )
 
 </template>
-<script>
+<script setup>
 
+import { computed, ref } from 'vue';
+import orderBy from 'lodash/orderBy';
 import Storage from '@/models/Storage';
+import i18n from '@/i18n';
 
-export default {
-  name: 'StorageSelect',
-  props: {
-    value: String,
-    disabled: Boolean,
+const props = defineProps({
+  modelValue: String,
+  disabled: Boolean,
+});
+
+const emit = defineEmits(['update:modelValue']);
+
+defineExpose({ open });
+
+const select = ref(null);
+
+function open() {
+  select.value.visible = true;
+}
+
+const storageId = computed({
+  get() {
+    return props.modelValue;
   },
-  methods: {
-    open() {
-      this.$refs.select.visible = true;
-    },
+  set(value) {
+    emit('update:modelValue', value);
   },
-  computed: {
-    storageId: {
-      get() {
-        return this.value;
-      },
-      set(value) {
-        this.$emit('input', value);
-      },
-    },
-    groups() {
-      return ['facility', 'personal']
-        .map(type => ({
-          type,
-          label: this.$t(`concepts.${type}`),
-          options: this.$orderBy(Storage.reactiveFilter({ type }), 'name'),
-        }))
-        .filter(({ options }) => options.length);
-    },
-  },
-};
+});
+
+const groups = computed(() => ['facility', 'personal']
+  .map(type => ({
+    type,
+    label: i18n.global.t(`concepts.${type}`),
+    options: orderBy(Storage.reactiveFilter({ type }), 'name'),
+  }))
+  .filter(({ options }) => options.length));
 
 </script>
 <style scoped lang="scss">
