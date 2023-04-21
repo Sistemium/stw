@@ -1,8 +1,8 @@
 <template lang="pug">
 
 el-input.search-input(
-  prefix-icon="el-icon-search"
   v-model="searchText"
+  prefix-icon="el-icon-search"
   :clearable="true"
   :placeholder="placeholder"
   :size="size"
@@ -10,48 +10,35 @@ el-input.search-input(
 )
 
 </template>
-<script>
+<script setup>
 
 import debounce from 'lodash/debounce';
+import { computed, ref, watch } from 'vue';
+import i18n from '@/i18n';
 
-export default {
-
-  name: 'SearchInput',
-
-  props: {
-    disabled: Boolean,
-    size: {
-      type: String,
-    },
-    value: String,
-    // placeholder: String,
-    debounce: {
-      type: Number,
-      default: 500,
-    },
+const props = defineProps({
+  disabled: Boolean,
+  size: {
+    type: String,
   },
-
-  computed: {
-    placeholder() {
-      return this.$t('search');
-    },
+  modelValue: String,
+  // placeholder: String,
+  debounce: {
+    type: Number,
+    default: 500,
   },
+});
 
-  data() {
-    return { searchText: this.value };
-  },
+const emit = defineEmits(['update:modelValue']);
 
-  created() {
-    this.$watch('searchText', debounce(value => this.$emit('input', value), this.debounce));
-  },
+const placeholder = computed(() => i18n.global.t('search'));
 
-  watch: {
-    value(newValue) {
-      this.searchText = newValue || '';
-    },
-  },
+const searchText = ref(props.modelValue);
 
-};
+watch(searchText, debounce(value => emit('update:modelValue', value), props.debounce));
+watch(() => props.modelValue, newValue => {
+  searchText.value = newValue || '';
+});
 
 </script>
 <style scoped lang="scss">
