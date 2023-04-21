@@ -3,58 +3,61 @@
 .storages-page.page
   page-title(title="menu.storages")
   .buttons(v-if="storages.length")
-    tool-button(tool="add" @click="onAdd()")
+    tool-button(
+      tool="add"
+      @click="onAdd()"
+    )
   resize(:padding="20")
     storages-list(
       :storages="storages"
       @click="onStorageClick"
       v-if="storages.length"
     )
-    el-alert.empty(type="info" :title="$t('validation.noData')" :closable="false" v-else)
+    el-alert.empty(
+      v-else
+      :closable="false"
+      :title="$t('validation.noData')"
+      type="info"
+    )
       el-button(
-        type="primary" @click="onAdd()" :plain="true"
+        :plain="true"
+        type="primary"
+        @click="onAdd()"
       ) {{ $tAction('add', 'storage') }}
+
   router-view
 
 </template>
-<script>
+<script setup>
 import PageTitle from '@/components/PageTitle.vue';
 import StoragesList from '@/components/stock/StoragesList.vue';
 import Storage from '@/models/Storage';
+import Resize from '@/lib/Resize.vue';
+import ToolButton from '@/lib/ToolButton.vue';
+import { computed } from 'vue';
+import { useRouter } from 'vue-router';
 
-export default {
-  name: 'StoragesPage',
-  props: {
-    editRoute: String,
-    createRoute: String,
-  },
-  computed: {
-    storages() {
-      return Storage.reactiveFilter();
+const props = defineProps({
+  editRoute: String,
+  createRoute: String,
+});
+
+const router = useRouter();
+const storages = computed(() => Storage.reactiveFilter());
+
+function onStorageClick(storage) {
+  router.push({
+    name: props.editRoute,
+    params: {
+      storageId: storage.id,
     },
-  },
-  methods: {
-    onStorageClick(storage) {
-      this.$router.push({
-        name: this.editRoute,
-        params: {
-          storageId: storage.id,
-        },
-      });
-    },
-    onAdd() {
-      this.$router.push({
-        name: this.createRoute,
-      });
-    },
-  },
-  components: {
-    StoragesList,
-    PageTitle,
-  },
-};
+  });
+}
+
+function onAdd() {
+  router.push({
+    name: props.createRoute,
+  });
+}
 
 </script>
-<style scoped lang="scss">
-@import "../styles/page";
-</style>

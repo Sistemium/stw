@@ -1,19 +1,24 @@
 <template lang="pug">
 
 .storages-list.list-group
-  .list-group-item(v-for="storage in storages" :key="storage.id" @click="$emit('click', storage)")
+  .list-group-item(
+    v-for="storage in storages"
+    :key="storage.id"
+    @click="$emit('click', storage)"
+  )
     .name {{ storage.name }}
     simple-label(:text="`concepts.${storage.type}`")
 
 </template>
-<script>
+<script setup>
 
-export default {
-  name: 'StoragesList',
-  props: {
-    storages: Array,
-  },
-};
+import SimpleLabel from '@/lib/SimpleLabel.vue';
+
+defineProps({
+  storages: Array,
+});
+
+defineEmits(['click']);
 
 </script>
 <style scoped lang="scss">
