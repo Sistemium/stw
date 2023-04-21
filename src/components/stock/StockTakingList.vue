@@ -6,26 +6,20 @@
     v-for="item in items" :key="item.id"
     :stock-taking="item"
     :class="{ active: activeId === item.id }"
-    @click="$emit('click', item)"
-    @positions-click="$emit('positionsClick', item)"
+    @click="emit('click', item)"
+    @positions-click="emit('positionsClick', item)"
   )
 
 </template>
-<script>
+<script setup>
 
 import StockTakingListItem from '@/components/stock/StockTakingListItem.vue';
 
-export default {
-  name: 'StockTakingList',
-  components: { StockTakingListItem },
-  props: {
-    items: Array,
-    activeId: String,
-  },
-  methods: {},
-};
+defineProps({
+  items: Array,
+  activeId: String,
+});
+
+const emit = defineEmits(['click', 'positionsClick']);
 
 </script>
-<style scoped lang="scss">
-
-</style>

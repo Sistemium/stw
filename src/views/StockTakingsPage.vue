@@ -6,48 +6,124 @@
     component.operations(:is="showDetails ? 'el-aside' : 'el-main'")
       .filters
         search-input(v-model="search")
-        .buttons(v-if="stockTakings.length")
-          storage-select(v-model="storageId" ref="storageSelect")
-          tool-button(tool="back" @click="onBack" v-if="showDetails")
-          tool-button(tool="add" @click="onAdd")
-      resize#stock-takings-scroll(:padding="20" v-if="storageId")
+        .buttons
+          //(v-if="stockTakings.length")
+          storage-select(
+            ref="storageSelectRef"
+            v-model="store.currentStorageId"
+          )
+          tool-button(
+            v-if="showDetails"
+            tool="back"
+            @click="onBack"
+          )
+          tool-button(
+            tool="add"
+            @click="onAdd"
+          )
+      resize#stock-takings-scroll(
+        :padding="20"
+        v-if="store.currentStorageId"
+      )
         stock-taking-list(
+          v-if="stockTakings.length"
+          :active-id="$route.params.stockTakingId"
           :items="stockTakings"
           @click="onPositionsClick"
           @positions-click="onPositionsClick"
-          v-if="stockTakings.length"
-          :active-id="$route.params.stockTakingId"
         )
         alert-empty(
           v-else
-          @click="onAdd"
           :button-text="$tAction('start', 'stockTaking')"
+          @click="onAdd"
         )
     router-view
 
 </template>
-<script>
+<script setup>
 
-import { createNamespacedHelpers } from 'vuex';
+import { computed, ref } from 'vue';
+import { useRoute } from 'vue-router';
+import orderBy from 'lodash/orderBy';
 import find from 'lodash/find';
 import StockTaking from '@/models/StockTaking';
 import StockTakingList from '@/components/stock/StockTakingList.vue';
 import SearchInput from '@/lib/SearchInput.vue';
-import pageMixin from '@/lib/pageMixin';
-import * as g from '@/store/inv/getters';
-import * as m from '@/store/inv/mutations';
-import storageSelectMixin from '@/components/storageSelectMixin';
 import { searchOperations } from '@/services/warehousing';
 import StockTakingItem from '@/models/StockTakingItem';
+import AlertEmpty from '@/lib/AlertEmpty.vue';
+import Resize from '@/lib/Resize.vue';
+import ToolButton from '@/lib/ToolButton.vue';
+import StorageSelect from '@/components/stock/StorageSelect.vue';
+import PageTitle from '@/components/PageTitle.vue';
+import { useInvStore } from '@/store/invStore';
+import { useRouteParams } from '@/lib/updateRouteParams';
+import { pageProps } from '@/lib/pageMixin';
+
+const { updateRouteParams } = useRouteParams();
+
+const storageSelectRef = ref(null);
+
+const props = defineProps(pageProps({
+  progressRoute: String,
+}));
+
+const route = useRoute();
+
+const search = computed({
+  get() {
+    return route.query.search || '';
+  },
+  set(search) {
+    updateRouteParams({}, { search: search || undefined });
+  },
+});
+
+const store = useInvStore();
+
+const stockTakings = computed(() => {
+  const data = StockTaking.reactiveManyByIndex('storageId', store.currentStorageId);
+  const filtered = search.value
+    ? data.filter(searchOperations(search.value, StockTakingItem, 'stockTakingId'))
+    : data;
+  return orderBy(filtered, ['date'], ['desc']);
+});
+
+const showDetails = computed(() => route.name
+  && find(route.matched, { name: props.progressRoute }));
+
+function onBack() {
+  this.updateRouteParams({
+    stockTakingId: null,
+  }, {}, props.rootState);
+}
+
+function onAdd() {
+  updateRouteParams({}, { storageId: store.currentStorageId }, props.createRoute)
+    .catch(e => this.$error(e));
+}
+
+function onItemClick(stockTaking, toProgress = false) {
+  const { processing } = stockTaking;
+  const progress = processing === 'progress' || toProgress;
+  const name = progress ? props.progressRoute : props.editRoute;
+  updateRouteParams({ stockTakingId: stockTaking.id }, {}, name);
+}
+
+function onPositionsClick(stockTaking) {
+  onItemClick(stockTaking, true);
+}
+
+</script>
+<!--<script>
+// import pageMixin from '@/lib/pageMixin';
+// import storageSelectMixin from '@/components/storageSelectMixin';
 import scrollToCreated from '@/components/scrollToCreated';
 
-const { mapGetters, mapMutations } = createNamespacedHelpers('inv');
-
 export default {
-  name: 'StockTakingsPage',
   mixins: [
-    pageMixin,
-    storageSelectMixin,
+    // pageMixin,
+    // storageSelectMixin,
     scrollToCreated({
       container: '#stock-takings-scroll',
       blink: false,
@@ -57,69 +133,8 @@ export default {
       },
     }),
   ],
-  components: { SearchInput, StockTakingList },
-  props: {
-    progressRoute: String,
-  },
-  computed: {
-    search: {
-      get() {
-        return this.$route.query.search || '';
-      },
-      set(search) {
-        this.updateRouteParams({}, { search: search || undefined });
-      },
-    },
-    ...mapGetters({
-      defaultStorageId: g.CURRENT_STORAGE,
-    }),
-    storageId: {
-      get() {
-        return this.defaultStorageId;
-      },
-      set(id) {
-        this.setCurrentStorageId(id);
-      },
-    },
-    stockTakings() {
-      const { storageId, search } = this;
-      const data = StockTaking.reactiveManyByIndex('storageId', storageId);
-      const filtered = search
-        ? data.filter(searchOperations(search, StockTakingItem, 'stockTakingId'))
-        : data;
-      return this.$orderBy(filtered, ['date'], ['desc']);
-    },
-    showDetails() {
-      return this.$route.name
-        && find(this.$router.currentRoute.matched, { name: this.progressRoute });
-    },
-  },
-  methods: {
-    onBack() {
-      this.updateRouteParams({
-        stockTakingId: null,
-      }, {}, this.rootState);
-    },
-    onAdd() {
-      this.pushCreate({ storageId: this.storageId });
-    },
-    ...mapMutations({
-      setCurrentStorageId: m.SET_CURRENT_STORAGE,
-    }),
-    onItemClick(stockTaking, toProgress = false) {
-      const { processing } = stockTaking;
-      const progress = processing === 'progress' || toProgress;
-      const name = progress ? this.progressRoute : this.editRoute;
-      this.updateRouteParams({ stockTakingId: stockTaking.id }, {}, name);
-    },
-    onPositionsClick(stockTaking) {
-      this.onItemClick(stockTaking, true);
-    },
-  },
-
-};
-
-</script>
+}
+</script>-->
 <style scoped lang="scss">
 @import "../styles/page";
 
@@ -144,12 +159,15 @@ export default {
       margin-bottom: $padding;
     }
   }
+
   .buttons {
     display: flex;
   }
+
   .storage-select {
     flex: 1;
   }
+
   + .el-main {
     margin-left: $margin-top;
   }

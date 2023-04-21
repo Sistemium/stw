@@ -1,5 +1,5 @@
 <template lang="pug">
-
+// eslint-disable vue/no-mutating-props
 el-form.stock-taking-form(
   :model="model"
   ref="form"
@@ -21,36 +21,22 @@ el-form.stock-taking-form(
     workflow-button(:workflow="workflow" v-model="model.processing")
 
 </template>
-<script>
+<script setup>
 
+import { computed } from 'vue';
 import Storage from '@/models/Storage';
 import WorkflowButton from '@/lib/WorkflowButton.vue';
 import { workflow } from '@/models/StockTaking';
 import DateStringPicker from '@/lib/DateStringPicker.vue';
+import { $requiredRule } from '@/lib/validations';
 
-export default {
-  name: 'StockTakingForm',
-  components: { WorkflowButton, DateStringPicker },
-  props: {
-    model: Object,
-    disabled: Boolean,
-  },
-  computed: {
-    rules() {
-      return {
-        ...this.$requiredRule(['date', 'storageId']),
-      };
-    },
-    storages() {
-      return Storage.reactiveFilter();
-    },
-    workflow() {
-      return workflow;
-    },
-  },
-};
+defineProps({
+  model: Object,
+  disabled: Boolean,
+});
+
+const rules = $requiredRule(['date', 'storageId']);
+
+const storages = computed(() => Storage.reactiveFilter());
 
 </script>
-<style scoped lang="scss">
-
-</style>

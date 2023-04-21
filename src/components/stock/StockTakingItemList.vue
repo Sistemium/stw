@@ -1,7 +1,11 @@
 <template lang="pug">
 
 .stock-taking-item-list.list-group(v-if="items.length")
-  .list-group-item(v-for="item in items" :key="item.id" @click="$emit('click', item)")
+  .list-group-item(
+    v-for="item in items"
+    :key="item.id"
+    @click="emit('click', item)"
+  )
     .title
       article-view(:article-id="item.articleId")
       .cts {{ $ts(item.deviceCts || item.cts) }}
@@ -19,20 +23,15 @@
         span.units {{ item.units }} {{ $t(`units.short.${item.measureUnitId}`) }}
 
 </template>
-<script>
+<script setup>
 import ArticleView from '@/components/catalogue/ArticleView.vue';
 import { shortenedPackage } from '@/models/PackageType';
 
-export default {
-  name: 'StockTakingItemList',
-  components: { ArticleView },
-  props: {
-    items: Array,
-  },
-  methods: {
-    shortenedPackage,
-  },
-};
+defineProps({
+  items: Array,
+});
+
+const emit  = defineEmits(['click']);
 
 </script>
 <style scoped lang="scss">

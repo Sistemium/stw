@@ -1,42 +1,37 @@
 <template lang="pug">
 
-.stock-taking-list-item-view.list-group-item(@click="$emit('click')")
+.stock-taking-list-item-view.list-group-item(@click="emit('click')")
   .title
     .date {{ $ts(stockTaking.date, 'short') }}
     .storage {{ storage }}
   .right
     workflow-processing(:processing="stockTaking.processing")
-    el-button.positions(
-      type="text"
-      @click.stop="$emit('positionsClick')"
+    el-link.positions(
+      @click.stop="emit('positionsClick')"
     ) {{ positions.length }} {{ $t('shortened.positions') }}.
 
 </template>
-<script>
+<script setup>
 
+import { computed } from 'vue';
 import StockTakingItem from '@/models/StockTakingItem';
 import Storage from '@/models/Storage';
 import WorkflowProcessing from '@/lib/WorkflowProcessing.vue';
 
-export default {
-  name: 'StockTakingListItem',
-  components: { WorkflowProcessing },
-  props: {
-    stockTaking: Object,
-  },
-  computed: {
-    positions() {
-      const { id: stockTakingId } = this.stockTaking;
-      return StockTakingItem.reactiveFilter({ stockTakingId });
-    },
-    storage() {
-      const { name } = Storage.reactiveGet(this.stockTaking.storageId) || {};
-      return name;
-    },
-  },
-};
+const props = defineProps({
+  stockTaking: Object,
+});
+
+const emit = defineEmits(['positionsClick', 'click']);
+
+const positions = computed(() => {
+  const { id: stockTakingId } = props.stockTaking;
+  return StockTakingItem.reactiveFilter({ stockTakingId });
+});
+
+const storage = computed(() => {
+  const { name } = Storage.reactiveGet(props.stockTaking.storageId) || {};
+  return name;
+});
 
 </script>
-<style scoped lang="scss">
-@import "../../styles/pageLists";
-</style>
