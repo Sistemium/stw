@@ -6,24 +6,23 @@ el-alert.alert-empty(
 )
   el-button(
     v-if="buttonText && !disabled"
-    @click="$emit('click')"
+    @click="emit('click')"
     type="primary"
     :plain="true"
   ) {{ buttonText }}
 
 </template>
-<script>
+<script setup>
 
-export default {
-  name: 'AlertEmpty',
-  props: {
-    title: {
-      type: String,
-    },
-    buttonText: String,
-    disabled: Boolean,
+defineProps({
+  title: {
+    type: String,
   },
-};
+  buttonText: String,
+  disabled: Boolean,
+});
+
+const emit = defineEmits(['click']);
 
 </script>
 <style scoped lang="scss">
@@ -34,6 +33,7 @@ export default {
     text-align: right;
   }
 }
+
 .alert-empty {
   max-width: 500px;
   margin-right: auto;
