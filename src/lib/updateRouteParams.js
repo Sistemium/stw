@@ -1,40 +1,48 @@
 import matches from 'lodash/matches';
+import { useRoute, useRouter } from 'vue-router';
 
-export default {
-  methods: {
-    async updateRouteParams(updateParams = {}, updateQuery = {}, updateName) {
 
-      const { name, params = {}, query = {} } = this.$route;
+export function useRouteParams() {
 
-      const newParams = {
-        ...params,
-        ...updateParams,
-      };
+  const route = useRoute();
+  const router = useRouter();
 
-      const newQuery = {
-        ...query,
-        ...updateQuery,
-      };
+  return { updateRouteParams };
 
-      const newName = updateName || name;
+  async function updateRouteParams(updateParams = {}, updateQuery = {}, updateName) {
 
-      const sameState = matches(params)(newParams)
-        && matches(newQuery)(query)
-        && newName === name;
+    const { name, params = {}, query = {} } = route;
 
-      if (sameState) {
-        return;
-      }
+    const newParams = {
+      ...params,
+      ...updateParams,
+    };
 
-      // this.$debug('route:', name, params, query);
-      // this.$debug('update:', updateName, updateParams, updateQuery);
+    const newQuery = {
+      ...query,
+      ...updateQuery,
+    };
 
-      await this.$router.push({
-        name: newName,
-        params: newParams,
-        query: newQuery,
-      });
+    const newName = updateName || name;
 
-    },
-  },
-};
+    const sameState = matches(params)(newParams)
+      && matches(newQuery)(query)
+      && newName === name;
+
+    if (sameState) {
+      return;
+    }
+
+    // this.$debug('route:', name, params, query);
+    // this.$debug('update:', updateName, updateParams, updateQuery);
+
+    await router.push({
+      name: newName,
+      params: newParams,
+      query: newQuery,
+    });
+
+  }
+
+}
+
