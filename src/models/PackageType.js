@@ -43,7 +43,9 @@ export const PackageType = [
   },
 ];
 
-export function packageTypes(locale = i18n.global.locale, fallbackLocale = i18n.fallbackLocale) {
+export function packageTypes(localeArg, fallbackLocaleArg) {
+  const locale = localeArg || i18n.global.locale.value;
+  const fallbackLocale = fallbackLocaleArg || i18n.global.fallbackLocale.value;
   return PackageType.map(packageType => ({
     ...packageType,
     name: packageType.name[locale] || packageType.name[fallbackLocale],
@@ -54,8 +56,8 @@ export function packageTypes(locale = i18n.global.locale, fallbackLocale = i18n.
 
 const BY_ID = mapValues(keyBy(['en', 'lt', 'ru']), locale => keyBy(packageTypes(locale), 'id'));
 
-export function getById(id, locale = i18n.global.locale) {
-  return BY_ID[locale][id];
+export function getById(id, locale = '') {
+  return BY_ID[locale || i18n.global.locale.value][id];
 }
 
 export function unitsInPackageLabel(measureUnitId) {
