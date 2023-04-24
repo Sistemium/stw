@@ -12,12 +12,18 @@ el-button.tool-button(
 <script setup>
 
 import { computed } from 'vue';
+import {
+  CirclePlus,
+  Edit,
+  Refresh,
+  Loading,
+} from '@element-plus/icons-vue';
 
 const ICONS = {
-  add: 'el-icon-circle-plus',
-  edit: 'el-icon-edit',
-  refresh: 'el-icon-refresh',
-  loading: 'el-icon-loading',
+  add: CirclePlus,
+  edit: Edit,
+  refresh: Refresh,
+  loading: Loading,
 };
 
 const props = defineProps({

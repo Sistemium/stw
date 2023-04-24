@@ -19,7 +19,7 @@ el-table.article-table(
       article-avatar(
         :article="row"
         :id="`id-${row.id}`"
-        size="medium"
+        size="default"
       )
   el-table-column(
     :label="$t('fields.name')"
