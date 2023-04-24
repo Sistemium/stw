@@ -1,33 +1,27 @@
 <template lang="pug">
 
 el-avatar.article-avatar(
-  :src="picture.thumbnailHref"
-  icon="el-icon-picture-outline"
-  :size="size"
-  shape="square"
   fit="cover"
+  icon="el-icon-picture-outline"
   :id="id"
+  shape="square"
+  :size="size"
+  :src="picture.thumbnailHref"
 )
 
 </template>
-<script>
+<script setup>
 
 import Picture from '@/models/Picture';
+import { computed } from 'vue';
 
-export default {
-  name: 'ArticleAvatar',
-  props: {
-    article: Object,
-    size: String,
-    id: String,
-  },
-  computed: {
-    picture() {
-      const { article } = this;
-      return Picture.reactiveGet(article.avatarPictureId) || {};
-    },
-  },
-};
+const props = defineProps({
+  article: Object,
+  size: String,
+  id: String,
+});
+
+const picture = computed(() => Picture.reactiveGet(props.article.avatarPictureId) || {});
 
 </script>
 <style scoped lang="scss">
