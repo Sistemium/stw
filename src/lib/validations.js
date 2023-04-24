@@ -20,16 +20,7 @@ export default {
     $percent(value) {
       return `${i18n.global.n(value * 100.0)}%`;
     },
-    $cloneInstance(res) {
-      return res && {
-        ...cloneDeep(res),
-        cts: undefined,
-        ts: undefined,
-        deviceCts: undefined,
-        _id: undefined,
-        id: undefined,
-      };
-    },
+    $cloneInstance: cloneInstance,
     $trim: trim,
     $map: map,
     $find: find,
@@ -82,4 +73,15 @@ export function $requiredRule(fieldOrArray) {
     }];
   });
   return res;
+}
+
+export function cloneInstance(res) {
+  return res && {
+    ...cloneDeep(res),
+    cts: undefined,
+    ts: undefined,
+    deviceCts: undefined,
+    _id: undefined,
+    id: undefined,
+  };
 }
