@@ -1,61 +1,48 @@
 <template lang="pug">
 
-el-button.download-excel-button(
-  @click="onClick"
-  type="text"
+el-link.download-excel-button(
+  @click="onClick()"
 )
   i.el-icon-download
   span .xlsx
 
 </template>
-<script>
+<script setup lang="ts">
 
 import axios from 'axios';
 import download from 'downloadjs';
+import { ElNotification } from 'element-plus'
 
-const NAME = 'DownloadExcelButton';
+interface XLSRequest {
+  data: object[];
+  schema: object;
+}
 
-export default {
+const props = withDefaults(defineProps<{
+  dataFn: () => XLSRequest;
+  name: string;
+}>(), { name: 'download' });
 
-  name: NAME,
+function onClick() {
 
-  props: {
-    dataFn: Function,
-    name: {
-      type: String,
-      default: 'download',
-    },
-  },
+  const {
+    data,
+    schema,
+  } = props.dataFn();
 
-  methods: {
-    onClick() {
-
-      const {
-        data,
-        schema,
-      } = this.dataFn();
-
-      axios.post('/xlsx', {
-        schema,
-        data,
-      }, {
-        responseType: 'blob',
-      })
-        .then(response => {
-          const content = response.headers['content-type'];
-          return download(response.data, `${this.name}.xlsx`, content);
-        })
-        .catch(e => {
-          this.$notify.error(e.message);
-        });
-
-    },
-  },
-};
+  axios.post('/xlsx', {
+    schema,
+    data,
+  }, {
+    responseType: 'blob',
+  })
+    .then(response => {
+      const content = response.headers['content-type'];
+      return download(response.data, `${props.name}.xlsx`, content);
+    })
+    .catch(e => {
+      ElNotification({ type: 'error', message: e.message });
+    });
+}
 
 </script>
-<style scoped lang="scss">
-
-@import "../styles/variables";
-
-</style>
