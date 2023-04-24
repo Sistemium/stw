@@ -28,7 +28,11 @@
     strong {{ title }}
 
   #nav
-    router-link(v-for="{ t, name } in menu" :key="t" :to="{ name }") {{ $t(t) }}
+    router-link(
+      v-for="{ t, name } in menu"
+      :key="t"
+      :to="{ name }"
+    ) {{ $t(t) }}
 
   lang-menu(
     :languages="languages"
@@ -38,66 +42,52 @@
   )
 
 </template>
-<script>
+<script setup lang="ts">
 
+import { computed, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import LangMenu from 'sistemium-vue/components/LangMenu.vue';
-import Language from '@/models/Language';
-import { toggleTabBar, isNative } from 'sistemium-data/src/util/native';
-import { routes } from '@/router';
-import i18n from '@/i18n';
+import { toggleTabBar, isNative as isNativeFn } from 'sistemium-data/src/util/native.js';
+import { routes } from '@/router/index.js';
+import i18n from '@/i18n.js';
+import type Language from '@/models/Languages';
+import { Languages } from '@/models/Languages';
 
-export default {
-  name: 'AppMenu',
-  data() {
-    return { tabBarShown: isNative() ? toggleTabBar() : null };
-  },
-  computed: {
-    languages() {
-      return [...Language];
-    },
-    menu() {
-      return routes
-        .filter(({ meta }) => !meta || !meta.menuHidden)
-        .map(({ name }) => ({
-          name,
-          t: `menu.${name}`,
-        }));
-    },
-    isNative() {
-      return isNative();
-    },
-    tabBarIcon() {
-      return this.tabBarShown ? 'el-icon-user' : 'el-icon-user-solid';
-    },
-    title() {
-      return this.routeTitle(this.$route);
-      // || this.routeTitle(this.$router.currentRoute.matched[0]);
-    },
-  },
-  methods: {
-    onCommand(name) {
-      if (name === 'toggleTabBar') {
-        this.tabBarShown = toggleTabBar();
-        return;
-      }
-      if (this.$route.name !== name) {
-        this.$router.push({ name });
-      }
-    },
-    routeTitle(route) {
-      const { name } = route || {};
-      if (!name) {
-        return null;
-      }
-      const key = `menu.${name}`;
-      const hasTitle = i18n.global.te(key);
-      return hasTitle && i18n.global.t(key);
-    },
-  },
-  components: {
-    LangMenu,
-  },
-};
+const router = useRouter();
+const route = useRoute();
+
+const isNative = computed(isNativeFn);
+const tabBarShown = ref(isNative.value ? toggleTabBar() : false);
+const languages: Language[] = [...Languages];
+
+const menu = computed(() => routes
+  .filter(({ meta }) => !meta || !meta.menuHidden)
+  .map(({ name }) => ({
+    name,
+    t: `menu.${name}`,
+  })));
+
+const tabBarIcon = computed(() => tabBarShown.value ? 'el-icon-user' : 'el-icon-user-solid');
+
+const title = computed(() => {
+  const { name } = route;
+  if (!name) {
+    return null;
+  }
+  const key = `menu.${name}`;
+  const hasTitle = i18n.global.te(key);
+  return hasTitle && i18n.global.t(key);
+});
+
+function onCommand(name) {
+  if (name === 'toggleTabBar') {
+    tabBarShown.value = toggleTabBar();
+    return;
+  }
+  if (route.name !== name) {
+    router.push({ name });
+  }
+}
 
 </script>
 <style scoped lang="scss">

@@ -1,4 +1,10 @@
-export default [
+export default interface Language {
+  key: string;
+  name: string;
+  icon: string;
+}
+
+export const Languages : Language[] = [
   {
     key: 'en',
     name: 'English',
