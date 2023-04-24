@@ -74,7 +74,7 @@ const title = computed(() => {
   if (!name) {
     return null;
   }
-  const key = `menu.${name}`;
+  const key = `menu.${name.toString()}`;
   const hasTitle = i18n.global.te(key);
   return hasTitle && i18n.global.t(key);
 });
