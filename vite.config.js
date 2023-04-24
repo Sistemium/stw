@@ -10,13 +10,14 @@ export default defineConfig({
   // },
   plugins: [
     vue({
-      template: {
-        compilerOptions: {
-          compatConfig: {
-            MODE: 3,
-          },
-        },
-      },
+      // template: {
+      //   compilerOptions: {
+      //     compatConfig: {
+      //       MODE: 2,
+      //       ATTR_FALSE_VALUE: false,
+      //     },
+      //   },
+      // },
     }),
     eslint({
       include: ['src/**/*.ts', 'src/**/*.vue', 'src/*.ts', 'src/*.vue'],
@@ -38,7 +39,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      vue: '@vue/compat',
+      // vue: '@vue/compat',
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
     extensions: [
