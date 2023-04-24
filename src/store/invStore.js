@@ -9,4 +9,9 @@ export const useInvStore = defineStore({
     currentStorageId: useStorage(`${VITE_LS_PREFIX}.currentStorageId`, ''),
     scannedBarcode: '',
   }),
+  actions: {
+    clearBarcode() {
+      this.scannedBarcode = null;
+    },
+  },
 });
