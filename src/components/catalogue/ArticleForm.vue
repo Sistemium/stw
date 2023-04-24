@@ -19,11 +19,10 @@
           @reorder="setName()"
           :show-clear="!prop.prop.isRequired"
         )
-        el-button.naming(
-          type="text"
+        el-link.naming(
           icon="el-icon-view"
-          @click.stop.prevent="toggleNaming(prop, idx)"
           :class="{ 'is-naming': prop.isNaming }"
+          @click.stop.prevent="toggleNaming(prop, idx)"
         )
         component(
           v-if="prop.component"
