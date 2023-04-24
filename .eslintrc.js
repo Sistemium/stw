@@ -8,6 +8,7 @@ module.exports = {
     'plugin:vue/vue3-recommended',
     'plugin:vue-pug/vue3-recommended',
     '@vue/typescript/recommended',
+    '@vue/eslint-config-typescript',
   ],
   parserOptions: {
     ecmaVersion: 'latest',
@@ -43,7 +44,6 @@ module.exports = {
     // allow debugger during development
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'no-return-assign': 'off',
-    'no-unused-vars': 'error',
     'no-empty': 'error',
     'array-bracket-spacing': ['error', 'never'],
     'object-curly-spacing': ['error', 'always'],
@@ -73,5 +73,7 @@ module.exports = {
     'vue/attributes-order': 'off',
     'vue/order-in-components': 'off',
     'vue/require-explicit-emits': 'off',
+    'no-unused-vars': 'off',
+    '@typescript-eslint/no-unused-vars': 'error',
   },
 };
