@@ -2,8 +2,8 @@
 
 el-input.barcode-input(
   v-model="input"
-  :placeholder="$t('scanBarcode')"
-  ref="wrapper"
+  :placeholder="t('scanBarcode')"
+  ref="wrapperRef"
   @blur="onBlur"
 )
   //template(#default:prepend)
@@ -13,74 +13,73 @@ el-input.barcode-input(
   //template(#default:append)
 
 </template>
-<script>
+<script setup lang="ts">
 
-import { createNamespacedHelpers } from 'vuex';
+import { nextTick, onMounted, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 import debounce from 'lodash/debounce';
-import * as m from '@/store/inv/mutations';
+import { useInvStore } from '@/store/invStore.js';
 
-const { mapMutations } = createNamespacedHelpers('inv');
+const wrapperRef = ref(null);
 
-export default {
-  name: 'BarcodeInput',
-  props: {
-    lock: {
-      type: Boolean,
-      default: true,
+const props = withDefaults(defineProps<{
+  lock: boolean;
+}>(), { lock: true });
+
+const input = ref('');
+
+const { t } = useI18n({
+  messages: {
+    en: {
+      scanBarcode: 'Scan barcode',
+    },
+    ru: {
+      scanBarcode: 'Сканируйте штрих-код',
+    },
+    lt: {
+      scanBarcode: 'Nuskaitykite brūkšninį kodą',
     },
   },
-  data() {
-    return { input: '' };
-  },
-  i18n: {
-    messages: {
-      en: {
-        scanBarcode: 'Scan barcode',
-      },
-      ru: {
-        scanBarcode: 'Сканируйте штрих-код',
-      },
-      lt: {
-        scanBarcode: 'Nuskaitykite brūkšninį kodą',
-      },
-    },
-  },
-  methods: {
-    ...mapMutations({
-      setScannedBarcode: m.SET_SCANNED_BARCODE,
-    }),
-    onBlur() {
-      if (this.lock) {
-        this.focus();
-      }
-    },
-    focus() {
-      this.$nextTick(() => {
-        if (!this.$refs.wrapper) {
-          return;
-        }
-        const { input } = this.$refs.wrapper.$refs;
-        if (input) {
-          input.focus();
-        }
-      });
-    },
-    onScan(code) {
-      if (!code) {
-        return;
-      }
-      this.$emit('scan', code);
-      this.setScannedBarcode({ code, symbology: null });
-      this.input = '';
-    },
-  },
-  mounted() {
-    this.focus();
-  },
-  created() {
-    this.$watch('input', debounce(input => this.onScan(input), 500));
-  },
-};
+});
+
+const emit = defineEmits<{
+  (e: 'scan', code: string): void
+}>();
+
+const store = useInvStore();
+
+watch(input, debounce(input => onScan(input), 500));
+
+onMounted(() => {
+  focus();
+})
+
+function onBlur() {
+  if (props.lock) {
+    focus();
+  }
+}
+
+function focus() {
+  nextTick(() => {
+    if (!wrapperRef.value) {
+      return;
+    }
+    const { input } = wrapperRef.value.$refs;
+    if (input) {
+      input.focus();
+    }
+  });
+}
+
+function onScan(code) {
+  if (!code) {
+    return;
+  }
+  emit('scan', code);
+  store.scannedBarcode = { code, symbology: null };
+  input.value = '';
+}
 
 </script>
 <style scoped lang="scss">
