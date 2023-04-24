@@ -3,29 +3,35 @@
 .article-list.list-group
   slot(name="header")
   .list-group-item(
+    v-for="article in articles"
+    :key="article.id"
     :id="`id-${article.id}`"
-    v-for="article in articles" :key="article.id"
-    @click="$emit('click', article)"
+    @click="emit('click', article)"
   )
-    .avatar(@click.prevent.stop="$emit('avatarClick', article)")
-      article-avatar(:article="article" size="medium")
+    .avatar(@click.prevent.stop="emit('avatarClick', article)")
+      article-avatar(
+        :article="article"
+        size="default"
+      )
     .description
       .name {{ article.name }}
       .code {{ article.code }}
+
   slot(name="footer")
 
 </template>
-<script>
+<script setup lang="ts">
 
 import ArticleAvatar from '@/components/catalogue/ArticleAvatar.vue';
 
-export default {
-  name: 'ArticleList',
-  components: { ArticleAvatar },
-  props: {
-    articles: Array,
-  },
-};
+defineProps<{
+  articles: object[],
+}>();
+
+const emit = defineEmits<{
+  (e: 'click', article: object): void
+  (e: 'avatarClick', article: object): void
+}>();
 
 </script>
 <style scoped lang="scss">
@@ -39,10 +45,12 @@ export default {
 .list-group-item {
   display: flex;
   text-align: left;
+
   .description {
     margin-left: $padding;
     flex: 1;
   }
+
   .el-avatar {
     //width: 30px;
     //height: 30px;
