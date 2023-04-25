@@ -41,22 +41,28 @@ el-table.article-table(
     column-key="buttons"
     :width="50"
   )
-    i.el-icon-edit
+    el-icon.el-icon-edit()
+      Edit
 
 </template>
-<script setup>
+<script setup lang="ts">
 
 import { ref } from 'vue';
+import { Edit } from '@element-plus/icons-vue';
 import ArticleAvatar from '@/components/catalogue/ArticleAvatar.vue';
 
-defineProps({
-  articles: Array,
-  propColumns: Array,
-  size: String,
-  height: Number,
-});
+defineProps<{
+  articles: object[],
+  propColumns: object[],
+  size?: string;
+  height?: number;
+}>();
 
-const emit = defineEmits(['currentChange', 'click', 'avatarClick']);
+const emit = defineEmits<{
+  (e: 'avatarClick', row: object) : void;
+  (e: 'click', row: object) : void;
+  (e: 'currentChange', current: object, old: object) : void;
+}>();
 const table = ref(null);
 
 function handleCurrentChange(current, old) {
