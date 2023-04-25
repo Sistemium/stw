@@ -5,7 +5,6 @@ el-dialog.stock-article-details-view(
   :fullscreen="fullscreen"
   :show-close="true"
   v-model="visible"
-  custom-class="el-dialog-tabs"
   @closed="handleClose()"
   :append-to-body="true"
   width="75%"
@@ -80,7 +79,7 @@ export default {
       return [
         {
           id: 'fields.unitsSur',
-          badge: fix.length || null,
+          badge: fix.length,
           operations: fix,
           counterparty: null,
           route: 'stockTakingProgress',
@@ -88,7 +87,7 @@ export default {
         },
         {
           id: 'fields.unitsIn',
-          badge: incoming.length || null,
+          badge: incoming.length,
           operations: incoming,
           counterparty: 'fields.supplier',
           route: 'stockReceiving',
@@ -96,7 +95,7 @@ export default {
         },
         {
           id: 'fields.unitsOut',
-          badge: out.length || null,
+          badge: out.length,
           operations: out,
           counterparty: 'fields.consignee',
           route: 'stockWithdrawing',

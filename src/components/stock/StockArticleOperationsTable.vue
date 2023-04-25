@@ -2,7 +2,7 @@
 
 el-table.stock-article-operations-table(
   :data="operations"
-  @row-click="(row, column) => $emit('row-click', row, column)"
+  @row-click="(row, column) => emit('rowClick', row, column)"
 )
   el-table-column(
     :label="$t('fields.date')"
@@ -37,18 +37,18 @@ el-table.stock-article-operations-table(
       .comment-text(v-if="row.commentText" ) {{ row.commentText }}
 
 </template>
-<script>
-export default {
-  name: 'StockArticleOperationsTable',
-  props: {
-    operations: Array,
-    counterparty: String,
-    columnWidth: {
-      type: Number,
-      default: 120,
-    },
+<script setup>
+
+defineProps({
+  operations: Array,
+  counterparty: String,
+  columnWidth: {
+    type: Number,
+    default: 120,
   },
-};
+});
+
+const emit = defineEmits(['rowClick']);
 
 </script>
 <style scoped lang="scss">

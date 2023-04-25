@@ -2,8 +2,8 @@
 
 el-table.stock-period-table(
   :data="data"
-  @row-click="(row, column) => $emit('row-click', row, column)"
   :height="height"
+  @row-click="(row, column) => emit('rowClick', row, column)"
 )
   el-table-column(
     :label="$t('concepts.article')"
@@ -37,22 +37,20 @@ el-table.stock-period-table(
   )
 
 </template>
-<script>
+<script setup lang="ts">
 
 import ArticleView from '@/components/catalogue/ArticleView.vue';
+import type StockArticleDate from '@/models/StockArticleDates';
 
-export default {
-  name: 'StockPeriodTable',
-  components: { ArticleView },
-  props: {
-    data: Array,
-    height: Number,
-    columnWidth: {
-      type: Number,
-      default: 120,
-    },
-  },
-};
+withDefaults(defineProps<{
+  data: StockArticleDate[];
+  height?: number;
+  columnWidth?: number;
+}>(), { columnWidth: 120 });
+
+const emit = defineEmits<{
+  (e: 'rowClick', row: StockArticleDate, column: object): void;
+}>();
 
 </script>
 <style scoped lang="scss">
