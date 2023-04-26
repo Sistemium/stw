@@ -1,7 +1,10 @@
 <template lang="pug">
 
 .barcode-scanner-status
-  el-button(type="text" @click="toggleScanner" :class="scannerStatus")
+  el-link(
+    :class="scannerStatus"
+    @click="toggleScanner()"
+  )
     svg
       use(:xlink:href="statusSrc")
 
@@ -76,6 +79,7 @@ svg {
     position: relative;
     top: 2px;
   }
+
   padding: 0;
 }
 

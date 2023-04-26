@@ -169,7 +169,7 @@ strong, .hamburger {
   }
 }
 
-.barcode-scanner-status {
+.app-menu :deep(.barcode-scanner-status) {
   @include gt-xxs() {
     position: absolute;
     top: 0;
