@@ -27,8 +27,8 @@
       @click="onAdd()"
     )
 
-  // ref="resizeRef"
   resize#articles-page-scroll(
+    :class="viewComponentName"
     :padding="20"
     @resized="setHeight"
   )
@@ -55,49 +55,44 @@
   router-view
 
 </template>
-<script setup>
+<script setup lang="ts">
 
+import { computed, ref } from 'vue';
+import type { Component } from 'vue';
+import { useI18n } from 'vue-i18n';
+import map from 'lodash/map';
+import { useRouter } from 'vue-router';
 import each from 'lodash/each';
 import pick from 'lodash/pick';
 import orderBy from 'lodash/orderBy';
 import filter from 'lodash/filter';
-import Article from '@/models/Article';
-import ArticleProp from '@/models/ArticleProp';
-import { articlePropertySort, searchArticle } from '@/services/catalogue';
-import PageTitle from '@/components/PageTitle.vue';
-import BarcodeView from '@/components/BarcodeScanner/BarcodeView.vue';
 import SearchInput from '@/lib/SearchInput.vue';
-import ArticleList from '@/components/catalogue/ArticleList.vue';
-import ArticleTable from '@/components/catalogue/ArticleTable.vue';
-import scrollToCreated from '@/components/scrollToCreated';
-import vssMixin from '@/components/vssMixin';
-import DownloadExcelButton from '@/lib/DownloadExcelButton.vue';
 import Resize from '@/lib/Resize.vue';
 import ToolButton from '@/lib/ToolButton.vue';
-import { computed, ref } from 'vue';
-import { useI18n } from 'vue-i18n';
-import map from 'lodash/map';
-import { useRouter } from 'vue-router';
-import i18n from '@/i18n';
+import DownloadExcelButton from '@/lib/DownloadExcelButton.vue';
 import useResponsiveTables from '@/components/useResponsiveTables';
+import PageTitle from '@/components/PageTitle.vue';
+import BarcodeView from '@/components/BarcodeScanner/BarcodeView.vue';
+import ArticleList from '@/components/catalogue/ArticleList.vue';
+import ArticleTable from '@/components/catalogue/ArticleTable.vue';
+import i18n from '@/i18n.js';
 import { DocumentCopy } from '@element-plus/icons-vue';
+import Article from '@/models/Article.js';
+import ArticleProp from '@/models/ArticleProp.js';
+import { articlePropertySort, searchArticle } from '@/services/catalogue.js';
 
-const props = defineProps({
-  editRoute: String,
-  createRoute: String,
-  galleryRoute: String,
-});
+const props = defineProps<{
+  editRoute: string;
+  createRoute: string;
+  galleryRoute: string;
+}>();
 
-// const resizeRef = ref(null);
 const barcode = ref(null);
 const search = ref('');
-const tableHeight = ref(undefined);
+const tableHeight = ref<number>(undefined);
 const selectedArticle = ref(null);
 const router = useRouter();
 
-// mixins: [
-//   scrollToCreated({ container: '#articles-page-scroll' }),
-// ],
 
 const copyTip = computed(() => {
   const { code, name } = selectedArticle.value || {};
@@ -105,7 +100,8 @@ const copyTip = computed(() => {
 });
 
 const { showTable, tableSize } = useResponsiveTables();
-const viewComponent = computed(() => showTable.value ? ArticleTable : ArticleList);
+const viewComponent = computed<Component>(() => showTable.value ? ArticleTable : ArticleList);
+const viewComponentName = computed(() => showTable.value ? 'table' : 'list');
 
 const articles = computed(() => {
   const rowFilter = !barcode.value ? searchArticle(search.value, tableData.value.propColumns)
@@ -230,13 +226,12 @@ function avatarClick(article) {
 
 </script>
 <style scoped lang="scss">
-//@import "../styles/page";
 
 .search-input {
   flex: 1;
 }
 
-.stm-resize {
+.stm-resize.table {
   overflow-y: hidden;
 }
 
