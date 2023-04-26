@@ -1,67 +1,40 @@
 <template lang="pug">
 
 el-dialog.article-pictures-page(
-  :fullscreen="true"
-  :show-close="true"
   v-model="visible"
-  custom-class="el-dialog-gallery"
-  @closed="handleClose()"
   :append-to-body="true"
   center
+  class="el-dialog-gallery"
+  :fullscreen="true"
+  :show-close="true"
+  @closed="handleClose()"
 )
   article-picture-gallery(
     :article-id="articleId"
-    :has-authoring="true"
     :avatars="true"
     :carousel-type="null"
-    :new-image-properties="newImageProperties"
+    :has-authoring="true"
     @image-click="handleClose"
   )
 
 </template>
-<script>
+<script setup lang="ts">
 
-import Picture from '@/models/Picture';
-import ArticlePictureGallery from '@/components/catalogue/ArticlePictureGallery';
+import ArticlePictureGallery from '@/components/catalogue/ArticlePictureGallery.vue';
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
-export default {
+const props = defineProps<{
+  from: object;
+  articleId: string;
+}>();
 
-  name: 'ArticlePicturesPage',
+const router = useRouter();
+const visible = ref(true);
 
-  props: {
-    from: Object,
-    articleId: String,
-  },
-
-  data() {
-    return {
-      busy: false,
-      image: undefined,
-      visible: true,
-      pictureModel: Picture,
-    };
-  },
-
-  computed: {
-    newImageProperties() {
-      return {
-        ownerXid: this.articleId,
-        target: 'Article',
-      };
-    },
-  },
-
-  methods: {
-    handleClose() {
-      this.$router.push(this.from)
-        .catch(e => this.$error('handleClose', e));
-    },
-  },
-
-  components: { ArticlePictureGallery },
-};
+function handleClose() {
+  router.push(props.from)
+    .catch(e => console.error('handleClose', e));
+}
 
 </script>
-<style scoped lang="scss">
-
-</style>
