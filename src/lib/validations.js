@@ -6,6 +6,7 @@ import map from 'lodash/map';
 import trim from 'lodash/trim';
 import i18n from '@/i18n';
 import cloneDeep from 'lodash/cloneDeep';
+import { ElLoading, ElMessage } from 'element-plus';
 
 export default {
 
@@ -29,32 +30,12 @@ export default {
       return i18n.global.d(new Date(dateString), key);
     },
     $requiredRule,
-    $tAction(action, name) {
-      return this.$t(`actions.${action}`, [this.$t(`accusative.${name}`)]);
-    },
+    $tAction: tAction,
     $tGen(action, name) {
       return this.$t(`actions.${action}`, [this.$t(`genitive.${name}`)]);
     },
     $get: get,
-    async $saveWithLoading(asyncFunction) {
-      const loading = this.$loading({});
-      let result;
-      try {
-        result = await asyncFunction();
-        this.$message.info({
-          message: this.$t('saved').toString(),
-          showClose: true,
-        });
-      } catch (e) {
-        this.$error('saveWithLoading', e);
-        this.$message.error({
-          message: this.$t('savingError').toString(),
-          showClose: true,
-        });
-      }
-      loading.close();
-      return result;
-    },
+    $saveWithLoading: saveWithLoading,
     $watchImmediate(expOrFn, callback, options = {}) {
       return this.$watch(expOrFn, callback, { immediate: true, ...options });
     },
@@ -84,4 +65,32 @@ export function cloneInstance(res) {
     _id: undefined,
     id: undefined,
   };
+}
+
+export function tAction(action, name) {
+  return i18n.global.t(`actions.${action}`, [i18n.global.t(`accusative.${name}`)]);
+}
+
+export function t(key) {
+  return i18n.global.t(key);
+}
+
+export async function saveWithLoading(asyncFunction) {
+  const loading = ElLoading.service({});
+  let result;
+  try {
+    result = await asyncFunction();
+    ElMessage.info({
+      message: t('saved').toString(),
+      showClose: true,
+    });
+  } catch (e) {
+    console.error('saveWithLoading', e);
+    ElMessage.error({
+      message: t('savingError').toString(),
+      showClose: true,
+    });
+  }
+  loading.close();
+  return result;
 }
