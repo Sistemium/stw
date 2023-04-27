@@ -2,21 +2,24 @@
 
 .prepend-select
   .prepend
-    el-button(:icon="buttonIcon" @click="$emit('buttonClick')")
+    el-button(
+      :icon="buttonIcon"
+      @click="emit('buttonClick')"
+    )
   slot
 
 </template>
-<script>
+<script setup lang="ts">
+import type { Component } from 'vue';
+import { Plus } from '@element-plus/icons-vue';
 
-export default {
-  name: 'ButtonPrepend',
-  props: {
-    buttonIcon: {
-      type: String,
-      default: 'el-icon-plus',
-    },
-  },
-};
+withDefaults(defineProps<{
+  buttonIcon?: Component;
+}>(), { buttonIcon: Plus });
+
+const emit = defineEmits<{
+  (e: 'buttonClick'): void;
+}>();
 
 </script>
 <style scoped lang="scss">
@@ -27,9 +30,14 @@ export default {
   width: 100%;
   align-items: flex-start;
 
-  :deep(input) {
+  :deep(.el-input__wrapper) {
     border-bottom-left-radius: 0;
     border-top-left-radius: 0;
+    height: 24px;
+  }
+
+  :deep(.el-select) {
+    width: 100%;
   }
 
   .prepend {
@@ -37,7 +45,8 @@ export default {
     border-right: none;
     border-radius: 4px 0 0 4px;
     line-height: 1;
-    & + *{
+
+    & + * {
       flex: 1;
     }
   }
