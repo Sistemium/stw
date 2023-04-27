@@ -1,63 +1,59 @@
 <template lang="pug">
 
 .ordering-buttons
-  el-button(
-    type="text"
+  el-link(
+    :disabled="index === 0 || null"
     @click.prevent.stop="reorder(-1)"
-    :disabled="index === 0"
   )
-    i.el-icon-arrow-up
+    el-icon
+      ArrowUp
 
-  el-button(
-    type="text"
+  el-link(
+    :disabled="index === length - 1 || null"
     @click.prevent.stop="reorder(1)"
-    :disabled="index === length - 1"
   )
-    i.el-icon-arrow-down
+    el-icon
+      ArrowDown
 
-  el-button(
-    type="text"
-    @click.prevent.stop="remove()"
+  el-link(
     v-if="showClear"
+    @click.prevent.stop="remove()"
   )
-    i.el-icon-close
+    el-icon
+      Close
 
 </template>
-<script>
+<script setup lang="ts">
 
-export default {
-  name: 'OrderingButtons',
-  props: {
-    items: Array,
-    item: Object,
-    showClear: Boolean,
-  },
-  computed: {
-    length() {
-      return this.items.length;
-    },
-    index() {
-      return this.items.indexOf(this.item);
-    },
-  },
-  methods: {
-    reorder(change) {
-      const { items } = this;
-      const ord1 = this.index;
-      const ord2 = ord1 + change;
-      items.splice(ord1, 1);
-      items.splice(ord2, 0, this.item);
-      this.$emit('reorder');
-    },
-    remove() {
-      const { items } = this;
-      items.splice(this.index, 1);
-      this.$emit('reorder');
-    },
-  },
-};
+import { computed } from 'vue';
+import { ArrowDown, ArrowUp, Close } from '@element-plus/icons-vue';
+
+const emit = defineEmits<{
+  (e: 'reorder'): void
+}>();
+
+const props = defineProps<{
+  items: object[];
+  item: object;
+  showClear: boolean;
+}>();
+
+const length = computed(() => props.items.length);
+const index = computed(() => props.items.indexOf(props.item));
+
+/* eslint-disable vue/no-mutating-props */
+
+function reorder(change) {
+  const { value: ord1 } = index;
+  const ord2 = ord1 + change;
+  props.items.splice(ord1, 1);
+  props.items.splice(ord2, 0, props.item);
+  emit('reorder');
+}
+
+function remove() {
+  props.items.splice(index.value, 1);
+  emit('reorder');
+}
 
 </script>
-<style scoped lang="scss">
-
-</style>
