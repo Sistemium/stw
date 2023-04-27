@@ -1,21 +1,25 @@
 <template lang="pug">
 
-button-prepend.prepend-select(@button-click="$emit('buttonClick')")
-  el-select(:value="value" @input="v => $emit('input', v)")
+button-prepend.prepend-select(@button-click="emit('buttonClick')")
+  el-select(
+    :model-value="modelValue"
+    @change="v => emit('update:modelValue', v)"
+  )
     slot
 
 </template>
-<script>
+<script setup lang="ts">
 
 import ButtonPrepend from '@/lib/ButtonPrepend.vue';
 
-export default {
-  name: 'PrependSelect',
-  components: { ButtonPrepend },
-  props: {
-    value: String,
-  },
-};
+defineProps<{
+  modelValue?: string;
+}>();
+
+const emit = defineEmits<{
+  (e: 'buttonClick') : void;
+  (e: 'update:modelValue', value: string): void;
+}>();
 
 </script>
 <style scoped lang="scss">
