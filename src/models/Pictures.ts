@@ -1,3 +1,5 @@
+import ApiModel from '@/models/ApiModels';
+
 export interface PictureInfo {
   name: string;
   src: string;
@@ -9,4 +11,13 @@ export interface IMSResponse {
   name: string;
   folder: string;
   pictures: PictureInfo[],
+}
+
+export interface Picture extends ApiModel {
+  name: string;
+  href: string;
+  thumbnailHref: string;
+  ownerXid: string;
+  target: string;
+  picturesInfo: PictureInfo[],
 }

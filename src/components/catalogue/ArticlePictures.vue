@@ -6,18 +6,16 @@
     :key="pic.id"
     astyle="width: 100px; height: 100px"
     :src="pic.src"
-    fit="fit"
+    fit="fill"
   )
 
 </template>
-<script>
+<script setup lang="ts">
+import type { Picture } from '@/models/Pictures';
 
-export default {
-  name: 'ArticlePictures',
-  props: {
-    pictures: Array,
-  },
-};
+defineProps<{
+  pictures: Picture[],
+}>();
 
 </script>
 <style scoped lang="scss">

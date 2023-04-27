@@ -7,7 +7,7 @@ picture-gallery(
   :new-image-properties="{ ownerXid: articleId, target: 'Article' }"
   :model="Picture"
   @set-avatar-click="setAvatar"
-  @remove-click="removeArticlePicture"
+  @remove-click="image => removeArticlePicture(article, image)"
   @uploaded="onUploaded"
 )
 </template>
@@ -20,7 +20,7 @@ import Article from '@/models/Article.js';
 import Picture from '@/models/Picture.js';
 import PictureGallery from '@/lib/PictureGallery.vue';
 import type ApiModel from '@/models/ApiModels';
-import { saveWithLoading } from '@/lib/validations';
+import { setAvatar, removeArticlePicture } from '@/components/catalogue/ArticlePicturing';
 
 const props = defineProps<{
   articleId: string;
@@ -31,26 +31,10 @@ const article = computed(() => Article.reactiveGet(props.articleId) || {})
 const activeId = computed(() => route.query.activeId as string);
 const images = computed(() => Picture.reactiveFilter({ ownerXid: props.articleId }) as ApiModel[]);
 
-async function onUploaded (picture) {
+async function onUploaded(picture) {
   if (images.value.length === 1) {
-    await setAvatar(picture);
+    await setAvatar(article.value, picture);
   }
-}
-
-async function setAvatar(picture) {
-  await saveWithLoading(() => Article.createOne({
-    ...article.value,
-    avatarPictureId: picture ? picture.id : null,
-  }));
-}
-
-async function removeArticlePicture(picture) {
-  await saveWithLoading(async () => {
-    await Picture.destroy(picture.id);
-    if (article.value.avatarPictureId === picture.id) {
-      await setAvatar(null);
-    }
-  });
 }
 
 </script>

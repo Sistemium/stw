@@ -34,28 +34,28 @@ drawer-edit.article-edit(
           article-pictures(:pictures="pictures")
         take-photo-button(
           entity-name="Picture"
-          @done="onPictureDone"
+          @uploaded="(picturesInfo, fileName) => onPictureDone(model, picturesInfo, fileName)"
         )
 
 </template>
 <script setup lang="ts">
 
-import DrawerEdit from '@/lib/DrawerEdit.vue';
-import Article from '@/models/Article';
-import ArticleForm from '@/components/catalogue/ArticleForm.vue';
-import { articleInstance } from '@/services/catalogue';
-import TakePhotoButton from '@/lib/TakePhotoButton.vue';
-import Picture, { mapPictureInfo } from '@/models/Picture';
-import find from 'lodash/find';
-import ArticlePictures from '@/components/catalogue/ArticlePictures.vue';
-import ArticleMeasurementForm from '@/components/catalogue/ArticleMeasurementForm.vue';
-import RecipeForm from '@/components/production/RecipeForm.vue';
-import Resize from '@/lib/Resize.vue';
 import { useRoute } from 'vue-router';
 import { computed, ref } from 'vue';
 import { useWindowSize } from '@vueuse/core';
+import DrawerEdit from '@/lib/DrawerEdit.vue';
+import Resize from '@/lib/Resize.vue';
+import TakePhotoButton from '@/lib/TakePhotoButton.vue';
+import RecipeForm from '@/components/production/RecipeForm.vue';
+import ArticleForm from '@/components/catalogue/ArticleForm.vue';
+import ArticlePictures from '@/components/catalogue/ArticlePictures.vue';
+import ArticleMeasurementForm from '@/components/catalogue/ArticleMeasurementForm.vue';
+import { articleInstance } from '@/services/catalogue.js';
 import { cloneInstance } from '@/lib/validations.js';
-
+import { createPicture } from '@/services/picturing';
+import Picture, { mapPictureInfo } from '@/models/Picture.js';
+import Article from '@/models/Article.js';
+import { setAvatar } from '@/components/catalogue/ArticlePicturing';
 
 const props = defineProps<{
   articleId: string,
@@ -91,25 +91,16 @@ function saveFn(obj) {
   return Article.createOne(obj);
 }
 
-async function onPictureDone(picturesInfo, fileName) {
-  // this.$debug(picturesInfo, fileName);
-  const { src } = find(picturesInfo, { name: 'largeImage' });
-  const { src: thumbnailSrc } = find(picturesInfo, { name: 'thumbnail' });
-  const picture = {
-    href: src,
-    thumbnailHref: thumbnailSrc,
-    picturesInfo,
+async function onPictureDone(article, picturesInfo, fileName) {
+  const properties = {
     name: fileName,
     target: 'Article',
     ownerXid: props.articleId,
   };
   try {
-    const { id: avatarPictureId } = await Picture.createOne(picture);
+    const picture = await createPicture(Picture, picturesInfo, properties);
     if (pictures.value.length === 1) {
-      await Article.createOne({
-        ...modelOrigin.value,
-        avatarPictureId,
-      });
+      await setAvatar(article, picture);
     }
   } catch (e) {
     console.error('onPictureDone', e);
@@ -121,11 +112,11 @@ async function onPictureDone(picturesInfo, fileName) {
 @import "../../styles/variables";
 
 .el-tab-pane {
-  padding-bottom: 60px;
+  padding-bottom: 40px;
 }
 
 .el-tab-pane.pictures {
-  margin-bottom: 60px;
+  //margin-bottom: 60px;
 }
 
 .take-photo-button {

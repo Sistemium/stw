@@ -63,7 +63,6 @@
 </template>
 <script setup lang="ts">
 
-import find from 'lodash/find';
 import findIndex from 'lodash/findIndex';
 import { computed, nextTick, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -73,6 +72,7 @@ import type ApiModel from '@/models/ApiModels';
 import ReactiveModel from 'sistemium-data-vue';
 import { ElMessage, ElNotification } from 'element-plus';
 import { PictureFilled } from '@element-plus/icons-vue';
+import { createPicture } from '@/services/picturing';
 
 const emit = defineEmits<{
   (e: 'removeClick', image: ApiModel): void;
@@ -154,18 +154,13 @@ async function unUploadError(err) {
 
 async function onUpload(picturesInfo, fileName) {
 
-  const { model } = props;
-  const { src: href } = find(picturesInfo, { name: 'original' });
-  const { src: thumbnailHref } = find(picturesInfo, { name: 'thumbnail' });
-
   try {
-    const picture : ApiModel = await model.create({
-      href,
-      thumbnailHref,
-      picturesInfo,
+    const properties = {
       name: fileName,
       ...props.newImageProperties,
-    });
+    };
+    const picture : ApiModel = await createPicture(props.model, picturesInfo, properties);
+
     emit('uploaded', picture, fileName);
   } catch (e) {
     ElNotification({
