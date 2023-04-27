@@ -58,7 +58,7 @@ import Article from '@/models/Article.js';
 import { setAvatar } from '@/components/catalogue/ArticlePicturing';
 
 const props = defineProps<{
-  articleId: string,
+  articleId?: string,
   from: object,
   drawerStyle?: object,
 }>();

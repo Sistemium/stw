@@ -94,7 +94,7 @@ export function testArticle(article, re, propColumns = []) {
   return re.test(article.name)
     || re.test(article.code)
     || propColumns.find(({ id }) => re.test(article[id]))
-    || article.props.find(({ stringValue }) => re.test(stringValue));
+    || article.props?.find(({ stringValue }) => re.test(stringValue));
 }
 
 export function searchByArticle(search) {
