@@ -1,5 +1,5 @@
 export default {
-  inserted(element) {
+  mounted(element) {
     const input = element.tagName === 'INPUT' ? element
       : element.getElementsByTagName('input')[0];
     if (!input) {
