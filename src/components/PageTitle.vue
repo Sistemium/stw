@@ -3,14 +3,11 @@
 h1.page-title {{ $t(title) }}
 
 </template>
-<script>
+<script setup lang="ts">
 
-export default {
-  name: 'PageTitle',
-  props: {
-    title: String,
-  },
-};
+defineProps<{
+  title: string;
+}>();
 
 </script>
 <style scoped lang="scss">
