@@ -104,8 +104,9 @@ const viewComponent = computed<Component>(() => showTable.value ? ArticleTable :
 const viewComponentName = computed(() => showTable.value ? 'table' : 'list');
 
 const articles = computed(() => {
-  const rowFilter = !barcode.value ? searchArticle(search.value, tableData.value.propColumns)
-    : (({ barcodes }) => barcodes && barcodes.includes(barcode));
+  const rowFilter = !barcode.value
+    ? searchArticle(search.value, tableData.value.propColumns)
+    : ({ barcodes }) => barcodes && barcodes.includes(barcode);
   return filter(tableData.value.rows, rowFilter);
 });
 
@@ -193,7 +194,7 @@ function onAdd() {
 
 function onCopy() {
   router.push({
-    name: this.createRoute,
+    name: props.createRoute,
     query: { copyId: selectedArticle.value.id },
   });
 }
