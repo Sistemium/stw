@@ -10,6 +10,12 @@ export interface ArticleProperty extends ArticleProp {
   optionId?: string;
 }
 
+// export interface ArticleMeasure {
+//   measureId: string;
+//   unitId: string,
+//   units: number;
+// }
+
 export interface Article extends ApiModel {
   name: string;
   code?: string;
@@ -28,6 +34,7 @@ export interface Article extends ApiModel {
   packageTypeId?: string;
   unitsInPackage?: number;
 
-  avatarPictureId: string;
+  avatarPictureId?: string;
+  // measures?: ArticleMeasure[];
 
 }

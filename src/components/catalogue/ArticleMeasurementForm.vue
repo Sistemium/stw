@@ -3,13 +3,26 @@
 el-form.article-measurement-form
 
   el-form-item(:label="$t('fields.measure')")
-    measure-select(v-model="model.measureId" @change="onChange")
+    measure-select(
+      v-model="model.measureId"
+      @change="onChange"
+    )
 
-  el-form-item(:label="$t('fields.measureUnit')" v-if="model.measureId")
-    measure-unit-select(:measure-id="model.measureId" v-model="model.measureUnitId")
+  el-form-item(
+    v-if="model.measureId"
+    :label="$t('fields.measureUnit')"
+  )
+    measure-unit-select(
+      v-model="model.measureUnitId"
+      :measure-id="model.measureId"
+    )
 
   el-form-item(:label="$t('concepts.packageType')")
-    el-select(v-model="model.packageTypeId" :clearable="true" @change="packageTypeChange")
+    el-select(
+      v-model="model.packageTypeId"
+      :clearable="true"
+      @change="packageTypeChange"
+    )
       el-option(
         v-for="{id, name} in packageTypes"
         :key="id"
@@ -18,8 +31,8 @@ el-form.article-measurement-form
       )
 
   el-form-item(
-    :label="unitsInPackageLabel"
     v-if="model.packageTypeId"
+    :label="unitsInPackageLabel"
   )
     el-input-number(
       v-model="model.unitsInPackage"
@@ -28,57 +41,58 @@ el-form.article-measurement-form
     )
 
 </template>
-<script>
+<script setup lang="ts">
 /* eslint-disable vue/no-mutating-props */
-import { measureUnits, DEFAULT_MEASURE_UNIT_ID } from '@/models/Measure';
-import { packageTypes, unitsInPackageLabel } from '@/models/PackageType';
+import { computed } from 'vue';
+import find from 'lodash/find';
+import get from 'lodash/get';
+import { measureUnits as measureUnitsFn, DEFAULT_MEASURE_UNIT_ID } from '@/models/Measure.js';
+import {
+  packageTypes as packageTypesFn,
+  unitsInPackageLabel as unitsInPackageLabelFn,
+} from '@/models/PackageType.js';
 import MeasureUnitSelect from '@/components/select/MeasureUnitSelect.vue';
 import MeasureSelect from '@/components/select/MeasureSelect.vue';
+import type { Article } from '@/models/Articles';
 
-export default {
-  name: 'ArticleMeasurementForm',
-  components: { MeasureSelect, MeasureUnitSelect },
-  props: {
-    model: Object,
-  },
-  computed: {
-    unitsInPackageLabel() {
-      return unitsInPackageLabel(this.model.measureUnitId || DEFAULT_MEASURE_UNIT_ID);
-    },
-    measureUnits() {
-      return measureUnits(this.model.measureId);
-    },
-    packageTypes() {
-      return packageTypes();
-    },
-    defaultUnitId() {
-      return this.$get(this.$find(this.measureUnits, { ratio: 1 }), 'id') || null;
-    },
-  },
-  methods: {
-    packageTypeChange(packageTypeId) {
-      if (!packageTypeId) {
-        this.model.unitsInPackage = null;
-      }
-    },
-    onAdd() {
-      if (!this.model.measures) {
-        this.model.measures = [];
-      }
-      this.model.measures.push({
-        measureId: null,
-        unitId: null,
-        units: null,
-      });
-    },
-    onChange() {
-      const { measureUnitId } = this.model;
-      if (!measureUnitId || !this.$find(this.measureUnits, { id: measureUnitId })) {
-        this.$set(this.model, 'measureUnitId', this.defaultUnitId);
-      }
-    },
-  },
-};
+const props = defineProps<{
+  model: Article,
+}>();
+
+const unitsInPackageLabel = computed(() => {
+  const id = props.model.measureUnitId || DEFAULT_MEASURE_UNIT_ID;
+  return unitsInPackageLabelFn(id);
+});
+
+const measureUnits = computed(() => measureUnitsFn(props.model.measureId));
+const packageTypes = packageTypesFn();
+const defaultUnitId =  computed(() => {
+  return get(find(measureUnits.value, { ratio: 1 }), 'id') || null;
+});
+
+function packageTypeChange(packageTypeId) {
+  if (!packageTypeId) {
+    props.model.unitsInPackage = null;
+  }
+}
+
+// function onAdd() {
+//   if (!props.model.measures) {
+//     props.model.measures = [];
+//   }
+//   props.model.measures.push({
+//     measureId: null,
+//     unitId: null,
+//     units: null,
+//   });
+// }
+
+function onChange() {
+  const { measureUnitId } = props.model;
+  if (!measureUnitId || !find(measureUnits.value, { id: measureUnitId })) {
+    props.model.measureUnitId = defaultUnitId.value;
+  }
+}
 
 </script>
 <style scoped lang="scss">

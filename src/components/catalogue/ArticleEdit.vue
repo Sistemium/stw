@@ -25,10 +25,17 @@ drawer-edit.article-edit(
           ) {{ $t('validation.noData') }}
           .list-group-item(v-for="barcode in model.barcodes" :key="barcode")
             .code {{ barcode }}
-      el-tab-pane.pictures(:label="$t('menu.pictures')" v-if="articleId" :lazy="true")
+      el-tab-pane.pictures(
+        v-if="articleId"
+        :label="$t('menu.pictures')"
+        :lazy="true"
+      )
         resize(:padding="110")
           article-pictures(:pictures="pictures")
-        take-photo-button(@done="onPictureDone" entity-name="Picture")
+        take-photo-button(
+          entity-name="Picture"
+          @done="onPictureDone"
+        )
 
 </template>
 <script setup lang="ts">

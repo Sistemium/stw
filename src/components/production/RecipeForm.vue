@@ -1,39 +1,37 @@
 <template lang="pug">
 // eslint-disable vue/no-mutating-props
 el-form.recipe-form(
-  :model="model"
   ref="form"
-  :rules="rules"
+  :model="model"
 )
-  el-form-item(:label="$t('fields.isSKU')" prop="isSKU")
+  el-form-item(
+    prop="isSKU"
+    :label="$t('fields.isSKU')"
+  )
     el-switch(v-model="model.isSKU")
 
-  materials-form(:materials="model.materials || null" @create="onCreate")
+  materials-form(
+    :materials="model.materials || null"
+    @create="onCreate"
+  )
 
 </template>
-<script>
+<script setup lang="ts">
 
+import { ref } from 'vue';
 import MaterialsForm from '@/components/production/MaterialsForm.vue';
-import Vue from 'vue';
+import type { Article } from '@/models/Articles';
 
-export default {
-  name: 'RecipeForm',
-  components: { MaterialsForm },
-  props: {
-    model: Object,
-  },
-  methods: {
-    onCreate(materials) {
-      Vue.set(this.model, 'materials', materials);
-    },
-  },
-  computed: {
-    rules() {
-      // return this.$requiredRule('name');
-      return {};
-    },
-  },
-};
+const props = defineProps<{
+  model: Article,
+}>();
+
+const form = ref(null);
+
+function onCreate(materials) {
+  // eslint-disable-next-line vue/no-mutating-props
+  props.model.materials = materials;
+}
 
 </script>
 <style scoped lang="scss">

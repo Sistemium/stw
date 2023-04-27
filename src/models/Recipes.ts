@@ -7,5 +7,5 @@ export interface MaterialFields {
 }
 
 export interface RecipeMaterial extends MaterialFields {
-  optionArticleIds: string[];
+  optionArticleIds?: string[];
 }
