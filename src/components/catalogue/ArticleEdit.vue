@@ -31,9 +31,8 @@ drawer-edit.article-edit(
         take-photo-button(@done="onPictureDone" entity-name="Picture")
 
 </template>
-<script>
+<script setup lang="ts">
 
-import vss from 'vue-screen-size';
 import DrawerEdit from '@/lib/DrawerEdit.vue';
 import Article from '@/models/Article';
 import ArticleForm from '@/components/catalogue/ArticleForm.vue';
@@ -44,82 +43,71 @@ import find from 'lodash/find';
 import ArticlePictures from '@/components/catalogue/ArticlePictures.vue';
 import ArticleMeasurementForm from '@/components/catalogue/ArticleMeasurementForm.vue';
 import RecipeForm from '@/components/production/RecipeForm.vue';
+import Resize from '@/lib/Resize.vue';
+import { useRoute } from 'vue-router';
+import { computed, ref } from 'vue';
+import { useWindowSize } from '@vueuse/core';
+import { cloneInstance } from '@/lib/validations.js';
 
-export default {
-  name: 'ArticleEdit',
-  mixins: [vss.VueScreenSizeMixin],
-  props: {
-    articleId: String,
-    from: Object,
-    drawerStyle: Object,
-  },
-  data() {
-    return {
-      currentTab: null,
-    };
-  },
-  components: {
-    RecipeForm,
-    ArticleMeasurementForm,
-    ArticlePictures,
-    TakePhotoButton,
-    ArticleForm,
-    DrawerEdit,
-  },
-  computed: {
-    drawerWidth() {
-      return this.$vssWidth > 450 ? '450px' : '370px';
-    },
-    copyArticle() {
-      const { copyId } = this.$route.query;
-      return this.$cloneInstance(Article.reactiveGet(copyId));
-    },
-    modelOrigin() {
-      const { articleId } = this;
-      if (articleId) {
-        return Article.reactiveGet(articleId);
-      }
-      return this.copyArticle || articleInstance();
-    },
-    pictures() {
-      return Picture.reactiveFilter({ ownerXid: this.articleId })
-        .map(mapPictureInfo('smallImage'));
-    },
-  },
-  methods: {
-    destroyFn() {
-      const { articleId } = this;
-      return articleId && Article.destroy(articleId);
-    },
-    saveFn(props) {
-      return Article.createOne(props);
-    },
-    async onPictureDone(picturesInfo, fileName) {
-      this.$debug(picturesInfo, fileName);
-      const { src } = find(picturesInfo, { name: 'largeImage' });
-      const { src: thumbnailSrc } = find(picturesInfo, { name: 'thumbnail' });
-      const picture = {
-        href: src,
-        thumbnailHref: thumbnailSrc,
-        picturesInfo,
-        name: fileName,
-        target: 'Article',
-        ownerXid: this.articleId,
-      };
-      try {
-        const { id: avatarPictureId } = await Picture.createOne(picture);
-        if (this.pictures.length === 1) {
-          await Article.createOne({
-            ...this.modelOrigin,
-            avatarPictureId,
-          });
-        }
-      } catch (e) {
-        this.$error('onPictureDone', e);
-      }
-    },
-  },
-};
+
+const props = defineProps<{
+  articleId: string,
+  from: object,
+  drawerStyle?: object,
+}>();
+
+const currentTab = ref(null);
+const route = useRoute();
+const { width } = useWindowSize();
+const drawerWidth = computed(() => width.value > 450 ? '450px' : '370px');
+const copyArticle = computed(() => {
+  const { copyId } = route.query;
+  return cloneInstance(Article.reactiveGet(copyId));
+});
+const modelOrigin = computed(() => {
+  const { articleId } = props;
+  if (articleId) {
+    return Article.reactiveGet(articleId);
+  }
+  return copyArticle.value || articleInstance();
+});
+
+const pictures = computed(() => Picture.reactiveFilter({ ownerXid: props.articleId })
+  .map(mapPictureInfo('smallImage')));
+
+function destroyFn() {
+  const { articleId } = props;
+  return articleId && Article.destroy(articleId);
+}
+
+function saveFn(obj) {
+  return Article.createOne(obj);
+}
+
+async function onPictureDone(picturesInfo, fileName) {
+  // this.$debug(picturesInfo, fileName);
+  const { src } = find(picturesInfo, { name: 'largeImage' });
+  const { src: thumbnailSrc } = find(picturesInfo, { name: 'thumbnail' });
+  const picture = {
+    href: src,
+    thumbnailHref: thumbnailSrc,
+    picturesInfo,
+    name: fileName,
+    target: 'Article',
+    ownerXid: props.articleId,
+  };
+  try {
+    const { id: avatarPictureId } = await Picture.createOne(picture);
+    if (pictures.value.length === 1) {
+      await Article.createOne({
+        ...modelOrigin.value,
+        avatarPictureId,
+      });
+    }
+  } catch (e) {
+    console.error('onPictureDone', e);
+  }
+}
 
 </script>
 <style scoped lang="scss">
