@@ -62,7 +62,7 @@ import Resize from '@/lib/Resize.vue';
 import ToolButton from '@/lib/ToolButton.vue';
 import { computed, ref } from 'vue';
 import { useRouteParams } from '@/lib/updateRouteParams.js';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 import { useInvStore } from '@/store/invStore.js';
 import orderBy from 'lodash/orderBy';
 import ReactiveModel from 'sistemium-data-vue';
@@ -98,7 +98,6 @@ const props = defineProps<{
 
 const { updateRouteParams } = useRouteParams();
 const route = useRoute();
-const router = useRouter();
 const { showTable, tableSize } = useResponsiveTables();
 const store = useInvStore();
 const tableHeight = ref<number>(undefined);
@@ -134,10 +133,13 @@ const stockOperations = computed(() => {
 });
 
 const showDetails = computed(() => {
-  const { name } = route;
-  return name === props.editRoute
-    || !!find(router.currentRoute.matched, { name: props.editRoute });
+  return route.name === props.editRoute
+    || !!find(route.matched, matchDetails);
 });
+
+function matchDetails({ name }) {
+  return name.match(`^${props.editRoute}(ItemEdit)?`);
+}
 
 const storageId = computed({
   get() {
