@@ -2,7 +2,7 @@
 
 el-input.search-input(
   v-model="searchText"
-  prefix-icon="el-icon-search"
+  :prefix-icon="Search"
   :clearable="true"
   :placeholder="placeholder"
   :size="size"
@@ -14,6 +14,7 @@ el-input.search-input(
 
 import debounce from 'lodash/debounce';
 import { computed, ref, watch } from 'vue';
+import { Search } from '@element-plus/icons-vue';
 import i18n from '@/i18n';
 
 const props = defineProps({
