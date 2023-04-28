@@ -13,10 +13,11 @@ el-button.tool-button(
 
 import { computed } from 'vue';
 import {
+  Back,
   CirclePlus,
   Edit,
-  Refresh,
   Loading,
+  Refresh,
 } from '@element-plus/icons-vue';
 
 const ICONS = {
@@ -24,6 +25,7 @@ const ICONS = {
   edit: Edit,
   refresh: Refresh,
   loading: Loading,
+  back: Back,
 };
 
 const props = defineProps({
