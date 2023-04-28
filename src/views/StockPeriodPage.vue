@@ -3,13 +3,19 @@
 .stock-date-page
   page-title(title="menu.stockPeriod")
   .filters
-    storage-select(v-model="storageId" ref="storageSelect")
+    storage-select(
+      ref="storageSelectRef"
+      v-model="storageId"
+    )
     el-date-picker(
       v-model="dateRange"
       type="daterange"
     )
     search-input(v-model="search")
-  resize(:padding="20" @resized="setHeight")
+  resize(
+    :padding="20"
+    @resized="setHeight"
+  )
     stock-period-table(
       :data="filteredData"
       @row-click="rowClick"
@@ -25,103 +31,88 @@
   )
 
 </template>
-<script>
+<script setup lang="ts">
 
-import { createNamespacedHelpers } from 'vuex';
+import { computed, ref, watch } from 'vue';
 import PageTitle from '@/components/PageTitle.vue';
 import dayjs from 'sistemium-dates';
-import * as g from '@/store/inv/getters';
-import * as m from '@/store/inv/mutations';
-import { findStockPeriod } from '@/services/warehousing';
+import { findStockPeriod } from '@/services/warehousing.js';
 import StockPeriodTable from '@/components/stock/StockPeriodTable.vue';
 import SearchInput from '@/lib/SearchInput.vue';
-import { searchArticle } from '@/services/catalogue';
-import storageSelectMixin from '@/components/storageSelectMixin';
+import { searchArticle } from '@/services/catalogue.js';
 import StockArticleDetailsView from '@/components/stock/StockArticleDetailsView.vue';
+import { ElLoading } from 'element-plus';
+import { useInvStore } from '@/store/invStore.js';
+import StorageSelect from '@/components/stock/StorageSelect.vue';
+import Resize from '@/lib/Resize.vue';
 
-const { mapGetters, mapMutations } = createNamespacedHelpers('inv');
+// mixins: [storageSelectMixin],
 
-export default {
-  name: 'StockPeriodPage',
-  mixins: [storageSelectMixin],
-  components: {
-    StockArticleDetailsView,
-    SearchInput,
-    StockPeriodTable,
-    PageTitle,
+const today = dayjs().endOf('day');
+const monthAgo = today.add(-1, 'month');
+
+const dateRange = ref([monthAgo, today]);
+const data = ref([]);
+const search = ref('');
+const showDetails = ref(false);
+const articleId = ref<string>(null);
+const tableHeight = ref<number>(undefined);
+const storageSelectRef = ref(null);
+
+const store = useInvStore();
+
+const storageId = computed({
+  get() {
+    return store.currentStorageId;
   },
-  data() {
-    const today = dayjs().endOf('day');
-    const monthAgo = today.add(-1, 'month');
-    return {
-      dateRange: [monthAgo, today],
-      data: [],
-      search: '',
-      showDetails: false,
-      articleId: null,
-      tableHeight: undefined,
-    };
+  set(id) {
+    store.currentStorageId = id;
   },
-  computed: {
-    ...mapGetters({
-      defaultStorageId: g.CURRENT_STORAGE,
-    }),
-    storageId: {
-      get() {
-        return this.defaultStorageId;
-      },
-      set(id) {
-        this.setCurrentStorageId(id);
-      },
-    },
-    queryParams() {
-      const [dateB, dateE] = this.dateRange;
-      return {
-        dateB: dayjs(dateB).startOf('day').toJSON(),
-        dateE: dayjs(dateE).endOf('day').toJSON(),
-        storageId: this.storageId,
-      };
-    },
-    filteredData() {
-      const { search, data } = this;
-      const searcher = searchArticle(search);
-      return search ? data.filter(({ article }) => article && searcher(article)) : data;
-    },
-  },
-  methods: {
-    ...mapMutations({
-      setCurrentStorageId: m.SET_CURRENT_STORAGE,
-    }),
-    setHeight(height) {
-      this.tableHeight = height;
-    },
-    async refresh(storageId, dateB, dateE) {
-      const loading = this.$loading({});
-      try {
-        this.data = await findStockPeriod(storageId, dateB, dateE);
-      } catch (e) {
-        this.$error('refresh', e);
-      }
-      loading.close();
-    },
-    rowClick(row) {
-      this.showDetails = true;
-      this.articleId = row.articleId;
-    },
-  },
-  watch: {
-    queryParams: {
-      immediate: true,
-      handler({ storageId, dateB, dateE }) {
-        if (!storageId || !dateB || !dateE) {
-          return;
-        }
-        this.refresh(storageId, dateB, dateE)
-          .catch(e => this.$error(e));
-      },
-    },
-  },
-};
+});
+
+const queryParams = computed(() => {
+  const [dateB, dateE] = dateRange.value;
+  return {
+    dateB: dayjs(dateB).startOf('day').toJSON(),
+    dateE: dayjs(dateE).endOf('day').toJSON(),
+    storageId: storageId.value,
+  };
+});
+
+const filteredData = computed(() => {
+  const searcher = searchArticle(search.value);
+  return search.value
+    ? data.value.filter(({ article }) => article && searcher(article))
+    : data.value;
+});
+
+function setHeight(height) {
+  tableHeight.value = height;
+}
+
+async function refresh(storageId, dateB, dateE) {
+  const loading = ElLoading.service({});
+  try {
+    data.value = await findStockPeriod(storageId, dateB, dateE);
+  } catch (e) {
+    console.error('refresh', e);
+  }
+  loading.close();
+}
+
+function rowClick(row) {
+  showDetails.value = true;
+  articleId.value = row.articleId;
+}
+
+watch(queryParams, ({ storageId, dateB, dateE }) => {
+  if (!storageId || !dateB || !dateE) {
+    return;
+  }
+  refresh(storageId, dateB, dateE)
+    .catch(e => console.error(e));
+}, { immediate: true });
+
 
 </script>
 <style scoped lang="scss">
