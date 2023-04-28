@@ -5,17 +5,11 @@
   .version v{{ version }}
 
 </template>
-<script>
+<script setup>
 
+import { computed } from 'vue';
 import packageJson from '../../package.json';
 
-export default {
-  name: 'AboutPage',
-  computed: {
-    version() {
-      return packageJson.version;
-    },
-  },
-};
+const version = computed(() => packageJson.version);
 
 </script>
