@@ -6,13 +6,17 @@ export interface ResponsiveTableConfig {
   sizeBreak?: number;
 }
 
-export default function (config : ResponsiveTableConfig = {}) {
+type ElSize = 'small' | 'default';
+
+export default function (config: ResponsiveTableConfig = {}) {
   const {
     widthBreak = 600,
     sizeBreak = 800,
   } = config;
   const { width } = useWindowSize();
-  const tableSize = computed( () => width.value < sizeBreak ? 'small' : 'default');
+  const tableSize = computed<ElSize>(() => {
+    return width.value < sizeBreak ? 'small' : 'default';
+  });
   const showTable = computed(() => width.value >= widthBreak);
   return { tableSize, showTable };
 }
