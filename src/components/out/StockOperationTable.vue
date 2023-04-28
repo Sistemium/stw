@@ -2,7 +2,7 @@
 
 el-table.stock-operation-table(
   :data="viewData"
-  @row-click="row => $emit('click', row)"
+  @row-click="row => emit('click', row)"
   :size="size"
   :height="height"
 )
@@ -47,35 +47,26 @@ el-table.stock-operation-table(
   )
 
 </template>
-<script>
+<script setup lang="ts">
 
-export default {
-  name: 'StockOperationTable',
-  props: {
-    viewData: Array,
-    activeId: String,
-    size: String,
-    positionsModel: Object,
-    height: Number,
-    counterpartyRole: String,
-  },
-  computed: {
-    counterpartyLabel() {
-      return this.$t(`fields.${this.counterpartyRole}`);
-    },
-    // data() {
-    //   return this.$map(this.items, this.itemToData);
-    // },
-    columnSize() {
-      return this.size === 'small' ? 120 : 140;
-    },
-    // itemToData() {
-    //   return item => stockOperationToViewData(item, this.positionsModel);
-    // },
-  },
-};
+import { computed } from 'vue';
+import { t } from '@/lib/validations.js';
+import type { StockOperationViewData } from '@/models/StockOperations';
+
+
+const props = defineProps<{
+  viewData: StockOperationViewData[];
+  activeId?: string;
+  size?: string;
+  height?: number;
+  counterpartyRole: string;
+}>();
+
+const emit = defineEmits<{
+  (e: 'click', item: StockOperationViewData): void;
+}>();
+
+const counterpartyLabel = computed(() => t(`fields.${props.counterpartyRole}`));
+const columnSize = computed(() => props.size === 'small' ? 120 : 140);
 
 </script>
-<style scoped lang="scss">
-
-</style>

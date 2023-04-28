@@ -7,33 +7,51 @@ el-form.stock-taking-item-form(
   :disabled="!editable"
 )
 
-  barcode-form-item(v-model="model.barcode" v-if="model.barcode")
-    template(#default:prepend)
-      el-button(:icon="barcodeIcon" @click="toggleShowAllArticles")
+  barcode-form-item(
+    v-if="model.barcode"
+    v-model="model.barcode"
+  )
+    template(#prepend)
+      el-button(
+        :icon="barcodeIcon"
+        @click="toggleShowAllArticles"
+      )
 
   el-form-item.add-barcode(v-if="canAddBarcode")
     el-button(
       type="warning"
       icon="el-icon-paperclip"
       @click="onAddBarcodeClick"
-    ) {{ $t('addBarcode') }}
+    ) {{ t('addBarcode') }}
 
-  el-form-item.article(:label="$t('concepts.article')" prop="articleId")
+  el-form-item.article(
+    :label="$t('concepts.article')"
+    prop="articleId"
+  )
     .strong(v-if="article") {{ article.code }}
     button-prepend(
       @button-click="addArticle"
-      :button-icon="`el-icon-${article ? 'edit' : 'plus'}`"
+      :button-icon="article ? Edit : Plus"
     )
-      article-select(v-model="model.articleId" :filters="articleFilters")
-        template(#empty v-if="model.barcode && !isShowingAllArticles")
-          p.el-select-dropdown__empty
-            span {{ $t('notFound') }}
-            el-button(@click="toggleShowAllArticles") {{ $t('showAll') }}
+      article-select(
+        v-model="model.articleId"
+        :filters="articleFilters"
+      )
+        template(#empty)
+          p.el-select-dropdown__empty(v-if="model.barcode && !isShowingAllArticles")
+            span {{ t('notFound') }}
+            el-button(@click="toggleShowAllArticles") {{ t('showAll') }}
 
   template(v-if="article")
 
-    el-form-item.mode(:label="$t('fields.package')" v-if="editable")
-      el-radio-group(v-model="mode" @change="modeChange")
+    el-form-item.mode(
+      v-if="editable"
+      :label="$t('fields.package')"
+      )
+      el-radio-group(
+        v-model="mode"
+        @change="modeChange"
+      )
         el-radio-button(label="other") {{ $t('concepts.other') }}
         el-radio-button(
           v-for="p in packageOptions"
@@ -58,29 +76,47 @@ el-form.stock-taking-item-form(
         prop="unitsInPackage"
         :label="unitsInPackageLabel"
       )
-        el-input-number(v-model="model.unitsInPackage" :min="1")
+        el-input-number(
+          v-model="model.unitsInPackage"
+          :min="1"
+        )
 
     template(v-if="mode !== defaultMode")
       el-form-item(
         prop="packages"
         :label="numberOfPackages"
       )
-        el-input-number(v-model="model.packages" :min="1" v-select-on-focus)
+        el-input-number(
+          v-model="model.packages"
+          :min="1"
+          v-select-on-focus
+        )
 
       el-form-item(
         v-if="editable || spareUnits"
         :label="$t('fields.notPackaged', [$t(`units.genitive.${measureUnitId}`)])"
       )
-        el-input-number(v-model="spareUnits" :min="0" v-select-on-focus)
+        el-input-number(
+          v-model="spareUnits"
+          :min="0"
+          v-select-on-focus
+        )
 
     el-form-item(
       v-else
       prop="units"
       :label="$t('units.quantityOf', [$t(`units.genitive.${measureUnitId}`)])"
     )
-      el-input-number(v-model="spareUnits" :min="0" v-select-on-focus)
+      el-input-number(
+        v-model="spareUnits"
+        :min="0"
+        v-select-on-focus
+      )
 
-  slot(name="article-extra" v-if="article")
+  slot(
+    v-if="article"
+    name="article-extra"
+  )
 
   article-edit(
     v-if="showDrawer"
@@ -91,210 +127,209 @@ el-form.stock-taking-item-form(
   )
 
 </template>
-<script>
+<script setup lang="ts">
 /* eslint-disable vue/no-mutating-props */
-import Article from '@/models/Article';
-import * as PackageType from '@/models/PackageType';
-import * as Measure from '@/models/Measure';
-// import ArticleView from '@/components/catalogue/ArticleView.vue';
+import find from 'lodash/find';
+import { computed, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { Edit, Plus } from '@element-plus/icons-vue';
+import ButtonPrepend from '@/lib/ButtonPrepend.vue';
+import { $requiredRule, saveWithLoading } from '@/lib/validations.js';
 import ArticleSelect from '@/components/catalogue/ArticleSelect.vue';
-import { addBarcodeToArticle, articlePackages } from '@/services/catalogue';
 import ArticleEdit from '@/components/catalogue/ArticleEdit.vue';
 import BarcodeFormItem from '@/components/BarcodeScanner/BarcodeFormItem.vue';
-import ButtonPrepend from '@/lib/ButtonPrepend.vue';
-import formsMixin from '@/lib/formsMixin';
+import * as PackageType from '@/models/PackageType.js';
+import { addBarcodeToArticle, articlePackages } from '@/services/catalogue.js';
+import * as Measure from '@/models/Measure.js';
+import Article from '@/models/Article.js';
+import type { StockOperationItem } from '@/models/StockOperations';
+// import formsMixin from '@/lib/formsMixin.js';
 
 const DEFAULT_MODE = 'units';
 
-export default {
-  name: 'StockTakingItemForm',
-  props: {
-    model: Object,
-    editable: Boolean,
-  },
-  data() {
-    return {
-      showDrawer: false,
-      spareUnits: 0,
-      isShowingAllArticles: false,
-      mode: DEFAULT_MODE,
+const props = defineProps<{
+  model: StockOperationItem;
+  editable: boolean;
+}>();
+
+const showDrawer = ref(false);
+const spareUnits = ref(0);
+const isShowingAllArticles = ref(false);
+const mode = ref(DEFAULT_MODE);
+
+const packageTypes = computed(() => PackageType.packageTypes());
+const numberOfPackages = computed(() => PackageType.numberOf(props.model.packageTypeId));
+const unitsInPackageLabel = computed(() => PackageType.unitsInPackageLabel(measureUnitId.value));
+const defaultMode = DEFAULT_MODE;
+const measureId = computed(() => article.value?.measureId || Measure.DEFAULT_MEASURE_ID);
+const packageOptions = computed(() => article.value ? articlePackages(article.value) : []);
+const measureUnitId = computed(() => {
+  return article.value?.measureUnitId || Measure.DEFAULT_MEASURE_UNIT_ID;
+});
+
+const barcodeIcon = computed(() => {
+  return isShowingAllArticles.value ? 'el-icon-s-release' : 'el-icon-attract';
+});
+
+const articleFilters = computed(() => {
+  const { barcode } = props.model;
+  if (barcode && !isShowingAllArticles.value) {
+    return function barcodeFilter({ barcodes }) {
+      return barcodes && barcodes.includes(barcode);
     };
-  },
-  mixins: [formsMixin],
-  computed: {
-    numberOfPackages() {
-      return PackageType.numberOf(this.model.packageTypeId);
-    },
-    unitsInPackageLabel() {
-      return PackageType.unitsInPackageLabel(this.measureUnitId);
-    },
-    defaultMode() {
-      return DEFAULT_MODE;
-    },
-    // measures: Measure.measures,
-    measureUnitId() {
-      const { measureUnitId } = this.article || {};
-      return measureUnitId || Measure.DEFAULT_MEASURE_UNIT_ID;
-    },
-    measureId() {
-      const { measureId } = this.article || {};
-      return measureId || Measure.DEFAULT_MEASURE_ID;
-    },
-    packageTypes() {
-      return PackageType.packageTypes();
-    },
-    barcodeIcon() {
-      return this.isShowingAllArticles ? 'el-icon-s-release' : 'el-icon-attract';
-    },
-    articleFilters() {
-      const { barcode } = this.model;
-      if (barcode && !this.isShowingAllArticles) {
-        return function barcodeFilter({ barcodes }) {
-          return barcodes && barcodes.includes(barcode);
-        };
+  }
+  return {};
+});
+
+
+const rules = computed(() => {
+  const fields = ['articleId'];
+  if (mode.value === DEFAULT_MODE) {
+    fields.push(DEFAULT_MODE);
+  } else {
+    fields.push('packages', 'unitsInPackage');
+  }
+  return $requiredRule(fields);
+});
+
+const units = computed(() => {
+  return (spareUnits.value || 0)
+    + (props.model.unitsInPackage || 1) * (props.model.packages || 0);
+});
+
+const article = computed(() => {
+  const { articleId } = props.model;
+  return Article.reactiveGet(articleId);
+});
+
+const canAddBarcode = computed(() => {
+  const { model: { barcode } } = props;
+  return article.value && barcode
+    && !(article.value.barcodes || []).includes(barcode);
+});
+
+
+if (canAddBarcode.value) {
+  // TODO make with watch
+  isShowingAllArticles.value = true;
+}
+
+watch(props.model, () => {
+  const { packages, unitsInPackage, units } = props.model;
+  spareUnits.value = (units || 0) - (packages || 0) * (unitsInPackage || 0);
+  mode.value = getMode();
+}, { immediate: true });
+
+watch(units, value => {
+  props.model.units = value;
+}, { immediate: true });
+
+watch(article, () => {
+  props.model.measureUnitId = measureUnitId.value;
+  props.model.measureId = measureId.value;
+  mode.value = getMode() || DEFAULT_MODE;
+}, { immediate: true });
+
+
+function articleEditClosed() {
+  showDrawer.value = false;
+}
+
+function articleSaved(articleObj) {
+  if (articleObj) {
+    setTimeout(() => {
+      props.model.articleId = articleObj.id;
+      if (canAddBarcode.value) {
+        isShowingAllArticles.value = true;
       }
-      return {};
-    },
-    packageOptions() {
-      const { article } = this;
-      return article ? articlePackages(article) : [];
-    },
-    rules() {
-      const fields = ['articleId'];
-      if (this.mode === DEFAULT_MODE) {
-        fields.push(DEFAULT_MODE);
-      } else {
-        fields.push('packages', 'unitsInPackage');
-      }
-      return this.$requiredRule(fields);
-    },
-    units() {
-      return (this.spareUnits || 0)
-        + (this.model.unitsInPackage || 1) * (this.model.packages || 0);
-    },
-    article() {
-      const { articleId } = this.model;
-      return Article.reactiveGet(articleId);
-    },
-    canAddBarcode() {
-      const { article, model: { barcode } } = this;
-      return article && barcode
-        && !(article.barcodes || []).includes(barcode);
-    },
-  },
-  methods: {
-    articleEditClosed() {
-      this.showDrawer = false;
-    },
-    articleSaved(article) {
-      if (article) {
-        setTimeout(() => {
-          this.model.articleId = article.id;
-          if (this.canAddBarcode) {
-            this.isShowingAllArticles = true;
-          }
-        }, 0);
-      }
-    },
-    addArticle() {
-      this.showDrawer = true;
-    },
-    onAddBarcodeClick() {
-      const { article, model: { barcode } } = this;
-      this.$saveWithLoading(async () => {
-        await addBarcodeToArticle(barcode, article);
-        this.isShowingAllArticles = false;
-      });
-    },
-    toggleShowAllArticles() {
-      this.isShowingAllArticles = !this.isShowingAllArticles;
-    },
-    modeChange(mode) {
-      if (mode === DEFAULT_MODE) {
-        Object.assign(this.model, {
-          packageTypeId: null,
-          packages: 0,
-          unitsInPackage: null,
-        });
-      } else if (mode === 'other') {
-        this.spareUnits = 0;
-        const { packageTypeId } = this.article;
-        this.model.packageTypeId = packageTypeId || PackageType.DEFAULT_PACKAGE_TYPE_ID;
-      } else {
-        const { packageTypeId, unitsInPackage } = this.$find(this.packageOptions, { id: mode });
-        Object.assign(this.model, {
-          packageTypeId,
-          packages: this.model.packages || 1,
-          unitsInPackage,
-        });
-        this.spareUnits = 0;
-      }
-    },
-    packageByProps(packageTypeId, unitsInPackage) {
-      return this.$find(this.packageOptions, ({ packageTypeId, unitsInPackage }));
-    },
-    getMode() {
-      const { packages, unitsInPackage, packageTypeId } = this.model;
-      if (!packages) {
-        return DEFAULT_MODE;
-      }
-      const packageType = this.packageByProps(packageTypeId, unitsInPackage);
-      return packageType ? packageType.id : 'other';
-    },
-  },
-  created() {
-    if (this.canAddBarcode) {
-      // TODO make with watch
-      this.isShowingAllArticles = true;
-    }
-    this.$watchImmediate('model', () => {
-      const { packages, unitsInPackage, units } = this.model;
-      this.spareUnits = (units || 0) - (packages || 0) * (unitsInPackage || 0);
-      this.mode = this.getMode();
+    }, 0);
+  }
+}
+
+function addArticle() {
+  showDrawer.value = true;
+}
+
+function onAddBarcodeClick() {
+  const { model: { barcode } } = props;
+  saveWithLoading(async () => {
+    await addBarcodeToArticle(barcode, article.value);
+    isShowingAllArticles.value = false;
+  });
+}
+
+function toggleShowAllArticles() {
+  isShowingAllArticles.value = !isShowingAllArticles.value;
+}
+
+function modeChange(mode) {
+  if (mode === DEFAULT_MODE) {
+    Object.assign(props.model, {
+      packageTypeId: null,
+      packages: 0,
+      unitsInPackage: null,
     });
-    this.$watchImmediate(DEFAULT_MODE, units => {
-      this.model.units = units;
+  } else if (mode === 'other') {
+    spareUnits.value = 0;
+    const { packageTypeId } = article.value;
+    props.model.packageTypeId = packageTypeId || PackageType.DEFAULT_PACKAGE_TYPE_ID;
+  } else {
+    const { packageTypeId, unitsInPackage } = find(packageOptions.value, { id: mode });
+    Object.assign(this.model, {
+      packageTypeId,
+      packages: this.model.packages || 1,
+      unitsInPackage,
     });
-    this.$watchImmediate('article', () => {
-      this.model.measureUnitId = this.measureUnitId;
-      this.model.measureId = this.measureId;
-      this.mode = this.getMode() || DEFAULT_MODE;
-    });
-  },
-  components: {
-    ButtonPrepend,
-    BarcodeFormItem,
-    ArticleEdit,
-    ArticleSelect,
-    // ArticleView,
-  },
-  i18n: {
-    messages: {
-      en: {
-        showAll: 'Show all',
-        nofFound: 'No articles for this barcode',
-        addBarcode: 'Link barcode to article',
-      },
-      lt: {
-        showAll: 'Parodyti viską',
-        notFound: 'Nera šio brūkšninio kodo prekių',
-        addBarcode: 'Susieti brūkšninį kodą su prekę',
-      },
-      ru: {
-        showAll: 'Показать все',
-        notFound: 'Нет номенклатуры для этого штрих-кода',
-        addBarcode: 'Связать штрих-код с номенклатурой',
-      },
+    spareUnits.value = 0;
+  }
+}
+
+function packageByProps(packageTypeId, unitsInPackage) {
+  return find(packageOptions.value, ({ packageTypeId, unitsInPackage }));
+}
+
+function getMode() {
+  const { packages, unitsInPackage, packageTypeId } = props.model;
+  if (!packages) {
+    return DEFAULT_MODE;
+  }
+  const packageType = packageByProps(packageTypeId, unitsInPackage);
+  return packageType ? packageType.id : 'other';
+}
+
+const { t } = useI18n({
+  messages: {
+    en: {
+      showAll: 'Show all',
+      nofFound: 'No articles for this barcode',
+      addBarcode: 'Link barcode to article',
+    },
+    lt: {
+      showAll: 'Parodyti viską',
+      notFound: 'Nera šio brūkšninio kodo prekių',
+      addBarcode: 'Susieti brūkšninį kodą su prekę',
+    },
+    ru: {
+      showAll: 'Показать все',
+      notFound: 'Нет номенклатуры для этого штрих-кода',
+      addBarcode: 'Связать штрих-код с номенклатурой',
     },
   },
-};
+});
 
 </script>
 <style scoped lang="scss">
 @import "../../styles/variables";
 
 .el-form-item {
+  display: block;
   text-align: right;
+  :deep(label) {
+    float: left;
+  }
+  :deep(.el-form-item__content) {
+    display: block;
+  }
 
   &::after, &::before {
     display: none;
@@ -319,9 +354,9 @@ export default {
   float: right;
   text-align: right;
   vertical-align: middle;
-  font-size: 14px;
+  font-size: 12px;
   color: $gray;
-  line-height: 40px;
+  line-height: 24px;
   font-weight: normal;
 }
 

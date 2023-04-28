@@ -59,6 +59,3 @@ const groups = computed(() => ['facility', 'personal']
   .filter(({ options }) => options.length));
 
 </script>
-<style scoped lang="scss">
-
-</style>

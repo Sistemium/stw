@@ -18,60 +18,65 @@ drawer-edit.stock-operation-edit(
     )
 
 </template>
-<script>
+<script setup lang="ts">
 
+import { computed, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import ReactiveModel from 'sistemium-data-vue';
 import DrawerEdit from '@/lib/DrawerEdit.vue';
 import StockOperationForm from '@/components/out/StockOperationForm.vue';
+import type ApiModel from '@/models/ApiModels';
+import type { StockOperation } from '@/models/StockOperations';
 
-export default {
-  name: 'StockOperationEdit',
-  components: { DrawerEdit, StockOperationForm },
-  props: {
-    stockOperationId: String,
-    from: Object,
-    editRoute: String,
-    isDrawer: { type: Boolean, default: true },
-    model: { type: Object, required: true },
-    operationName: { type: String, required: true },
-    counterpartyRole: { type: String, required: true },
-  },
-  computed: {
-    disabled() {
-      return this.modelOrigin.processing === 'finished';
-    },
-    modelOrigin() {
-      const { stockOperationId } = this;
-      return stockOperationId ? this.model.reactiveGet(stockOperationId) : {
-        date: new Date().toJSON(),
-        processing: 'progress',
-        deviceCts: new Date().toJSON(),
-        counterpartyType: null,
-        counterpartyId: null,
-        storageId: this.$route.query.storageId || null,
-        commentText: null,
-      };
-    },
-  },
-  methods: {
-    async saveFn(props) {
-      const { id: stockOperationId } = await this.model.createOne(props);
-      if (!this.stockOperationId) {
-        setTimeout(() => {
-          this.$router.push({
-            name: this.editRoute,
-            params: { stockOperationId },
-          })
-            // .then(res => this.$debug(res))
-            .catch(e => this.$error(e));
-        }, 1);
-      }
-      return this.model.reactiveGet(stockOperationId);
-    },
-    destroyFn(id) {
-      return this.model.destroy(id);
-    },
-  },
-};
+const props = withDefaults(defineProps<{
+  stockOperationId?: string;
+  from: object;
+  editRoute: string;
+  isDrawer?: boolean;
+  model: ReactiveModel;
+  operationName: string;
+  counterpartyRole: string;
+}>(), { isDrawer: true });
+
+const route = useRoute();
+const router = useRouter();
+const form = ref(null);
+
+const modelOrigin = computed((): StockOperation => {
+  const { stockOperationId } = props;
+  return stockOperationId
+    ? props.model.reactiveGet(stockOperationId) as StockOperation
+    : {
+      date: new Date().toJSON(),
+      processing: 'progress',
+      counterpartyType: null,
+      counterpartyId: null,
+      storageId: route.query.storageId || null,
+      commentText: null,
+      deviceCts: new Date().toJSON(),
+    };
+});
+
+const disabled = computed(() => modelOrigin.value.processing === 'finished');
+
+async function saveFn(obj) {
+  const { id: stockOperationId } = await props.model.createOne(obj) as ApiModel;
+  if (!props.stockOperationId) {
+    setTimeout(() => {
+      router.push({
+        name: props.editRoute,
+        params: { stockOperationId },
+      })
+        // .then(res => $debug(res))
+        .catch(e => console.error(e));
+    }, 1);
+  }
+  return props.model.reactiveGet(stockOperationId);
+}
+
+function destroyFn(id) {
+  return props.model.destroy(id);
+}
 
 </script>
 <style scoped lang="scss">

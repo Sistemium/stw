@@ -1,6 +1,6 @@
 <template lang="pug">
 
-.stock-operation-list-item.list-group-item(@click="$emit('click')")
+.stock-operation-list-item.list-group-item(@click="emit('click')")
   .title
     .date {{ $ts(viewData.date, 'short') }}
     .counterparty(v-if="viewData.counterpartyName") {{ viewData.counterpartyName }}
@@ -16,18 +16,22 @@
     .total-cost(v-if="viewData.totalCost") {{ viewData.totalCost }} &euro;
 
 </template>
-<script>
+<script setup lang="ts">
 
-export default {
-  name: 'StockOperationListItem',
-  props: {
-    viewData: { type: Object, required: true },
-  },
-};
+import type { StockOperationViewData } from '@/models/StockOperations';
+
+defineProps<{
+  viewData: StockOperationViewData;
+}>();
+
+const emit = defineEmits<{
+  (e: 'click'): void;
+}>();
 
 </script>
 <style scoped lang="scss">
 @import "../../styles/pageLists";
+
 .comment-text {
   color: $gray;
   font-size: smaller;

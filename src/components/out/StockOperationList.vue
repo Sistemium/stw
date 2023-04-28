@@ -5,26 +5,24 @@
     :id="`id-${item.id}`"
     v-for="item in viewData"
     :key="item.id"
-    @click="$emit('click', item)"
+    @click="emit('click', item)"
     :class="{ active: activeId === item.id }"
     :view-data="item"
   )
 
 </template>
-<script>
+<script setup lang="ts">
 
 import StockOperationListItem from '@/components/out/StockOperationListItem.vue';
+import type { StockOperationViewData } from '@/models/StockOperations';
 
-export default {
-  name: 'StockOperationList',
-  components: { StockOperationListItem },
-  props: {
-    viewData: Array,
-    activeId: String,
-  },
-};
+defineProps<{
+    viewData: StockOperationViewData[];
+    activeId?: string;
+}>();
+
+const emit = defineEmits<{
+  (e: 'click', item: StockOperationViewData): void;
+}>();
 
 </script>
-<style scoped lang="scss">
-
-</style>

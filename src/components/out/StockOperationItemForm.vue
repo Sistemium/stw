@@ -15,64 +15,49 @@ el-tabs.stock-operation-item-form(:class="tabClass")
       materials-form(:materials="model.materials")
 
 </template>
-<script>
+<script setup lang="ts">
 
-import Vue from 'vue';
+import { computed, ref, watch } from 'vue';
 import cloneDeep from 'lodash/cloneDeep';
 import StockTakingItemForm from '@/components/stock/StockTakingItemForm.vue';
 import MaterialsForm from '@/components/production/MaterialsForm.vue';
 import PriceForm from '@/components/out/PriceForm.vue';
-import Article from '@/models/Article';
+import Article from '@/models/Article.js';
 import VatModeSwitch from '@/components/out/VatModeSwitch.vue';
+import type { StockOperationItem } from '@/models/StockOperations';
 
-export default {
-  name: 'StockOperationItemForm',
-  components: {
-    VatModeSwitch,
-    PriceForm,
-    StockTakingItemForm,
-    MaterialsForm,
-  },
-  props: {
-    editable: Boolean,
-    model: Object,
-    vatPrices: Boolean,
-  },
-  data() {
-    return {
-      formVatPrices: this.vatPrices,
-    };
-  },
-  methods: {
-    validate(cb) {
-      const { itemForm } = this.$refs;
-      const { form } = itemForm.$refs;
-      // this.$debug('validate:', form, itemForm);
-      if (!form) {
-        cb(false);
-        return;
-      }
-      form.validate(cb);
-    },
-  },
-  computed: {
-    article() {
-      return Article.reactiveGet(this.model.articleId);
-    },
-    articleMaterials() {
-      const { materials = null } = this.article || {};
-      return materials;
-    },
-    tabClass() {
-      return !this.articleMaterials && 'single';
-    },
-  },
-  created() {
-    this.$watch('model.articleId', () => {
-      Vue.set(this.model, 'materials', cloneDeep(this.articleMaterials));
-    });
-  },
-};
+const props = defineProps<{
+  editable: boolean;
+  model: StockOperationItem;
+  vatPrices: boolean;
+}>();
+
+defineExpose({ validate });
+
+const formVatPrices = ref(props.vatPrices);
+const itemForm = ref(null);
+
+const article = computed(() => Article.reactiveGet(props.model.articleId));
+const articleMaterials = computed(() => {
+  const { materials = null } = article.value || {};
+  return materials;
+});
+const tabClass = computed(() => articleMaterials.value && 'single');
+
+watch(() => props.model.articleId, () => {
+  // eslint-disable-next-line vue/no-mutating-props
+  props.model.materials = cloneDeep(articleMaterials.value);
+});
+
+function validate(cb) {
+  const { form } = itemForm.value.$refs;
+  // $debug('validate:', form, itemForm);
+  if (!form) {
+    cb(false);
+    return;
+  }
+  form.validate(cb);
+}
 
 </script>
 <style scoped lang="scss">

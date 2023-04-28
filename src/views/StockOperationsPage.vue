@@ -2,35 +2,48 @@
 
 .stock-withdrawals-page
 
-  //el-header
   page-title(:title="`menu.${rootState}`")
 
   el-container
     component(:is="showDetails ? 'el-aside' : 'el-main'")
       .filters
         search-input(v-model="search")
-        .buttons()
-          storage-select(v-model="storageId" ref="storageSelect" :disabled="showDetails")
-          tool-button(tool="back" @click="onBack" v-if="showDetails")
-          tool-button(tool="add" @click="onAdd()")
-      resize#stock-operation-scroll(:padding="20" @resized="setHeight")
+        .buttons
+          storage-select(
+            v-model="storageId"
+            ref="storageSelectRef"
+            :disabled="showDetails"
+          )
+          tool-button(
+            v-if="showDetails"
+            tool="back"
+            @click="onBack"
+          )
+          tool-button(
+            tool="add"
+            @click="onAdd()"
+          )
+      resize#stock-operation-scroll(
+        :padding="20"
+        @resized="setHeight"
+      )
         template(v-if="viewData.length")
           stock-operation-list(
             v-if="showList"
             :view-data="viewData"
+            :active-id="route.params.stockOperationId"
             @click="onItemClick"
-            :active-id="$route.params.stockOperationId"
           )
           stock-operation-table(
             v-else
             :height="tableHeight"
             :view-data="viewData"
-            @click="onItemClick"
             :size="tableSize"
             :counterparty-role="counterpartyRole"
+            @click="onItemClick"
           )
       alert-empty(
-        v-if="currentStorageId && !stockOperations.length"
+        v-if="store.currentStorageId && !stockOperations.length"
         @click="onAdd()"
         :button-text="$tAction('start', operationName)"
       )
@@ -38,124 +51,132 @@
     router-view
 
 </template>
-<script>
-import { createNamespacedHelpers } from 'vuex';
-import StockOperationList from '@/components/out/StockOperationList.vue';
-import pageMixin from '@/lib/pageMixin';
+<script setup lang="ts">
 import find from 'lodash/find';
-import { stockOperationToViewData, searchOperations } from '@/services/warehousing';
+import { stockOperationToViewData, searchOperations } from '@/services/warehousing.js';
+import StockOperationList from '@/components/out/StockOperationList.vue';
 import StockOperationTable from '@/components/out/StockOperationTable.vue';
-import vssMixin from '@/components/vssMixin';
-import * as g from '@/store/inv/getters';
-import * as m from '@/store/inv/mutations';
-import storageSelectMixin from '@/components/storageSelectMixin';
-import scrollToCreated from '@/components/scrollToCreated';
+
 import SearchInput from '@/lib/SearchInput.vue';
 import Resize from '@/lib/Resize.vue';
 import ToolButton from '@/lib/ToolButton.vue';
+import { computed, ref } from 'vue';
+import { useRouteParams } from '@/lib/updateRouteParams.js';
+import { useRoute, useRouter } from 'vue-router';
+import { useInvStore } from '@/store/invStore.js';
+import orderBy from 'lodash/orderBy';
+import ReactiveModel from 'sistemium-data-vue';
+// import type { PageProps } from '@/views/pages';
+import AlertEmpty from '@/lib/AlertEmpty.vue';
+import useResponsiveTables from '@/components/useResponsiveTables';
+import StorageSelect from '@/components/stock/StorageSelect.vue';
+import PageTitle from '@/components/PageTitle.vue';
 
-const { mapGetters, mapMutations } = createNamespacedHelpers('inv');
+// mixins: [
+//   scrollToCreated({
+//     container: '#stock-operation-scroll',
+//     blink: false,
+//     watchFor: '$route.params.stockOperationId',
+//     watchToRepeat() {
+//       return !!this.$route.query.search;
+//     },
+//   })
+// ]
 
-export default {
-  name: 'StockOperationsPage',
-  mixins: [
-    pageMixin,
-    vssMixin,
-    storageSelectMixin,
-    scrollToCreated({
-      container: '#stock-operation-scroll',
-      blink: false,
-      watchFor: '$route.params.stockOperationId',
-      watchToRepeat() {
-        return !!this.$route.query.search;
-      },
-    }),
-  ],
-  components: { ToolButton, Resize, SearchInput, StockOperationTable, StockOperationList },
-  props: {
-    model: Object,
-    positionsModel: Object,
-    operationName: String,
-    counterpartyRole: String,
+// interface StockOperationsProps extends PageProps {
+// }
+
+const props = defineProps<{
+  model: ReactiveModel;
+  positionsModel: ReactiveModel;
+  operationName: string;
+  counterpartyRole: string;
+  rootState: string;
+  editRoute: string;
+  createRoute: string;
+}>();
+
+const { updateRouteParams } = useRouteParams();
+const route = useRoute();
+const router = useRouter();
+const { showTable, tableSize } = useResponsiveTables();
+const store = useInvStore();
+const tableHeight = ref<number>(undefined);
+// TODO: auto open if empty
+const storageSelectRef = ref(null);
+
+const search = computed({
+  get() {
+    return route.query.search || '';
   },
-  data() {
-    return {
-      tableHeight: undefined,
-    };
+  set(search) {
+    updateRouteParams({}, { search: search || undefined });
   },
-  computed: {
-    search: {
-      get() {
-        return this.$route.query.search || '';
-      },
-      set(search) {
-        this.updateRouteParams({}, { search: search || undefined });
-      },
-    },
-    viewData() {
-      return this.stockOperations
-        .map(o => stockOperationToViewData(o, this.positionsModel, this.operationName));
-    },
-    ...mapGetters({
-      currentStorageId: g.CURRENT_STORAGE,
-    }),
-    showList() {
-      return !this.showTable || this.showDetails;
-    },
-    stockOperations() {
-      const { storageId, search } = this;
-      if (!storageId) {
-        return [];
+});
+
+const viewData = computed(() => {
+  return stockOperations.value
+    .map(o => stockOperationToViewData(o, props.positionsModel, props.operationName));
+});
+
+
+const showList = computed(() => !showTable.value || showDetails.value);
+
+const stockOperations = computed(() => {
+  if (!storageId.value) {
+    return [];
+  }
+  const data = props.model.reactiveManyByIndex('storageId', storageId.value);
+  const filtered = search.value
+    ? data.filter(searchOperations(search.value, props.positionsModel, `${props.operationName}Id`))
+    : data;
+  return orderBy(filtered, ['date', 'cts'], ['desc', 'desc']);
+});
+
+const showDetails = computed(() => {
+  const { name } = route;
+  return name === props.editRoute
+    || !!find(router.currentRoute.matched, { name: props.editRoute });
+});
+
+const storageId = computed({
+  get() {
+    const { stockOperationId } = route.params;
+    if (stockOperationId) {
+      const { storageId: id } = props.model.reactiveGet(stockOperationId as string) || {};
+      if (id) {
+        return id;
       }
-      const data = this.model.reactiveManyByIndex('storageId', this.storageId);
-      const filtered = search
-        ? data.filter(searchOperations(search, this.positionsModel, `${this.operationName}Id`))
-        : data;
-      return this.$orderBy(filtered, ['date', 'cts'], ['desc', 'desc']);
-    },
-    showDetails() {
-      const { name } = this.$route;
-      return name === this.editRoute
-        || !!find(this.$router.currentRoute.matched, { name: this.editRoute });
-    },
-    storageId: {
-      get() {
-        const { stockOperationId } = this.$route.params;
-        if (stockOperationId) {
-          const { storageId } = this.model.reactiveGet(stockOperationId) || {};
-          if (storageId) {
-            return storageId;
-          }
-        }
-        return this.currentStorageId;
-      },
-      set(id) {
-        this.setCurrentStorageId(id);
-      },
-    },
+    }
+    return store.currentStorageId;
   },
-  methods: {
-    setHeight(height) {
-      this.tableHeight = height;
-    },
-    onAdd() {
-      this.pushCreate({ storageId: this.storageId });
-    },
-    ...mapMutations({
-      setCurrentStorageId: m.SET_CURRENT_STORAGE,
-    }),
-    onItemClick(item) {
-      this.updateRouteParams({
-        stockOperationId: item.id,
-      }, {}, this.editRoute);
-    },
-    onBack() {
-      this.updateRouteParams({
-        stockOperationId: null,
-      }, {}, this.rootState);
-    },
+  set(id) {
+    store.currentStorageId = id;
   },
-};
+});
+
+
+function setHeight(height) {
+  tableHeight.value = height;
+}
+
+function onAdd() {
+  updateRouteParams({
+    stockOperationId: undefined,
+  }, { storageId: storageId.value }, props.createRoute);
+}
+
+function onItemClick(item) {
+  updateRouteParams({
+    stockOperationId: item.id,
+  }, {}, props.editRoute);
+}
+
+function onBack() {
+  updateRouteParams({
+    stockOperationId: undefined,
+  }, {}, props.rootState);
+}
 
 </script>
 <style scoped lang="scss">

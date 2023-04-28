@@ -1,7 +1,11 @@
 <template lang="pug">
 
 .stock-operation-item-list.list-group
-  .list-group-item(v-for="item in items" :key="item.id" @click="$emit('click', item)")
+  .list-group-item(
+    v-for="item in items"
+    :key="item.id"
+    @click="emit('click', item)"
+  )
     .title
       article-view(:article-id="item.articleId")
     .right
@@ -21,22 +25,19 @@
         .price {{ item[priceField] }} &euro;
 
 </template>
-<script>
+<script setup lang="ts">
 import ArticleView from '@/components/catalogue/ArticleView.vue';
-import { shortenedPackage } from '@/models/PackageType';
+import { shortenedPackage } from '@/models/PackageType.js';
+import type { StockOperationItem } from '@/models/StockOperations';
 
-export default {
-  name: 'StockOperationItemList',
-  props: {
-    stockOperationId: String,
-    items: Array,
-    priceField: { type: String, default: 'price' },
-  },
-  components: { ArticleView },
-  methods: {
-    shortenedPackage,
-  },
-};
+withDefaults(defineProps<{
+  items: StockOperationItem[];
+  priceField?: string;
+}>(), { priceField: 'price' });
+
+const emit = defineEmits<{
+  (e: 'click', item: StockOperationItem);
+}>();
 
 </script>
 <style scoped lang="scss">

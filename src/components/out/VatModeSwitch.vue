@@ -6,25 +6,25 @@ el-form-item.vat-mode-switch(
   el-switch(v-model="model")
 
 </template>
-<script>
+<script setup lang="ts">
 
-export default {
-  name: 'VatModeSwitch',
-  props: {
-    value: Boolean,
+import { computed } from 'vue';
+
+const props = defineProps<{
+  modelValue: boolean;
+}>();
+
+const emit = defineEmits<{
+  (e: 'update:modelValue', value: boolean): void;
+}>();
+
+const model = computed({
+  get() {
+    return props.modelValue || false;
   },
-  computed: {
-    model: {
-      get() {
-        return this.value || false;
-      },
-      set(value) {
-        this.$emit('input', value || false);
-      },
-    },
+  set(value) {
+    emit('update:modelValue', value || false);
   },
-};
+});
 
 </script>
-<style scoped lang="scss">
-</style>

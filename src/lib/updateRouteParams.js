@@ -18,6 +18,12 @@ export function useRouteParams() {
       ...updateParams,
     };
 
+    Object.keys(updateParams).forEach(key => {
+      if (!updateParams[key]) {
+        delete newParams[key];
+      }
+    });
+
     const newQuery = {
       ...query,
       ...updateQuery,

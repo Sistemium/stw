@@ -10,7 +10,7 @@
           :workflow="workflow"
           :value="stockOperation.processing"
           @input="onProcessing"
-          :disabled="busy"
+          :disabled="isBusy"
         )
         tool-button(tool="add" @click="onAddItem" :disabled="disabled")
       resize(:padding="20")
@@ -39,106 +39,85 @@
   router-view
 
 </template>
-<script>
-import { workflow } from '@/models/StockWithdrawing';
+<script setup lang="ts">
+
+import { computed } from 'vue';
+import { useRouter } from 'vue-router';
+import ReactiveModel from 'sistemium-data-vue';
+import ToolButton from '@/lib/ToolButton.vue';
+import Resize from '@/lib/Resize.vue';
+import AlertEmpty from '@/lib/AlertEmpty.vue';
 import WorkflowTransitions from '@/lib/WorkflowTransitions.vue';
-import pageMixin from '@/lib/pageMixin';
 import StockOperationItemList from '@/components/out/StockOperationItemList.vue';
 import StockOperationEdit from '@/components/out/StockOperationEdit.vue';
-// import ProductionItemList from '@/components/production/ProductionItemList.vue';
-// import StockWithdrawingProduct from '@/models/StockWithdrawingProduct';
-import { configPriceField } from '@/services/warehousing';
+import { configPriceField } from '@/services/warehousing.js';
+import { workflow } from '@/models/StockWithdrawing.js';
+import { useBusy } from '@/views/pages';
 
-export default {
-  name: 'StockOperationPage',
-  components: {
-    // ProductionItemList,
-    WorkflowTransitions,
-    StockOperationEdit,
-    StockOperationItemList,
-  },
-  mixins: [pageMixin],
-  props: {
-    stockOperationId: String,
-    from: Object,
-    model: Object,
-    positionsModel: Object,
-    counterpartyRole: String,
-    operationName: String,
-  },
-  computed: {
-    workflow() {
-      return workflow;
+
+const props = defineProps<{
+  stockOperationId?: string;
+  from: object;
+  model: ReactiveModel;
+  positionsModel?: ReactiveModel;
+  counterpartyRole?: string;
+  operationName: string;
+  rootState?: string;
+  editRoute?: string;
+  createRoute?: string;
+}>();
+
+const router = useRouter();
+const { setBusy, isBusy } = useBusy();
+
+const priceField = computed(() => {
+  return configPriceField(props.operationName, stockOperation.value.date);
+});
+
+const stockOperationItems = computed(() => {
+  const { stockOperationId } = props;
+  return props.positionsModel.reactiveFilter({
+    [`${props.operationName}Id`]: stockOperationId,
+  });
+});
+
+const stockOperation = computed(() => {
+  return props.model.reactiveGet(props.stockOperationId) || {};
+});
+
+const disabled = computed(() => {
+  const { processing } = stockOperation.value;
+  return !workflow.step(processing).editable;
+});
+
+function onAddItem() {
+  router.push({
+    name: props.createRoute,
+    params: {
+      stockOperationId: props.stockOperationId,
     },
-    priceField() {
-      return configPriceField(this.operationName, this.stockOperation.date);
+  });
+}
+
+function onItemClick(item) {
+  router.push({
+    name: props.editRoute,
+    params: {
+      stockOperationId: props.stockOperationId,
+      stockOperationItemId: item.id,
     },
-    // productionItems() {
-    //   if (this.operationName !== 'stockWithdrawing') {
-    //     return null;
-    //   }
-    //   const { stockOperationId: stockWithdrawingId } = this;
-    //   return StockWithdrawingProduct.reactiveFilter({ stockWithdrawingId });
-    // },
-    stockOperationItems() {
-      const { stockOperationId } = this;
-      return this.positionsModel.reactiveFilter({
-        [`${this.operationName}Id`]: stockOperationId,
-      });
-    },
-    stockOperation() {
-      return this.model.reactiveGet(this.stockOperationId) || {};
-    },
-    disabled() {
-      const { processing } = this.stockOperation;
-      return !workflow.step(processing).editable;
-    },
-  },
-  methods: {
-    onAddItem() {
-      this.$router.push({
-        name: this.createRoute,
-        params: {
-          stockOperationId: this.stockOperationId,
-        },
-      });
-    },
-    // onAddProduct() {
-    //   this.$router.push({
-    //     name: 'stockWithdrawingProductCreate',
-    //     params: {
-    //       stockWithdrawingId: this.stockOperationId,
-    //     },
-    //   });
-    // },
-    // onProductClick(item) {
-    //   this.$router.push({
-    //     name: 'stockWithdrawingProductEdit',
-    //     params: {
-    //       stockOperationId: this.stockOperationId,
-    //       stockOperationItemId: item.id,
-    //     },
-    //   });
-    // },
-    onItemClick(item) {
-      this.$router.push({
-        name: this.editRoute,
-        params: {
-          stockOperationId: this.stockOperationId,
-          stockOperationItemId: item.id,
-        },
-      });
-    },
-    onEditClose(record) {
-      if (!record) {
-        this.$router.replace({ name: this.from.name });
-      }
-    },
-    onProcessing(processing) {
-      this.setBusy(this.model.patch(this.stockOperationId, { processing }));
-    },
-  },
-};
+  });
+}
+
+function onEditClose(record) {
+  if (!record) {
+    router.replace({ name: props.from.name });
+  }
+}
+
+function onProcessing(processing) {
+  setBusy(props.model.patch(props.stockOperationId, { processing }));
+}
 
 </script>
 <style scoped lang="scss">
