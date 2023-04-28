@@ -27,3 +27,8 @@
 .el-table.el-table--enable-row-hover tr:hover > td.el-table__cell {
   color: $primary-hover-color;
 }
+
+.el-link {
+  color: $primary-color;
+  padding: 6px 3px;
+}
