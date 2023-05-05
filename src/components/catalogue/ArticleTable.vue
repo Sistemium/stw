@@ -12,6 +12,7 @@ el-table.article-table(
   @current-change="handleCurrentChange"
 )
   el-table-column(
+    class-name="avatar"
     column-key="avatar"
     :width="60"
   )
@@ -90,6 +91,10 @@ function rowClick(row, column) {
 
 .el-icon-edit {
   cursor: pointer;
+}
+
+.article-table :deep(td.avatar .cell) {
+  text-overflow: unset;
 }
 
 </style>
