@@ -148,6 +148,7 @@ function onCommand(name) {
   a {
     font-weight: bold;
     line-height: 25px;
+    font-size: 13px;
   }
 
   a + a:before {
