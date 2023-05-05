@@ -30,10 +30,17 @@ const emit = defineEmits<{
   width: 100%;
   align-items: flex-start;
 
+  :deep(.el-select--small .el-input__wrapper) {
+    height: 24px;
+  }
+
+  :deep(.el-select--default .el-input__wrapper) {
+    height: 32px;
+  }
+
   :deep(.el-input__wrapper) {
     border-bottom-left-radius: 0;
     border-top-left-radius: 0;
-    height: 24px;
   }
 
   :deep(.el-select) {

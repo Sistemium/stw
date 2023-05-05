@@ -35,3 +35,6 @@ const storage = computed(() => {
 });
 
 </script>
+<style scoped lang="scss">
+@import "../../styles/pageLists";
+</style>

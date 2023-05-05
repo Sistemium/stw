@@ -119,8 +119,13 @@ watch(queryParams, ({ storageId, dateB, dateE }) => {
 @import "../styles/variables";
 
 .filters {
-  > * + * {
+  display: flex;
+  justify-content: center;
+  :deep(> * + *) {
     margin-left: $margin-right;
+  }
+  :deep(.el-date-editor) {
+    flex-grow: 0;
   }
 }
 

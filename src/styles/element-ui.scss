@@ -32,3 +32,8 @@
   color: $primary-color;
   padding: 6px 3px;
 }
+
+h1:first-child {
+  margin-top: 0;
+  font-size: 20px;
+}

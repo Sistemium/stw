@@ -34,7 +34,7 @@ $gray-background, $dark-gray, $margin-top, $primary-color, $white, $padding) {
       background: $primary-color;
       color: $white;
 
-      .el-button--text {
+      .el-button--text, .el-link {
         color: $white;
       }
     }

@@ -51,7 +51,7 @@ const modelOrigin = computed((): StockOperation => {
       processing: 'progress',
       counterpartyType: null,
       counterpartyId: null,
-      storageId: route.query.storageId || null,
+      storageId: route.query.storageId as string || null,
       commentText: null,
       deviceCts: new Date().toJSON(),
     };

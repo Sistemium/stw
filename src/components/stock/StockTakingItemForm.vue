@@ -214,7 +214,7 @@ if (canAddBarcode.value) {
   isShowingAllArticles.value = true;
 }
 
-watch(props.model, () => {
+watch(() => props.model, () => {
   const { packages, unitsInPackage, units } = props.model;
   spareUnits.value = (units || 0) - (packages || 0) * (unitsInPackage || 0);
   mode.value = getMode();

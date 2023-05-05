@@ -232,7 +232,7 @@ export default {
 @import "../styles/variables";
 
 .container {
-  padding: $margin-right;
+  //padding: $margin-right;
 }
 
 .el-card {

@@ -42,7 +42,7 @@ const articleMaterials = computed(() => {
   const { materials = null } = article.value || {};
   return materials;
 });
-const tabClass = computed(() => articleMaterials.value && 'single');
+const tabClass = computed(() => !articleMaterials.value && 'single');
 
 watch(() => props.model.articleId, () => {
   // eslint-disable-next-line vue/no-mutating-props
