@@ -14,35 +14,38 @@
   router-view
 
 </template>
-<script>
+<script setup lang="ts">
 
-import pageMixin from '@/lib/pageMixin';
+import { computed } from 'vue';
+import orderBy from 'lodash/orderBy';
 import RecipeList from '@/components/production/RecipeList.vue';
-import Recipe from '@/models/Recipe';
+import Recipe from '@/models/Recipe.js';
+import { useRouter } from 'vue-router';
+import { useRouteParams } from '@/lib/updateRouteParams.js';
 
-export default {
-  name: 'RecipesPage',
-  components: { RecipeList },
-  mixins: [pageMixin],
-  computed: {
-    recipes() {
-      return this.$orderBy(Recipe.reactiveFilter(), 'name');
+const props = defineProps({
+  rootState: String,
+  editRoute: String,
+  createRoute: String,
+  closeRoute: String,
+});
+
+const recipes = computed(() => orderBy(Recipe.reactiveFilter(), 'name'));
+const router = useRouter();
+const { updateRouteParams } = useRouteParams();
+
+function onItemClick(item) {
+  router.push({
+    name: props.editRoute,
+    params: {
+      recipeId: item.id,
     },
-  },
-  methods: {
-    onItemClick(item) {
-      this.$router.push({
-        name: this.editRoute,
-        params: {
-          recipeId: item.id,
-        },
-      });
-    },
-    onAdd() {
-      this.pushCreate({});
-    },
-  },
-};
+  });
+}
+
+function onAdd() {
+  updateRouteParams({}, {}, props.createRoute)
+}
 
 </script>
 <style scoped lang="scss">

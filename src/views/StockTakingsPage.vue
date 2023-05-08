@@ -58,16 +58,19 @@ import StorageSelect from '@/components/stock/StorageSelect.vue';
 import PageTitle from '@/components/PageTitle.vue';
 import { useInvStore } from '@/store/invStore';
 import { useRouteParams } from '@/lib/updateRouteParams.js';
-import { pageProps } from '@/lib/pageMixin';
 import { useScrollToCreated } from '@/services/scrolling';
 
 const { updateRouteParams } = useRouteParams();
 
 const storageSelectRef = ref(null);
 
-const props = defineProps(pageProps({
+const props = defineProps({
+  rootState: String,
+  editRoute: String,
+  createRoute: String,
+  closeRoute: String,
   progressRoute: String,
-}));
+});
 
 const route = useRoute();
 
