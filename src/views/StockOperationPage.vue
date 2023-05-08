@@ -53,6 +53,7 @@ import StockOperationEdit from '@/components/out/StockOperationEdit.vue';
 import { configPriceField } from '@/services/warehousing.js';
 import { workflow } from '@/models/StockWithdrawing.js';
 import { useBusy } from '@/views/pages';
+import { useOperationDisabled } from '@/services/workflowing';
 
 
 const props = defineProps<{
@@ -85,10 +86,7 @@ const stockOperation = computed(() => {
   return props.model.reactiveGet(props.stockOperationId) || {};
 });
 
-const disabled = computed(() => {
-  const { processing } = stockOperation.value;
-  return !workflow.step(processing).editable;
-});
+const disabled = useOperationDisabled(stockOperation, workflow);
 
 function onAddItem() {
   router.push({

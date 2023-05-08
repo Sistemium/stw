@@ -91,7 +91,7 @@ const stockTakingItems = computed(() => {
 });
 
 const { updateRouteParams } = useRouteParams();
-const { disabled } = useOperationDisabled(stockTaking);
+const { disabled } = useOperationDisabled(stockTaking, workflow);
 const { setBusy, isBusy } = useBusy();
 
 function onClose(record) {

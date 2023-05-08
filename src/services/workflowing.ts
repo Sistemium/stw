@@ -1,6 +1,5 @@
 import { computed } from 'vue';
 import type { ComputedRef } from 'vue';
-import { workflow } from '@/models/StockWithdrawing';
 
 export function useWorkflow(props, emit) {
 
@@ -29,7 +28,7 @@ export const workflowProps = {
   },
 };
 
-export function useOperationDisabled(operation: ComputedRef) {
+export function useOperationDisabled(operation: ComputedRef, workflow) {
   const disabled = computed(() => {
     const { processing } = operation.value;
     return !workflow.step(processing).editable;
