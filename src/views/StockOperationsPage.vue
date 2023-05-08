@@ -71,20 +71,7 @@ import AlertEmpty from '@/lib/AlertEmpty.vue';
 import useResponsiveTables from '@/components/useResponsiveTables';
 import StorageSelect from '@/components/stock/StorageSelect.vue';
 import PageTitle from '@/components/PageTitle.vue';
-
-// mixins: [
-//   scrollToCreated({
-//     container: '#stock-operation-scroll',
-//     blink: false,
-//     watchFor: '$route.params.stockOperationId',
-//     watchToRepeat() {
-//       return !!this.$route.query.search;
-//     },
-//   })
-// ]
-
-// interface StockOperationsProps extends PageProps {
-// }
+import { useScrollToCreated } from '@/services/scrolling';
 
 const props = defineProps<{
   model: ReactiveModel;
@@ -96,6 +83,7 @@ const props = defineProps<{
   createRoute: string;
 }>();
 
+
 const { updateRouteParams } = useRouteParams();
 const route = useRoute();
 const { showTable, tableSize } = useResponsiveTables();
@@ -103,6 +91,14 @@ const store = useInvStore();
 const tableHeight = ref<number>(undefined);
 // TODO: auto open if empty
 const storageSelectRef = ref(null);
+
+useScrollToCreated({
+  blink: false,
+  watchFor: 'stockOperationId',
+  watchToRepeat() {
+    return !!route.query.search;
+  },
+});
 
 const search = computed({
   get() {
