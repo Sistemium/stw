@@ -51,6 +51,7 @@ export function useScrollToCreated(config: ScrollConfig) {
   function waitUntilId(id) {
     if (window.document.getElementById(id)) {
       // console.info('waitUntilId', id, true);
+      waitCount.value = 0;
       scrollToId(id, SCROLL_DURATION, blink);
       return;
     }
@@ -63,28 +64,37 @@ export function useScrollToCreated(config: ScrollConfig) {
       waitUntilId(id);
     }, WAIT_FOR_TIMEOUT);
   }
-}
 
 
-
-function scrollToId(id, duration = 500, blink = false) {
-  const el = window.document.getElementById(id);
-  if (!el) {
-    // console.info('scrollToId', id, 'none');
-    return;
-  }
-  setTimeout(() => {
-    const scrollEl = el.closest('tr') || el;
-    scrollEl.scrollIntoView({ behavior: 'smooth' });
-  }, 10);
-  if (!blink) {
-    return;
-  }
-  setTimeout(() => {
-    const toBlink = el.closest('tr') || el;
-    toBlink.classList.add(BLINK_CLASS);
+  function scrollToId(id, duration = 500, blink = false) {
+    const el = window.document.getElementById(id);
+    if (!el) {
+      // console.info('scrollToId', id, 'none');
+      return;
+    }
     setTimeout(() => {
-      toBlink.classList.remove(BLINK_CLASS);
-    }, REMOVE_BLINK_AFTER);
-  }, duration);
+      const scrollEl = el.closest('tr') || el;
+      // console.info('scrollToId', id, scrollEl.offsetParent, waitCount.value);
+      if (!scrollEl.offsetParent && waitCount.value <= MAX_WAIT_FOR) {
+        waitCount.value += 1;
+        setTimeout(() => scrollToId(id, duration, blink), 10);
+        return;
+      }
+      scrollEl.scrollIntoView({ behavior: 'smooth' });
+    }, 10);
+    if (!blink) {
+      return;
+    }
+    setTimeout(() => {
+      const toBlink = el.closest('tr') || el;
+      toBlink.classList.add(BLINK_CLASS);
+      setTimeout(() => {
+        toBlink.classList.remove(BLINK_CLASS);
+      }, REMOVE_BLINK_AFTER);
+    }, duration);
+  }
+
 }
+
+
+
