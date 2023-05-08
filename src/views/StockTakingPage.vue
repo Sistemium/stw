@@ -18,6 +18,7 @@ el-main.stock-taking-page.page
         tool-button(
           tool="add"
           @click="onAdd()"
+          :disabled="disabled"
         )
       resize(:padding="20")
         stock-taking-item-list(
@@ -57,6 +58,8 @@ import { computed, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import orderBy from 'lodash/orderBy';
 import { useRouteParams } from '@/lib/updateRouteParams';
+import { useOperationDisabled } from '@/services/workflowing';
+import StockTaking from '@/models/StockTaking';
 // import { useI18n } from 'vue-i18n';
 // import StockTaking from '@/models/StockTaking';
 // import { useInvStore } from '@/store/invStore';
@@ -72,6 +75,7 @@ const currentTabData = ref('items');
 const route = useRoute();
 const router = useRouter();
 const search = computed(() => route.query.search || '');
+const stockTaking = computed(() => StockTaking.reactiveGet(props.stockTakingId));
 // const stockTakingItem = ref(null);
 // const store = useInvStore();
 // const stockTaking = computed(() => StockTaking.reactiveGet(props.stockTakingId) || {});
@@ -84,6 +88,7 @@ const stockTakingItems = computed(() => {
 });
 
 const { updateRouteParams } = useRouteParams();
+const { disabled } = useOperationDisabled(stockTaking);
 
 function onClose(record) {
   if (!record) {
@@ -105,7 +110,7 @@ function onClose(record) {
 function onAdd(barcode) {
   const query = barcode ? { barcode } : {};
   updateRouteParams({
-    stockTakingId: this.stockTakingId,
+    stockTakingId: props.stockTakingId,
   }, query, props.createItemRoute);
 }
 
