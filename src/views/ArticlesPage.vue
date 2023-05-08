@@ -61,7 +61,7 @@ import { computed, ref } from 'vue';
 import type { Component } from 'vue';
 import { useI18n } from 'vue-i18n';
 import map from 'lodash/map';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import each from 'lodash/each';
 import pick from 'lodash/pick';
 import orderBy from 'lodash/orderBy';
@@ -80,6 +80,7 @@ import { DocumentCopy } from '@element-plus/icons-vue';
 import Article from '@/models/Article.js';
 import ArticleProp from '@/models/ArticleProp.js';
 import { articlePropertySort, searchArticle } from '@/services/catalogue.js';
+import { useScrollToCreated } from '@/services/scrolling';
 
 const props = defineProps<{
   editRoute: string;
@@ -92,7 +93,14 @@ const search = ref('');
 const tableHeight = ref<number>(undefined);
 const selectedArticle = ref(null);
 const router = useRouter();
+const route = useRoute();
 
+useScrollToCreated({
+  blink: true,
+  watchFor() {
+    return route.query.createdId as string;
+  },
+});
 
 const copyTip = computed(() => {
   const { code, name } = selectedArticle.value || {};

@@ -74,7 +74,8 @@ function scrollToId(id, duration = 500, blink = false) {
     return;
   }
   setTimeout(() => {
-    el.scrollIntoView({ behavior: 'smooth' });
+    const scrollEl = el.closest('tr') || el;
+    scrollEl.scrollIntoView({ behavior: 'smooth' });
   }, 10);
   if (!blink) {
     return;
