@@ -57,7 +57,7 @@ import ToolButton from '@/lib/ToolButton.vue';
 import StorageSelect from '@/components/stock/StorageSelect.vue';
 import PageTitle from '@/components/PageTitle.vue';
 import { useInvStore } from '@/store/invStore';
-import { useRouteParams } from '@/lib/updateRouteParams';
+import { useRouteParams } from '@/lib/updateRouteParams.js';
 import { pageProps } from '@/lib/pageMixin';
 import { useScrollToCreated } from '@/services/scrolling';
 
@@ -102,14 +102,11 @@ useScrollToCreated({
 });
 
 function onBack() {
-  this.updateRouteParams({
-    stockTakingId: null,
-  }, {}, props.rootState);
+  updateRouteParams({ stockTakingId: null }, {}, props.rootState);
 }
 
 function onAdd() {
-  updateRouteParams({}, { storageId: store.currentStorageId }, props.createRoute)
-    .catch(e => this.$error(e));
+  updateRouteParams({}, { storageId: store.currentStorageId }, props.createRoute);
 }
 
 function onItemClick(stockTaking, toProgress = false) {
