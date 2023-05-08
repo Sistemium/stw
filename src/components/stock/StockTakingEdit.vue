@@ -11,61 +11,62 @@ drawer-edit.stock-taking-edit(
   :after-close-to="afterCloseTo"
 )
   template(#default="{ model }")
-    stock-taking-form(ref="form" :model="model" :disabled="!editable")
+    stock-taking-form(
+      ref="form"
+      :model="model"
+      :disabled="!editable"
+    )
 
 </template>
-<script>
+<script setup lang="ts">
 
+import { computed, ref } from 'vue';
+import { useRoute } from 'vue-router';
 import DrawerEdit from '@/lib/DrawerEdit.vue';
-import StockTaking, { workflow } from '@/models/StockTaking';
+import StockTaking, { workflow } from '@/models/StockTaking.js';
 import StockTakingForm from '@/components/stock/StockTakingForm.vue';
 
-export default {
-  name: 'StockTakingEdit',
-  props: {
-    stockTakingId: String,
-    from: Object,
-    editRoute: String,
-    isDrawer: { type: Boolean, default: true },
-  },
-  data() {
-    return {
-      afterCloseTo: null,
+const props = withDefaults(defineProps<{
+  stockTakingId?: string;
+  from?: object;
+  editRoute?: string;
+  isDrawer?: boolean;
+}>(), { isDrawer: true });
+
+const form = ref(null);
+const afterCloseTo = ref(null);
+const route = useRoute();
+
+const modelOrigin = computed(() => {
+  const { stockTakingId } = props;
+  const { storageId } = route.query;
+  return stockTakingId ? StockTaking.reactiveGet(stockTakingId) : {
+    date: new Date().toJSON(),
+    processing: 'progress',
+    deviceCts: new Date().toJSON(),
+    storageId,
+  };
+});
+
+const editable = computed(() => {
+  const { processing } = modelOrigin.value || {};
+  return workflow.step(processing).editable;
+});
+
+async function saveFn(props) {
+  const { id: stockTakingId, processing } = await StockTaking.createOne(props);
+  if (processing === 'progress') {
+    afterCloseTo.value = {
+      name: 'stockTakingProgress',
+      params: { stockTakingId },
     };
-  },
-  computed: {
-    modelOrigin() {
-      const { stockTakingId } = this;
-      const { storageId } = this.$route.query;
-      return stockTakingId ? StockTaking.reactiveGet(stockTakingId) : {
-        date: new Date().toJSON(),
-        processing: 'progress',
-        deviceCts: new Date().toJSON(),
-        storageId,
-      };
-    },
-    editable() {
-      const { processing } = this.modelOrigin || {};
-      return workflow.step(processing).editable;
-    },
-  },
-  methods: {
-    async saveFn(props) {
-      const { id: stockTakingId, processing } = await StockTaking.createOne(props);
-      if (processing === 'progress') {
-        this.afterCloseTo = {
-          name: 'stockTakingProgress',
-          params: { stockTakingId },
-        };
-      }
-      return StockTaking.reactiveGet(stockTakingId);
-    },
-    destroyFn(id) {
-      return StockTaking.destroy(id);
-    },
-  },
-  components: { StockTakingForm, DrawerEdit },
-};
+  }
+  return StockTaking.reactiveGet(stockTakingId);
+}
+
+function destroyFn(id) {
+  return StockTaking.destroy(id);
+}
 
 </script>
 <style scoped lang="scss">
