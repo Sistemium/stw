@@ -9,56 +9,51 @@ drawer-edit.stock-taking-item-edit(
   :deletable="editable"
 )
   template(#default="{ model }")
-    stock-taking-item-form(ref="form" :model="model" :editable="editable")
+    stock-taking-item-form(
+      ref="form"
+      :model="model"
+      :editable="editable"
+    )
 
 </template>
-<script>
+<script setup lang="ts">
 
+import { computed } from 'vue';
 import DrawerEdit from '@/lib/DrawerEdit.vue';
-import StockTakingItem from '@/models/StockTakingItem';
-import StockTaking, { workflow } from '@/models/StockTaking';
+import StockTakingItem from '@/models/StockTakingItem.js';
+import StockTaking, { workflow } from '@/models/StockTaking.js';
 import StockTakingItemForm from '@/components/stock/StockTakingItemForm.vue';
-import { stockTakingItemInstance } from '@/services/warehousing';
+import { stockTakingItemInstance } from '@/services/warehousing.js';
 
-export default {
-  name: 'StockTakingItemEdit',
-  components: { StockTakingItemForm, DrawerEdit },
-  props: {
-    stockTakingId: { type: String, required: true },
-    stockTakingItemId: String,
-    from: Object,
-    barcode: String,
-  },
-  computed: {
-    stockTaking() {
-      return StockTaking.reactiveGet(this.stockTakingId);
-    },
-    modelOrigin() {
-      const { stockTakingItemId: id, stockTakingId, barcode = null } = this;
-      return id ? StockTakingItem.reactiveGet(id)
-        : stockTakingItemInstance({
-          stockTakingId,
-          barcode,
-          articleId: null,
-        });
-    },
-    editable() {
-      const { processing } = this.stockTaking || {};
-      return workflow.step(processing).editable;
-    },
-  },
-  methods: {
-    saveFn(props) {
-      return StockTakingItem.createOne(props);
-    },
-    destroyFn(id) {
-      return StockTakingItem.destroy(id);
-    },
-  },
+const props = defineProps({
+  stockTakingId: { type: String, required: true },
+  stockTakingItemId: String,
+  from: Object,
+  barcode: String,
+});
 
-};
+const stockTaking = computed(() => StockTaking.reactiveGet(props.stockTakingId));
+const modelOrigin = computed(() => {
+  const { stockTakingItemId: id, stockTakingId, barcode = null } = props;
+  return id ? StockTakingItem.reactiveGet(id)
+    : stockTakingItemInstance({
+      stockTakingId,
+      barcode,
+      articleId: null,
+    });
+});
+
+const editable = computed(() => {
+  const { processing } = stockTaking.value || {};
+  return workflow.step(processing).editable;
+});
+
+async function saveFn(obj) {
+  return StockTakingItem.createOne(obj);
+}
+
+async function destroyFn(id) {
+  return StockTakingItem.destroy(id);
+}
 
 </script>
-<style scoped lang="scss">
-
-</style>
