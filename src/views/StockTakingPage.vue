@@ -4,17 +4,18 @@ el-main.stock-taking-page.page
 
   //barcode-scanner(@scan="onScan")
 
-  //.header
-    el-date-picker.date(v-model="stockTaking.date" :disabled="true")
-    //workflow-button(:workflow="workflow" :value="stockTaking.processing" @input="onProcessing")
-
   el-tabs(
     v-model="currentTabData"
     tab-position="top"
   )
     el-tab-pane(:label="$t('concepts.items')" name="items")
       .buttons(v-if="stockTakingItems.length || search")
-        //search-input(v-model="search")
+        workflow-transitions(
+          :workflow="workflow"
+          :model-value="stockTaking.processing"
+          :disabled="isBusy"
+          @update:model-value="onProcessing"
+        )
         tool-button(
           tool="add"
           @click="onAdd()"
@@ -59,7 +60,9 @@ import { useRoute, useRouter } from 'vue-router';
 import orderBy from 'lodash/orderBy';
 import { useRouteParams } from '@/lib/updateRouteParams';
 import { useOperationDisabled } from '@/services/workflowing';
-import StockTaking from '@/models/StockTaking';
+import StockTaking, { workflow } from '@/models/StockTaking';
+import WorkflowTransitions from '@/lib/WorkflowTransitions.vue';
+import { useBusy } from '@/views/pages';
 // import { useI18n } from 'vue-i18n';
 // import StockTaking from '@/models/StockTaking';
 // import { useInvStore } from '@/store/invStore';
@@ -89,6 +92,7 @@ const stockTakingItems = computed(() => {
 
 const { updateRouteParams } = useRouteParams();
 const { disabled } = useOperationDisabled(stockTaking);
+const { setBusy, isBusy } = useBusy();
 
 function onClose(record) {
   if (!record) {
@@ -119,6 +123,10 @@ function onItemClick(item) {
     stockTakingItemId: item.id,
     stockTakingId: props.stockTakingId,
   }, {}, props.editItemRoute);
+}
+
+function onProcessing(processing) {
+  setBusy(StockTaking.patch(props.stockTakingId, { processing }));
 }
 
 // const { t }  = useI18n({

@@ -8,9 +8,9 @@
       .buttons
         workflow-transitions(
           :workflow="workflow"
-          :value="stockOperation.processing"
-          @input="onProcessing"
+          :model-value="stockOperation.processing"
           :disabled="isBusy"
+          @update:model-value="onProcessing"
         )
         tool-button(tool="add" @click="onAddItem" :disabled="disabled")
       resize(:padding="20")

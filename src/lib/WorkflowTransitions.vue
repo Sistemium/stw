@@ -2,29 +2,29 @@
 
 .workflow-transitions
   el-button(
-    :disabled="disabled"
     v-for="option in options"
+    :disabled="disabled"
     :key="option.processing"
-    @click="onCommand(option.to)"
     :size="size"
     :type="option.type"
+    @click="onCommand(option.to)"
   ) {{ $t(option.label) }}
 
 </template>
-<script>
+<script setup lang="ts">
 
-import workflowMixin from '@/lib/workflowMixin';
+import { useWorkflow, workflowProps } from '@/services/workflowing';
 
-export default {
-  name: 'WorkflowTransitions',
-  props: {
-    workflow: Object,
-    value: String,
-  },
-  mixins: [workflowMixin],
-};
+const props = defineProps({
+  ...workflowProps,
+  workflow: Object,
+  value: String,
+});
+
+const emit = defineEmits<{
+  (e: 'update:modelValue', value: string);
+}>();
+
+const { options, onCommand } = useWorkflow(props, emit);
 
 </script>
-<style scoped lang="scss">
-
-</style>
