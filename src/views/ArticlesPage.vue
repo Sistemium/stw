@@ -61,7 +61,7 @@ import { computed, ref } from 'vue';
 import type { Component } from 'vue';
 import { useI18n } from 'vue-i18n';
 import map from 'lodash/map';
-import { useRoute, useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
 import each from 'lodash/each';
 import pick from 'lodash/pick';
 import orderBy from 'lodash/orderBy';
@@ -93,14 +93,8 @@ const search = ref('');
 const tableHeight = ref<number>(undefined);
 const selectedArticle = ref(null);
 const router = useRouter();
-const route = useRoute();
 
-useScrollToCreated({
-  blink: true,
-  watchFor() {
-    return route.query.createdId as string;
-  },
-});
+useScrollToCreated({});
 
 const copyTip = computed(() => {
   const { code, name } = selectedArticle.value || {};
