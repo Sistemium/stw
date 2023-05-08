@@ -59,6 +59,7 @@ import PageTitle from '@/components/PageTitle.vue';
 import { useInvStore } from '@/store/invStore';
 import { useRouteParams } from '@/lib/updateRouteParams';
 import { pageProps } from '@/lib/pageMixin';
+import { useScrollToCreated } from '@/services/scrolling';
 
 const { updateRouteParams } = useRouteParams();
 
@@ -92,6 +93,14 @@ const stockTakings = computed(() => {
 const showDetails = computed(() => route.name
   && find(route.matched, { name: props.progressRoute }));
 
+useScrollToCreated({
+  blink: false,
+  watchFor: 'stockTakingId',
+  watchToRepeat() {
+    return !!route.query.search;
+  },
+});
+
 function onBack() {
   this.updateRouteParams({
     stockTakingId: null,
@@ -115,26 +124,6 @@ function onPositionsClick(stockTaking) {
 }
 
 </script>
-<!--<script>
-// import pageMixin from '@/lib/pageMixin';
-// import storageSelectMixin from '@/components/storageSelectMixin';
-import scrollToCreated from '@/components/scrollToCreated';
-
-export default {
-  mixins: [
-    // pageMixin,
-    // storageSelectMixin,
-    scrollToCreated({
-      container: '#stock-takings-scroll',
-      blink: false,
-      watchFor: '$route.params.stockTakingId',
-      watchToRepeat() {
-        return !!this.$route.query.search;
-      },
-    }),
-  ],
-}
-</script>-->
 <style scoped lang="scss">
 @import "../styles/page";
 
