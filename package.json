@@ -5,7 +5,7 @@
   "scripts": {
     "serve": "vite preview --host",
     "dev": "vite --host",
-    "build": "vue-cli-service build --modern",
+    "build": "vite build",
     "test:unit": "vue-cli-service test:unit",
     "lint": "eslint src",
     "i18n:report": "vue-cli-service i18n:report --src \"./src/**/*.?(js|vue)\" --locales \"./src/locales/**/*.json\""
@@ -20,6 +20,7 @@
     "@vueuse/core": "^10.0.2",
     "async": "^3.2.4",
     "axios": "^0.21.0",
+    "dayjs": "^1.11.7",
     "downloadjs": "^1.4.7",
     "element-plus": "^2.3.3",
     "lodash": "^4.17.21",
@@ -27,7 +28,6 @@
     "qs": "^6.11.0",
     "sistemium-data": "^1.10.0",
     "sistemium-data-vue": "^0.3.0",
-    "sistemium-dates": "^1.1.0",
     "sistemium-debug": "^1.0.1",
     "sistemium-vue": "^1.8.5",
     "uuid": "^9.0.0",

@@ -17,7 +17,7 @@
 <script setup lang="ts">
 
 import { useDropzone } from 'vue3-dropzone';
-import { addMonths } from 'sistemium-dates';
+import dayjs from 'dayjs';
 import { tAction, t } from '@/lib/validations.js'
 import { computed, ref } from 'vue';
 import axios from 'axios';
@@ -51,7 +51,7 @@ function onDrop(acceptFiles) {
 function imsUrl() {
   const { org = '' } = store.state.auth?.account;
   const url = [
-    `/ims/${org}?folder=${props.entityName}/${addMonths(new Date(), 0)}`,
+    `/ims/${org}?folder=${props.entityName}/${dayjs().format('YYYY-MM-DD')}`,
     props.trim && 'trim=true',
   ];
   return filter(url)

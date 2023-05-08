@@ -11,7 +11,6 @@ el-date-picker.date-string-picker(
 
 import isDate from 'lodash/isDate';
 import { computed } from 'vue';
-// import dayjs from 'sistemium-dates';
 
 const props = defineProps({
   modelValue: String,
@@ -31,6 +30,3 @@ const date = computed({
 });
 
 </script>
-<style scoped lang="scss">
-
-</style>

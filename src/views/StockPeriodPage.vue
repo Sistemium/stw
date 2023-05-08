@@ -35,7 +35,7 @@
 
 import { computed, ref, watch } from 'vue';
 import PageTitle from '@/components/PageTitle.vue';
-import dayjs from 'sistemium-dates';
+import dayjs from 'dayjs';
 import { findStockPeriod } from '@/services/warehousing.js';
 import StockPeriodTable from '@/components/stock/StockPeriodTable.vue';
 import SearchInput from '@/lib/SearchInput.vue';
