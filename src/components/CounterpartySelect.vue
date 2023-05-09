@@ -20,84 +20,80 @@ el-select.counterparty-select(
   )
 
 </template>
-<script>
+<script setup lang="ts">
 
-import { CONSIGNEE_TYPES } from '@/services/warehousing';
+import { computed, ref, watch } from 'vue';
+import orderBy from 'lodash/orderBy';
+import find from 'lodash/find';
 import debounce from 'lodash/debounce';
+import { CONSIGNEE_TYPES } from '@/services/warehousing.js';
+import type { CounterpartyType } from '@/models/StockOperations';
 
-export default {
-  name: 'CounterpartySelect',
-  props: {
-    type: String,
-    value: String,
+const props = defineProps<{
+  type: CounterpartyType;
+  modelValue?: string;
+}>();
+
+const emit = defineEmits<{
+  (e: 'update:modelValue', value: string | null);
+}>();
+
+const loading = ref(false);
+const remoteOptions = ref([]);
+const model = computed(() => CONSIGNEE_TYPES.get(props.type));
+
+const remoteMethod = computed(() => {
+  return props.type === 'Storage' ? null : debounce(searcher, 300);
+});
+
+const options = computed(() => {
+  const res = remoteMethod.value ? remoteOptions.value
+    : (model.value && model.value.reactiveFilter({}));
+  return orderBy(res, 'name');
+});
+
+const counterparty = computed(() => {
+  const { value } = model;
+  return value ? value.reactiveGet(props.modelValue) : null
+});
+
+const counterpartyId = computed({
+  get() {
+    return props.modelValue;
   },
-  data() {
-    return {
-      loading: false,
-      remoteOptions: [],
-    };
+  set(value) {
+    emit('update:modelValue', value);
   },
-  computed: {
-    remoteMethod() {
-      return this.type === 'Storage' ? null : debounce(q => this.searcher(q), 300);
-    },
-    model() {
-      return CONSIGNEE_TYPES.get(this.type);
-    },
-    options() {
-      const res = this.remoteMethod ? this.remoteOptions
-        : (this.model && this.model.reactiveFilter({}));
-      return this.$orderBy(res, 'name');
-    },
-    counterparty() {
-      const { model } = this;
-      return model ? this.model.reactiveGet(this.value) : null;
-    },
-    counterpartyId: {
-      get() {
-        return this.value;
-      },
-      set(value) {
-        this.$emit('input', value);
-      },
-    },
-  },
-  created() {
-    this.$watchImmediate('counterparty.id', id => {
-      if (id && !this.$find(this.options, { id })) {
-        this.remoteOptions = this.model.reactiveFilter();
-      }
+});
+
+watch(() => counterparty.value?.id, id => {
+  if (id && !find(options.value, { id })) {
+    remoteOptions.value = model.value.reactiveFilter();
+  }
+}, { immediate: true });
+
+watch(() => props.type, () => {
+  remoteOptions.value = [];
+});
+
+function searcher(query) {
+  if (!query) {
+    remoteOptions.value = model.value.reactiveFilter();
+    return;
+  }
+  loading.value = true;
+  model.value
+    .findAll({
+      'where:': { name: { like: query } },
+    }, {
+      headers: { 'x-page-size': 50 },
+    })
+    .then(records => {
+      remoteOptions.value = records;
+    })
+    .finally(() => {
+      loading.value = false;
     });
-  },
-  watch: {
-    type() {
-      this.remoteOptions = [];
-    },
-  },
-  methods: {
-    searcher(query) {
-      if (!query) {
-        this.remoteOptions = this.model.reactiveFilter();
-        return;
-      }
-      this.loading = true;
-      this.model
-        .findAll({
-          'where:': { name: { like: query } },
-        }, {
-          headers: { 'x-page-size': 50 },
-        })
-        .then(records => {
-          this.remoteOptions = records;
-        })
-        .finally(() => {
-          this.loading = false;
-        });
-    },
-  },
-};
+}
 
 </script>
-<style scoped lang="scss">
-
-</style>
