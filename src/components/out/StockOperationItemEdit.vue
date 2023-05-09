@@ -26,7 +26,7 @@ import ReactiveModel from 'sistemium-data-vue';
 import { workflow } from '@/models/StockWithdrawing.js';
 import { stockOperationItemInstance } from '@/services/warehousing.js';
 import StockOperationItemForm from '@/components/out/StockOperationItemForm.vue';
-import { useVatConfig } from '@/components/etc/vatConfiguring';
+import { useVatConfig } from '@/services/vatConfiguring';
 import { drawerEditingProps, useDrawerEditing } from '@/services/drawerEditing';
 import type { StockOperation } from '@/models/StockOperations';
 import DrawerEdit from '@/lib/DrawerEdit.vue';
