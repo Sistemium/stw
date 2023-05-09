@@ -19,56 +19,48 @@ drawer-edit.stock-operation-item-edit(
     )
 
 </template>
-<script>
+<script setup lang="ts">
 
-import drawerEditMixin from '@/lib/drawerEditMixin';
-import { workflow } from '@/models/StockWithdrawing';
-import { stockOperationItemInstance } from '@/services/warehousing';
+import { computed, ref } from 'vue';
+import ReactiveModel from 'sistemium-data-vue';
+import { workflow } from '@/models/StockWithdrawing.js';
+import { stockOperationItemInstance } from '@/services/warehousing.js';
 import StockOperationItemForm from '@/components/out/StockOperationItemForm.vue';
-import vatConfigMixin from '@/components/etc/vatConfigMixin';
+import { useVatConfig } from '@/components/etc/vatConfiguring';
+import { drawerEditingProps, useDrawerEditing } from '@/services/drawerEditing';
+import type { StockOperation } from '@/models/StockOperations';
+import DrawerEdit from '@/lib/DrawerEdit.vue';
 
-export default {
-  name: 'StockOperationItemEdit',
-  mixins: [drawerEditMixin, vatConfigMixin],
-  components: { StockOperationItemForm },
-  props: {
-    stockOperationId: { type: String, required: true },
-    stockOperationItemId: String,
-    barcode: String,
-    operationName: { type: String, required: true },
-    model: Object,
-    positionsModel: Object,
-  },
-  computed: {
-    stockOperation() {
-      return this.model.reactiveGet(this.stockOperationId);
-    },
-    modelOrigin() {
-      const { stockOperationItemId: id, stockOperationId, barcode = null } = this;
-      const { vatRate } = this.vatOperationConfig;
-      return id ? this.positionsModel.reactiveGet(id)
-        : stockOperationItemInstance(this.operationName, {
-          stockOperationId,
-          barcode,
-          articleId: null,
-          vatRate,
-        });
-    },
-    editable() {
-      const { processing } = this.stockOperation || {};
-      return workflow.step(processing).editable;
-    },
-  },
-  methods: {
-    saveFn(props) {
-      return this.positionsModel.createOne(props);
-    },
-    destroyFn(id) {
-      return this.positionsModel.destroy(id);
-    },
-  },
-};
+const props = defineProps({
+  ...drawerEditingProps,
+  stockOperationId: { type: String, required: true },
+  stockOperationItemId: String,
+  barcode: String,
+  operationName: { type: String, required: true },
+  model: ReactiveModel,
+  positionsModel: ReactiveModel,
+});
+
+const form = ref(null);
+const { destroyFn, saveFn } = useDrawerEditing(props.positionsModel);
+const { vatOperationConfig } = useVatConfig(props.operationName);
+const stockOperation = computed(() => props.model.reactiveGet(props.stockOperationId) as StockOperation);
+
+const modelOrigin = computed(() => {
+  const { stockOperationItemId: id, stockOperationId, barcode = null } = props;
+  const { vatRate } = vatOperationConfig.value;
+  return id
+    ? props.positionsModel.reactiveGet(id)
+    : stockOperationItemInstance(props.operationName, {
+      stockOperationId,
+      barcode,
+      articleId: null,
+      vatRate,
+    });
+});
+
+const editable = computed(() => {
+  return workflow.step(stockOperation.value?.processing).editable;
+});
 
 </script>
-<style scoped lang="scss">
-</style>
