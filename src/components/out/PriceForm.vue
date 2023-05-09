@@ -15,36 +15,32 @@
     )
 
 </template>
-<script>
+<script setup lang="ts">
 
 import round from 'lodash/round';
+import { computed, watch } from 'vue';
+import { $percent } from '@/lib/validations.js';
 
-export default {
-  name: 'PriceForm',
-  props: {
-    model: Object,
-    vatPrices: Boolean,
-  },
-  methods: {
-    setPrices(price) {
-      const { vatPrices, model: { vatRate } } = this;
-      const otherField = vatPrices ? 'price' : 'vatPrice';
-      const fn = vatPrices ? v => v / (1.0 + vatRate) : v => v * (1.0 + vatRate);
-      // eslint-disable-next-line vue/no-mutating-props
-      this.model[otherField] = round(fn(price), 2);
-    },
-  },
-  computed: {
-    editablePrice() {
-      return this.vatPrices ? this.model.vatPrice : this.model.price;
-    },
-  },
-  watch: {
-    editablePrice(price) {
-      this.setPrices(price);
-    },
-  },
-};
+const props = defineProps<{
+  model: object;
+  vatPrices: boolean;
+}>();
+
+const editablePrice = computed(() => {
+  return props.vatPrices ? props.model.vatPrice : props.model.price;
+});
+
+watch(editablePrice, price => {
+  setPrices(price);
+});
+
+function setPrices(price) {
+  const { vatPrices, model: { vatRate } } = props;
+  const otherField = vatPrices ? 'price' : 'vatPrice';
+  const fn = vatPrices ? v => v / (1.0 + vatRate) : v => v * (1.0 + vatRate);
+  // eslint-disable-next-line vue/no-mutating-props
+  props.model[otherField] = round(fn(price), 2);
+}
 
 </script>
 <style scoped lang="scss">
