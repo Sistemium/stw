@@ -3,16 +3,10 @@
   h1 {{ msg }}
 
 </template>
-<script>
+<script setup lang="ts">
 
-export default {
-  name: 'HelloWorld',
-  props: {
-    msg: String,
-  },
-};
+defineProps<{
+  msg?: string;
+}>();
 
 </script>
-<style scoped lang="scss">
-
-</style>
