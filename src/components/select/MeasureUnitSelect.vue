@@ -1,34 +1,30 @@
 <template lang="pug">
 
 el-select.measure-unit-select(
-  :value="value"
-  @input="unitId => $emit('input', unitId)"
+  :model-value="modelValue"
+  @update:model-value="unitId => emit('update:modelValue', unitId)"
 )
   el-option(
-    v-for="unit in measureUnits"
+    v-for="unit in units"
     :key="unit.id"
     :value="unit.id"
     :label="unit.name"
   )
 
 </template>
-<script>
-import { measureUnits } from '@/models/Measure';
+<script setup lang="ts">
+import { computed } from 'vue';
+import { measureUnits } from '@/models/Measure.js';
 
-export default {
-  name: 'MeasureUnitSelect',
-  props: {
-    value: String,
-    measureId: { type: String, required: true },
-  },
-  computed: {
-    measureUnits() {
-      return measureUnits(this.measureId);
-    },
-  },
-};
+const props = defineProps<{
+  modelValue?: string;
+  measureId: string;
+}>();
+
+const emit = defineEmits<{
+  (e: 'update:modelValue', value: string);
+}>();
+
+const units = computed(() => measureUnits(props.measureId));
 
 </script>
-<style scoped lang="scss">
-
-</style>
