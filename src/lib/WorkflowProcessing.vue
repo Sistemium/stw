@@ -3,14 +3,11 @@
 .processing() {{ $t(`workflow.${ processing || 'progress' }`) }}
 
 </template>
-<script>
+<script setup lang="ts">
 
-export default {
-  name: 'WorkflowProcessing',
-  props: {
-    processing: String,
-  },
-};
+defineProps<{
+  processing?: string;
+}>();
 
 </script>
 <style scoped lang="scss">
