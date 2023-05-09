@@ -7,18 +7,32 @@ el-form.stock-operation-form(
   :disabled="disabled"
 )
 
-  el-form-item(:label="$t('fields.date')" prop="date")
+  el-form-item(
+    :label="$t('fields.date')"
+    prop="date"
+  )
     date-string-picker(v-model="model.date")
 
-  el-form-item(:label="$t('fields.storage')" prop="storageId")
+  el-form-item(
+    :label="$t('fields.storage')"
+    prop="storageId"
+  )
     el-select(v-model="model.storageId")
       el-option(
-        v-for="{ id, name } in storages" :key="id"
-        :label="name" :value="id"
+        v-for="{ id, name } in storages"
+        :key="id"
+        :label="name"
+        :value="id"
       )
 
-  el-form-item(:label="$t(counterpartyLabel.type)" prop="counterpartyType")
-    counterparty-type-switch(v-model="model.counterpartyType" @change="model.counterpartyId = null")
+  el-form-item(
+    :label="$t(counterpartyLabel.type)"
+    prop="counterpartyType"
+  )
+    counterparty-type-switch(
+      v-model="model.counterpartyType"
+      @change="model.counterpartyId = null"
+    )
 
   el-form-item(
     v-if="model.counterpartyType"
@@ -26,29 +40,43 @@ el-form.stock-operation-form(
     prop="counterparty"
   )
     button-prepend(@button-click="addCounterparty")
-      counterparty-select(:type="model.counterpartyType" v-model="model.counterpartyId")
+      counterparty-select(
+        v-model="model.counterpartyId"
+        :type="model.counterpartyType"
+      )
 
-  el-form-item(:label="$t('fields.processing')" prop="processing")
-    workflow-button(:workflow="workflow" v-model="model.processing")
+  el-form-item(
+    :label="$t('fields.processing')"
+    prop="processing"
+  )
+    workflow-button(
+      :workflow="workflow"
+      v-model="model.processing"
+    )
 
   el-form-item(
     :label="$t('fields.commentText')"
     prop="commentText"
     v-if="!disabled || model.commentText"
   )
-    el-input(v-model="model.commentText" type="textarea" :autosize="{ minRows: 2 }")
+    el-input(
+      v-model="model.commentText"
+      type="textarea"
+      :autosize="{ minRows: 2 }"
+    )
 
   component(
+    v-if="showDrawer && counterpartyEditComponent"
     :is="counterpartyEditComponent"
-    v-if="showDrawer"
+    :drawer-style="{ top: '50px' }"
     @saved="counterpartySaved"
     @closed="counterpartyEditClosed"
-    :drawer-style="{ top: '50px' }"
   )
 
 </template>
-<script>
+<script setup lang="ts">
 /* eslint-disable vue/no-mutating-props */
+import { computed, ref } from 'vue';
 import WorkflowButton from '@/lib/WorkflowButton.vue';
 import Storage from '@/models/Storage';
 import { workflow } from '@/models/StockWithdrawing';
@@ -58,69 +86,50 @@ import CounterpartyTypeSwitch from '@/components/CounterpartyTypeSwitch.vue';
 import CounterpartySelect from '@/components/CounterpartySelect.vue';
 import LegalEntityEdit from '@/components/contacts/LegalEntityEdit.vue';
 import StorageEdit from '@/components/stock/StorageEdit.vue';
+import { $requiredRule } from '@/lib/validations.js';
+import type { StockOperation } from '@/models/StockOperations';
 
-export default {
-  name: 'StockOperationForm',
-  components: {
-    LegalEntityEdit,
-    ButtonPrepend,
-    CounterpartySelect,
-    CounterpartyTypeSwitch,
-    DateStringPicker,
-    WorkflowButton,
-    StorageEdit,
-  },
-  props: {
-    model: Object,
-    disabled: Boolean,
-    counterpartyRole: String,
-  },
-  data() {
-    return {
-      showDrawer: false,
-    };
-  },
-  computed: {
-    counterpartyLabel() {
-      const { counterpartyRole } = this;
-      return {
-        type: `fields.${counterpartyRole}Type`,
-        choice: `fields.${counterpartyRole}`,
-      };
-    },
-    rules() {
-      return {
-        ...this.$requiredRule(['date', 'storageId']),
-      };
-    },
-    storages() {
-      return Storage.reactiveFilter();
-    },
-    workflow() {
-      return workflow;
-    },
-    counterpartyEditComponent() {
-      const { counterpartyType } = this.model;
-      return counterpartyType ? `${counterpartyType}Edit` : 'div';
-    },
-  },
-  methods: {
-    addCounterparty() {
-      this.showDrawer = true;
-    },
-    counterpartySaved(counterparty) {
-      if (counterparty) {
-        setTimeout(() => {
-          this.model.counterpartyId = counterparty.id;
-        }, 0);
-      }
-    },
-    counterpartyEditClosed() {
-      this.showDrawer = false;
-    },
-  },
-};
+const props = defineProps<{
+  model: StockOperation;
+  disabled: boolean;
+  counterpartyRole: string;
+}>();
+
+const showDrawer = ref(false);
+
+const counterpartyLabel = computed(() => {
+  const { counterpartyRole } = props;
+  return {
+    type: `fields.${counterpartyRole}Type`,
+    choice: `fields.${counterpartyRole}`,
+  };
+});
+
+const rules = $requiredRule(['date', 'storageId']);
+
+const storages = computed(() => Storage.reactiveFilter());
+
+const cpMap = new Map([
+  ['Storage', StorageEdit],
+  ['LegalEntity', LegalEntityEdit],
+]);
+
+const counterpartyEditComponent = computed(() => cpMap.get(props.model.counterpartyType));
+
+function addCounterparty() {
+  showDrawer.value = true;
+}
+
+function counterpartySaved(counterparty) {
+  if (counterparty) {
+    setTimeout(() => {
+      props.model.counterpartyId = counterparty.id;
+    }, 0);
+  }
+}
+
+function counterpartyEditClosed() {
+  showDrawer.value = false;
+}
 
 </script>
-<style scoped lang="scss">
-</style>
