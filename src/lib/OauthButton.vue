@@ -12,47 +12,37 @@
       span {{ label }}
 
 </template>
-<script>
+<script setup lang="ts">
 
 import toLower from 'lodash/toLower';
+import { computed } from 'vue';
 
 const { VITE_OAUTH_URL, VITE_OAUTH_REDIRECT_URI, VITE_OAUTH_ORG_APP } = import.meta.env;
 
-export default {
-  name: 'OauthButton',
-  props: {
-    disabled: Boolean,
-    from: String,
-    label: String,
-    image: String,
-    buttonType: {
-      type: String,
-      default: 'primary',
-    },
-    code: String,
-  },
-  computed: {
-    src() {
-      return `${this.image}.png`;
-    },
-    href() {
-      const url = this.code || toLower(this.label);
-      const redirect = [
-        `redirect_uri=${encodeURIComponent(VITE_OAUTH_REDIRECT_URI)}`,
-        this.from && `?from=${this.from}`,
-      ]
-        .filter(x => x)
-        .join('');
-      return `${VITE_OAUTH_URL}/auth/${url}/vfs`
-        + `?${redirect}&orgAppId=${VITE_OAUTH_ORG_APP}`;
-    },
-  },
-  methods: {
-    onClick() {
-      window.location.href = this.href;
-    },
-  },
-};
+const props = withDefaults(defineProps<{
+  disabled: boolean;
+  from: string;
+  label: string;
+  image: string;
+  buttonType: string;
+  code: string;
+}>(), { buttonType: 'primary' });
+
+const src = computed(() => `${props.image}.png`);
+const href = computed(() => {
+  const url = props.code || toLower(props.label);
+  const redirect = [
+    `redirect_uri=${encodeURIComponent(VITE_OAUTH_REDIRECT_URI)}`,
+    props.from && `?from=${props.from}`,
+  ]
+    .filter(x => x)
+    .join('');
+  return `${VITE_OAUTH_URL}/auth/${url}/vfs?${redirect}&orgAppId=${VITE_OAUTH_ORG_APP}`;
+});
+
+function onClick() {
+  window.location.href = href.value;
+}
 
 </script>
 <style scoped lang="scss">
