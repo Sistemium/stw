@@ -13,48 +13,30 @@ drawer-edit.legal-entity-edit(
     legal-entity-form(:model="model")
 
 </template>
-<script>
-import drawerEditMixin from '@/lib/drawerEditMixin';
-import LegalEntity from '@/models/LegalEntity';
+<script setup lang="ts">
+import { computed } from 'vue';
+import { drawerEditingProps, useDrawerEditing } from '@/services/drawerEditing';
+import LegalEntity from '@/models/LegalEntity.js';
 import LegalEntityForm from '@/components/contacts/LegalEntityForm.vue';
+import DrawerEdit from '@/lib/DrawerEdit.vue';
 
-export default {
-  name: 'LegalEntityEdit',
-  components: { LegalEntityForm },
-  mixins: [drawerEditMixin],
-  props: {
-    legalEntityId: String,
-  },
-  computed: {
-    stockWithdrawing() {
-      return LegalEntity.reactiveGet(this.legalEntityId);
-    },
-    modelOrigin() {
-      const { legalEntityId } = this;
-      return legalEntityId ? LegalEntity.reactiveGet(legalEntityId)
-        : {
-          name: null,
-          code: null,
-          vatCode: null,
-          address: null,
-        };
-    },
-    editable() {
-      const { processing } = this.stockWithdrawing || {};
-      return processing === 'progress';
-    },
-  },
-  methods: {
-    saveFn(props) {
-      return LegalEntity.createOne(props);
-    },
-    destroyFn(id) {
-      return LegalEntity.destroy(id);
-    },
-  },
-};
+const props = defineProps({
+  ...drawerEditingProps,
+  legalEntityId: String,
+});
+
+const modelOrigin = computed(() => {
+  const { legalEntityId } = props;
+  return legalEntityId
+    ? LegalEntity.reactiveGet(legalEntityId)
+    : {
+      name: null,
+      code: null,
+      vatCode: null,
+      address: null,
+    };
+});
+
+const { destroyFn, saveFn } = useDrawerEditing(LegalEntity);
 
 </script>
-<style scoped lang="scss">
-
-</style>
