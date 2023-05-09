@@ -227,7 +227,7 @@ export default {
 };
 
 </script>
-<style scoped lang="scss">
+<style lang="scss">
 
 @import "../styles/variables";
 
@@ -235,7 +235,11 @@ export default {
   //padding: $margin-right;
 }
 
-.el-card {
+.el-drawer.drawer-edit {
+  height: unset;
+}
+
+.el-card.drawer-edit {
   @include responsive-only(xxs) {
     border: none;
     :deep(.el-card__body), .container {
