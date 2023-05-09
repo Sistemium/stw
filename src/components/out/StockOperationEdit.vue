@@ -30,8 +30,8 @@ import type { StockOperation } from '@/models/StockOperations';
 
 const props = withDefaults(defineProps<{
   stockOperationId?: string;
-  from: object;
-  editRoute: string;
+  from?: object;
+  editRoute?: string;
   isDrawer?: boolean;
   model: ReactiveModel;
   operationName: string;
