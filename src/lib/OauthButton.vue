@@ -21,7 +21,7 @@ const { VITE_OAUTH_URL, VITE_OAUTH_REDIRECT_URI, VITE_OAUTH_ORG_APP } = import.m
 
 const props = withDefaults(defineProps<{
   disabled: boolean;
-  from: string;
+  from?: string;
   label: string;
   image: string;
   buttonType: string;
