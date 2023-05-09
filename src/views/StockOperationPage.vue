@@ -12,7 +12,11 @@
           :disabled="isBusy"
           @update:model-value="onProcessing"
         )
-        tool-button(tool="add" @click="onAddItem" :disabled="disabled")
+        tool-button(
+          tool="add"
+          @click="onAddItem"
+          :disabled="disabled"
+        )
       resize(:padding="20")
         stock-operation-item-list(
           :items="stockOperationItems"
@@ -86,7 +90,7 @@ const stockOperation = computed(() => {
   return props.model.reactiveGet(props.stockOperationId) || {};
 });
 
-const disabled = useOperationDisabled(stockOperation, workflow);
+const { disabled } = useOperationDisabled(stockOperation, workflow);
 
 function onAddItem() {
   router.push({
