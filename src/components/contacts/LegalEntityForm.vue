@@ -20,22 +20,17 @@ el-form.legal-entity-form(
     el-input(v-model="model.address")
 
 </template>
-<script>
+<script setup lang="ts">
 
-export default {
-  name: 'LegalEntityForm',
-  props: {
-    model: Object,
-    disabled: Boolean,
-  },
-  computed: {
-    rules() {
-      return this.$requiredRule(['name']);
-    },
-  },
-};
+import { computed } from 'vue';
+import { $requiredRule } from '@/lib/validations.js';
+import type { LegalEntity } from '@/models/LegalEntities';
+
+defineProps<{
+  model: LegalEntity;
+  disabled?: boolean;
+}>();
+
+const rules = computed(() => $requiredRule(['name']));
 
 </script>
-<style scoped lang="scss">
-
-</style>
