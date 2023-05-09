@@ -5,26 +5,19 @@
   .code {{ article.code }}
 
 </template>
-<script>
-import Article from '@/models/Article';
+<script setup lang="ts">
+import { computed } from 'vue';
+import Article from '@/models/Article.js';
 
-export default {
-  name: 'ArticleView',
-  props: {
-    articleId: {
-      type: String,
-    },
-  },
-  computed: {
-    article() {
-      return Article.reactiveGet(this.articleId);
-    },
-  },
-};
+const props = defineProps<{
+  articleId: string;
+}>();
+
+const article = computed(() => Article.reactiveGet(props.articleId));
 
 </script>
 <style scoped lang="scss">
-@import "../../styles/variables";
+@import "@/styles/variables";
 
 .code {
   font-size: smaller;
