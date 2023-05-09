@@ -24,70 +24,60 @@
       el-button(type="warning" @click="logout") {{ $t('actions.logout') }}
 
 </template>
-<script>
+<script setup lang="ts">
 
-import { createNamespacedHelpers } from 'vuex';
-import * as g from 'sistemium-vue/store/auth/getters';
-import * as a from 'sistemium-vue/store/auth/actions';
+import { computed, watch } from 'vue';
+import { useStore } from 'vuex';
+import { useRoute, useRouter } from 'vue-router';
+import * as g from 'sistemium-vue/store/auth/getters.js';
+import * as a from 'sistemium-vue/store/auth/actions.js';
 import PageTitle from '@/components/PageTitle.vue';
 import OauthButton from '@/lib/OauthButton.vue';
 import HelloWorld from '@/components/HelloWorld.vue';
 
-const {
-  mapActions,
-  mapGetters,
-} = createNamespacedHelpers('auth');
+const store = useStore();
+const route = useRoute();
+const router = useRouter();
 
-export default {
-  name: 'AuthPage',
-  components: { OauthButton, PageTitle, HelloWorld },
-  computed: {
-    from() {
-      return this.$route.query.from;
-    },
-    accessToken() {
-      return this.$route.query['access-token'];
-    },
-    ...mapGetters({
-      isAuthorized: g.IS_AUTHORIZED,
-      isAuthorizing: g.IS_AUTHORIZING,
-      account: g.ACCOUNT,
-    }),
-  },
-  methods: {
-    ...mapActions({
-      login: a.AUTH_INIT,
-      logout: a.LOGOFF,
-    }),
-    onAuth() {
-      const { from, accessToken } = this;
-      if (from || accessToken) {
-        const to = this.from || '/';
-        this.$router.push(to);
-      }
-    },
-  },
-  watch: {
-    isAuthorized(yes) {
-      this.$debug('isAuthorized', yes);
-      if (yes) {
-        this.onAuth();
-      }
-    },
-  },
-  async created() {
-    this.$debug('created', this.from, this.isAuthorizing, this.isAuthorized);
-    if (this.isAuthorized) {
-      this.onAuth();
-    }
-    if (!this.accessToken) {
-      return;
-    }
-    await this.login(this.accessToken);
-  },
-};
+const from = computed(() => route.query.from as string);
+const accessToken = computed(() => route.query['access-token']);
+const isAuthorized = computed(() => store.getters[`auth/${g.IS_AUTHORIZED}`]);
+const isAuthorizing = computed(() => store.getters[`auth/${g.IS_AUTHORIZING}`]);
+const account = computed(() => store.getters[`auth/${g.ACCOUNT}`]);
+
+function login (token) {
+  return store.dispatch(`auth/${a.AUTH_INIT}`, token);
+}
+
+function logout () {
+  return store.dispatch(a.LOGOFF);
+}
+
+function onAuth() {
+  if (from.value || accessToken.value) {
+    const to = from.value || '/';
+    router.push(to);
+  }
+}
+
+watch(isAuthorized, yes => {
+  // debug('isAuthorized', yes);
+  if (yes) {
+    onAuth();
+  }
+});
+
+created();
+
+async function created() {
+  // debug('created', this.from, this.isAuthorizing, this.isAuthorized);
+  if (isAuthorized.value) {
+    onAuth();
+  }
+  if (!accessToken.value) {
+    return;
+  }
+  await login(accessToken.value);
+}
 
 </script>
-<style scoped lang="scss">
-
-</style>
