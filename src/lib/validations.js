@@ -18,9 +18,6 @@ export default {
   },
 
   methods: {
-    $percent(value) {
-      return `${i18n.global.n(value * 100.0)}%`;
-    },
     $cloneInstance: cloneInstance,
     $trim: trim,
     $map: map,
@@ -93,4 +90,8 @@ export async function saveWithLoading(asyncFunction) {
   }
   loading.close();
   return result;
+}
+
+export function $percent(value) {
+  return `${i18n.global.n(value * 100.0)}%`;
 }
