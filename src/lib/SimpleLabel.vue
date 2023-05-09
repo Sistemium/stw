@@ -3,14 +3,11 @@
 .simple-label {{ $t(text) }}
 
 </template>
-<script>
+<script setup lang="ts">
 
-export default {
-  name: 'SimpleLabel',
-  props: {
-    text: String,
-  },
-};
+defineProps<{
+  text: string;
+}>();
 
 </script>
 <style scoped lang="scss">
