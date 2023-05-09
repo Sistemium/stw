@@ -7,7 +7,7 @@ import debug from '@/lib/debug';
 
 // eslint-disable-next-line func-names
 export default function (app) {
-  app.component(SimpleLabel.name, SimpleLabel);
+  app.component('SimpleLabel', SimpleLabel);
   app.component(Resize.name, Resize);
   app.directive('selectOnFocus', SelectOnFocus);
   app.mixin(validations);
