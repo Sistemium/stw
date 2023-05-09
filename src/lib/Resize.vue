@@ -61,7 +61,7 @@ export default {
 <style scoped lang="scss">
 
 .stm-resize {
-  overflow-y: scroll;
+  overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   @media print {
     max-height: none !important;
