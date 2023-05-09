@@ -26,11 +26,12 @@ export interface CounterParty extends ApiModel {
   name: string;
 }
 
+export type CounterpartyType = 'Storage' | 'LegalEntity' | 'Person' | null;
 export interface StockOperation {
   date: string | Date;
   storageId?: string;
   partnerId?: string;
-  counterpartyType?: 'Storage' | 'LegalEntity' | 'Person' | null;
+  counterpartyType?: CounterpartyType;
   counterpartyId?: string;
   processing: string;
   commentText?: string;
