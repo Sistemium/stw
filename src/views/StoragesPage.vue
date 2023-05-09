@@ -61,3 +61,6 @@ function onAdd() {
 }
 
 </script>
+<style scoped lang="scss">
+@import "../styles/page";
+</style>
