@@ -1,14 +1,14 @@
 <template lang="pug">
 
 el-select.article-select(
-  filterable
   v-model="currentId"
-  :filter-method="filterSearch"
-  :debounce="300"
   v-cancel-read-only
   :clearable="true"
-  :placeholder="placeholder"
-  @change="changes => $emit('change', changes)"
+  :debounce="300"
+  filterable
+  :filter-method="filterSearch"
+  :placeholder="placeholderValue"
+  @change="changes => emit('update:modelValue', changes)"
 )
   el-option(
     v-for="article in options"
@@ -22,77 +22,69 @@ el-select.article-select(
     slot(name="empty")
 
 </template>
-<script>
+<script setup lang="ts">
 
 import Article from '@/models/Article';
 import { searchArticle } from '@/services/catalogue';
-import i18n from '@/i18n';
+import i18n from '@/i18n.js';
 import upperFirst from 'lodash/upperFirst';
+import { computed, ref, watch } from 'vue';
+import orderBy from 'lodash/orderBy';
 
-export default {
-  name: 'ArticleSelect',
-  props: {
-    value: String,
-    filters: {
-      type: [Object, Function],
-      default() {
-        return {};
-      },
-    },
-    placeholder: {
-      type: String,
-      default() {
-        const string = i18n.global.t('actions.select', [i18n.global.t('accusative.article')]);
-        return upperFirst(string.toString());
-      },
+
+const props = defineProps({
+  modelValue: String,
+  filters: {
+    type: [Object, Function],
+    default() {
+      return {};
     },
   },
-  data() {
-    return {
-      search: '',
-    };
+  placeholder: String,
+});
+
+const emit = defineEmits<{
+  (e: 'update:modelValue', value: string | null);
+}>();
+
+const placeholderValue = computed(() => {
+  const string = i18n.global.t('actions.select', [i18n.global.t('accusative.article')]);
+  return props.placeholder || upperFirst(string.toString());
+});
+
+const search = ref('');
+const hasBarcodeFilter = computed(() => props.filters?.name === 'barcodeFilter');
+const options = computed(() => {
+  const filtered = Article.reactiveFilter(props.filters);
+  const res = hasBarcodeFilter.value ? filtered : filtered.filter(searchArticle(search.value));
+  return orderBy(res, ['name']);
+});
+
+const currentId = computed({
+  get() {
+    return props.modelValue;
   },
-  computed: {
-    hasBarcodeFilter() {
-      return this.$get(this.filters, 'name') === 'barcodeFilter';
-    },
-    options() {
-      const filtered = Article.reactiveFilter(this.filters);
-      const res = this.hasBarcodeFilter ? filtered : filtered.filter(searchArticle(this.search));
-      return this.$orderBy(res, ['name']);
-    },
-    currentId: {
-      get() {
-        return this.value;
-      },
-      set(id) {
-        this.$emit('input', id);
-      },
-    },
+  set(id) {
+    emit('update:modelValue', id);
   },
-  methods: {
-    filterSearch(search) {
-      this.search = search;
-    },
-  },
-  watch: {
-    options: {
-      immediate: true,
-      handler(options) {
-        if (!this.hasBarcodeFilter) {
-          return;
-        }
-        if (options.length === 1) {
-          this.currentId = options[0].id;
-          return;
-        }
-        if (this.currentId && !options.find(({ id }) => id === this.currentId)) {
-          this.currentId = null;
-        }
-      },
-    },
-  },
-};
+});
+
+function filterSearch(str: string) {
+  search.value = str;
+}
+
+watch(options, optionsValue => {
+  if (!hasBarcodeFilter.value) {
+    return;
+  }
+  if (optionsValue.length === 1) {
+    currentId.value = optionsValue[0].id;
+    return;
+  }
+  if (currentId.value && !optionsValue.find(({ id }) => id === currentId.value)) {
+    currentId.value = null;
+  }
+}, { immediate: true });
 
 </script>
 <style scoped lang="scss">
