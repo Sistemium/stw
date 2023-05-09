@@ -10,43 +10,27 @@
     el-input-number(v-model="model.units" :min="0")
 
 </template>
-<script>
+<script setup lang="ts">
 
-import * as Measure from '@/models/Measure';
+import { computed, watch } from 'vue';
 import ArticleSelect from '@/components/catalogue/ArticleSelect.vue';
-import Article from '@/models/Article';
+import * as Measure from '@/models/Measure.js';
+import ArticleModel  from '@/models/Article.js';
+import type { MaterialFields } from '@/models/Recipes';
 /* eslint-disable vue/no-mutating-props */
 
-export default {
-  name: 'RecipeMaterialForm',
-  components: { ArticleSelect },
-  props: {
-    model: { type: Object, required: true },
-  },
-  computed: {
-    article() {
-      const { articleId } = this.model;
-      return Article.reactiveGet(articleId);
-    },
-    measureUnitId() {
-      const { measureUnitId } = this.article || {};
-      return measureUnitId || Measure.DEFAULT_MEASURE_UNIT_ID;
-    },
-    measureId() {
-      const { measureId } = this.article || {};
-      return measureId || Measure.DEFAULT_MEASURE_ID;
-    },
-  },
-  methods: {
-    onArticle() {
-      this.model.measureUnitId = this.measureUnitId;
-      this.model.measureId = this.measureId;
-    },
-  },
-  created() {
-    this.$watch('article', this.onArticle);
-  },
-};
+const props = defineProps<{
+  model: MaterialFields;
+}>();
+
+const article = computed(() => ArticleModel.reactiveGet(props.model?.articleId));
+const measureUnitId = computed(() => article.value?.measureUnitId || Measure.DEFAULT_MEASURE_UNIT_ID);
+const measureId = computed(() => article.value?.measureId || Measure.DEFAULT_MEASURE_ID);
+
+watch(article, () => {
+  props.model.measureUnitId = measureUnitId.value;
+  props.model.measureId = measureId.value;
+});
 
 </script>
 <style scoped lang="scss">
