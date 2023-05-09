@@ -1,9 +1,9 @@
 <template lang="pug">
 
 el-select.measure-select(
-  @change="data => $emit('change', data)"
-  :value="value"
-  @input="id => $emit('input', id)"
+  :model-value="modelValue"
+  @change="data => emit('change', data)"
+  @update:model-value="id => emit('update:model-value', id)"
 )
   el-option(
     v-for="{id} in measures"
@@ -13,21 +13,20 @@ el-select.measure-select(
   )
 
 </template>
-<script>
+<script setup lang="ts">
 
-import { measures } from '@/models/Measure';
+import { computed } from 'vue';
+import { measures as measuresFn } from '@/models/Measure.js';
 
-export default {
-  name: 'MeasureSelect',
-  computed: {
-    measures,
-  },
-  props: {
-    value: String,
-  },
-};
+defineProps<{
+  modelValue?: string;
+}>();
+
+const emit = defineEmits<{
+  (e: 'update:model-value', value: string);
+  (e: 'change', value: string);
+}>();
+
+const measures = computed(measuresFn);
 
 </script>
-<style scoped lang="scss">
-
-</style>
