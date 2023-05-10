@@ -11,7 +11,10 @@ drawer-edit.article-property-edit(
   template(#default="{ model }")
     el-tabs(v-model="currentTab")
       el-tab-pane(:label="t('form')")
-        article-property-form(ref="form" :model="model")
+        article-property-form(
+          ref="form"
+          :model="model"
+        )
       el-tab-pane(
         :label="t('options')"
         v-if="articlePropId && model.type === 'options'"
@@ -56,6 +59,7 @@ const props = defineProps({
 
 const currentOptionId = ref(null);
 const currentTab = ref('0');
+const form = ref(null);
 
 const modelOrigin = computed(() => {
   const { articlePropId } = props;

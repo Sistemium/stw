@@ -43,6 +43,7 @@ el-form.article-property-form(
 import { VALUE_TYPES } from '@/models/ArticleProp';
 import { computed } from 'vue';
 import { $requiredRule } from '@/lib/validations';
+import { useFormValidate } from '@/services/validating';
 
 defineProps({
   model: {
@@ -50,6 +51,10 @@ defineProps({
     required: true,
   },
 });
+
+const { form, validate } = useFormValidate();
+
+defineExpose({ validate });
 
 const types = computed(() => Object.keys(VALUE_TYPES));
 
