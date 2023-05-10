@@ -23,14 +23,18 @@ el-form.storage-form(
 </template>
 <script setup>
 
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 import { $requiredRule } from '@/lib/validations';
+import { useFormValidate } from '@/services/validating';
 
 defineProps({
   model: Object,
 });
 
-const form = ref(null);
+const { form, validate } = useFormValidate();
+
+defineExpose({ validate });
+
 const rules = computed(() => $requiredRule('name'));
 
 </script>

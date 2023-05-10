@@ -25,11 +25,16 @@ el-form.legal-entity-form(
 import { computed } from 'vue';
 import { $requiredRule } from '@/lib/validations.js';
 import type { LegalEntity } from '@/models/LegalEntities';
+import { useFormValidate } from '@/services/validating';
 
 defineProps<{
   model: LegalEntity;
   disabled?: boolean;
 }>();
+
+const { form, validate } = useFormValidate();
+
+defineExpose({ validate });
 
 const rules = computed(() => $requiredRule(['name']));
 

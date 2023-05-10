@@ -10,11 +10,14 @@ drawer-edit.legal-entity-edit(
   :is-drawer="isDrawer"
 )
   template(#default="{ model }")
-    legal-entity-form(:model="model")
+    legal-entity-form(
+      ref="form"
+      :model="model"
+    )
 
 </template>
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { drawerEditingProps, useDrawerEditing } from '@/services/drawerEditing';
 import LegalEntity from '@/models/LegalEntity.js';
 import LegalEntityForm from '@/components/contacts/LegalEntityForm.vue';
@@ -37,6 +40,7 @@ const modelOrigin = computed(() => {
     };
 });
 
+const form = ref(null);
 const { destroyFn, saveFn } = useDrawerEditing(LegalEntity);
 
 </script>
