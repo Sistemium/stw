@@ -88,12 +88,17 @@ import LegalEntityEdit from '@/components/contacts/LegalEntityEdit.vue';
 import StorageEdit from '@/components/stock/StorageEdit.vue';
 import { $requiredRule } from '@/lib/validations.js';
 import type { StockOperation } from '@/models/StockOperations';
+import { useFormValidate } from '@/services/validating';
 
 const props = defineProps<{
   model: StockOperation;
   disabled: boolean;
   counterpartyRole: string;
 }>();
+
+const { form, validate } = useFormValidate();
+
+defineExpose({ validate });
 
 const showDrawer = ref(false);
 

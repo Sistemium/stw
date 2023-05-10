@@ -143,6 +143,7 @@ import { addBarcodeToArticle, articlePackages } from '@/services/catalogue.js';
 import * as Measure from '@/models/Measure.js';
 import Article from '@/models/Article.js';
 import type { StockOperationItem } from '@/models/StockOperations';
+import { useFormValidate } from '@/services/validating';
 // import formsMixin from '@/lib/formsMixin.js';
 
 const DEFAULT_MODE = 'units';
@@ -151,6 +152,10 @@ const props = defineProps<{
   model: StockOperationItem;
   editable: boolean;
 }>();
+
+const { form, validate } = useFormValidate();
+
+defineExpose({ validate });
 
 const showDrawer = ref(false);
 const spareUnits = ref(0);

@@ -5,7 +5,7 @@ el-tabs.stock-operation-item-form(:class="tabClass")
     stock-taking-item-form(
       :model="model"
       :editable="editable"
-      ref="itemForm"
+      ref="form"
     )
       template(#article-extra)
         vat-mode-switch(v-model="formVatPrices" v-if="editable")
@@ -25,6 +25,7 @@ import PriceForm from '@/components/out/PriceForm.vue';
 import Article from '@/models/Article.js';
 import VatModeSwitch from '@/components/out/VatModeSwitch.vue';
 import type { StockOperationItem } from '@/models/StockOperations';
+import { useFormValidate } from '@/services/validating';
 
 const props = defineProps<{
   editable: boolean;
@@ -32,10 +33,11 @@ const props = defineProps<{
   vatPrices: boolean;
 }>();
 
+const { form, validate } = useFormValidate();
+
 defineExpose({ validate });
 
 const formVatPrices = ref(props.vatPrices);
-const itemForm = ref(null);
 
 const article = computed(() => Article.reactiveGet(props.model.articleId));
 const articleMaterials = computed(() => {
@@ -48,16 +50,6 @@ watch(() => props.model.articleId, () => {
   // eslint-disable-next-line vue/no-mutating-props
   props.model.materials = cloneDeep(articleMaterials.value);
 });
-
-function validate(cb) {
-  const { form } = itemForm.value.$refs;
-  // $debug('validate:', form, itemForm);
-  if (!form) {
-    cb(false);
-    return;
-  }
-  form.validate(cb);
-}
 
 </script>
 <style scoped lang="scss">
