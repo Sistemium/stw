@@ -29,11 +29,16 @@ import WorkflowButton from '@/lib/WorkflowButton.vue';
 import { workflow } from '@/models/StockTaking';
 import DateStringPicker from '@/lib/DateStringPicker.vue';
 import { $requiredRule } from '@/lib/validations';
+import { useFormValidate } from '@/services/validating';
 
 defineProps({
   model: Object,
   disabled: Boolean,
 });
+
+const { form, validate } = useFormValidate();
+
+defineExpose({ validate });
 
 const rules = $requiredRule(['date', 'storageId']);
 
