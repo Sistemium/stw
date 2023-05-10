@@ -22,10 +22,13 @@ const defaultTime = new Date();
 const date = computed({
   get() {
     const { modelValue: value } = props;
-    return value && isDate(value) ? value : new Date(value || null);
+    if (!value) {
+      return null;
+    }
+    return value && isDate(value) ? value : new Date(value);
   },
   set(value) {
-    emit('update:modelValue', value.toJSON());
+    emit('update:modelValue', value ? value.toJSON() : null);
   },
 });
 
