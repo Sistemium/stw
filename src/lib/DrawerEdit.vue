@@ -1,19 +1,19 @@
 <template lang="pug">
 
 component.drawer-edit.box-card(
+  ref="drawer"
   :is="drawerComponent"
   shadow="never"
   :title="title"
   :model-value="true"
   :append-to-body="true"
   :destroy-on-close="true"
-  ref="drawer"
   :size="size"
-  @close="handleClose"
   :style="drawerStyle"
+  @close="handleClose"
 )
 
-  .resize.container(:padding="60")
+  .container
     slot(:model="model")
 
   form-buttons(
@@ -26,205 +26,193 @@ component.drawer-edit.box-card(
   )
 
 </template>
-<script>
+<script setup lang="ts">
 
-import FormButtons from 'sistemium-vue/components/FormButtons.vue';
-import matchesDeep from 'sistemium-data/src/util/matchesDeep';
+import { computed, getCurrentInstance, nextTick, onMounted, ref, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { ElMessage } from 'element-plus';
 import cloneDeep from 'lodash/cloneDeep';
 import pick from 'lodash/pick';
 import merge from 'lodash/merge';
-import { localizedDeleteError } from '@/services/erroring';
+import FormButtons from 'sistemium-vue/components/FormButtons.vue';
+import matchesDeep from 'sistemium-data/src/util/matchesDeep.js';
+import { localizedDeleteError } from '@/services/erroring.js';
+import i18n from '@/i18n.js';
+// import { useLog } from '@/services/debugging';
+//
+// const { debug } = useLog();
 
-export default {
-  name: 'DrawerEdit',
-  components: { FormButtons },
-  props: {
-    title: String,
-    isDrawer: { type: Boolean, default: true },
-    size: {
-      type: String,
-      default: '370px',
-    },
-    from: Object,
-    forceModified: Boolean,
-    deletable: {
-      type: Boolean,
-      default: false,
-    },
-    modelOrigin: {
-      type: Object,
-      default: null,
-    },
-    saveFn: {
-      type: Function,
-      async default(props) {
-        this.$error('saveFn not implemented', props);
-      },
-    },
-    destroyFn: {
-      type: Function,
-      async default(id) {
-        this.$error('destroyFn not implemented', id);
-      },
-    },
-    drawerStyle: Object,
-    afterCloseTo: Object,
+const props = defineProps({
+  title: String,
+  isDrawer: { type: Boolean, default: true },
+  size: {
+    type: String,
+    default: '370px',
   },
-  data() {
-    return {
-      loadingMessage: null,
-      drawerOpen: false,
-      model: null,
-    };
+  from: Object,
+  forceModified: Boolean,
+  deletable: {
+    type: Boolean,
+    default: false,
   },
-  created() {
-    this.$nextTick(() => {
-      this.drawerOpen = true;
+  modelOrigin: {
+    type: Object,
+    default: null,
+  },
+  saveFn: {
+    type: Function,
+    async default(props) {
+      console.error('saveFn not implemented', props);
+    },
+  },
+  destroyFn: {
+    type: Function,
+    async default(id) {
+      console.error('destroyFn not implemented', id);
+    },
+  },
+  validateFn: {
+    type: Function,
+  },
+  drawerStyle: Object,
+  afterCloseTo: Object,
+});
+
+const emit = defineEmits<{
+  (e: 'deleted', id: string);
+  (e: 'error', error: Error);
+}>();
+
+const drawer = ref(null);
+const loadingMessage = ref(null);
+const drawerOpen = ref(false);
+const model = ref(null);
+const router = useRouter();
+const route = useRoute();
+const $parent = ref(null);
+
+nextTick(() => {
+  drawerOpen.value = true;
+});
+
+const drawerComponent = computed(() => props.isDrawer ? 'el-drawer' : 'el-card');
+
+// const loading = computed(() => !!loadingMessage.value);
+const isDeletable = computed(() => props.deletable && !!props.modelOrigin?.id);
+const changed = computed(()  =>props.forceModified || hasChanges.value);
+const hasChanges = computed(() => {
+  return !props.modelOrigin
+    || !props.modelOrigin.id
+    || !matchesDeep(model.value, props.modelOrigin);
+});
+
+onMounted(() => {
+  $parent.value = getCurrentInstance().parent;
+});
+
+watch(() => props.modelOrigin, modelOrigin => {
+  model.value = cloneDeep(modelOrigin || {});
+}, { immediate: true });
+
+function onDeleteClick() {
+  const { id } = model.value;
+  if (!id) {
+    emit('deleted', null);
+    return;
+  }
+  performOperation(() => props.destroyFn(id)
+    .then(() => {
+      emit('deleted', id);
+    }).catch(e => {
+      throw localizedDeleteError(e);
+    }));
+}
+
+function getValidateForm() {
+  const fn = props.validateFn || $parent.value?.refs?.form?.validate;
+  return fn || (cb => typeof cb === 'function' && cb(true));
+}
+
+function onSaveClick() {
+  getValidateForm()(valid => {
+    if (valid) {
+      performOperation(save);
+    } else {
+      ElMessage.warning(i18n.global.t('validation.formInvalid').toString());
+    }
+  });
+}
+
+function save() {
+  return props.saveFn(model.value)
+    .then(record => {
+      $parent.value.emit('saved', record);
+      return record;
     });
-  },
-  computed: {
-    drawerComponent() {
-      return this.isDrawer ? 'el-drawer' : 'el-card';
-    },
-    loading() {
-      return !!this.loadingMessage;
-    },
-    isDeletable() {
-      return this.deletable && !!(this.modelOrigin && this.modelOrigin.id);
-    },
-    changed() {
-      return this.forceModified || this.hasChanges;
-    },
-    hasChanges() {
-      return !this.modelOrigin
-        || !this.modelOrigin.id
-        || !matchesDeep(this.model, this.modelOrigin);
-    },
-  },
-  methods: {
+}
 
-    cloneDeep,
-    matchesDeep,
+function handleClose(record) {
+  if (!props.from) {
+    drawerOpen.value = false;
+    $parent.value.emit('closed', record);
+    return;
+  }
+  const query = pick(route.query, 'search');
+  if (record && !props.modelOrigin.id) {
+    query.createdId = record.id;
+  }
+  router.replace(merge({ ...(props.afterCloseTo || props.from) }, { query }))
+    .catch(e => console.error('handleClose', e));
+}
 
-    onDeleteClick() {
-      const { id } = this.model;
-      if (!id) {
-        this.$emit('deleted');
-        return;
-      }
-      this.performOperation(() => this.destroyFn(id)
-        .then(() => {
-          this.$emit('deleted', id);
-        }).catch(e => {
-          throw localizedDeleteError(e);
-        }));
-    },
+function cancelClick(record) {
+  if (!drawer.value) {
+    console.error('cancelClick', 'drawer ref is empty');
+    return;
+  }
+  handleClose(record);
+}
 
-    getValidateForm(parent = this.$parent) {
-      const { form } = parent.$refs;
-      if (!form) {
-        return cb => (cb ? cb(true) : true);
-      }
-      const { validate } = form;
-      return validate ? cb => validate.call(form, cb) : this.getValidateForm(form);
-    },
+async function performOperation(op) {
 
-    onSaveClick() {
-      this.getValidateForm()(valid => {
-        if (valid) {
-          this.performOperation(this.save);
-        } else {
-          this.$message.warning(this.$t('validation.formInvalid').toString());
-        }
-      });
-    },
+  showLoading();
 
-    save() {
-      return this.saveFn(this.model)
-        .then(record => {
-          this.$parent.$emit('saved', record);
-          return record;
-          // if (this.$refs.drawer) {
-          //   this.cancelClick(record);
-          // }
-        });
-    },
+  try {
+    const res = await op();
+    hideLoading();
+    cancelClick(res);
+  } catch (e) {
+    hideLoading();
+    emit('error', e);
+    showError(e);
+  }
 
-    handleClose(record) {
-      this.$debug(this.afterCloseTo);
-      if (!this.from) {
-        this.drawerOpen = false;
-        this.$parent.$emit('closed', record);
-        return;
-      }
-      const query = pick(this.$route.query, 'search');
-      if (record && !this.modelOrigin.id) {
-        query.createdId = record.id;
-      }
-      this.$router.replace(merge({ ...(this.afterCloseTo || this.from) }, { query }))
-        .catch(e => this.$error('handleClose', e));
-    },
+}
 
-    cancelClick(record) {
-      const { drawer } = this.$refs;
-      if (!drawer) {
-        this.$error('cancelClick', 'drawer ref is empty');
-        return;
-      }
-      this.handleClose(record);
-    },
+function showError(e) {
+  return ElMessage.error({
+    message: e.message,
+    // offset: 20,
+    duration: 7500,
+    showClose: true,
+    dangerouslyUseHTMLString: true,
+  });
+}
 
-    async performOperation(op) {
+function showLoading(message = '') {
+  loadingMessage.value = ElMessage({
+    message: message || `${i18n.global.t('saving')} ...`,
+    duration: 0,
+  });
+}
 
-      this.showLoading();
-
-      try {
-        const res = await op();
-        this.hideLoading();
-        this.cancelClick(res);
-      } catch (e) {
-        this.hideLoading();
-        this.$emit('error', e);
-        this.showError(e);
-      }
-
-    },
-
-    showError(e) {
-      return this.$message.error({
-        message: e.message,
-        // offset: 20,
-        duration: 7500,
-        showClose: true,
-        dangerouslyUseHTMLString: true,
-      });
-    },
-
-    showLoading(message) {
-      this.loadingMessage = this.$message({
-        message: message || `${this.$t('saving')} ...`,
-        duration: 0,
-      });
-    },
-
-    hideLoading() {
-      if (!this.loadingMessage) {
-        return;
-      }
-      this.loadingMessage.close();
-      this.loadingMessage = null;
-    },
-
-  },
-  watch: {
-    modelOrigin: {
-      handler(modelOrigin) {
-        this.model = cloneDeep(modelOrigin || {});
-      },
-      immediate: true,
-    },
-  },
-};
+function hideLoading() {
+  if (!loadingMessage.value) {
+    return;
+  }
+  loadingMessage.value.close();
+  loadingMessage.value = null;
+}
 
 </script>
 <style lang="scss">
