@@ -1,8 +1,14 @@
 <template lang="pug">
 // eslint-disable vue/no-mutating-props
-.recipe-material-form
+el-form.recipe-material-form(
+  ref="form"
+  :model="model"
+  :rules="rules"
+)
   el-form-item(prop="articleId")
-    article-select(v-model="model.articleId")
+    article-select(
+      v-model="model.articleId"
+    )
   el-form-item(
     :label="$t('units.quantityOf', [$t(`units.genitive.${measureUnitId}`)])"
     prop="units"
@@ -17,6 +23,8 @@ import ArticleSelect from '@/components/catalogue/ArticleSelect.vue';
 import * as Measure from '@/models/Measure.js';
 import ArticleModel  from '@/models/Article.js';
 import type { MaterialFields } from '@/models/Recipes';
+import { $requiredRule } from '@/lib/validations.js';
+import { useFormValidate } from '@/services/validating';
 /* eslint-disable vue/no-mutating-props */
 
 const props = defineProps<{
@@ -26,11 +34,15 @@ const props = defineProps<{
 const article = computed(() => ArticleModel.reactiveGet(props.model?.articleId));
 const measureUnitId = computed(() => article.value?.measureUnitId || Measure.DEFAULT_MEASURE_UNIT_ID);
 const measureId = computed(() => article.value?.measureId || Measure.DEFAULT_MEASURE_ID);
+const rules = $requiredRule(['articleId', 'units']);
+const { form, validate } = useFormValidate();
 
 watch(article, () => {
   props.model.measureUnitId = measureUnitId.value;
   props.model.measureId = measureId.value;
 });
+
+defineExpose({ validate });
 
 </script>
 <style scoped lang="scss">

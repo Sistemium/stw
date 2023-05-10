@@ -12,21 +12,29 @@ el-form.recipe-form(
 
   materials-form(
     :materials="model.materials || null"
+    ref="materialsFormRef"
     @create="onCreate"
   )
 
 </template>
 <script setup lang="ts">
 
-import { ref } from 'vue';
 import MaterialsForm from '@/components/production/MaterialsForm.vue';
 import type { Article } from '@/models/Articles';
+import { ref } from 'vue';
+// import { useFormValidate } from '@/services/validating';
 
 const props = defineProps<{
   model: Article,
 }>();
 
-const form = ref(null);
+const materialsFormRef = ref(null);
+
+defineExpose({
+  validate(callback) {
+    materialsFormRef.value.validate(callback);
+  },
+});
 
 function onCreate(materials) {
   // eslint-disable-next-line vue/no-mutating-props
@@ -34,6 +42,3 @@ function onCreate(materials) {
 }
 
 </script>
-<style scoped lang="scss">
-
-</style>

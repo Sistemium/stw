@@ -16,7 +16,10 @@
           )
         el-link(@click="removeMaterial(material)")
           small {{ $t('delete') }}
-      recipe-material-form(:model="material")
+      recipe-material-form(
+        :model="material"
+        :ref="el => el && itemRefs.push(el)"
+      )
   .buttons
     el-link(@click="onAddMaterial()")
       small {{ $tAction('add', 'material') }}
@@ -24,7 +27,9 @@
 </template>
 <script setup lang="ts">
 
+import { onBeforeUpdate, ref } from 'vue';
 import { v4 } from 'uuid';
+import { eachSeries } from 'async';
 import RecipeMaterialForm from '@/components/production/RecipeMaterialForm.vue';
 import type { RecipeMaterial } from '@/models/Recipes';
 
@@ -36,6 +41,24 @@ const props = defineProps<{
 const emit = defineEmits<{
   (e: 'create', materials: RecipeMaterial[]) : void;
 }>();
+
+const itemRefs = ref([]);
+
+onBeforeUpdate(() => {
+  itemRefs.value = [];
+});
+
+defineExpose({
+  validate(callback) {
+    eachSeries(itemRefs.value, (item, cb) => {
+      item.validate(itemValid => {
+        cb(itemValid ? null : Error('invalid item'));
+      });
+    }, err => {
+      callback(!err);
+    });
+  },
+})
 
 function removeMaterial(material) {
   const { materials } = props;

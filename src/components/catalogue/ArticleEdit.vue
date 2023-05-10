@@ -9,6 +9,7 @@ drawer-edit.article-edit(
   :deletable="currentTab ==='0'"
   :drawer-style="drawerStyle"
   :size="drawerWidth"
+  :validate-fn="validate"
 )
   template(#default="{ model }")
     el-tabs(v-model="currentTab")
@@ -23,7 +24,10 @@ drawer-edit.article-edit(
           :model="model"
         )
       el-tab-pane(:label="$t('concepts.recipe')")
-        recipe-form(:model="model" ref="recipeForm")
+        recipe-form(
+          :model="model"
+          ref="recipeFormRef"
+        )
       //el-tab-pane(:label="$t('menu.barcodes')")
         .list-group
           .list-group-item(
@@ -62,6 +66,7 @@ import { createPicture } from '@/services/picturing';
 import Picture, { mapPictureInfo } from '@/models/Picture.js';
 import Article from '@/models/Article.js';
 import { setAvatar } from '@/components/catalogue/ArticlePicturing';
+import { eachSeries } from 'async';
 
 const props = defineProps<{
   articleId?: string,
@@ -71,6 +76,7 @@ const props = defineProps<{
 
 const form = ref(null);
 const measurementForm = ref(null);
+const recipeFormRef = ref(null);
 const currentTab = ref('0');
 const route = useRoute();
 const { width } = useWindowSize();
@@ -89,6 +95,20 @@ const modelOrigin = computed(() => {
 
 const pictures = computed(() => Picture.reactiveFilter({ ownerXid: props.articleId })
   .map(mapPictureInfo('smallImage')));
+
+function validate(callback) {
+  const validators = [
+    form.value.validate,
+    recipeFormRef.value.validate,
+  ];
+  eachSeries(validators, (fn, cb) => {
+    fn(valid => {
+      cb(valid ? null : Error('invalid'));
+    });
+  }, err => {
+    callback(!err);
+  });
+}
 
 function destroyFn() {
   const { articleId } = props;
