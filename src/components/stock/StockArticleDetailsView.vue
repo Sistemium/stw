@@ -1,13 +1,13 @@
 <template lang="pug">
 
 el-dialog.stock-article-details-view(
+  v-model="visible"
   :title="title"
   :fullscreen="fullscreen"
   :show-close="true"
-  v-model="visible"
-  @closed="handleClose()"
   :append-to-body="true"
   width="75%"
+  @closed="handleClose()"
 )
 
   .filters
@@ -36,116 +36,120 @@ el-dialog.stock-article-details-view(
       stock-article-operations-table(
         :operations="tab.operations"
         :counterparty="tab.counterparty"
-        @row-click="(row, column) => operationClick(tab, row, column)"
+        @row-click="row => operationClick(tab, row)"
       )
 
 </template>
-<script>
+<script setup lang="ts">
 
-import Article from '@/models/Article';
-import { findStockPeriodOperations } from '@/services/warehousing';
+import { computed, ref, watch } from 'vue';
+import { useRouter } from 'vue-router';
+import Article from '@/models/Article.js';
+import { findStockPeriodOperations } from '@/services/warehousing.js';
 import StockArticleOperationsTable from '@/components/stock/StockArticleOperationsTable.vue';
 
-export default {
-  name: 'StockArticleDetailsView',
-  components: { StockArticleOperationsTable },
-  data() {
-    return {
-      loading: false,
-      data: {},
-      currentTab: null,
-      period: {
-        dateB: new Date(this.dateB),
-        dateE: new Date(this.dateE),
-      },
-    };
+interface StockDetailsData {
+  in?: object[];
+  out?: object[];
+  fix?: object[];
+}
+
+const props = defineProps<{
+  modelValue: boolean;
+  articleId: string;
+  storageId: string;
+  dateB: string;
+  dateE: string;
+}>();
+
+const emit = defineEmits<{
+  (e: 'update:modelValue', value: boolean);
+}>();
+
+const loading = ref(false);
+const data = ref<StockDetailsData>({});
+const currentTab = ref(null);
+const period = ref({
+  dateB: new Date(props.dateB),
+  dateE: new Date(props.dateE),
+});
+
+const router = useRouter();
+
+const title = computed(() => Article.reactiveGet(props.articleId)?.name);
+const tabs = computed(() => {
+  const {
+    fix = [],
+    in: incoming = [],
+    out = [],
+  } = data.value;
+  return [
+    {
+      id: 'fields.unitsSur',
+      badge: fix.length,
+      operations: fix,
+      counterparty: null,
+      route: 'stockTakingProgress',
+      routeParam: 'stockTakingId',
+    },
+    {
+      id: 'fields.unitsIn',
+      badge: incoming.length,
+      operations: incoming,
+      counterparty: 'fields.supplier',
+      route: 'stockReceiving',
+      routeParam: 'stockOperationId',
+    },
+    {
+      id: 'fields.unitsOut',
+      badge: out.length,
+      operations: out,
+      counterparty: 'fields.consignee',
+      route: 'stockWithdrawing',
+      routeParam: 'stockOperationId',
+    },
+  ];
+});
+
+const visible = computed({
+  get() {
+    return props.modelValue;
   },
-  props: {
-    value: Boolean,
-    articleId: String,
-    storageId: String,
-    dateB: String,
-    dateE: String,
+  set(visible) {
+    emit('update:modelValue', visible);
   },
-  computed: {
-    title() {
-      const { name } = Article.reactiveGet(this.articleId) || {};
-      return name;
-    },
-    tabs() {
-      const {
-        data: { fix = [], in: incoming = [], out = [] },
-      } = this;
-      return [
-        {
-          id: 'fields.unitsSur',
-          badge: fix.length,
-          operations: fix,
-          counterparty: null,
-          route: 'stockTakingProgress',
-          routeParam: 'stockTakingId',
-        },
-        {
-          id: 'fields.unitsIn',
-          badge: incoming.length,
-          operations: incoming,
-          counterparty: 'fields.supplier',
-          route: 'stockReceiving',
-          routeParam: 'stockOperationId',
-        },
-        {
-          id: 'fields.unitsOut',
-          badge: out.length,
-          operations: out,
-          counterparty: 'fields.consignee',
-          route: 'stockWithdrawing',
-          routeParam: 'stockOperationId',
-        },
-      ];
-    },
-    visible: {
-      get() {
-        return this.value;
-      },
-      set(visible) {
-        this.$emit('input', visible);
-      },
-    },
-    fullscreen() {
-      return false;
-    },
-  },
-  created() {
-    this.$watchImmediate('period', this.refresh, { deep: true });
-  },
-  methods: {
-    operationClick(tab, row) {
-      const to = {
-        name: tab.route,
-        params: { [tab.routeParam]: row.parentId },
-      };
-      this.$router.push(to)
-        .catch(e => this.$error('operationClick', e));
-    },
-    handleClose() {
-      this.visible = false;
-    },
-    refresh({ dateB, dateE }) {
-      this.loading = true;
-      findStockPeriodOperations(this.articleId, this.storageId, dateB, dateE)
-        .then(res => {
-          this.data = res;
-          const tab = this.tabs.find(({ operations }) => operations.length);
-          if (tab) {
-            this.currentTab = tab.id;
-          }
-        })
-        .finally(() => {
-          this.loading = false;
-        });
-    },
-  },
-};
+});
+
+const fullscreen = false;
+watch(period, refresh, { deep: true, immediate: true });
+
+function operationClick(tab, row) {
+  const to = {
+    name: tab.route,
+    params: { [tab.routeParam]: row.parentId },
+  };
+  router.push(to)
+    .catch(e => console.error('operationClick', e));
+}
+
+function handleClose() {
+  visible.value = false;
+}
+
+function refresh({ dateB, dateE }) {
+  loading.value = true;
+  findStockPeriodOperations(props.articleId, props.storageId, dateB, dateE)
+    .then(res => {
+      data.value = res;
+      const tab = tabs.value.find(({ operations }) => operations.length);
+      if (tab) {
+        currentTab.value = tab.id;
+      }
+    })
+    .finally(() => {
+      loading.value = false;
+    });
+}
 
 </script>
 <style scoped lang="scss">
@@ -159,10 +163,13 @@ export default {
   display: flex;
   flex-direction: row;
   align-items: center;
+
   label {
     padding: $padding;
   }
+
   margin-bottom: $margin-top;
+
   .el-date-editor {
     flex: 1;
   }
