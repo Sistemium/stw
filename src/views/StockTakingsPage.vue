@@ -52,7 +52,7 @@ import SearchInput from '@/lib/SearchInput.vue';
 import { searchOperations } from '@/services/warehousing';
 import StockTakingItem from '@/models/StockTakingItem';
 import AlertEmpty from '@/lib/AlertEmpty.vue';
-import Resize from '@/lib/Resize.vue';
+import Resize from '@/lib/StmResize.vue';
 import ToolButton from '@/lib/ToolButton.vue';
 import StorageSelect from '@/components/stock/StorageSelect.vue';
 import PageTitle from '@/components/PageTitle.vue';

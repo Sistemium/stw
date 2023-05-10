@@ -34,7 +34,7 @@ import { ARTICLE_FILTERS } from '@/store/inv/getters';
 import { SET_ARTICLE_FILTERS } from '@/store/inv/mutations';
 import { VALUE_TYPES } from '@/models/ArticleProp';
 import ArticleList from '@/components/catalogue/ArticleList.vue';
-import Resize from '@/lib/Resize.vue';
+import Resize from '@/lib/StmResize.vue';
 import SimpleLabel from '@/lib/SimpleLabel.vue';
 
 const { mapGetters, mapMutations } = createNamespacedHelpers('inv');

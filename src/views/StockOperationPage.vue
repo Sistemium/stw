@@ -49,7 +49,7 @@ import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 import ReactiveModel from 'sistemium-data-vue';
 import ToolButton from '@/lib/ToolButton.vue';
-import Resize from '@/lib/Resize.vue';
+import Resize from '@/lib/StmResize.vue';
 import AlertEmpty from '@/lib/AlertEmpty.vue';
 import WorkflowTransitions from '@/lib/WorkflowTransitions.vue';
 import StockOperationItemList from '@/components/out/StockOperationItemList.vue';

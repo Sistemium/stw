@@ -67,7 +67,7 @@ import pick from 'lodash/pick';
 import orderBy from 'lodash/orderBy';
 import filter from 'lodash/filter';
 import SearchInput from '@/lib/SearchInput.vue';
-import Resize from '@/lib/Resize.vue';
+import Resize from '@/lib/StmResize.vue';
 import ToolButton from '@/lib/ToolButton.vue';
 import DownloadExcelButton from '@/lib/DownloadExcelButton.vue';
 import useResponsiveTables from '@/components/useResponsiveTables';

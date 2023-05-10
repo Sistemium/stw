@@ -44,7 +44,7 @@ import StockArticleDetailsView from '@/components/stock/StockArticleDetailsView.
 import { ElLoading } from 'element-plus';
 import { useInvStore } from '@/store/invStore.js';
 import StorageSelect from '@/components/stock/StorageSelect.vue';
-import Resize from '@/lib/Resize.vue';
+import Resize from '@/lib/StmResize.vue';
 
 // mixins: [storageSelectMixin],
 

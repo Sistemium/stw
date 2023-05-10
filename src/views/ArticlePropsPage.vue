@@ -26,7 +26,7 @@ import ArticleProp from '@/models/ArticleProp';
 import ArticlePropsList from '@/components/catalogue/ArticlePropsList.vue';
 import PageTitle from '@/components/PageTitle.vue';
 import { articlePropertySort } from '@/services/catalogue';
-import Resize from '@/lib/Resize.vue';
+import Resize from '@/lib/StmResize.vue';
 import ToolButton from '@/lib/ToolButton.vue';
 import { useRouter } from 'vue-router';
 import { computed } from 'vue';

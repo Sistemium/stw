@@ -58,7 +58,7 @@ import StockOperationList from '@/components/out/StockOperationList.vue';
 import StockOperationTable from '@/components/out/StockOperationTable.vue';
 
 import SearchInput from '@/lib/SearchInput.vue';
-import Resize from '@/lib/Resize.vue';
+import Resize from '@/lib/StmResize.vue';
 import ToolButton from '@/lib/ToolButton.vue';
 import { computed, ref } from 'vue';
 import { useRouteParams } from '@/lib/updateRouteParams.js';

@@ -32,7 +32,7 @@
 import PageTitle from '@/components/PageTitle.vue';
 import StoragesList from '@/components/stock/StoragesList.vue';
 import Storage from '@/models/Storage';
-import Resize from '@/lib/Resize.vue';
+import Resize from '@/lib/StmResize.vue';
 import ToolButton from '@/lib/ToolButton.vue';
 import { computed } from 'vue';
 import { useRouter } from 'vue-router';

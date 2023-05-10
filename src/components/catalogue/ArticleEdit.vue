@@ -44,7 +44,7 @@ import { useRoute } from 'vue-router';
 import { computed, ref } from 'vue';
 import { useWindowSize } from '@vueuse/core';
 import DrawerEdit from '@/lib/DrawerEdit.vue';
-import Resize from '@/lib/Resize.vue';
+import Resize from '@/lib/StmResize.vue';
 import TakePhotoButton from '@/lib/TakePhotoButton.vue';
 import RecipeForm from '@/components/production/RecipeForm.vue';
 import ArticleForm from '@/components/catalogue/ArticleForm.vue';

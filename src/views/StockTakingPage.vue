@@ -54,7 +54,7 @@ import StockTakingEdit from '@/components/stock/StockTakingEdit.vue';
 import AlertEmpty from '@/lib/AlertEmpty.vue';
 import { searchByArticle } from '@/services/catalogue';
 import ToolButton from '@/lib/ToolButton.vue';
-import Resize from '@/lib/Resize.vue';
+import Resize from '@/lib/StmResize.vue';
 import { computed, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import orderBy from 'lodash/orderBy';

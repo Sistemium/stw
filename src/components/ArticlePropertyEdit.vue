@@ -45,7 +45,7 @@ import PropOptionList from '@/components/catalogue/PropOptionList.vue';
 import PropOptionEdit from '@/components/props/PropOptionEdit.vue';
 import orderBy from 'lodash/orderBy';
 import ToolButton from '@/lib/ToolButton.vue';
-import Resize from '@/lib/Resize.vue';
+import Resize from '@/lib/StmResize.vue';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
