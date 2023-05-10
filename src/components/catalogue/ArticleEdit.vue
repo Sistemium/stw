@@ -13,9 +13,15 @@ drawer-edit.article-edit(
   template(#default="{ model }")
     el-tabs(v-model="currentTab")
       el-tab-pane(:label="$t('menu.articleProps')")
-        article-form(ref="form" :model="model")
+        article-form(
+          ref="form"
+          :model="model"
+        )
       el-tab-pane(:label="$t('menu.measurements')")
-        article-measurement-form(:model="model" ref="measurementForm")
+        article-measurement-form(
+          ref="measurementForm"
+          :model="model"
+        )
       el-tab-pane(:label="$t('concepts.recipe')")
         recipe-form(:model="model" ref="recipeForm")
       //el-tab-pane(:label="$t('menu.barcodes')")
@@ -63,7 +69,9 @@ const props = defineProps<{
   drawerStyle?: object,
 }>();
 
-const currentTab = ref(null);
+const form = ref(null);
+const measurementForm = ref(null);
+const currentTab = ref('0');
 const route = useRoute();
 const { width } = useWindowSize();
 const drawerWidth = computed(() => width.value > 450 ? '450px' : '370px');

@@ -14,6 +14,7 @@ el-form.prop-option-form(
 import { computed } from 'vue';
 import ArticleProp from '@/models/ArticleProp';
 import { $requiredRule } from '@/lib/validations';
+import { useFormValidate } from '@/services/validating';
 
 const props = defineProps({
   model: {
@@ -21,6 +22,10 @@ const props = defineProps({
     required: true,
   },
 });
+
+const { form, validate } = useFormValidate();
+
+defineExpose({ validate });
 
 const property = computed(() => {
   const { propId } = props.model;

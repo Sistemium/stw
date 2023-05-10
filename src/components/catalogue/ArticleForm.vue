@@ -93,6 +93,7 @@ import { $requiredRule, t } from '@/lib/validations.js';
 import type { Article, ArticleProperty } from '@/models/Articles';
 import orderBy from 'lodash/orderBy';
 import PrependSelect from '@/lib/PrependSelect.vue';
+import { useFormValidate } from '@/services/validating';
 
 interface ArticleFormComponent {
   is: string | Component;
@@ -103,7 +104,9 @@ const props = defineProps<{
   model: Article;
 }>();
 
-const form = ref(null);
+const { form, validate } = useFormValidate();
+
+defineExpose({ validate });
 
 const INPUTS = new Map<string, ArticleFormComponent>([
   ['boolean', { is: 'el-switch', field: 'boolValue' }],
