@@ -1,10 +1,7 @@
 import { computed, watch } from 'vue';
 import { useInvStore } from '@/store/invStore';
+import type { BarcodeScan } from '@/store/invStore';
 
-export interface BarcodeScan {
-  code: string;
-  symbology: string;
-}
 
 export interface BarcodeScannerEvents {
   (e: 'update:modelValue', scanData: BarcodeScan): void;
@@ -18,7 +15,7 @@ export function useBarcodeScanner(emit: BarcodeScannerEvents) {
   const scannedBarCode = computed(() => store.scannedBarcode);
 
 
-  watch(scannedBarCode, barCode => {
+  watch(scannedBarCode, (barCode: BarcodeScan) => {
     emit('update:modelValue', barCode);
     if (barCode) {
       emit('scan', barCode);
