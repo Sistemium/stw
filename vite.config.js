@@ -40,6 +40,7 @@ export default defineConfig(({ mode }) => {
     },
     build: {
       // minify: false,
+      sourcemap: 'hidden',
     },
     resolve: {
       alias: {
