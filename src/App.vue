@@ -8,39 +8,33 @@
   router-view
 
 </template>
-<script>
+<script setup lang="ts">
 
-import { createNamespacedHelpers } from 'vuex';
 import find from 'lodash/find';
+import { computed, watch } from 'vue';
+import { useStore } from 'vuex';
+import { useRoute } from 'vue-router';
 import AppMenu from '@/components/AppMenu.vue';
 import BarcodeScannerStatus, {
   isNative,
 } from '@/components/BarcodeScanner/BarcodeScannerStatus.vue';
 import BarcodeInput from '@/components/BarcodeScanner/BarcodeInput.vue';
-import * as g from '@/store/inv/getters';
+import * as g from '@/store/inv/getters.js';
+import i18n, { saveLocale } from '@/i18n';
 
-const { mapGetters } = createNamespacedHelpers('inv');
+const store = useStore();
+const route = useRoute();
 
-export default {
-  components: {
-    BarcodeInput,
-    BarcodeScannerStatus,
-    AppMenu,
-  },
-  computed: {
-    ...mapGetters({
-      isConnected: g.SCANNER_IS_CONNECTED,
-    }),
-    showBarcodeStatus() {
-      const { matched } = this.$router.currentRoute;
-      return this.$route.meta.useScanner
-        || !!find(matched, ({ meta }) => meta && meta.useScanner);
-    },
-    showBarcodeInput() {
-      return this.showBarcodeStatus && !isNative() && this.isConnected;
-    },
-  },
-};
+const isConnected = computed(() => store.getters[`inv/${g.SCANNER_IS_CONNECTED}`]);
+const showBarcodeStatus = computed(() => {
+  return route.meta.useScanner
+    || !!find(route.matched, ({ meta }) => meta && meta.useScanner);
+});
+const showBarcodeInput = computed(() => {
+  return showBarcodeStatus.value && !isNative() && isConnected.value;
+});
+
+watch(() => i18n.global.locale, saveLocale);
 
 </script>
 <style lang="scss">
