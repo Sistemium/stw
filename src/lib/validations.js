@@ -1,12 +1,6 @@
-// import Vue from 'vue';
-import orderBy from 'lodash/orderBy';
-import get from 'lodash/get';
-import find from 'lodash/find';
-import map from 'lodash/map';
-import trim from 'lodash/trim';
-import i18n from '@/i18n';
 import cloneDeep from 'lodash/cloneDeep';
 import { ElLoading, ElMessage } from 'element-plus';
+import i18n from '@/i18n';
 
 export default {
 
@@ -18,23 +12,10 @@ export default {
   },
 
   methods: {
-    $cloneInstance: cloneInstance,
-    $trim: trim,
-    $map: map,
-    $find: find,
-    $orderBy: orderBy,
-    $ts(dateString, key = 'timestamp') {
-      return i18n.global.d(new Date(dateString), key);
-    },
-    $requiredRule,
+    $ts,
     $tAction: tAction,
     $tGen(action, name) {
       return this.$t(`actions.${action}`, [this.$t(`genitive.${name}`)]);
-    },
-    $get: get,
-    $saveWithLoading: saveWithLoading,
-    $watchImmediate(expOrFn, callback, options = {}) {
-      return this.$watch(expOrFn, callback, { immediate: true, ...options });
     },
   },
 };
@@ -94,4 +75,8 @@ export async function saveWithLoading(asyncFunction) {
 
 export function $percent(value) {
   return `${i18n.global.n(value * 100.0)}%`;
+}
+
+export function $ts(dateString, key = 'timestamp') {
+  return i18n.global.d(new Date(dateString), key);
 }
