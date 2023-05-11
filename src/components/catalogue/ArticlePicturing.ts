@@ -1,4 +1,4 @@
-import { saveWithLoading } from '@/lib/validations.js';
+import { saveWithLoading } from '@/lib/validations';
 import ArticleModel from '@/models/Article';
 import Picture from '@/models/Picture';
 

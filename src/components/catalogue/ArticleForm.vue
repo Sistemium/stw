@@ -89,7 +89,7 @@ import * as catalogue from '@/services/catalogue.js';
 import PropOption from '@/models/PropOption.js';
 import { filterArticleProps, getArticleProp } from '@/models/ArticleProps';
 import type ArticleProp from '@/models/ArticleProps';
-import { $requiredRule, t } from '@/lib/validations.js';
+import { $requiredRule, t } from '@/lib/validations';
 import type { Article, ArticleProperty } from '@/models/Articles';
 import orderBy from 'lodash/orderBy';
 import PrependSelect from '@/lib/PrependSelect.vue';

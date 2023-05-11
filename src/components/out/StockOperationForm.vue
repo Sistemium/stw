@@ -86,7 +86,7 @@ import CounterpartyTypeSwitch from '@/components/CounterpartyTypeSwitch.vue';
 import CounterpartySelect from '@/components/CounterpartySelect.vue';
 import LegalEntityEdit from '@/components/contacts/LegalEntityEdit.vue';
 import StorageEdit from '@/components/stock/StorageEdit.vue';
-import { $requiredRule } from '@/lib/validations.js';
+import { $requiredRule } from '@/lib/validations';
 import type { StockOperation } from '@/models/StockOperations';
 import { useFormValidate } from '@/services/validating';
 

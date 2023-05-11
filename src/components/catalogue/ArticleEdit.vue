@@ -61,7 +61,7 @@ import ArticleForm from '@/components/catalogue/ArticleForm.vue';
 import ArticlePictures from '@/components/catalogue/ArticlePictures.vue';
 import ArticleMeasurementForm from '@/components/catalogue/ArticleMeasurementForm.vue';
 import { articleInstance } from '@/services/catalogue.js';
-import { cloneInstance } from '@/lib/validations.js';
+import { cloneInstance } from '@/lib/validations';
 import { createPicture } from '@/services/picturing';
 import Picture, { mapPictureInfo } from '@/models/Picture.js';
 import Article from '@/models/Article.js';

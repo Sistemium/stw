@@ -50,7 +50,7 @@ el-table.stock-operation-table(
 <script setup lang="ts">
 
 import { computed } from 'vue';
-import { t } from '@/lib/validations.js';
+import { t } from '@/lib/validations';
 import type { StockOperationViewData } from '@/models/StockOperations';
 
 

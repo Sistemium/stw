@@ -134,7 +134,7 @@ import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { Edit, Plus } from '@element-plus/icons-vue';
 import ButtonPrepend from '@/lib/ButtonPrepend.vue';
-import { $requiredRule, saveWithLoading } from '@/lib/validations.js';
+import { $requiredRule, saveWithLoading } from '@/lib/validations';
 import ArticleSelect from '@/components/catalogue/ArticleSelect.vue';
 import ArticleEdit from '@/components/catalogue/ArticleEdit.vue';
 import BarcodeFormItem from '@/components/BarcodeScanner/BarcodeFormItem.vue';

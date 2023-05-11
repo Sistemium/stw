@@ -18,7 +18,7 @@
 
 import { useDropzone } from 'vue3-dropzone';
 import dayjs from 'dayjs';
-import { tAction, t } from '@/lib/validations.js'
+import { tAction, t } from '@/lib/validations'
 import { computed, ref } from 'vue';
 import axios from 'axios';
 import filter from 'lodash/filter';

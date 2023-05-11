@@ -23,7 +23,7 @@ import ArticleSelect from '@/components/catalogue/ArticleSelect.vue';
 import * as Measure from '@/models/Measure.js';
 import ArticleModel  from '@/models/Article.js';
 import type { MaterialFields } from '@/models/Recipes';
-import { $requiredRule } from '@/lib/validations.js';
+import { $requiredRule } from '@/lib/validations';
 import { useFormValidate } from '@/services/validating';
 /* eslint-disable vue/no-mutating-props */
 

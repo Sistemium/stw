@@ -19,7 +19,7 @@
 
 import round from 'lodash/round';
 import { computed, watch } from 'vue';
-import { $percent } from '@/lib/validations.js';
+import { $percent } from '@/lib/validations';
 
 const props = defineProps<{
   model: object;
