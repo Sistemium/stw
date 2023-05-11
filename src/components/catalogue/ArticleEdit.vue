@@ -99,6 +99,7 @@ const pictures = computed(() => Picture.reactiveFilter({ ownerXid: props.article
 function validate(callback) {
   const validators = [
     form.value.validate,
+    measurementForm.value.validate,
     recipeFormRef.value.validate,
   ];
   eachSeries(validators, (fn, cb) => {

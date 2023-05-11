@@ -1,6 +1,10 @@
 <template lang="pug">
 // eslint-disable vue/no-mutating-props
-el-form.article-measurement-form
+el-form.article-measurement-form(
+  ref="form"
+  :model="model"
+  :rules="rules"
+)
 
   el-form-item(:label="$t('fields.measure')")
     measure-select(
@@ -33,6 +37,7 @@ el-form.article-measurement-form
   el-form-item(
     v-if="model.packageTypeId"
     :label="unitsInPackageLabel"
+    prop="unitsInPackage"
   )
     el-input-number(
       v-model="model.unitsInPackage"
@@ -54,10 +59,17 @@ import {
 import MeasureUnitSelect from '@/components/select/MeasureUnitSelect.vue';
 import MeasureSelect from '@/components/select/MeasureSelect.vue';
 import type { Article } from '@/models/Articles';
+import { $requiredRule } from '@/lib/validations';
+import { useFormValidate } from '@/services/validating';
+
 
 const props = defineProps<{
   model: Article,
 }>();
+
+const { form, validate } = useFormValidate();
+
+defineExpose({ validate });
 
 const unitsInPackageLabel = computed(() => {
   const id = props.model.measureUnitId || DEFAULT_MEASURE_UNIT_ID;
@@ -66,8 +78,16 @@ const unitsInPackageLabel = computed(() => {
 
 const measureUnits = computed(() => measureUnitsFn(props.model.measureId));
 const packageTypes = packageTypesFn();
-const defaultUnitId =  computed(() => {
+const defaultUnitId = computed(() => {
   return get(find(measureUnits.value, { ratio: 1 }), 'id') || null;
+});
+
+const rules = computed(() => {
+  const res = {};
+  if (props.model.packageTypeId) {
+    Object.assign(res, $requiredRule('unitsInPackage'));
+  }
+  return res;
 });
 
 function packageTypeChange(packageTypeId) {

@@ -2,6 +2,7 @@
 
 el-select.measure-select(
   :model-value="modelValue"
+  :clearable="true"
   @change="data => emit('change', data)"
   @update:model-value="id => emit('update:model-value', id)"
 )
