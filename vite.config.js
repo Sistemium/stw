@@ -3,22 +3,14 @@ import eslint from 'vite-plugin-eslint';
 import { fileURLToPath, URL } from 'node:url';
 import { defineConfig } from 'vite';
 import legacy from '@vitejs/plugin-legacy';
+import { sentryVitePlugin } from "@sentry/vite-plugin";
 
 export default defineConfig({
   // optimizeDeps: {
   //   include: ['sistemium-data'],
   // },
   plugins: [
-    vue({
-      // template: {
-      //   compilerOptions: {
-      //     compatConfig: {
-      //       MODE: 2,
-      //       ATTR_FALSE_VALUE: false,
-      //     },
-      //   },
-      // },
-    }),
+    vue({}),
     eslint({
       include: ['src/**/*.ts', 'src/**/*.vue', 'src/*.ts', 'src/*.vue'],
     }),
@@ -26,6 +18,16 @@ export default defineConfig({
       ignoreBrowserslistConfig: true,
       targets: ['defaults', 'not IE 11'],
       modernPolyfills: false,
+    }),
+    sentryVitePlugin({
+      org: 'sistemium',
+      project: 'stw',
+      authToken: process.env.SENTRY_AUTH_TOKEN,
+      release: `${process.env.npm_package_name}@${process.env.npm_package_version}`,
+      include: './dist',
+      sourcemaps: {
+        assets: "./dist/**",
+      },
     }),
   ],
   define: {
@@ -39,7 +41,6 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      // vue: '@vue/compat',
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
     extensions: [
@@ -65,6 +66,15 @@ export default defineConfig({
         target: 'http://localhost:3130',
         changeOrigin: true,
         rewrite: path => path.replace(/^\/pha/, ''),
+      },
+      '/xlsx': {
+        // target: 'http://localhost:3300',
+        target: 'https://stw.sistemium.com',
+        changeOrigin: true,
+      },
+      '/ims/': {
+        target: 'https://stw.sistemium.com',
+        changeOrigin: true,
       },
     },
   },
