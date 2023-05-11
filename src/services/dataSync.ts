@@ -20,10 +20,14 @@ import groupBy from 'lodash/groupBy';
 import filter from 'lodash/filter';
 import find from 'lodash/find';
 import { ElLoading } from 'element-plus';
+import Model from '@/init/Model.js';
 
 const { error, debug } = log('dataSync');
 
-const initPromiseInfo = {};
+const initPromiseInfo: {
+  resolve?: (value?: unknown) => void;
+  reject?: () => void;
+} = {};
 
 const initPromise = new Promise((resolve, reject) => {
   initPromiseInfo.resolve = resolve;
@@ -73,7 +77,13 @@ async function stockWithdrawingIdSync(to, model, positionsModel, field) {
 
 }
 
-async function stockWithdrawingSync(to, from, options) {
+interface SyncOptions {
+  model: Model;
+  positionsModel: Model;
+  field: string;
+}
+
+async function stockWithdrawingSync(to, from, options: SyncOptions) {
   const {
     model,
     positionsModel,
@@ -85,7 +95,7 @@ async function stockWithdrawingSync(to, from, options) {
   try {
     const data = await model.findAll({});
     const ids = map(data, 'id');
-    await positionsModel.findByMany(ids, { field });
+    await positionsModel.findByMany(ids, { field, chunkSize: 70 });
     // if (field === 'stockWithdrawingId') {
     //   await StockWithdrawingProduct.findByMany(ids, { field });
     // }
@@ -148,8 +158,8 @@ export async function authGuard(to, from, next) {
 
 }
 
-const LOADERS = new Map([
-  [/Recipe/i, () => Recipe.findAll()],
+const LOADERS: Map<RegExp, (to?: object, from?: object, next?: () => void) => Promise<void>> = new Map([
+  [/Recipe/i, async () => { await Recipe.findAll() }],
   [/StockTaking/i, stockTakingSync],
   [/StockWithdraw/i, (to, from) => stockWithdrawingSync(to, from, {
     model: StockWithdrawing,
