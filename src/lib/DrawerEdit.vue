@@ -37,7 +37,7 @@ import merge from 'lodash/merge';
 import FormButtons from 'sistemium-vue/components/FormButtons.vue';
 import matchesDeep from 'sistemium-data/src/util/matchesDeep.js';
 import { localizedDeleteError } from '@/services/erroring.js';
-import i18n from '@/i18n.js';
+import i18n from '@/i18n';
 // import { useLog } from '@/services/debugging';
 //
 // const { debug } = useLog();
@@ -99,7 +99,7 @@ const drawerComponent = computed(() => props.isDrawer ? 'el-drawer' : 'el-card')
 
 // const loading = computed(() => !!loadingMessage.value);
 const isDeletable = computed(() => props.deletable && !!props.modelOrigin?.id);
-const changed = computed(()  =>props.forceModified || hasChanges.value);
+const changed = computed(() => props.forceModified || hasChanges.value);
 const hasChanges = computed(() => {
   return !props.modelOrigin
     || !props.modelOrigin.id
@@ -157,7 +157,7 @@ function handleClose(record) {
     $parent.value.emit('closed', record);
     return;
   }
-  const query = pick(route.query, 'search');
+  const query = pick(route.query, 'search') as { [key: string]: string };
   if (record && !props.modelOrigin.id) {
     query.createdId = record.id;
   }

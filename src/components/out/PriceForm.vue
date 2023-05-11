@@ -22,7 +22,11 @@ import { computed, watch } from 'vue';
 import { $percent } from '@/lib/validations';
 
 const props = defineProps<{
-  model: object;
+  model: {
+    vatPrice?: number;
+    price?: number;
+    vatRate: number;
+  };
   vatPrices: boolean;
 }>();
 

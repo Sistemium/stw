@@ -61,9 +61,9 @@ import SearchInput from '@/lib/SearchInput.vue';
 import Resize from '@/lib/StmResize.vue';
 import ToolButton from '@/lib/ToolButton.vue';
 import { computed, ref } from 'vue';
-import { useRouteParams } from '@/lib/updateRouteParams.js';
+import { useRouteParams } from '@/lib/updateRouteParams';
 import { useRoute } from 'vue-router';
-import { useInvStore } from '@/store/invStore.js';
+import { useInvStore } from '@/store/invStore';
 import orderBy from 'lodash/orderBy';
 import ReactiveModel from 'sistemium-data-vue';
 // import type { PageProps } from '@/views/pages';
@@ -72,6 +72,7 @@ import useResponsiveTables from '@/components/useResponsiveTables';
 import StorageSelect from '@/components/stock/StorageSelect.vue';
 import PageTitle from '@/components/PageTitle.vue';
 import { useScrollToCreated } from '@/services/scrolling';
+import type { StockOperation } from '@/models/StockOperations';
 
 const props = defineProps<{
   model: ReactiveModel;
@@ -141,7 +142,7 @@ const storageId = computed({
   get() {
     const { stockOperationId } = route.params;
     if (stockOperationId) {
-      const { storageId: id } = props.model.reactiveGet(stockOperationId as string) || {};
+      const { storageId: id } = props.model.reactiveGet(stockOperationId as string) as StockOperation || {};
       if (id) {
         return id;
       }

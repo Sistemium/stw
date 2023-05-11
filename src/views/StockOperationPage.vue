@@ -58,11 +58,15 @@ import { configPriceField } from '@/services/warehousing.js';
 import { workflow } from '@/models/StockWithdrawing.js';
 import { useBusy } from '@/views/pages';
 import { useOperationDisabled } from '@/services/workflowing';
+import type { StockOperation } from '@/models/StockOperations';
 
 
 const props = defineProps<{
   stockOperationId?: string;
-  from: object;
+  from?: {
+    name: string;
+    params?: object;
+  };
   model: ReactiveModel;
   positionsModel?: ReactiveModel;
   counterpartyRole?: string;
@@ -86,7 +90,7 @@ const stockOperationItems = computed(() => {
   });
 });
 
-const stockOperation = computed(() => {
+const stockOperation = computed<StockOperation>(() => {
   return props.model.reactiveGet(props.stockOperationId) || {};
 });
 
@@ -118,7 +122,7 @@ function onEditClose(record) {
 }
 
 function onProcessing(processing) {
-  setBusy(props.model.patch(props.stockOperationId, { processing }));
+  setBusy(props.model.updateOne({ id: props.stockOperationId, processing }));
 }
 
 </script>

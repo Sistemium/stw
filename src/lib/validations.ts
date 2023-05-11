@@ -45,12 +45,14 @@ export function cloneInstance(res) {
   };
 }
 
-export function tAction(action, name) {
-  return i18n.global.t(`actions.${action}`, [i18n.global.t(`accusative.${name}`)]);
+export function tAction(action: string, name: string): string {
+  return t(`actions.${action}`, [t(`accusative.${name}`)]);
 }
 
-export function t(key) {
-  return i18n.global.t(key);
+export function t(key: string, etc?: string[]): string {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  return i18n.global.t(key, etc);
 }
 
 export async function saveWithLoading(asyncFunction) {

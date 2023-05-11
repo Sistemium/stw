@@ -1,5 +1,5 @@
 import { computed, watch } from 'vue';
-import { useInvStore } from '@/store/invStore.js';
+import { useInvStore } from '@/store/invStore';
 
 export interface BarcodeScan {
   code: string;
@@ -7,9 +7,9 @@ export interface BarcodeScan {
 }
 
 export interface BarcodeScannerEvents {
-  (e: 'update:modelValue', scanData: BarcodeScan): void
-  (e: 'scan', scanData: BarcodeScan): void
-  (e: 'clear'): void
+  (e: 'update:modelValue', scanData: BarcodeScan): void;
+  (e: 'scan', scanData: BarcodeScan): void;
+  (e: 'clear'): void;
 }
 
 export function useBarcodeScanner(emit: BarcodeScannerEvents) {

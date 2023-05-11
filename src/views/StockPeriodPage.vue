@@ -42,7 +42,7 @@ import SearchInput from '@/lib/SearchInput.vue';
 import { searchArticle } from '@/services/catalogue.js';
 import StockArticleDetailsView from '@/components/stock/StockArticleDetailsView.vue';
 import { ElLoading } from 'element-plus';
-import { useInvStore } from '@/store/invStore.js';
+import { useInvStore } from '@/store/invStore';
 import StorageSelect from '@/components/stock/StorageSelect.vue';
 import Resize from '@/lib/StmResize.vue';
 

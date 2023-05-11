@@ -75,7 +75,7 @@ import PageTitle from '@/components/PageTitle.vue';
 import BarcodeView from '@/components/BarcodeScanner/BarcodeView.vue';
 import ArticleList from '@/components/catalogue/ArticleList.vue';
 import ArticleTable from '@/components/catalogue/ArticleTable.vue';
-import i18n from '@/i18n.js';
+import i18n from '@/i18n';
 import { DocumentCopy } from '@element-plus/icons-vue';
 import Article from '@/models/Article.js';
 import ArticleProp from '@/models/ArticleProp.js';

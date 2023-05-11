@@ -49,7 +49,7 @@ import { useRoute, useRouter } from 'vue-router';
 import LangMenu from 'sistemium-vue/components/LangMenu.vue';
 import { toggleTabBar, isNative as isNativeFn } from 'sistemium-data/src/util/native.js';
 import { routes } from '@/router/index.js';
-import i18n from '@/i18n.js';
+import i18n from '@/i18n';
 import type Language from '@/models/Languages';
 import { Languages } from '@/models/Languages';
 

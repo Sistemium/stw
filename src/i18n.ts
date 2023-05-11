@@ -5,29 +5,8 @@ import uiLt from 'element-plus/dist/locale/lt';
 import ru from '@/locales/ru.json';
 import en from '@/locales/en.json';
 import lt from '@/locales/lt.json';
-// import ElementLocale from 'element-ui/lib/locale';
 
 const LS_KEY_I18N_LOCALE = 'I18N_LOCALE';
-// const ui = {
-//   en: uiEn,
-//   ru: uiRu,
-//   lt: uiLt,
-// };
-
-// const local = { en, ru, lt };
-
-// function loadLocaleMessages() {
-//   const locales = require.context('./locales', true, /[A-Za-z0-9-_,\s]+\.json$/i);
-//   const messages = {};
-//   locales.keys()
-//     .forEach(key => {
-//       const [, locale] = key.match(/([A-Za-z0-9-_]+)\./i);
-//       messages[locale] = { ...locales(key), ...ui[locale] };
-//       // eslint-disable-next-line no-console
-//       console.log(locale, locales(key));
-//     });
-//   return messages;
-// }
 
 const dateTimeFormatGeneric = {
   timestamp: {
@@ -58,7 +37,7 @@ const dateTimeFormatGeneric = {
     hour: 'numeric',
     minute: 'numeric',
   },
-};
+} as const;
 
 const i18n = createI18n({
   locale: getSavedLocale() || process.env.VITE_I18N_LOCALE || 'en',

@@ -126,7 +126,7 @@ function onItemClick(item) {
 }
 
 function onProcessing(processing) {
-  setBusy(StockTaking.patch(props.stockTakingId, { processing }));
+  setBusy(StockTaking.updateOne({ id: props.stockTakingId, processing }));
 }
 
 // const { t }  = useI18n({

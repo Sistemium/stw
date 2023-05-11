@@ -57,7 +57,7 @@ import ToolButton from '@/lib/ToolButton.vue';
 import StorageSelect from '@/components/stock/StorageSelect.vue';
 import PageTitle from '@/components/PageTitle.vue';
 import { useInvStore } from '@/store/invStore';
-import { useRouteParams } from '@/lib/updateRouteParams.js';
+import { useRouteParams } from '@/lib/updateRouteParams';
 import { useScrollToCreated } from '@/services/scrolling';
 
 const { updateRouteParams } = useRouteParams();

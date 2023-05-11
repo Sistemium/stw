@@ -18,7 +18,7 @@ el-input.barcode-input(
 import { nextTick, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import debounce from 'lodash/debounce';
-import { useInvStore } from '@/store/invStore.js';
+import { useInvStore } from '@/store/invStore';
 
 const wrapperRef = ref(null);
 

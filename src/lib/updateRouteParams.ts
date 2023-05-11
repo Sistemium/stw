@@ -9,7 +9,7 @@ export function useRouteParams() {
 
   return { updateRouteParams };
 
-  async function updateRouteParams(updateParams = {}, updateQuery = {}, updateName) {
+  async function updateRouteParams(updateParams = {}, updateQuery = {}, updateName?: string) {
 
     const { name, params = {}, query = {} } = route;
 

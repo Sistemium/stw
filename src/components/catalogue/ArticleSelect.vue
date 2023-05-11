@@ -26,7 +26,7 @@ el-select.article-select(
 
 import Article from '@/models/Article';
 import { searchArticle } from '@/services/catalogue';
-import i18n from '@/i18n.js';
+import i18n from '@/i18n';
 import upperFirst from 'lodash/upperFirst';
 import { computed, ref, watch } from 'vue';
 import orderBy from 'lodash/orderBy';
