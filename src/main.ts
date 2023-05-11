@@ -62,10 +62,10 @@ const unsubscribe = store.subscribe(mutation => {
   const { type, payload } = mutation;
   debug(type, payload);
   if (type === 'auth/SET_AUTHORIZED') {
-    const { token, account: { name: username } = {} } = payload;
+    const { token, account: { name: username = 'unknown' } = {} } = payload;
     authorizeAxios(token);
     debug(username);
-    // Sentry.setUser({ username });
+    Sentry.setUser({ username });
     store.dispatch('inv/SUBSCRIBE_SOCKET_STATUS')
       .catch(error);
   } else if (type === 'inv/SET_SOCKET_IS_READY' && payload) {
