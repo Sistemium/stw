@@ -34,7 +34,7 @@ const showBarcodeInput = computed(() => {
   return showBarcodeStatus.value && !isNative() && isConnected.value;
 });
 
-watch(() => i18n.global.locale, saveLocale);
+watch(i18n.global.locale, saveLocale);
 
 </script>
 <style lang="scss">
