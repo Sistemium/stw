@@ -1,7 +1,6 @@
 import ReactiveModel from 'sistemium-data-vue';
 import qs from 'qs';
 import { axios } from 'sistemium-data/src/util/axios';
-import isString from 'lodash/isString';
 import { isNative } from 'sistemium-data/src/util/native';
 import axiosScriptMessaging, {
   SOCKET_SOURCE_HEADER,
@@ -14,21 +13,6 @@ export default class HybridDataModel extends ReactiveModel {
   constructor(config) {
     super(config);
     Object.assign(this, config.methods || {});
-  }
-
-  async patch(idOrObj, props) {
-    const { id } = isString(idOrObj) ? { id: idOrObj } : idOrObj;
-    if (!id) {
-      throw new Error('Can not patch: empty id');
-    }
-    const data = await this.findByID(id);
-    if (!data) {
-      throw new Error('Can not patch: not found id');
-    }
-    return this.create({
-      ...data,
-      ...props,
-    });
   }
 
 }
