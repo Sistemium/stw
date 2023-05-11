@@ -27,7 +27,7 @@ function webConfig(token) {
   return {
     baseURL: API_URL || '/api',
     headers: {
-      'x-page-size': 1000,
+      'x-page-size': 10000,
       authorization: token,
     },
     paramsSerializer(params) {
