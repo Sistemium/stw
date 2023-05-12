@@ -11,7 +11,7 @@ export interface BarcodeScan {
 export const useInvStore = defineStore({
   id: 'inv',
   state: () => ({
-    currentStorageId: useStorage<string>(`${VITE_LS_PREFIX}.currentStorageId`, ''),
+    currentStorageId: useStorage<string>(`${VITE_LS_PREFIX}.CURRENT_STORAGE`, ''),
     scannedBarcode: null as BarcodeScan,
   }),
   actions: {
