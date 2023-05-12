@@ -7,6 +7,8 @@ import { sentryVitePlugin } from '@sentry/vite-plugin';
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
+  const release = `${process.env.npm_package_name}@${process.env.npm_package_version}`;
+  console.log('release:', release);
   return {
     // optimizeDeps: {
     //   include: ['sistemium-data'],
@@ -25,7 +27,7 @@ export default defineConfig(({ mode }) => {
         org: 'sistemium',
         project: 'stw',
         authToken: env.SENTRY_AUTH_TOKEN,
-        release: `${process.env.npm_package_name}@${process.env.npm_package_version}`,
+        release,
         include: './dist',
         sourcemaps: {
           assets: './dist/**',
