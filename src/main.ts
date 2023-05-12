@@ -16,7 +16,8 @@ const { debug, error } = log('main');
 
 router.beforeEach(authGuard);
 
-const { NODE_ENV: environment, VITE_SENTRY_DSN: dsn } = import.meta.env;
+const { PROD: prodEnv, VITE_SENTRY_DSN: dsn } = import.meta.env;
+const environment = prodEnv ? 'production' : 'development';
 
 const app = createApp(App);
 
@@ -30,7 +31,7 @@ Sentry.init({
       tracePropagationTargets: ['localhost', 'stw.sistemium.com', /^\//],
     }),
   ],
-  tracesSampleRate: environment === 'production' ? 0.1 : 1,
+  tracesSampleRate: prodEnv ? 0.1 : 1,
 });
 
 app.use(router)
@@ -64,7 +65,7 @@ const unsubscribe = store.subscribe(mutation => {
   if (type === 'auth/SET_AUTHORIZED') {
     const { token, account: { name: username = 'unknown' } = {} } = payload;
     authorizeAxios(token);
-    debug(username);
+    debug('environment:', environment, 'user:', username);
     Sentry.setUser({ username });
     store.dispatch('inv/SUBSCRIBE_SOCKET_STATUS')
       .catch(error);
