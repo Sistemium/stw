@@ -57,7 +57,7 @@ const modelOrigin = computed((): StockOperation => {
     };
 });
 
-const disabled = computed(() => modelOrigin.value.processing === 'finished');
+const disabled = computed(() => modelOrigin.value?.processing === 'finished');
 
 async function saveFn(obj) {
   const { id: stockOperationId } = await props.model.createOne(obj) as ApiModel;

@@ -267,22 +267,22 @@ function toggleShowAllArticles() {
   isShowingAllArticles.value = !isShowingAllArticles.value;
 }
 
-function modeChange(mode) {
-  if (mode === DEFAULT_MODE) {
+function modeChange(newMode) {
+  if (newMode === DEFAULT_MODE) {
     Object.assign(props.model, {
       packageTypeId: null,
       packages: 0,
       unitsInPackage: null,
     });
-  } else if (mode === 'other') {
+  } else if (newMode === 'other') {
     spareUnits.value = 0;
     const { packageTypeId } = article.value;
     props.model.packageTypeId = packageTypeId || PackageType.DEFAULT_PACKAGE_TYPE_ID;
   } else {
-    const { packageTypeId, unitsInPackage } = find(packageOptions.value, { id: mode });
-    Object.assign(this.model, {
+    const { packageTypeId, unitsInPackage } = find(packageOptions.value, { id: newMode });
+    Object.assign(props.model, {
       packageTypeId,
-      packages: this.model.packages || 1,
+      packages: props.model.packages || 1,
       unitsInPackage,
     });
     spareUnits.value = 0;
