@@ -12,6 +12,8 @@ interface ScrollConfig {
   blink?: boolean;
   watchFor?: string | (() => string);
   watchToRepeat?: () => string | boolean;
+  scrollToIdFn?: (id: string) => boolean;
+  ifIdExistsFn?: (id: string, duration?: number) => boolean;
 }
 
 export function useScrollToCreated(config: ScrollConfig) {
@@ -23,6 +25,8 @@ export function useScrollToCreated(config: ScrollConfig) {
     blink = true,
     watchFor = () => route.query.createdId,
     watchToRepeat = null,
+    scrollToIdFn = scrollToIdDefault,
+    ifIdExistsFn = (id: string) => !!window.document.getElementById(`id-${id}`),
   } = config;
   const waitCount = ref(0);
 
@@ -34,14 +38,14 @@ export function useScrollToCreated(config: ScrollConfig) {
         return;
       }
       waitCount.value = 0;
-      waitUntilId(`id-${id}`);
+      waitUntilId(id);
     }, { immediate: true });
     if (watchToRepeat) {
       watch(watchToRepeat, () => {
         const id = watchForFn();
         // console.info('watchToRepeat', id);
         if (id) {
-          waitUntilId(`id-${id}`);
+          waitUntilId(id);
         }
       });
     }
@@ -49,7 +53,7 @@ export function useScrollToCreated(config: ScrollConfig) {
 
 
   function waitUntilId(id) {
-    if (window.document.getElementById(id)) {
+    if (ifIdExistsFn(id)) {
       // console.info('waitUntilId', id, true);
       waitCount.value = 0;
       scrollToId(id, SCROLL_DURATION, blink);
@@ -66,11 +70,29 @@ export function useScrollToCreated(config: ScrollConfig) {
   }
 
 
-  function scrollToId(id, duration = 500, blink = false) {
+  function scrollToId(id: string, duration = 500, blink = false) {
+    if (!scrollToIdFn(id, duration) || !blink) {
+      return;
+    }
+    setTimeout(() => {
+      const el = window.document.getElementById(id);
+      if (!el) {
+        return;
+      }
+      const toBlink = el.closest('tr') || el;
+      toBlink.classList.add(BLINK_CLASS);
+      setTimeout(() => {
+        toBlink.classList.remove(BLINK_CLASS);
+      }, REMOVE_BLINK_AFTER);
+    }, duration);
+  }
+
+  function scrollToIdDefault(rawId: string, duration: number): boolean {
+    const id = `id-${rawId}`;
     const el = window.document.getElementById(id);
     if (!el) {
       // console.info('scrollToId', id, 'none');
-      return;
+      return false;
     }
     setTimeout(() => {
       const scrollEl = el.closest('tr') || el;
@@ -82,16 +104,7 @@ export function useScrollToCreated(config: ScrollConfig) {
       }
       scrollEl.scrollIntoView({ behavior: 'smooth' });
     }, 10);
-    if (!blink) {
-      return;
-    }
-    setTimeout(() => {
-      const toBlink = el.closest('tr') || el;
-      toBlink.classList.add(BLINK_CLASS);
-      setTimeout(() => {
-        toBlink.classList.remove(BLINK_CLASS);
-      }, REMOVE_BLINK_AFTER);
-    }, duration);
+    return true;
   }
 
 }
