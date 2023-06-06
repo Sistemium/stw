@@ -3,6 +3,8 @@ import { createApp } from 'vue';
 import { ElLoading } from 'element-plus';
 import { createPinia } from 'pinia';
 import * as Sentry from '@sentry/vue';
+import { createVuetify } from 'vuetify';
+import { VVirtualScroll } from 'vuetify/components';
 import { authorizeAxios } from '@/init/HybridDataModel';
 import { authGuard, initData } from '@/services/dataSync';
 import init from './init';
@@ -20,10 +22,13 @@ const { PROD: prodEnv, VITE_SENTRY_DSN: dsn } = import.meta.env;
 const environment = prodEnv ? 'production' : 'development';
 
 const app = createApp(App);
+const vietify = createVuetify({
+  components: { VVirtualScroll },
+});
 
 Sentry.init({
   app,
-  dsn,
+  dsn: prodEnv ? dsn : null,
   environment,
   integrations: [
     new Sentry.BrowserTracing({
@@ -37,6 +42,7 @@ Sentry.init({
 app.use(router)
   .use(i18n)
   .use(store)
+  .use(vietify)
   .use(createPinia());
 
 init(app);
