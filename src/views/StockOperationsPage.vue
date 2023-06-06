@@ -30,9 +30,11 @@
         template(v-if="viewData.length")
           stock-operation-list(
             v-if="showList"
+            ref="operationListRef"
             :view-data="viewData"
             :active-id="route.params.stockOperationId"
             @click="onItemClick"
+            :height="tableHeight"
           )
           stock-operation-table(
             v-else
@@ -92,12 +94,19 @@ const store = useInvStore();
 const tableHeight = ref<number>(undefined);
 // TODO: auto open if empty
 const storageSelectRef = ref(null);
+const operationListRef = ref(null);
 
 useScrollToCreated({
   blink: false,
   watchFor: 'stockOperationId',
   watchToRepeat() {
     return !!route.query.search;
+  },
+  ifIdExistsFn(id: string) {
+    return !!operationListRef.value && !!viewData.value.find(item => id === item.id);
+  },
+  scrollToIdFn(id: string) {
+    return operationListRef.value?.scrollToId(id);
   },
 });
 
@@ -230,8 +239,12 @@ function onBack() {
   }
 }
 
-.el-main > .stm-resize {
+.stm-resize {
   overflow-y: hidden;
+}
+
+.stock-operation-list {
+  overflow-y: auto;
 }
 
 .el-main {

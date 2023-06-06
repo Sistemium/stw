@@ -39,6 +39,7 @@ export interface StockOperation {
 }
 
 export interface StockOperationViewData extends  StockOperation {
+  id: string;
   processing: string;
   counterparty: CounterParty;
   counterpartyName: string;
