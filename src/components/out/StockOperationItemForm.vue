@@ -12,7 +12,7 @@ el-tabs.stock-operation-item-form(:class="tabClass")
         price-form(:model="model" :vat-prices="formVatPrices")
   el-tab-pane(:label="$t('menu.materials')" v-if="model.materials")
     el-form(:model="model" :disabled="!editable")
-      materials-form(:materials="model.materials")
+      materials-form(:materials="model.materials" :disabled="!editable")
 
 </template>
 <script setup lang="ts">

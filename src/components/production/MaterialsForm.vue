@@ -14,14 +14,15 @@
             type="info"
             :value="idx +1"
           )
-        el-link(@click="removeMaterial(material)")
+        el-link(@click="removeMaterial(material)" :disabled="disabled")
           small {{ $t('delete') }}
       recipe-material-form(
         :model="material"
         :ref="el => el && itemRefs.push(el)"
+        :disabled="disabled"
       )
   .buttons
-    el-link(@click="onAddMaterial()")
+    el-link(@click="onAddMaterial()" :disabled="disabled")
       small {{ $tAction('add', 'material') }}
 
 </template>
@@ -36,10 +37,11 @@ import type { RecipeMaterial } from '@/models/Recipes';
 /* eslint-disable vue/no-mutating-props */
 const props = defineProps<{
   materials: RecipeMaterial[] | null;
+  disabled?: boolean;
 }>();
 
 const emit = defineEmits<{
-  (e: 'create', materials: RecipeMaterial[]) : void;
+  (e: 'create', materials: RecipeMaterial[]): void;
 }>();
 
 const itemRefs = ref([]);

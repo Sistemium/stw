@@ -4,6 +4,7 @@ el-form.recipe-material-form(
   ref="form"
   :model="model"
   :rules="rules"
+  :disabled="disabled"
 )
   el-form-item(prop="articleId")
     article-select(
@@ -29,6 +30,7 @@ import { useFormValidate } from '@/services/validating';
 
 const props = defineProps<{
   model: MaterialFields;
+  disabled?: boolean;
 }>();
 
 const article = computed(() => ArticleModel.reactiveGet(props.model?.articleId));
