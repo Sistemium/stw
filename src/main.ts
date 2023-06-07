@@ -22,7 +22,7 @@ const { PROD: prodEnv, VITE_SENTRY_DSN: dsn } = import.meta.env;
 const environment = prodEnv ? 'production' : 'development';
 
 const app = createApp(App);
-const vietify = createVuetify({
+const vuetify = createVuetify({
   components: { VVirtualScroll },
 });
 
@@ -42,7 +42,7 @@ Sentry.init({
 app.use(router)
   .use(i18n)
   .use(store)
-  .use(vietify)
+  .use(vuetify)
   .use(createPinia());
 
 init(app);
