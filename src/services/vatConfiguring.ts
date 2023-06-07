@@ -1,19 +1,40 @@
-import { computed } from 'vue';
+import { computed, ComputedRef } from 'vue';
 import { vatConfig as vatConfigFn } from '@/services/warehousing.js';
 
-export function useVatConfig(operationName) {
+interface VatOperationConfig {
+  vatRate: number;
+  vatPrices: boolean;
+  priceField: string;
+}
 
-  const vatConfig = computed(() => vatConfigFn());
+interface VatConfig {
+  rules: {
+    vatPrices: {
+      stockReceiving: boolean;
+      stockWithdrawing: boolean;
+    }
+    defaultRate: number;
+  },
+}
 
-  const vatOperationConfig = computed(() => {
+export function useVatConfig(operationName): {
+  vatConfig: ComputedRef<VatConfig>;
+  vatOperationConfig: ComputedRef<VatOperationConfig>;
+} {
+
+  const vatConfig = computed<VatConfig>(() => vatConfigFn());
+
+  const vatOperationConfig = computed<VatOperationConfig>(() => {
     const { rules } = vatConfig.value;
     if (!operationName) {
       throw Error('No operationName');
     }
-    const { vatPrices = {}, defaultRate: vatRate = 0 } = rules;
+    const { defaultRate: vatRate = 0 } = rules;
+    const vatPrices = rules && rules.vatPrices[operationName] || false;
     return {
       vatRate,
-      vatPrices: vatPrices[operationName] || false,
+      vatPrices,
+      priceField: vatPrices ? 'vatPrice' : 'price',
     };
   });
 
