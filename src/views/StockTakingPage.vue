@@ -24,6 +24,7 @@ el-main.stock-taking-page.page
       resize(:padding="20")
         stock-taking-item-list(
           :items="stockTakingItems"
+          :price-field="vatOperationConfig.priceField"
           @click="onItemClick"
         )
         alert-empty(
@@ -45,14 +46,14 @@ el-main.stock-taking-page.page
   router-view
 
 </template>
-<script setup>
+<script setup lang="ts">
 
-import StockTakingItem from '@/models/StockTakingItem';
+import StockTakingItem from '@/models/StockTakingItem.js';
 import StockTakingItemList from '@/components/stock/StockTakingItemList.vue';
 // import BarcodeScanner from '@/components/BarcodeScanner/BarcodeScanner';
 import StockTakingEdit from '@/components/stock/StockTakingEdit.vue';
 import AlertEmpty from '@/lib/AlertEmpty.vue';
-import { searchByArticle } from '@/services/catalogue';
+import { searchByArticle } from '@/services/catalogue.js';
 import ToolButton from '@/lib/ToolButton.vue';
 import Resize from '@/lib/StmResize.vue';
 import { computed, ref } from 'vue';
@@ -60,9 +61,10 @@ import { useRoute, useRouter } from 'vue-router';
 import orderBy from 'lodash/orderBy';
 import { useRouteParams } from '@/lib/updateRouteParams';
 import { useOperationDisabled } from '@/services/workflowing';
-import StockTaking, { workflow } from '@/models/StockTaking';
+import StockTaking, { workflow } from '@/models/StockTaking.js';
 import WorkflowTransitions from '@/lib/WorkflowTransitions.vue';
 import { useBusy } from '@/views/pages';
+import { useVatConfig } from '@/services/vatConfiguring';
 // import { useI18n } from 'vue-i18n';
 // import StockTaking from '@/models/StockTaking';
 // import { useInvStore } from '@/store/invStore';
@@ -73,6 +75,8 @@ const props = defineProps({
   stockTakingId: String,
   closeRoute: String,
 });
+
+const { vatOperationConfig } = useVatConfig('stockReceiving');
 
 const currentTabData = ref('items');
 const route = useRoute();

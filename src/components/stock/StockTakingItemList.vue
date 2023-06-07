@@ -21,6 +21,8 @@
             span {{ $t(`units.short.${item.measureUnitId}`) }}
           span &equals;
         span.units {{ item.units }} {{ $t(`units.short.${item.measureUnitId}`) }}
+      .cost(v-if="item.price")
+        .price {{ item[priceField] }} &euro;
 
 </template>
 <script setup>
@@ -29,6 +31,7 @@ import { shortenedPackage } from '@/models/PackageType';
 
 defineProps({
   items: Array,
+  priceField: String,
 });
 
 const emit  = defineEmits(['click']);

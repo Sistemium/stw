@@ -26,7 +26,7 @@ import StockTaking from '@/models/StockTaking';
 import { testArticle } from '@/services/catalogue';
 import { likeLt } from '@/services/lt';
 
-export function stockTakingItemInstance({ stockTakingId, articleId, barcode }) {
+export function stockTakingItemInstance({ stockTakingId, articleId, barcode, vatRate }) {
   return {
     stockTakingId,
     articleId,
@@ -35,6 +35,9 @@ export function stockTakingItemInstance({ stockTakingId, articleId, barcode }) {
     packages: null,
     packageTypeId: null,
     unitsInPackage: null,
+    vatRate,
+    price: null,
+    vatPrice: null,
 
     measureId: null,
     measureUnitId: null,

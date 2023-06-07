@@ -14,16 +14,22 @@ drawer-edit.stock-taking-item-edit(
       :model="model"
       :editable="editable"
     )
+      template(#article-extra)
+        vat-mode-switch(v-model="formVatPrices" v-if="editable")
+        price-form(:model="model" :vat-prices="formVatPrices")
 
 </template>
 <script setup lang="ts">
 
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import DrawerEdit from '@/lib/DrawerEdit.vue';
 import StockTakingItem from '@/models/StockTakingItem.js';
 import StockTaking, { workflow } from '@/models/StockTaking.js';
 import StockTakingItemForm from '@/components/stock/StockTakingItemForm.vue';
 import { stockTakingItemInstance } from '@/services/warehousing.js';
+import VatModeSwitch from '@/components/out/VatModeSwitch.vue';
+import PriceForm from '@/components/out/PriceForm.vue';
+import { useVatConfig } from '@/services/vatConfiguring';
 
 const props = defineProps({
   stockTakingId: { type: String, required: true },
@@ -32,13 +38,19 @@ const props = defineProps({
   barcode: String,
 });
 
+const { vatOperationConfig } = useVatConfig('stockReceiving');
+
+const formVatPrices = ref(vatOperationConfig.value.vatPrices);
+
 const stockTaking = computed(() => StockTaking.reactiveGet(props.stockTakingId));
 const modelOrigin = computed(() => {
   const { stockTakingItemId: id, stockTakingId, barcode = null } = props;
-  return id ? StockTakingItem.reactiveGet(id)
+  const { vatRate } = vatOperationConfig.value;
+  return id ? { ...StockTakingItem.reactiveGet(id), vatRate }
     : stockTakingItemInstance({
       stockTakingId,
       barcode,
+      vatRate,
       articleId: null,
     });
 });

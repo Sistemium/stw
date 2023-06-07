@@ -43,7 +43,7 @@ function setPrices(price) {
   const otherField = vatPrices ? 'price' : 'vatPrice';
   const fn = vatPrices ? v => v / (1.0 + vatRate) : v => v * (1.0 + vatRate);
   // eslint-disable-next-line vue/no-mutating-props
-  props.model[otherField] = round(fn(price), 2);
+  props.model[otherField] = price === null ? null : round(fn(price), 2);
 }
 
 </script>
