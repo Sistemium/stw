@@ -36,7 +36,7 @@
                 :view-data="showRow"
               )
             stock-operation-list(
-              v-else
+              v-else-if="tableHeight"
               ref="operationListRef"
               :view-data="viewData"
               :active-id="route.params.stockOperationId"
