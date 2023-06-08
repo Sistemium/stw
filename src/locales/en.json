@@ -58,6 +58,7 @@
     "vatPrice": "Price with VAT",
     "vatRate": "VAT",
     "totalCost": "Cost",
+    "cost": "Self cost",
     "inverse": "Name for value \"no\"",
     "prefix": "Prefix",
     "suffix": "Suffix",

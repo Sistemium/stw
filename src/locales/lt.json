@@ -58,6 +58,7 @@
     "vatPrice": "Kaina su PVM",
     "vatRate": "PVM",
     "totalCost": "Kaina iš viso",
+    "cost": "Savikaina",
     "inverse": "Reikšmės \"ne\" pavadinimas",
     "prefix": "Priešdėlis",
     "suffix": "Priesaga",
