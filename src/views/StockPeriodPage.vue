@@ -40,6 +40,7 @@
 import { computed, ref, watch } from 'vue';
 import PageTitle from '@/components/PageTitle.vue';
 import dayjs from 'dayjs';
+import { useRoute } from 'vue-router';
 import { findStockPeriod } from '@/services/warehousing.js';
 import StockPeriodTable from '@/components/stock/StockPeriodTable.vue';
 import SearchInput from '@/lib/SearchInput.vue';
@@ -50,6 +51,7 @@ import { useInvStore } from '@/store/invStore';
 import StorageSelect from '@/components/stock/StorageSelect.vue';
 import Resize from '@/lib/StmResize.vue';
 import ToolButton from '@/lib/ToolButton.vue';
+import { useRouteParams } from '@/lib/updateRouteParams';
 
 // mixins: [storageSelectMixin],
 
@@ -58,11 +60,13 @@ const monthAgo = today.add(-1, 'month');
 
 const dateRange = ref([monthAgo, today]);
 const data = ref([]);
+const route = useRoute();
 const search = ref('');
-const showDetails = ref(false);
-const articleId = ref<string>(null);
+const articleId = ref<string | null>(route.query.articleId?.toString() || null);
+const showDetails = ref(!!articleId.value);
 const tableHeight = ref<number>(undefined);
 const storageSelectRef = ref(null);
+const { updateRouteParams } = useRouteParams();
 
 const store = useInvStore();
 
@@ -113,6 +117,9 @@ async function refresh(storageId, dateB, dateE) {
 function rowClick(row) {
   showDetails.value = true;
   articleId.value = row.articleId;
+  updateRouteParams({}, {
+    articleId: row.articleId,
+  });
 }
 
 watch(queryParams, ({ storageId, dateB, dateE }) => {
@@ -123,6 +130,13 @@ watch(queryParams, ({ storageId, dateB, dateE }) => {
     .catch(e => console.error(e));
 }, { immediate: true });
 
+watch(showDetails, show => {
+  if (!show) {
+    updateRouteParams({}, {
+      articleId: undefined,
+    });
+  }
+});
 
 </script>
 <style scoped lang="scss">
