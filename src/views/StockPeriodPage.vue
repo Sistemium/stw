@@ -2,6 +2,10 @@
 
 .stock-date-page
   page-title(title="menu.stockPeriod")
+    tool-button(
+      tool="refresh"
+      @click="refreshClick"
+    )
   .filters
     storage-select(
       ref="storageSelectRef"
@@ -45,6 +49,7 @@ import { ElLoading } from 'element-plus';
 import { useInvStore } from '@/store/invStore';
 import StorageSelect from '@/components/stock/StorageSelect.vue';
 import Resize from '@/lib/StmResize.vue';
+import ToolButton from '@/lib/ToolButton.vue';
 
 // mixins: [storageSelectMixin],
 
@@ -90,6 +95,11 @@ function setHeight(height) {
   tableHeight.value = height;
 }
 
+async function refreshClick() {
+  const { storageId, dateB, dateE } = queryParams.value;
+  await refresh(storageId, dateB, dateE);
+}
+
 async function refresh(storageId, dateB, dateE) {
   const loading = ElLoading.service({});
   try {
@@ -121,9 +131,11 @@ watch(queryParams, ({ storageId, dateB, dateE }) => {
 .filters {
   display: flex;
   justify-content: center;
+
   :deep(> * + *) {
     margin-left: $margin-right;
   }
+
   :deep(.el-date-editor) {
     flex-grow: 0;
   }
@@ -132,6 +144,10 @@ watch(queryParams, ({ storageId, dateB, dateE }) => {
 .stm-resize {
   margin-top: $margin-top;
   overflow-y: hidden;
+}
+
+.tool-button {
+  margin-left: $margin-right;
 }
 
 </style>

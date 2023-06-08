@@ -1,6 +1,7 @@
 <template lang="pug">
 
 h1.page-title {{ $t(title) }}
+  slot
 
 </template>
 <script setup lang="ts">
