@@ -28,14 +28,21 @@
         @resized="setHeight"
       )
         template(v-if="viewData.length")
-          stock-operation-list(
+          template(
             v-if="showList"
-            ref="operationListRef"
-            :view-data="viewData"
-            :active-id="route.params.stockOperationId"
-            @click="onItemClick"
-            :height="tableHeight"
           )
+            .list-group(v-if="showRow")
+              stock-operation-list-item(
+                :view-data="showRow"
+              )
+            stock-operation-list(
+              v-else
+              ref="operationListRef"
+              :view-data="viewData"
+              :active-id="route.params.stockOperationId"
+              @click="onItemClick"
+              :height="tableHeight"
+            )
           stock-operation-table(
             v-else
             :height="tableHeight"
@@ -58,7 +65,7 @@ import find from 'lodash/find';
 import { stockOperationToViewData, searchOperations } from '@/services/warehousing.js';
 import StockOperationList from '@/components/out/StockOperationList.vue';
 import StockOperationTable from '@/components/out/StockOperationTable.vue';
-
+import StockOperationListItem from '@/components/out/StockOperationListItem.vue';
 import SearchInput from '@/lib/SearchInput.vue';
 import Resize from '@/lib/StmResize.vue';
 import ToolButton from '@/lib/ToolButton.vue';
@@ -68,7 +75,6 @@ import { useRoute } from 'vue-router';
 import { useInvStore } from '@/store/invStore';
 import orderBy from 'lodash/orderBy';
 import ReactiveModel from 'sistemium-data-vue';
-// import type { PageProps } from '@/views/pages';
 import AlertEmpty from '@/lib/AlertEmpty.vue';
 import useResponsiveTables from '@/components/useResponsiveTables';
 import StorageSelect from '@/components/stock/StorageSelect.vue';
@@ -89,7 +95,7 @@ const props = defineProps<{
 
 const { updateRouteParams } = useRouteParams();
 const route = useRoute();
-const { showTable, tableSize } = useResponsiveTables();
+const { showTable, tableSize, windowWidth } = useResponsiveTables();
 const store = useInvStore();
 const tableHeight = ref<number>(undefined);
 // TODO: auto open if empty
@@ -126,6 +132,12 @@ const viewData = computed(() => {
 
 
 const showList = computed(() => !showTable.value || showDetails.value);
+const showRow = computed(() => {
+  if (!showList.value || windowWidth.value > 992) {
+    return null;
+  }
+  return viewData.value.find(({ id }) => id === route.params.stockOperationId);
+});
 
 const stockOperations = computed(() => {
   if (!storageId.value) {
@@ -188,7 +200,7 @@ function onBack() {
 
 </script>
 <style scoped lang="scss">
-@import "../styles/variables";
+@import "@/styles/variables";
 
 @include responsive-only(lt-md) {
   .el-container {
@@ -196,11 +208,6 @@ function onBack() {
   }
   .el-aside {
     width: 100% !important;
-
-    :deep(.stock-operation-list-item:not(.active)) {
-      display: none;
-    }
-
     margin-bottom: $margin-right;
   }
   .el-aside :deep(.stock-operation-list-item) {
