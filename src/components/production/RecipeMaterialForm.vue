@@ -15,6 +15,7 @@ el-form.recipe-material-form(
     prop="units"
   )
     el-input-number(v-model="model.units" :min="0")
+  slot
 
 </template>
 <script setup lang="ts">

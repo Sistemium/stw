@@ -21,6 +21,8 @@
         :ref="el => el && itemRefs.push(el)"
         :disabled="disabled"
       )
+        template(#default)
+          slot(name="material" :material="material")
   .buttons
     el-link(@click="onAddMaterial()" :disabled="disabled")
       small {{ $tAction('add', 'material') }}

@@ -16,6 +16,8 @@ drawer-edit.stock-operation-item-edit(
       :model="drawerModel"
       :vat-prices="vatOperationConfig.vatPrices"
       :vat-rate="vatOperationConfig.vatRate"
+      :storage-id="stockOperation.storageId"
+      :date="stockOperation.date"
     )
 
 </template>

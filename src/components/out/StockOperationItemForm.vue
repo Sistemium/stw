@@ -13,6 +13,16 @@ el-tabs.stock-operation-item-form(:class="tabClass")
   el-tab-pane(:label="$t('menu.materials')" v-if="model.materials")
     el-form(:model="model" :disabled="!editable")
       materials-form(:materials="model.materials" :disabled="!editable")
+        template(#material="{ material: material }")
+          article-cost-info(
+            v-if="material?.articleId && storageId && date"
+            :article-id="material.articleId"
+            :storage-id="storageId"
+            :date="date"
+            :vat-prices="vatPrices"
+            :vat-rate="vatRate"
+            :units="material.units"
+          )
 
 </template>
 <script setup lang="ts">
@@ -21,6 +31,7 @@ import { computed, ref, watch } from 'vue';
 import cloneDeep from 'lodash/cloneDeep';
 import StockTakingItemForm from '@/components/stock/StockTakingItemForm.vue';
 import MaterialsForm from '@/components/production/MaterialsForm.vue';
+import ArticleCostInfo from '@/components/production/ArticleCostInfo.vue';
 import PriceForm from '@/components/out/PriceForm.vue';
 import Article from '@/models/Article.js';
 import VatModeSwitch from '@/components/out/VatModeSwitch.vue';
@@ -31,6 +42,9 @@ const props = defineProps<{
   editable: boolean;
   model: StockOperationItem;
   vatPrices: boolean;
+  vatRate?: number;
+  storageId?: string;
+  date?: string;
 }>();
 
 const { form, validate } = useFormValidate();
