@@ -35,6 +35,13 @@ el-table.stock-period-table(
     :label="$t('fields.remains')"
     :width="columnWidth"
   )
+  el-table-column(
+    prop="resultCost"
+    :label="$t('fields.cost')"
+    :width="columnWidth"
+  )
+    template(#default="{ row }")
+      span(v-if="row.resultCost") {{ $n(row.resultCost) }}
 
 </template>
 <script setup lang="ts">
