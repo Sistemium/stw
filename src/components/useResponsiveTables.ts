@@ -18,5 +18,5 @@ export default function (config: ResponsiveTableConfig = {}) {
     return width.value < sizeBreak ? 'small' : 'default';
   });
   const showTable = computed(() => width.value >= widthBreak);
-  return { tableSize, showTable };
+  return { tableSize, showTable, windowWidth: width };
 }
