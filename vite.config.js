@@ -65,7 +65,6 @@ export default defineConfig(({ mode }) => {
           target: 'https://vfsd.sistemium.com',
           // target: 'http://localhost:3105',
           changeOrigin: true,
-          // rewrite: path => path.replace(/^\/api/, ''),
         },
         '/pha': {
           target: 'http://localhost:3130',
