@@ -14,8 +14,13 @@
     el-date-picker(
       v-model="dateRange"
       type="daterange"
+      :unlink-panels="true"
     )
     search-input(v-model="search")
+    download-excel-button(
+      :data-fn="downloadExcelData"
+      :name="downloadExcelName"
+    )
   resize(
     :padding="20"
     @resized="setHeight"
@@ -40,6 +45,9 @@
 import { computed, ref, watch } from 'vue';
 import PageTitle from '@/components/PageTitle.vue';
 import dayjs from 'dayjs';
+import map from 'lodash/map';
+import pick from 'lodash/pick';
+import round from 'lodash/round';
 import { useRoute } from 'vue-router';
 import { findStockPeriod } from '@/services/warehousing.js';
 import StockPeriodTable from '@/components/stock/StockPeriodTable.vue';
@@ -49,9 +57,12 @@ import StockArticleDetailsView from '@/components/stock/StockArticleDetailsView.
 import { ElLoading } from 'element-plus';
 import { useInvStore } from '@/store/invStore';
 import StorageSelect from '@/components/stock/StorageSelect.vue';
+import DownloadExcelButton from '@/lib/DownloadExcelButton.vue';
 import Resize from '@/lib/StmResize.vue';
 import ToolButton from '@/lib/ToolButton.vue';
 import { useRouteParams } from '@/lib/updateRouteParams';
+import { t } from '@/lib/validations';
+import Article from '@/models/Article.js';
 
 // mixins: [storageSelectMixin],
 
@@ -94,6 +105,70 @@ const filteredData = computed(() => {
     ? data.value.filter(({ article }) => article && searcher(article))
     : data.value;
 });
+
+function downloadSchema() {
+  return {
+    columns: [
+      {
+        key: 'id',
+        title: 'ID',
+        width: 0,
+      }, {
+        key: 'name',
+        title: t('concepts.article'),
+        width: 55,
+      }, {
+        key: 'code',
+        title: t('fields.code'),
+        width: 30,
+      }, {
+        key: 'initUnits',
+        title: t('fields.initUnits'),
+        width: 15,
+      }, {
+        key: 'unitsIn',
+        title: t('fields.unitsIn'),
+        width: 15,
+      }, {
+        key: 'unitsOut',
+        title: t('fields.unitsOut'),
+        width: 15,
+      }, {
+        key: 'unitsSur',
+        title: t('fields.unitsSur'),
+        width: 15,
+      }, {
+        key: 'resultUnits',
+        title: t('fields.remains'),
+        width: 15,
+      }, {
+        key: 'resultCost',
+        title: t('fields.cost'),
+        width: 15,
+      },
+    ],
+  };
+}
+
+const downloadExcelName = computed(() => {
+  const [dateB, dateE] = dateRange.value;
+  const fmt = 'YYYY-MM-DD';
+  return `${t('menu.stockPeriod')}-${dateB.format(fmt)}-${dateE.format(fmt)}`;
+});
+
+function downloadExcelData() {
+  const schema = downloadSchema();
+  const columns = map(schema.columns, 'key');
+  const data = filteredData.value.map(a => ({
+    ...pick(a, columns),
+    ...pick(Article.getByID(a.articleId), ['name', 'code', 'id']),
+    resultCost: round(a.resultCost, 2),
+  }));
+  return {
+    schema,
+    data,
+  };
+}
 
 function setHeight(height) {
   tableHeight.value = height;
