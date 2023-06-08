@@ -39,6 +39,14 @@ const dateTimeFormatGeneric = {
   },
 } as const;
 
+const numberFormats = {
+  decimal: {
+    style: 'decimal',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  },
+}
+
 const i18n = createI18n({
   locale: getSavedLocale() || process.env.VITE_I18N_LOCALE || 'en',
   fallbackLocale: process.env.VITE_I18N_FALLBACK_LOCALE || 'en',
@@ -52,6 +60,11 @@ const i18n = createI18n({
     en: dateTimeFormatGeneric,
     ru: dateTimeFormatGeneric,
     lt: dateTimeFormatGeneric,
+  },
+  numberFormats: {
+    en: numberFormats,
+    ru: numberFormats,
+    lt: numberFormats,
   },
 });
 
