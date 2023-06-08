@@ -41,7 +41,7 @@
               :view-data="viewData"
               :active-id="route.params.stockOperationId"
               @click="onItemClick"
-              :height="tableHeight"
+              :height="tableHeight - 2"
             )
           stock-operation-table(
             v-else
