@@ -209,5 +209,8 @@
     "finished": "Завершено",
     "planned": "Запланировано",
     "cancel": "Отмена"
+  },
+  "after": {
+    "stockReceiving": "после прихода"
   }
 }

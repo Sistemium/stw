@@ -209,5 +209,8 @@
     "finished": "Įvykdyta",
     "planned": "Suplanuota",
     "cancel": "Grįžti į planavimą"
+  },
+  "after": {
+    "stockReceiving": "po priemimo"
   }
 }

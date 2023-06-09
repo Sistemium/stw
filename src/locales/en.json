@@ -212,5 +212,8 @@
     "finished": "Finished",
     "planned": "Planned",
     "cancel": "Cancel"
+  },
+  "after": {
+    "stockReceiving": "after receiving"
   }
 }
