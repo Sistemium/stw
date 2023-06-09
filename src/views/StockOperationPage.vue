@@ -59,6 +59,7 @@ import { workflow } from '@/models/StockWithdrawing.js';
 import { useBusy } from '@/views/pages';
 import { useOperationDisabled } from '@/services/workflowing';
 import type { StockOperation } from '@/models/StockOperations';
+import { useRouteParams } from '@/lib/updateRouteParams';
 
 
 const props = defineProps<{
@@ -78,6 +79,7 @@ const props = defineProps<{
 
 const router = useRouter();
 const { setBusy, isBusy } = useBusy();
+const { updateRouteParams } = useRouteParams();
 
 const priceField = computed(() => {
   return configPriceField(props.operationName, stockOperation.value.date);
@@ -97,22 +99,16 @@ const stockOperation = computed<StockOperation>(() => {
 const { disabled } = useOperationDisabled(stockOperation, workflow);
 
 function onAddItem() {
-  router.push({
-    name: props.createRoute,
-    params: {
-      stockOperationId: props.stockOperationId,
-    },
-  });
+  updateRouteParams({
+    stockOperationId: props.stockOperationId,
+  }, {}, props.createRoute);
 }
 
 function onItemClick(item) {
-  router.push({
-    name: props.editRoute,
-    params: {
-      stockOperationId: props.stockOperationId,
-      stockOperationItemId: item.id,
-    },
-  });
+  updateRouteParams({
+    stockOperationId: props.stockOperationId,
+    stockOperationItemId: item.id,
+  }, {}, props.editRoute);
 }
 
 function onEditClose(record) {
