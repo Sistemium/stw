@@ -113,7 +113,10 @@ function onItemClick(item) {
 
 function onEditClose(record) {
   if (!record) {
-    router.replace({ name: props.from.name });
+    router.replace({
+      name: props.from.name,
+      query: router.currentRoute.value.query,
+    });
   }
 }
 
