@@ -1,13 +1,12 @@
 <template lang="pug">
-el-row.article-cost-info
-  el-col.lbl(:span="14") {{ $t('fields.cost') }}:
-  el-col.val(:span="10" v-if="data")
-    span {{ $n(data.cost, 'decimal') }}
+el-form-item(prop="cost" :label="$t('fields.cost')")
+  template(v-if="data")
+    span {{ $n(cost, 'decimal') }}
     template(v-if="units > 1 && data.cost")
       small x
       span {{ units }}
       small &equals;
-      span {{ $n(units * data.cost, 'decimal') }}
+      span {{ $n(units * cost, 'decimal') }}
 
 </template>
 
@@ -35,6 +34,10 @@ const data = computed<StockArticleDate>(() => {
   })[0];
 });
 
+const cost = computed(() => {
+  return data.value?.cost * (props.vatPrices ? (1 + props.vatRate) : 1);
+});
+
 watch(() => [props.articleId, props.storageId, props.date].join('|'), async () => {
   const {
     storageId,
@@ -53,18 +56,8 @@ watch(() => [props.articleId, props.storageId, props.date].join('|'), async () =
 
 <style scoped lang="scss">
 @import "@/styles/variables.scss";
-.el-row {
-  font-size: var(--el-form-label-font-size);
-  color: var(--el-text-color-regular);
-  margin-bottom: $margin-right;
-}
-.lbl, .val {
-  text-align: right;
-}
-.el-col {
-  padding: 0 $padding;
-}
+
 small {
-  padding: 3px;
+  padding: 0 3px;
 }
 </style>
