@@ -56,7 +56,9 @@ export function useScrollToCreated(config: ScrollConfig) {
     if (ifIdExistsFn(id)) {
       // console.info('waitUntilId', id, true);
       waitCount.value = 0;
-      scrollToId(id, SCROLL_DURATION, blink);
+      setTimeout(() => {
+        scrollToId(id, SCROLL_DURATION, blink);
+      }, 0);
       return;
     }
     setTimeout(() => {
