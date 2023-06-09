@@ -10,6 +10,16 @@ el-tabs.stock-operation-item-form(:class="tabClass")
       template(#article-extra)
         vat-mode-switch(v-model="formVatPrices" v-if="editable")
         price-form(:model="model" :vat-prices="formVatPrices")
+        article-cost-info(
+          v-if="model.articleId && storageId && date"
+          :article-id="model.articleId"
+          :storage-id="storageId"
+          :date="date"
+          :vat-prices="formVatPrices"
+          :vat-rate="vatRate"
+          :materials="model.materials"
+          :units="1"
+        )
   el-tab-pane(:label="$t('menu.materials')" v-if="model.materials")
     el-form(:model="model" :disabled="!editable")
       materials-form(:materials="model.materials" :disabled="!editable")
@@ -19,7 +29,7 @@ el-tabs.stock-operation-item-form(:class="tabClass")
             :article-id="material.articleId"
             :storage-id="storageId"
             :date="date"
-            :vat-prices="vatPrices"
+            :vat-prices="formVatPrices"
             :vat-rate="vatRate"
             :units="material.units"
           )
