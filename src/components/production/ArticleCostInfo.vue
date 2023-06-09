@@ -1,12 +1,11 @@
 <template lang="pug">
-el-form-item(prop="cost" :label="$t('fields.cost')")
-  template(v-if="data")
-    span {{ $n(cost, 'decimal') }}
-    template(v-if="units > 1 && data.cost")
-      small x
-      span {{ units }}
-      small &equals;
-      span {{ $n(units * cost, 'decimal') }}
+el-form-item(:label="$t('fields.cost')")
+  span {{ $n(cost, 'decimal') }}
+  template(v-if="units > 1 && cost")
+    small x
+    span {{ units }}
+    small &equals;
+    span {{ $n(units * cost, 'decimal') }}
 
 </template>
 
@@ -28,22 +27,28 @@ const props = defineProps<{
   vatPrices: boolean;
   units?: number;
   materials?: MaterialFields[];
+  type?: 'initCost' | 'resultCost' | 'cost';
 }>();
 
-const data = computed<{ cost: number }>(() => {
+const data = computed<{ initCost: number, resultCost?: number }>(() => {
   if (!props.materials) {
     return stockArticleDateReactive(props.storageId, props.articleId, props.date);
   }
   return {
-    cost: sumBy(props.materials, ({ articleId, units }) => {
-      const cost = stockArticleDateReactive(props.storageId, articleId, props.date)?.cost;
-      return cost && units ? units * cost : 0;
+    initCost: sumBy(props.materials, ({ articleId, units }) => {
+      const initCost = stockArticleDateReactive(props.storageId, articleId, props.date)?.initCost;
+      return initCost && units ? units * initCost : 0;
     }),
   };
 });
 
 const cost = computed(() => {
-  return data.value?.cost * (props.vatPrices ? (1 + props.vatRate) : 1);
+  const { value } = data;
+  if (!value) {
+    return 0;
+  }
+  const price = props.type ? value[props.type] : (value.initCost || value.resultCost);
+  return price * (props.vatPrices ? (1 + props.vatRate) : 1) || 0;
 });
 
 watch(() => props.materials, async materials => {
