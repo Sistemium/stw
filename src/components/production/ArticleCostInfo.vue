@@ -58,7 +58,7 @@ watch(() => props.materials, async materials => {
     storageId: props.storageId,
     articleId: { $in: articleIds },
     date: { $lte: props.date },
-    nextDate: { $gte: props.date },
+    nextDate: { $gt: props.date },
   });
 }, { immediate: true });
 
@@ -76,7 +76,7 @@ watch(() => [props.articleId, props.storageId, props.date].join('|'), async () =
     storageId,
     articleId,
     date: { $lte: date },
-    nextDate: { $gte: date },
+    nextDate: { $gt: date },
   });
 }, { immediate: true });
 
