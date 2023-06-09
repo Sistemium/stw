@@ -1,22 +1,18 @@
 <template lang="pug">
 
-v-virtual-scroll.stock-operation-list.list-group(
+virtual-scroll-list.stock-operation-list.list-group(
+  data-key="id"
+  :data-sources="viewData"
+  :data-component="StockOperationListItem"
   ref="scrollRef"
-  :items="viewData"
-  :height="height"
+  :extra-props="{ activeId: activeId, onClick: onClick }"
 )
-  template(#default="{ item }")
-    stock-operation-list-item(
-      :id="`id-${item.id}`"
-      @click="emit('click', item)"
-      :class="{ active: activeId === item.id }"
-      :view-data="item"
-    )
 
 </template>
 <script setup lang="ts">
 
 import { ref } from 'vue';
+import VirtualScrollList from 'vue3-virtual-scroll-list';
 import StockOperationListItem from '@/components/out/StockOperationListItem.vue';
 import type { StockOperationViewData } from '@/models/StockOperations';
 
@@ -25,7 +21,6 @@ const scrollRef = ref(null);
 const props = defineProps<{
   viewData: StockOperationViewData[];
   activeId?: string;
-  height: number;
 }>();
 
 defineExpose({
@@ -44,5 +39,9 @@ defineExpose({
 const emit = defineEmits<{
   (e: 'click', item: StockOperationViewData): void;
 }>();
+
+function onClick(item) {
+  emit('click', item);
+}
 
 </script>

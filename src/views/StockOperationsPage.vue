@@ -41,7 +41,6 @@
               :view-data="viewData"
               :active-id="route.params.stockOperationId"
               @click="onItemClick"
-              :height="tableHeight - 2"
             )
           stock-operation-table(
             v-else
@@ -248,6 +247,8 @@ function onBack() {
 
 .stm-resize {
   overflow-y: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .stock-operation-list {
