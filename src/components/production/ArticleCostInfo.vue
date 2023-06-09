@@ -1,5 +1,5 @@
 <template lang="pug">
-el-form-item(:label="$t('fields.cost')")
+el-form-item(:label="label")
   span {{ $n(cost, 'decimal') }}
   template(v-if="units > 1 && cost")
     small x
@@ -16,8 +16,10 @@ import model from '@/models/StockArticleDate.js';
 import filter from 'lodash/filter';
 import uniq from 'lodash/uniq';
 import sumBy from 'lodash/sumBy';
+import trim from 'lodash/trim';
 import type StockArticleDate from '@/models/StockArticleDates';
 import type { MaterialFields } from '@/models/Recipes';
+import { t } from '@/lib/validations';
 
 const props = defineProps<{
   storageId: string;
@@ -28,7 +30,10 @@ const props = defineProps<{
   units?: number;
   materials?: MaterialFields[];
   type?: 'initCost' | 'resultCost' | 'cost';
+  labelSuffix?: string;
 }>();
+
+const label = computed(() => trim(`${t('fields.cost')} ${props.labelSuffix || ''}`));
 
 const data = computed<{ initCost: number, resultCost?: number }>(() => {
   if (!props.materials) {
