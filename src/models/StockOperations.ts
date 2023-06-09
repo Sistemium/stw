@@ -16,6 +16,9 @@ export interface ArticleQuantityFields {
 }
 
 export interface StockOperationItem extends ArticleQuantityFields {
+  stockWithdrawingId?: string;
+  stockReceivingId?: string;
+  stockTakingId?: string;
   price?: number;
   vatRate?: number;
   vatPrice?: number;
