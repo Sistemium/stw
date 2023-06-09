@@ -63,7 +63,7 @@ export default defineConfig(({ mode }) => {
       proxy: {
         '^/api': {
           target: 'https://vfsd.sistemium.com',
-          // target: 'http://localhost:3105',
+          // target: 'http://localhost:9390',
           changeOrigin: true,
         },
         '/pha': {
