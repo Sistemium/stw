@@ -19,6 +19,19 @@ el-tabs.stock-operation-item-form(:class="tabClass")
           :vat-rate="vatRate"
           :materials="model.materials"
           :units="1"
+          type="initCost"
+        )
+        article-cost-info(
+          v-if="model.articleId && model.stockReceivingId && !editable"
+          :article-id="model.articleId"
+          :storage-id="storageId"
+          :date="date"
+          :vat-prices="formVatPrices"
+          :vat-rate="vatRate"
+          :materials="model.materials"
+          :units="1"
+          type="resultCost"
+          :label-suffix="$t('after.stockReceiving')"
         )
   el-tab-pane(:label="$t('menu.materials')" v-if="model.materials")
     el-form(:model="model" :disabled="!editable")
