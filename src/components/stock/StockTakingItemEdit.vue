@@ -17,6 +17,16 @@ drawer-edit.stock-taking-item-edit(
       template(#article-extra)
         vat-mode-switch(v-model="formVatPrices" v-if="editable")
         price-form(:model="model" :vat-prices="formVatPrices")
+        article-cost-info(
+          v-if="model.articleId"
+          :article-id="model.articleId"
+          :storage-id="stockTaking.storageId"
+          :date="stockTaking.date"
+          :vat-prices="formVatPrices"
+          :vat-rate="modelOrigin.vatRate"
+          :units="1"
+          type="initCost"
+        )
 
 </template>
 <script setup lang="ts">
@@ -30,6 +40,7 @@ import { stockTakingItemInstance } from '@/services/warehousing.js';
 import VatModeSwitch from '@/components/out/VatModeSwitch.vue';
 import PriceForm from '@/components/out/PriceForm.vue';
 import { useVatConfig } from '@/services/vatConfiguring';
+import ArticleCostInfo from '@/components/production/ArticleCostInfo.vue';
 
 const props = defineProps({
   stockTakingId: { type: String, required: true },
