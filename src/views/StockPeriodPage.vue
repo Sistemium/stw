@@ -63,6 +63,7 @@ import ToolButton from '@/lib/ToolButton.vue';
 import { useRouteParams } from '@/lib/updateRouteParams';
 import { t } from '@/lib/validations';
 import Article from '@/models/Article.js';
+import Storage from '@/models/Storage.js';
 
 // mixins: [storageSelectMixin],
 
@@ -153,7 +154,12 @@ function downloadSchema() {
 const downloadExcelName = computed(() => {
   const [dateB, dateE] = dateRange.value;
   const fmt = 'YYYY-MM-DD';
-  return `${t('menu.stockPeriod')}-${dayjs(dateB).format(fmt)}-${dayjs(dateE).format(fmt)}`;
+  return [
+    t('menu.stockPeriod'),
+    Storage.reactiveGet(storageId.value)?.name,
+    dayjs(dateB).format(fmt),
+    dayjs(dateE).format(fmt),
+  ].join('-');
 });
 
 function downloadExcelData() {
