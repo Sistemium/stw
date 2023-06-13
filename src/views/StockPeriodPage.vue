@@ -153,7 +153,7 @@ function downloadSchema() {
 const downloadExcelName = computed(() => {
   const [dateB, dateE] = dateRange.value;
   const fmt = 'YYYY-MM-DD';
-  return `${t('menu.stockPeriod')}-${dateB.format(fmt)}-${dateE.format(fmt)}`;
+  return `${t('menu.stockPeriod')}-${dayjs(dateB).format(fmt)}-${dayjs(dateE).format(fmt)}`;
 });
 
 function downloadExcelData() {
