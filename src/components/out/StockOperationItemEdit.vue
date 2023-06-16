@@ -13,6 +13,7 @@ drawer-edit.stock-operation-item-edit(
     stock-operation-item-form(
       ref="form"
       :editable="editable"
+      :finished="finished"
       :model="drawerModel"
       :vat-prices="vatOperationConfig.vatPrices"
       :vat-rate="vatOperationConfig.vatRate"
@@ -61,8 +62,12 @@ const modelOrigin = computed(() => {
     });
 });
 
+const finished = computed(() => {
+  return !workflow.step(stockOperation.value?.processing).editable;
+});
+
 const editable = computed(() => {
-  return workflow.step(stockOperation.value?.processing).editable;
+  return !finished.value && !stockOperation.value?.sourceId;
 });
 
 </script>
