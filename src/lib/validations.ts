@@ -50,11 +50,11 @@ export function tAction(action: string, name: string): string {
 }
 
 export function t(key: string, etc?: string[]): string {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
   if (!key) {
     return '';
   }
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   return i18n.global.t(key, etc);
 }
 
