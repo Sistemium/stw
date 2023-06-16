@@ -211,6 +211,7 @@
     "cancel": "Grįžti į planavimą"
   },
   "after": {
-    "stockReceiving": "po priemimo"
+    "stockReceiving": "po priemimo",
+    "withVat": "su PVM"
   }
 }

@@ -16,7 +16,6 @@ import model from '@/models/StockArticleDate.js';
 import filter from 'lodash/filter';
 import uniq from 'lodash/uniq';
 import sumBy from 'lodash/sumBy';
-import trim from 'lodash/trim';
 import type StockArticleDate from '@/models/StockArticleDates';
 import type { MaterialFields } from '@/models/Recipes';
 import { t } from '@/lib/validations';
@@ -33,7 +32,11 @@ const props = defineProps<{
   labelSuffix?: string;
 }>();
 
-const label = computed(() => trim(`${t('fields.cost')} ${props.labelSuffix || ''}`));
+const label = computed(() => [
+  t('fields.cost'),
+  props.labelSuffix,
+  props.vatPrices && t('after.withVat'),
+].filter(x => x).join(' '));
 
 const data = computed<{ initCost: number, resultCost?: number }>(() => {
   if (!props.materials) {
