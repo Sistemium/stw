@@ -1,4 +1,5 @@
 import cloneDeep from 'lodash/cloneDeep';
+import round from 'lodash/round';
 import { ElLoading, ElMessage } from 'element-plus';
 import i18n from '@/i18n';
 
@@ -16,6 +17,9 @@ export default {
     $tAction: tAction,
     $tGen(action, name) {
       return this.$t(`actions.${action}`, [this.$t(`genitive.${name}`)]);
+    },
+    $nr(num, decimals = 2) {
+      return i18n.global.n(round(num, decimals), 'decimal');
     },
   },
 };

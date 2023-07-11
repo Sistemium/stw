@@ -1,6 +1,6 @@
 <template lang="pug">
 el-form-item(:label="label")
-  span {{ $n(cost, 'decimal') }}
+  span {{ $nr(cost) }}
   template(v-if="units > 1 && cost")
     small x
     span {{ units }}
