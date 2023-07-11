@@ -1,4 +1,5 @@
 import { ref } from 'vue';
+import { ElNotification } from 'element-plus';
 
 export interface PageProps {
   rootState: string;
@@ -15,6 +16,12 @@ export function useBusy() {
     wasBusy.value = isBusy.value;
     isBusy.value = true;
     return promise
+      .catch(e => {
+        ElNotification({
+          message: e.response?.data || e.message,
+          type: 'error',
+        });
+      })
       .finally(() => {
         isBusy.value = wasBusy.value || false;
       });

@@ -39,6 +39,7 @@ export interface StockOperation {
   processing?: string;
   commentText?: string;
   deviceCts?: string;
+  sourceId?: string;
 }
 
 export interface StockOperationViewData extends  StockOperation {

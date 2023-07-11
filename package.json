@@ -1,6 +1,6 @@
 {
   "name": "stw",
-  "version": "0.6.1",
+  "version": "0.6.3",
   "private": true,
   "scripts": {
     "serve": "vite preview --host",
@@ -37,7 +37,6 @@
     "vue-screen-size": "^2.1.0",
     "vue3-dropzone": "^2.0.1",
     "vue3-virtual-scroll-list": "^0.2.1",
-    "vuetify": "^3.3.2",
     "vuex": "^4.1.0",
     "vuex-shared-mutations": "^1.0.2"
   },

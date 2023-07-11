@@ -214,6 +214,7 @@
     "cancel": "Cancel"
   },
   "after": {
-    "stockReceiving": "after receiving"
+    "stockReceiving": "after receiving",
+    "withVat": "inc. VAT"
   }
 }

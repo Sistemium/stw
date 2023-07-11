@@ -33,7 +33,7 @@
           )
             .list-group(v-if="showRow")
               stock-operation-list-item(
-                :view-data="showRow"
+                :source="showRow"
               )
             stock-operation-list(
               v-else-if="tableHeight"

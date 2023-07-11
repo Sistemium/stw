@@ -1,7 +1,7 @@
 <template lang="pug">
 
 .stock-operation-list-item.list-group-item(
-  @click="onClick(source)"
+  @click="onClick && onClick(source)"
   :class="{ active: activeId === source.id }"
 )
   .title
@@ -26,7 +26,7 @@ import type { StockOperationViewData } from '@/models/StockOperations';
 defineProps<{
   source: StockOperationViewData;
   activeId?: string;
-  onClick: (item: StockOperationViewData) => void;
+  onClick?: (item: StockOperationViewData) => void;
 }>();
 
 </script>

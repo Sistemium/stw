@@ -211,6 +211,7 @@
     "cancel": "Отмена"
   },
   "after": {
-    "stockReceiving": "после прихода"
+    "stockReceiving": "после прихода",
+    "withVat": "с НДС"
   }
 }

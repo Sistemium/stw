@@ -3,11 +3,12 @@ import upperFirst from 'lodash/upperFirst';
 import trim from 'lodash/trim';
 import map from 'lodash/map';
 import uniq from 'lodash/uniq';
-import ArticleProp, { TYPES_DEFAULTS, VALUE_TYPES } from '@/models/ArticleProp';
+import each from 'lodash/each';
 import orderBy from 'lodash/orderBy';
-import Article from '@/models/Article';
-import * as PackageType from '@/models/PackageType';
-import { likeLt } from '@/services/lt';
+import ArticleProp, { TYPES_DEFAULTS, VALUE_TYPES } from '@/models/ArticleProp.js';
+import Article from '@/models/Article.js';
+import * as PackageType from '@/models/PackageType.js';
+import { likeLt } from '@/services/lt.js';
 
 export function compoundName(filters) {
   const res = map(filters, filter => {
@@ -113,4 +114,35 @@ export function articlePackages(article) {
     ...(PackageType.getById(packageTypeId) || {}),
     id: `${packageTypeId}|${unitsInPackage}`,
   }];
+}
+
+
+export function catalogueData() {
+  const allProps = new Map();
+  const rows = map(Article.reactiveFilter(), item => {
+    const res = {
+      ...item,
+    };
+    each(item.props, ({ propId, stringValue, numberValue }) => {
+      allProps.set(propId, true);
+      res[propId] = stringValue || numberValue;
+    });
+    return res;
+  });
+  const propColumns = Array.from(allProps.keys())
+    .map(id => {
+      const prop = ArticleProp.reactiveGet(id);
+      if (prop.isNaming) {
+        return false;
+      }
+      return {
+        ...prop,
+        align: prop.type === 'number' ? 'right' : 'left',
+      };
+    })
+    .filter(x => !!x);
+  return {
+    rows: orderBy(rows, 'name'),
+    propColumns: articlePropertySort(propColumns),
+  };
 }

@@ -22,7 +22,7 @@ el-tabs.stock-operation-item-form(:class="tabClass")
           type="initCost"
         )
         article-cost-info(
-          v-if="model.articleId && model.stockReceivingId && !editable"
+          v-if="model.articleId && model.stockReceivingId && finished"
           :article-id="model.articleId"
           :storage-id="storageId"
           :date="date"
@@ -63,6 +63,7 @@ import { useFormValidate } from '@/services/validating';
 
 const props = defineProps<{
   editable: boolean;
+  finished?: boolean;
   model: StockOperationItem;
   vatPrices: boolean;
   vatRate?: number;
