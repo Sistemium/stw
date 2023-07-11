@@ -62,9 +62,7 @@ import type { Component } from 'vue';
 import { useI18n } from 'vue-i18n';
 import map from 'lodash/map';
 import { useRouter } from 'vue-router';
-import each from 'lodash/each';
 import pick from 'lodash/pick';
-import orderBy from 'lodash/orderBy';
 import filter from 'lodash/filter';
 import SearchInput from '@/lib/SearchInput.vue';
 import Resize from '@/lib/StmResize.vue';
@@ -77,9 +75,7 @@ import ArticleList from '@/components/catalogue/ArticleList.vue';
 import ArticleTable from '@/components/catalogue/ArticleTable.vue';
 import i18n from '@/i18n';
 import { DocumentCopy } from '@element-plus/icons-vue';
-import Article from '@/models/Article.js';
-import ArticleProp from '@/models/ArticleProp.js';
-import { articlePropertySort, searchArticle } from '@/services/catalogue.js';
+import { catalogueData, searchArticle } from '@/services/catalogue.js';
 import { useScrollToCreated } from '@/services/scrolling';
 
 const props = defineProps<{
@@ -112,35 +108,7 @@ const articles = computed(() => {
   return filter(tableData.value.rows, rowFilter);
 });
 
-const tableData = computed(() => {
-  const allProps = new Map();
-  const rows = map(Article.reactiveFilter(), item => {
-    const res = {
-      ...item,
-    };
-    each(item.props, ({ propId, stringValue, numberValue }) => {
-      allProps.set(propId, true);
-      res[propId] = stringValue || numberValue;
-    });
-    return res;
-  });
-  const propColumns = Array.from(allProps.keys())
-    .map(id => {
-      const prop = ArticleProp.reactiveGet(id);
-      if (prop.isNaming) {
-        return false;
-      }
-      return {
-        ...prop,
-        align: prop.type === 'number' ? 'right' : 'left',
-      };
-    })
-    .filter(x => !!x);
-  return {
-    rows: orderBy(rows, 'name'),
-    propColumns: articlePropertySort(propColumns),
-  };
-});
+const tableData = computed(() => catalogueData());
 
 const { t } = useI18n({
   messages: {

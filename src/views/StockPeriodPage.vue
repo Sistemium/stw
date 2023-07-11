@@ -47,12 +47,13 @@ import PageTitle from '@/components/PageTitle.vue';
 import dayjs from 'dayjs';
 import map from 'lodash/map';
 import pick from 'lodash/pick';
+import keyBy from 'lodash/keyBy';
 import round from 'lodash/round';
 import { useRoute } from 'vue-router';
 import { findStockPeriod } from '@/services/warehousing.js';
 import StockPeriodTable from '@/components/stock/StockPeriodTable.vue';
 import SearchInput from '@/lib/SearchInput.vue';
-import { searchArticle } from '@/services/catalogue.js';
+import { catalogueData, searchArticle } from '@/services/catalogue.js';
 import StockArticleDetailsView from '@/components/stock/StockArticleDetailsView.vue';
 import { ElLoading } from 'element-plus';
 import { useInvStore } from '@/store/invStore';
@@ -62,7 +63,7 @@ import Resize from '@/lib/StmResize.vue';
 import ToolButton from '@/lib/ToolButton.vue';
 import { useRouteParams } from '@/lib/updateRouteParams';
 import { t } from '@/lib/validations';
-import Article from '@/models/Article.js';
+// import Article from '@/models/Article.js';
 import Storage from '@/models/Storage.js';
 
 // mixins: [storageSelectMixin],
@@ -107,7 +108,7 @@ const filteredData = computed(() => {
     : data.value;
 });
 
-function downloadSchema() {
+function downloadSchema(tableData) {
   return {
     columns: [
       {
@@ -147,6 +148,8 @@ function downloadSchema() {
         title: t('fields.cost'),
         width: 15,
       },
+      ...tableData.propColumns
+        .map(({ id, name }) => ({ key: id, title: name, width: 25 })),
     ],
   };
 }
@@ -163,11 +166,13 @@ const downloadExcelName = computed(() => {
 });
 
 function downloadExcelData() {
-  const schema = downloadSchema();
+  const tableData = catalogueData();
+  const schema = downloadSchema(tableData);
   const columns = map(schema.columns, 'key');
+  const { rows } = tableData;
+  const articles = keyBy(rows, 'id');
   const data = filteredData.value.map(a => ({
-    ...pick(a, columns),
-    ...pick(Article.getByID(a.articleId), ['name', 'code', 'id']),
+    ...pick({ ...a, ...(articles[a.articleId] || {}) }, columns),
     resultCost: round(a.resultCost, 2),
   }));
   return {
