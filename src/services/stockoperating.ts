@@ -36,8 +36,9 @@ export function stockOperationAct(items: StockOperationItem[]): StockOperationAc
   });
 }
 
-export function actHeadRows(stockOperation: StockOperation, operationName) {
+export function actHeadRows(stockOperation: StockOperation, operationName: string, counterpartyRole: string) {
   const { date, storageId } = stockOperation;
+  const counterparty = getCounterparty(stockOperation);
   return [
     {
       title: tGen('act', operationName),
@@ -54,8 +55,8 @@ export function actHeadRows(stockOperation: StockOperation, operationName) {
       numFmt: 'yyyy-mm-dd hh:mm',
     },
     {
-      label: t('fields.consignee'),
-      value: getCounterparty(stockOperation)?.name,
+      label: t(`fields.${counterpartyRole}`),
+      value: counterparty?.name,
     },
     {
       label: t('fields.commentText'),

@@ -141,7 +141,7 @@ function downloadExcelData() {
   return {
     schema: {
       columns,
-      headRows: actHeadRows(stockOperation.value, props.operationName),
+      headRows: actHeadRows(stockOperation.value, props.operationName, props.counterpartyRole),
       pageSetup: { paperSize: 9, orientation: 'portrait', fitToWidth: 1 },
       grid: { style: 'thin' },
     },
