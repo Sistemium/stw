@@ -1,5 +1,5 @@
 export interface MaterialFields {
-  id: string;
+  id?: string;
   articleId: string;
   measureId: string;
   measureUnitId: string;

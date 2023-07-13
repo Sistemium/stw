@@ -2,12 +2,12 @@ import type ApiModel from '@/models/ApiModels';
 import type { MaterialFields } from '@/models/Recipes';
 
 export interface ArticleQuantityFields {
+
+  packages?: number;
+  packageTypeId?: string;
+  unitsInPackage?: number;
+
   articleId: string;
-
-  packages: number;
-  packageTypeId: string;
-  unitsInPackage: number;
-
   measureId: string;
   measureUnitId: string;
   units: number;
@@ -31,6 +31,7 @@ export interface CounterParty extends ApiModel {
 
 export type CounterpartyType = 'Storage' | 'LegalEntity' | 'Person' | null;
 export interface StockOperation {
+  id?: string;
   date?: string | Date;
   storageId?: string;
   partnerId?: string;
