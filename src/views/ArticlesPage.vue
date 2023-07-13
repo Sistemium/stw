@@ -73,7 +73,7 @@ import PageTitle from '@/components/PageTitle.vue';
 import BarcodeView from '@/components/BarcodeScanner/BarcodeView.vue';
 import ArticleList from '@/components/catalogue/ArticleList.vue';
 import ArticleTable from '@/components/catalogue/ArticleTable.vue';
-import i18n from '@/i18n';
+import { t } from '@/lib/validations';
 import { DocumentCopy } from '@element-plus/icons-vue';
 import { catalogueData, searchArticle } from '@/services/catalogue.js';
 import { useScrollToCreated } from '@/services/scrolling';
@@ -94,7 +94,7 @@ useScrollToCreated({});
 
 const copyTip = computed(() => {
   const { code, name } = selectedArticle.value || {};
-  return t('copyTip', [code || name]);
+  return localT('copyTip', [code || name]);
 });
 
 const { showTable, tableSize } = useResponsiveTables();
@@ -110,7 +110,7 @@ const articles = computed(() => {
 
 const tableData = computed(() => catalogueData());
 
-const { t } = useI18n({
+const { t: localT } = useI18n({
   messages: {
     en: {
       copyTip: 'Click to copy "{0}" article',
@@ -130,14 +130,15 @@ function setHeight(height) {
 
 function downloadSchema() {
   return {
+    wrapText: true,
     columns: [
       {
         key: 'name',
-        title: i18n.global.t('fields.name'),
+        title: t('fields.name'),
         width: 50,
       }, {
         key: 'code',
-        title: i18n.global.t('fields.code'),
+        title: t('fields.code'),
         width: 25,
       },
       ...tableData.value.propColumns

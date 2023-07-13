@@ -110,6 +110,7 @@ const filteredData = computed(() => {
 
 function downloadSchema(tableData) {
   return {
+    wrapText: true,
     columns: [
       {
         key: 'id',
