@@ -15,9 +15,7 @@ export default {
   methods: {
     $ts,
     $tAction: tAction,
-    $tGen(action, name) {
-      return this.$t(`actions.${action}`, [this.$t(`genitive.${name}`)]);
-    },
+    $tGen: tGen,
     $nr(num, decimals = 2) {
       return i18n.global.n(round(num, decimals), 'decimal');
     },
@@ -51,6 +49,10 @@ export function cloneInstance(res) {
 
 export function tAction(action: string, name: string): string {
   return t(`actions.${action}`, [t(`accusative.${name}`)]);
+}
+
+export function tGen(action, name) {
+  return t(`actions.${action}`, [t(`genitive.${name}`)]);
 }
 
 export function t(key: string, etc?: string[]): string {
