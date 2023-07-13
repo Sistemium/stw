@@ -80,7 +80,8 @@
     "measure": "Measure",
     "measureUnit": "Unit of measure",
     "unitsInPackage": "{0} in a package",
-    "value": "Value"
+    "value": "Value",
+    "id": "ID"
   },
   "measures": {
     "weight": "Weight",
@@ -159,6 +160,7 @@
     "noData": "No data"
   },
   "actions": {
+    "act": "Declaration of {0}",
     "add": "Add {0}",
     "show": "Show {0}",
     "hide": "Hide {0}",
