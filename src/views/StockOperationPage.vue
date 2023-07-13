@@ -12,6 +12,10 @@
           :disabled="isBusy"
           @update:model-value="onProcessing"
         )
+        download-excel-button(
+          :data-fn="downloadExcelData"
+          :name="downloadExcelName"
+        )
         tool-button(
           tool="add"
           @click="onAddItem"
@@ -45,6 +49,9 @@
 </template>
 <script setup lang="ts">
 
+import map from 'lodash/map';
+import pick from 'lodash/fp/pick';
+import dayjs from 'dayjs';
 import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 import ReactiveModel from 'sistemium-data-vue';
@@ -58,8 +65,11 @@ import { configPriceField } from '@/services/warehousing.js';
 import { workflow } from '@/models/StockWithdrawing.js';
 import { useBusy } from '@/views/pages';
 import { useOperationDisabled } from '@/services/workflowing';
-import type { StockOperation } from '@/models/StockOperations';
+import type { StockOperation, StockOperationItem } from '@/models/StockOperations';
 import { useRouteParams } from '@/lib/updateRouteParams';
+import DownloadExcelButton from '@/lib/DownloadExcelButton.vue';
+import { t } from '@/lib/validations';
+import { actHeadRows, stockOperationAct } from '@/services/stockoperating';
 
 
 const props = defineProps<{
@@ -89,7 +99,7 @@ const stockOperationItems = computed(() => {
   const { stockOperationId } = props;
   return props.positionsModel.reactiveFilter({
     [`${props.operationName}Id`]: stockOperationId,
-  });
+  }) as StockOperationItem[];
 });
 
 const stockOperation = computed<StockOperation>(() => {
@@ -97,6 +107,48 @@ const stockOperation = computed<StockOperation>(() => {
 });
 
 const { disabled } = useOperationDisabled(stockOperation, workflow);
+
+const downloadExcelName = computed(() => {
+  return [
+    t(`menu.${props.operationName}`),
+    dayjs(stockOperation.value.date).format('YYYY-MM-DD'),
+  ].join('-');
+});
+
+function downloadColumns() {
+  return [
+    {
+      key: 'code',
+      title: t('fields.code'),
+      width: 30,
+    }, {
+      key: 'name',
+      title: t('concepts.article'),
+      width: 55,
+      wrapText: true,
+    }, {
+      key: 'units',
+      title: t('fields.quantity'),
+      width: 15,
+    },
+  ];
+}
+
+
+function downloadExcelData() {
+  const columns = downloadColumns();
+
+  return {
+    schema: {
+      columns,
+      headRows: actHeadRows(stockOperation.value, props.operationName),
+      pageSetup: { paperSize: 9, orientation: 'portrait', fitToWidth: 1 },
+      grid: { style: 'thin' },
+    },
+    data: stockOperationAct(stockOperationItems.value)
+      .map(pick(map(columns, 'key'))),
+  };
+}
 
 function onAddItem() {
   updateRouteParams({
