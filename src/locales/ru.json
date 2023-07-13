@@ -27,6 +27,7 @@
     "storages": "Склады",
     "pictures": "Изображения",
     "stockReceivals": "Приход на склад",
+    "stockReceiving": "Приход на склад",
     "stockWithdrawals": "Отгрузки со склада",
     "stockWithdrawing": "Выдача со склада",
     "stockPeriod": "Остатки",

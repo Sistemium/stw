@@ -27,6 +27,7 @@
     "storages": "Storages",
     "pictures": "Pictures",
     "stockReceivals": "Receiving to warehouse",
+    "stockReceiving": "Receiving to warehouse",
     "stockWithdrawals": "Withdrawals from warehouse",
     "stockWithdrawing": "Stock withdrawing",
     "stockPeriod": "Stock remains",
