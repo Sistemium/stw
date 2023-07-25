@@ -18,10 +18,10 @@
       :unlink-panels="true"
     )
     //search-input(v-model="search")
-    //download-excel-button(
-    //  :data-fn="downloadExcelData"
-    //  :name="downloadExcelName"
-    //)
+    download-excel-button(
+      :data-fn="downloadExcelData"
+      :name="downloadExcelName"
+    )
   resize(
     :padding="20"
     @resized="height => { tableHeight = height }"
@@ -35,6 +35,8 @@
 
 <script setup lang="ts">
 
+import map from 'lodash/map';
+import pick from 'lodash/pick';
 import dayjs from 'dayjs';
 import { useRouteParams } from '@/lib/updateRouteParams';
 import { computed, ref, watch } from 'vue';
@@ -44,7 +46,10 @@ import StorageSelect from '@/components/stock/StorageSelect.vue';
 import Resize from '@/lib/StmResize.vue';
 import { useStorage, withdrawingReportData } from '@/services/stockoperating';
 import StockItemsTable from '@/components/stock/StockItemsTable.vue';
-// import DownloadExcelButton from '@/lib/DownloadExcelButton.vue';
+import DownloadExcelButton from '@/lib/DownloadExcelButton.vue';
+import { t } from '@/lib/validations';
+import Storage from '@/models/Storage.js';
+import Article from '@/models/Article.js';
 
 const today = dayjs().endOf('day');
 const monthAgo = today.add(-3, 'month');
@@ -83,10 +88,65 @@ watch(queryParams, p => {
     .catch(e => console.error(e));
 }, { immediate: true });
 
+function downloadSchema() {
+  return {
+    wrapText: true,
+    columns: [
+      {
+        key: 'date',
+        title: t('fields.date'),
+        width: 15,
+        // dataType: 'date',
+        // numFmt: 'yyyy-mm-dd',
+      }, {
+        key: 'name',
+        title: t('concepts.article'),
+        width: 55,
+      }, {
+        key: 'code',
+        title: t('fields.code'),
+        width: 20,
+      }, {
+        key: 'units',
+        title: t('fields.units'),
+        width: 15,
+      },
+    ],
+  };
+}
+
+const downloadExcelName = computed(() => {
+  const [dateB, dateE] = dateRange.value;
+  const fmt = 'YYYY-MM-DD';
+  return [
+    t('reports.stockMovement'),
+    Storage.reactiveGet(storageId.value)?.name,
+    Storage.reactiveGet(counterPartyId.value)?.name,
+    dayjs(dateB).format(fmt),
+    dayjs(dateE).format(fmt),
+  ].join('-');
+});
+
+function downloadExcelData() {
+  const schema = downloadSchema();
+  const columns = map(schema.columns, 'key');
+  return {
+    schema,
+    data: data.value.map(item => ({
+      ...pick({
+        ...item,
+        ...(Article.getByID(item.articleId) || {}),
+        date: dayjs(item.date).format('YYYY-MM-DD'),
+      }, columns),
+    })),
+  };
+}
+
 </script>
 
 <style scoped lang="scss">
 @import "@/styles/filters.scss";
+
 .filters {
   label {
     margin: 0 $padding;
