@@ -31,7 +31,11 @@
     "stockWithdrawals": "Withdrawals from warehouse",
     "stockWithdrawing": "Stock withdrawing",
     "stockPeriod": "Stock remains",
+    "reports": "Reports",
     "measurements": "Measurements"
+  },
+  "reports": {
+    "stockMovement": "Intra-movements"
   },
   "fields": {
     "address": "Address",
@@ -82,6 +86,8 @@
     "measureUnit": "Unit of measure",
     "unitsInPackage": "{0} in a package",
     "value": "Value",
+    "from": "From",
+    "to": "To",
     "id": "ID"
   },
   "measures": {

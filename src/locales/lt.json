@@ -31,7 +31,11 @@
     "stockWithdrawals": "Iškrovimas iš sandėlio",
     "stockWithdrawing": "Iškrovimas iš sandėlio",
     "stockPeriod": "Likučiai",
+    "reports": "Ataskaitos",
     "measurements": "Išmatavimai"
+  },
+  "reports": {
+    "stockMovement": "Perkelimai"
   },
   "fields": {
     "address": "Adresas",
@@ -81,6 +85,8 @@
     "measureUnit": "Matavimo vienetas",
     "unitsInPackage": "{0} pakuotėje",
     "ord": "Eilės numeris",
+    "from": "Iš",
+    "to": "Į",
     "id": "Identifikatorius"
   },
   "models": {

@@ -31,7 +31,11 @@
     "stockWithdrawals": "Отгрузки со склада",
     "stockWithdrawing": "Выдача со склада",
     "stockPeriod": "Остатки",
+    "reports": "Отчёты",
     "measurements": "Измерения"
+  },
+  "reports": {
+    "stockMovement": "Перемещения"
   },
   "fields": {
     "address": "Адрес",
@@ -81,6 +85,8 @@
     "measureUnit": "Единица измерения",
     "unitsInPackage": "{0} в упаковке",
     "ord": "Порядковый номер",
+    "from": "Из",
+    "to": "Для",
     "id": "Идентификатор"
   },
   "models": {
