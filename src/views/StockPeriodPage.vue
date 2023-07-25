@@ -56,7 +56,6 @@ import SearchInput from '@/lib/SearchInput.vue';
 import { catalogueData, searchArticle } from '@/services/catalogue.js';
 import StockArticleDetailsView from '@/components/stock/StockArticleDetailsView.vue';
 import { ElLoading } from 'element-plus';
-import { useInvStore } from '@/store/invStore';
 import StorageSelect from '@/components/stock/StorageSelect.vue';
 import DownloadExcelButton from '@/lib/DownloadExcelButton.vue';
 import Resize from '@/lib/StmResize.vue';
@@ -65,6 +64,7 @@ import { useRouteParams } from '@/lib/updateRouteParams';
 import { t } from '@/lib/validations';
 // import Article from '@/models/Article.js';
 import Storage from '@/models/Storage.js';
+import { useStorage } from '@/services/stockoperating';
 
 // mixins: [storageSelectMixin],
 
@@ -81,16 +81,7 @@ const tableHeight = ref<number>(undefined);
 const storageSelectRef = ref(null);
 const { updateRouteParams } = useRouteParams();
 
-const store = useInvStore();
-
-const storageId = computed({
-  get() {
-    return store.currentStorageId;
-  },
-  set(id) {
-    store.currentStorageId = id;
-  },
-});
+const { storageId } = useStorage();
 
 const queryParams = computed(() => {
   const [dateB, dateE] = dateRange.value;
@@ -228,19 +219,7 @@ watch(showDetails, show => {
 </script>
 <style scoped lang="scss">
 @import "../styles/variables";
-
-.filters {
-  display: flex;
-  justify-content: center;
-
-  :deep(> * + *) {
-    margin-left: $margin-right;
-  }
-
-  :deep(.el-date-editor) {
-    flex-grow: 0;
-  }
-}
+@import "../styles/filters";
 
 .stm-resize {
   margin-top: $margin-top;
