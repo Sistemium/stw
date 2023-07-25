@@ -1,4 +1,5 @@
 import flatten from 'lodash/flatten';
+import orderBy from 'lodash/orderBy';
 import dayjs from 'dayjs';
 import { computed } from 'vue';
 import { StockOperation, StockOperationItem } from '@/models/StockOperations';
@@ -8,6 +9,8 @@ import { MaterialFields } from '@/models/Recipes';
 import { t, tGen } from '@/lib/validations';
 import { getCounterparty } from '@/services/warehousing.js';
 import { useInvStore } from '@/store/invStore';
+import StockWithdrawing from '@/models/StockWithdrawing.js';
+import StockWithdrawingItem from '@/models/StockWithdrawingItem.js';
 
 interface StockOperationActItem extends MaterialFields {
   name: string;
@@ -85,4 +88,37 @@ export function actHeadRows(stockOperation: StockOperation, operationName: strin
     },
     {},
   ];
+}
+
+export interface StockOperationReportItem extends StockOperationItem {
+  date: string;
+}
+
+export async function withdrawingReportData(storageId, counterpartyId, dateB, dateE): Promise<StockOperationReportItem[]> {
+
+  const headers = await StockWithdrawing.find({
+    storageId,
+    counterpartyId,
+    date: {
+      $gte: dateB,
+      $lte: dateE,
+    },
+  });
+
+  if (!headers) {
+    return [];
+  }
+
+  const ids = headers.map(({ id }) => id);
+
+  const items = await StockWithdrawingItem.findByMany(ids, { field: 'stockWithdrawingId' });
+
+  return orderBy(items.map(item => {
+    const stockWithdrawing = StockWithdrawing.getByID(item.stockWithdrawingId);
+    return {
+      ...item,
+      date: stockWithdrawing.date,
+    };
+  }), ['date']);
+
 }

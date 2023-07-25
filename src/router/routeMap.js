@@ -53,6 +53,13 @@ export default new RouteMapper({
     component: () => import(/* webpackChunkName: "stock" */ '../views/StockPeriodPage.vue'),
     beforeEnter: initGuard,
   },
+  stockMovementReport: {
+    component: () => import(/* webpackChunkName: "stock" */ '../views/StockMovementReportPage.vue'),
+    beforeEnter: initGuard,
+    meta: {
+      menuHidden: true,
+    },
+  },
   articles: {
     model: Article,
     component: () => import(/* webpackChunkName: "articles" */ '../views/ArticlesPage.vue'),

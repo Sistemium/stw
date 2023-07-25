@@ -7,7 +7,7 @@ export function useRouteParams() {
   const route = useRoute();
   const router = useRouter();
 
-  return { updateRouteParams };
+  return { updateRouteParams, route, router };
 
   async function updateRouteParams(updateParams = {}, updateQuery = {}, updateName?: string) {
 
