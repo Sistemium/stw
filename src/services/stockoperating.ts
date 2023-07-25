@@ -1,11 +1,13 @@
 import flatten from 'lodash/flatten';
 import dayjs from 'dayjs';
+import { computed } from 'vue';
 import { StockOperation, StockOperationItem } from '@/models/StockOperations';
 import Article from '@/models/Article.js';
 import Storage from '@/models/Storage.js';
 import { MaterialFields } from '@/models/Recipes';
 import { t, tGen } from '@/lib/validations';
 import { getCounterparty } from '@/services/warehousing.js';
+import { useInvStore } from '@/store/invStore';
 
 interface StockOperationActItem extends MaterialFields {
   name: string;
@@ -34,6 +36,21 @@ export function stockOperationAct(items: StockOperationItem[]): StockOperationAc
       code: article?.code,
     };
   });
+}
+
+export function useStorage() {
+  const store = useInvStore();
+
+  const storageId = computed({
+    get() {
+      return store.currentStorageId;
+    },
+    set(id) {
+      store.currentStorageId = id;
+    },
+  });
+
+  return { storageId };
 }
 
 export function actHeadRows(stockOperation: StockOperation, operationName: string, counterpartyRole: string) {
