@@ -43,6 +43,7 @@
     "regCode": "Registration number",
     "vatCode": "VAT number",
     "name": "Name",
+    "email": "E-mail",
     "type": "Type",
     "consigneeType": "Consignee type",
     "consignee": "Consignee",

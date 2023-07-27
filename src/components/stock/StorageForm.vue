@@ -20,6 +20,12 @@ el-form.storage-form(
   )
     el-input(v-model="model.name")
 
+  el-form-item(
+    :label="$t('fields.email')"
+    prop="name"
+  )
+    el-input(v-model="model.email")
+
 </template>
 <script setup>
 

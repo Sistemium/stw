@@ -36,6 +36,7 @@ import Resize from '@/lib/StmResize.vue';
 import ToolButton from '@/lib/ToolButton.vue';
 import { computed } from 'vue';
 import { useRouter } from 'vue-router';
+import orderBy from 'lodash/orderBy';
 
 const props = defineProps({
   editRoute: String,
@@ -43,7 +44,7 @@ const props = defineProps({
 });
 
 const router = useRouter();
-const storages = computed(() => Storage.reactiveFilter());
+const storages = computed(() => orderBy(Storage.reactiveFilter(), 'name'));
 
 function onStorageClick(storage) {
   router.push({

@@ -43,6 +43,7 @@
     "regCode": "Įmonės kodas",
     "vatCode": "PVM kodas",
     "name": "Pavadinimas",
+    "email": "El. paštas",
     "date": "Data",
     "dateB": "Data nuo",
     "toDate": "iki",
