@@ -56,7 +56,7 @@ import SearchInput from '@/lib/SearchInput.vue';
 import { catalogueData, searchArticle } from '@/services/catalogue.js';
 import StockArticleDetailsView from '@/components/stock/StockArticleDetailsView.vue';
 import { ElLoading } from 'element-plus';
-import StorageSelect from '@/components/stock/StorageSelect.vue';
+import StorageSelect from '@/components/select/StorageSelect.vue';
 import DownloadExcelButton from '@/lib/DownloadExcelButton.vue';
 import Resize from '@/lib/StmResize.vue';
 import ToolButton from '@/lib/ToolButton.vue';

@@ -81,7 +81,7 @@ import orderBy from 'lodash/orderBy';
 import ReactiveModel from 'sistemium-data-vue';
 import AlertEmpty from '@/lib/AlertEmpty.vue';
 import useResponsiveTables from '@/components/useResponsiveTables';
-import StorageSelect from '@/components/stock/StorageSelect.vue';
+import StorageSelect from '@/components/select/StorageSelect.vue';
 import PageTitle from '@/components/PageTitle.vue';
 import { useScrollToCreated } from '@/services/scrolling';
 import type { StockOperation } from '@/models/StockOperations';

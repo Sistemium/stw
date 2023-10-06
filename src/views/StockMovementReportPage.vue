@@ -41,7 +41,7 @@ import dayjs from 'dayjs';
 import { useRouteParams } from '@/lib/updateRouteParams';
 import { computed, ref, watch } from 'vue';
 import PageTitle from '@/components/PageTitle.vue';
-import StorageSelect from '@/components/stock/StorageSelect.vue';
+import StorageSelect from '@/components/select/StorageSelect.vue';
 // import SearchInput from '@/lib/SearchInput.vue';
 import Resize from '@/lib/StmResize.vue';
 import { useStorage, withdrawingReportData } from '@/services/stockoperating';
