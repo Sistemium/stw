@@ -4,7 +4,7 @@ el-button.tool-button(
   :icon="icon"
   :size="size"
   :disabled="disabled || null"
-  circle
+  :circle="circle"
   @click="emit('click')"
 )
 
@@ -48,6 +48,10 @@ const props = defineProps({
   size: {
     type: String,
     default: 'small',
+  },
+  circle: {
+    type: Boolean,
+    default: true,
   },
 });
 
