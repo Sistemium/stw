@@ -1,5 +1,6 @@
 import cloneDeep from 'lodash/cloneDeep';
 import round from 'lodash/round';
+import isNumber from 'lodash/isNumber';
 import { ElLoading, ElMessage } from 'element-plus';
 import i18n from '@/i18n';
 
@@ -90,4 +91,8 @@ export function $percent(value) {
 
 export function $ts(dateString, key = 'timestamp') {
   return i18n.global.d(new Date(dateString), key);
+}
+
+export function tn(num: number, format?: string): string {
+  return isNumber(num) ? i18n.global.n(num, format) : '';
 }
