@@ -1,7 +1,7 @@
 <template lang="pug">
 
 drawer-edit.article-edit(
-  :title="$tGen('editing', 'article')"
+  :title="title"
   :save-fn="saveFn"
   :destroy-fn="destroyFn"
   :model-origin="modelOrigin"
@@ -96,6 +96,7 @@ import { setAvatar } from '@/components/catalogue/ArticlePicturing';
 import ArticleCostInfo from '@/components/production/ArticleCostInfo.vue';
 import { useInvStore } from '@/store/invStore';
 import StorageSelect from '@/components/select/StorageSelect.vue';
+import { tGen } from '@/lib/validations';
 
 const props = defineProps<{
   articleId?: string,
@@ -129,7 +130,12 @@ const date = ref(new Date().toJSON());
 const pictures = computed(() => Picture.reactiveFilter({ ownerXid: props.articleId })
   .map(mapPictureInfo('smallImage')));
 
-function validate(callback) {
+const title = computed(() => [
+  modelOrigin.value.code,
+  tGen('editing', 'article'),
+].filter(x => x).join(' '));
+
+function validate(callback: (e: boolean) => void) {
   const validators = [
     form.value.validate,
     measurementForm.value.validate,
