@@ -1,31 +1,32 @@
 <template lang="pug">
 
-.article-list.list-group
-  slot(name="header")
-  .list-group-item(
-    v-for="article in articles"
-    :key="article.id"
-    :id="`id-${article.id}`"
-    @click="emit('click', article)"
-  )
-    .avatar(@click.prevent.stop="emit('avatarClick', article)")
-      article-avatar(
-        :article="article"
-        size="default"
-      )
-    .description
-      .name {{ article.name }}
-      .code {{ article.code }}
-
-  slot(name="footer")
+virtual-scroll-list.article-list.list-group(
+  v-if="height"
+  :style="{ height: `${height}px` }"
+  data-key="id"
+  :data-sources="articles"
+  :data-component="ArticleListItem"
+  ref="scrollRef"
+  :extra-props="{ activeId: selectedId, onClick, onAvatarClick }"
+)
 
 </template>
 <script setup lang="ts">
+import { ref } from 'vue';
+import ArticleListItem from '@/components/catalogue/ArticleListItem.vue';
+import VirtualScrollList from 'vue3-virtual-scroll-list';
 
-import ArticleAvatar from '@/components/catalogue/ArticleAvatar.vue';
+//slot(name="header")
+//slot(name="footer")
+const props = defineProps<{
+  articles: object[];
+  selectedId?: string;
+  propColumns: object[];
+  height?: number;
+}>();
 
-defineProps<{
-  articles: object[],
+const scrollRef = ref<{
+  scrollToIndex(idx: number): void;
 }>();
 
 const emit = defineEmits<{
@@ -33,28 +34,35 @@ const emit = defineEmits<{
   (e: 'avatarClick', article: object): void
 }>();
 
+function onClick(item: object): void {
+  emit('click', item);
+}
+
+function onAvatarClick(item: object): void {
+  emit('avatarClick', item);
+}
+
+defineExpose({
+  isReady(): boolean {
+    return !!scrollRef.value;
+  },
+  scrollToId(id: string): boolean {
+    const idx = props.articles.findIndex(item => item.id === id);
+    if (idx < 0 || !scrollRef.value) {
+      return false;
+    }
+    setTimeout(() => {
+      scrollRef.value.scrollToIndex(idx ? idx - 1 : 0);
+    }, 100);
+    return true;
+  },
+});
+
 </script>
 <style scoped lang="scss">
 @import "../../styles/variables";
 
-.code {
-  text-align: right;
-  font-size: smaller;
+.article-list {
+  overflow-y: auto;
 }
-
-.list-group-item {
-  display: flex;
-  text-align: left;
-
-  .description {
-    margin-left: $padding;
-    flex: 1;
-  }
-
-  .el-avatar {
-    //width: 30px;
-    //height: 30px;
-  }
-}
-
 </style>
