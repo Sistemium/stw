@@ -16,7 +16,7 @@ import filter from 'lodash/filter';
 import uniq from 'lodash/uniq';
 import sumBy from 'lodash/sumBy';
 import type StockArticleDate from '@/models/StockArticleDates';
-import type { MaterialFields } from '@/models/Recipes';
+import type { CostType, MaterialFields } from '@/models/Recipes';
 import model from '@/models/StockArticleDate.js';
 import { t } from '@/lib/validations';
 
@@ -28,7 +28,7 @@ const props = defineProps<{
   vatPrices: boolean;
   units?: number;
   materials?: MaterialFields[];
-  type?: 'initCost' | 'resultCost' | 'cost';
+  type?: CostType;
   labelSuffix?: string;
 }>();
 
