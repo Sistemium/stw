@@ -131,7 +131,7 @@ const pictures = computed(() => Picture.reactiveFilter({ ownerXid: props.article
   .map(mapPictureInfo('smallImage')));
 
 const title = computed(() => [
-  modelOrigin.value.code,
+  modelOrigin.value?.code,
   tGen('editing', 'article'),
 ].filter(x => x).join(' '));
 
