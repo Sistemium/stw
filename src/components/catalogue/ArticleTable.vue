@@ -9,6 +9,7 @@
       el-table-v2(
         v-if="tableWidth"
         ref="tableInstance"
+        :key="tableWidth"
         :columns="columns"
         :data="articles"
         :width="tableWidth"
