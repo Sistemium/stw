@@ -1,6 +1,7 @@
 <template lang="pug">
 
 el-table-v2.stock-period-table(
+  :key="width"
   v-if="width"
   ref="tableInstance"
   :columns="columns"
@@ -15,6 +16,7 @@ el-table-v2.stock-period-table(
 
 </template>
 <script setup lang="tsx">
+import max from 'lodash/max';
 import { computed } from 'vue';
 import ArticleView from '@/components/catalogue/ArticleView.vue';
 import type StockArticleDate from '@/models/StockArticleDates';
@@ -33,7 +35,10 @@ const emit = defineEmits<{
 }>();
 
 const columns = computed<Column[]>(() => {
-  const nameWidth = props.width - props.columnWidth * 6 - 6;
+  const { columnWidth } = props;
+  const nameWidth = max([props.width - columnWidth * 6 - 6, 120]);
+  const width = Math.floor((props.width - nameWidth - 6) / 6);
+  console.log(props.width);
   return [
     {
       class: 'article',
@@ -43,33 +48,33 @@ const columns = computed<Column[]>(() => {
       cellRenderer: ({ rowData }) => <ArticleView article-id={rowData.articleId}/>,
     },
     {
-      width: props.columnWidth,
+      width,
       title: t('fields.initUnits'),
       dataKey: 'initUnits',
     },
     {
-      width: props.columnWidth,
+      width,
       title: t('fields.unitsIn'),
       dataKey: 'unitsIn',
     },
     {
-      width: props.columnWidth,
+      width,
       title: t('fields.unitsOut'),
       dataKey: 'unitsOut',
     },
     {
-      width: props.columnWidth,
+      width,
       title: t('fields.unitsSur'),
       dataKey: 'unitsSur',
     },
     {
-      width: props.columnWidth,
+      width,
       title: t('fields.remains'),
       dataKey: 'resultUnits',
     },
     {
       align: 'right',
-      width: props.columnWidth,
+      width,
       title: t('fields.cost'),
       dataKey: 'resultCost',
       cellRenderer: ({ cellData }) => <span>{ tn(cellData, 'decimal') }</span>,
