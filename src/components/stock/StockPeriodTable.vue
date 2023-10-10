@@ -3,7 +3,6 @@
 el-table-v2.stock-period-table(
   :key="width"
   v-if="width"
-  ref="tableInstance"
   :columns="columns"
   :data="data"
   :width="width"
@@ -11,7 +10,6 @@ el-table-v2.stock-period-table(
   fixed
   :estimated-row-height="50"
   :row-event-handlers="{ onClick: handleCLick }"
-  :row-class="({ rowData }) => rowData.id === selectedId && 'active'"
 )
 
 </template>
@@ -89,13 +87,10 @@ function handleCLick({ rowData }) {
 </script>
 <style scoped lang="scss">
 
-.stock-period-table :deep(.cell) {
-  word-break: normal;
+.stock-period-table :deep(.article) {
+  word-break: normal !important;
 }
 
-.el-table :deep(td) {
-  cursor: pointer;
-}
 .stock-period-table {
   text-align: left;
 }
