@@ -1,63 +1,86 @@
 <template lang="pug">
 
-el-table.stock-period-table(
+el-table-v2.stock-period-table(
+  v-if="width"
+  ref="tableInstance"
+  :columns="columns"
   :data="data"
+  :width="width"
   :height="height"
-  @row-click="(row, column) => emit('rowClick', row, column)"
+  fixed
+  :estimated-row-height="50"
+  :row-event-handlers="{ onClick: handleCLick }"
+  :row-class="({ rowData }) => rowData.id === selectedId && 'active'"
 )
-  el-table-column(
-    :label="$t('concepts.article')"
-  )
-    template(#default="{ row }")
-      article-view(:article-id="row.articleId")
-  el-table-column(
-    prop="initUnits"
-    :label="$t('fields.initUnits')"
-    :width="columnWidth"
-  )
-  el-table-column(
-    prop="unitsIn"
-    :label="$t('fields.unitsIn')"
-    :width="columnWidth"
-  )
-  el-table-column(
-    prop="unitsOut"
-    :label="$t('fields.unitsOut')"
-    :width="columnWidth"
-  )
-  el-table-column(
-    prop="unitsSur"
-    :label="$t('fields.unitsSur')"
-    :width="columnWidth"
-  )
-  el-table-column(
-    prop="resultUnits"
-    :label="$t('fields.remains')"
-    :width="columnWidth"
-  )
-  el-table-column(
-    prop="resultCost"
-    :label="$t('fields.cost')"
-    :width="columnWidth"
-  )
-    template(#default="{ row }")
-      span(v-if="row.resultCost") {{ $n(row.resultCost) }}
 
 </template>
-<script setup lang="ts">
-
+<script setup lang="tsx">
+import { computed } from 'vue';
 import ArticleView from '@/components/catalogue/ArticleView.vue';
 import type StockArticleDate from '@/models/StockArticleDates';
+import { t, tn } from '@/lib/validations';
+import type { Column } from 'element-plus'
 
-withDefaults(defineProps<{
+const props = withDefaults(defineProps<{
   data: StockArticleDate[];
   height?: number;
+  width?: number;
   columnWidth?: number;
 }>(), { columnWidth: 120 });
 
 const emit = defineEmits<{
-  (e: 'rowClick', row: StockArticleDate, column: object): void;
+  (e: 'rowClick', row: StockArticleDate): void;
 }>();
+
+const columns = computed<Column[]>(() => {
+  const nameWidth = props.width - props.columnWidth * 6 - 6;
+  return [
+    {
+      class: 'article',
+      key: 'article',
+      title: t('concepts.article'),
+      width: nameWidth,
+      cellRenderer: ({ rowData }) => <ArticleView article-id={rowData.articleId}/>,
+    },
+    {
+      width: props.columnWidth,
+      title: t('fields.initUnits'),
+      dataKey: 'initUnits',
+    },
+    {
+      width: props.columnWidth,
+      title: t('fields.unitsIn'),
+      dataKey: 'unitsIn',
+    },
+    {
+      width: props.columnWidth,
+      title: t('fields.unitsOut'),
+      dataKey: 'unitsOut',
+    },
+    {
+      width: props.columnWidth,
+      title: t('fields.unitsSur'),
+      dataKey: 'unitsSur',
+    },
+    {
+      width: props.columnWidth,
+      title: t('fields.remains'),
+      dataKey: 'resultUnits',
+    },
+    {
+      align: 'right',
+      width: props.columnWidth,
+      title: t('fields.cost'),
+      dataKey: 'resultCost',
+      cellRenderer: ({ cellData }) => <span>{ tn(cellData, 'decimal') }</span>,
+    },
+  ]
+});
+
+
+function handleCLick({ rowData }) {
+  emit('rowClick', rowData as StockArticleDate);
+}
 
 </script>
 <style scoped lang="scss">
@@ -69,5 +92,7 @@ const emit = defineEmits<{
 .el-table :deep(td) {
   cursor: pointer;
 }
-
+.stock-period-table {
+  text-align: left;
+}
 </style>

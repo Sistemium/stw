@@ -25,11 +25,14 @@
     :padding="20"
     @resized="setHeight"
   )
-    stock-period-table(
-      :data="filteredData"
-      @row-click="rowClick"
-      :height="tableHeight"
-    )
+    el-auto-resizer
+      template(#default="{ width }")
+        stock-period-table(
+          :data="filteredData"
+          @row-click="rowClick"
+          :height="tableHeight"
+          :width="width"
+        )
   stock-article-details-view(
     v-if="showDetails"
     v-model="showDetails"
