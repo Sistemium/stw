@@ -38,7 +38,6 @@ const columns = computed<Column[]>(() => {
   const { columnWidth } = props;
   const nameWidth = max([props.width - columnWidth * 6 - 6, 120]);
   const width = Math.floor((props.width - nameWidth - 6) / 6);
-  console.log(props.width);
   return [
     {
       class: 'article',
