@@ -48,6 +48,11 @@ drawer-edit.article-edit(
         recipe-form(
           :model="model"
           ref="recipeFormRef"
+          :storage-id="storageId"
+          :date="date"
+          :vat-prices="false"
+          :vat-rate="0"
+          cost-type="resultCost"
         )
       //el-tab-pane(:label="$t('menu.barcodes')")
         .list-group
