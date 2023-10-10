@@ -12,12 +12,12 @@ el-form-item(:label="label")
 <script setup lang="ts">
 
 import { computed, watch } from 'vue';
-import model from '@/models/StockArticleDate.js';
 import filter from 'lodash/filter';
 import uniq from 'lodash/uniq';
 import sumBy from 'lodash/sumBy';
 import type StockArticleDate from '@/models/StockArticleDates';
 import type { MaterialFields } from '@/models/Recipes';
+import model from '@/models/StockArticleDate.js';
 import { t } from '@/lib/validations';
 
 const props = defineProps<{
@@ -42,9 +42,11 @@ const data = computed<{ initCost: number, resultCost?: number }>(() => {
   if (!props.materials) {
     return stockArticleDateReactive(props.storageId, props.articleId, props.date);
   }
+  const type = props.type || 'initCost';
   return {
-    initCost: sumBy(props.materials, ({ articleId, units }) => {
-      const initCost = stockArticleDateReactive(props.storageId, articleId, props.date)?.initCost;
+    [type]: sumBy(props.materials, ({ articleId, units }) => {
+      const initCostObj = stockArticleDateReactive(props.storageId, articleId, props.date) || {};
+      const initCost = initCostObj[type];
       return initCost && units ? units * initCost : 0;
     }),
   };
@@ -59,11 +61,22 @@ const cost = computed(() => {
   return price * (props.vatPrices ? (1 + props.vatRate) : 1) || 0;
 });
 
-watch(() => props.materials, async materials => {
+const materialArticleIds = computed<string[]>(() => {
+  const { materials } = props;
   if (!materials) {
-    return;
+    return [];
   }
-  const articleIds = filter(uniq(materials.map(({ articleId }) => articleId)));
+  return filter(uniq(materials.map(({ articleId }) => articleId)));
+});
+
+const findSensor = computed(() => [
+  ...materialArticleIds.value,
+  props.date,
+  props.storageId,
+].join('|'));
+
+watch(findSensor, async () => {
+  const { value: articleIds } = materialArticleIds;
   if (!articleIds.length) {
     return;
   }
@@ -93,7 +106,7 @@ watch(() => [props.articleId, props.storageId, props.date].join('|'), async () =
   });
 }, { immediate: true });
 
-function stockArticleDateReactive(storageId, articleId, date) {
+function stockArticleDateReactive(storageId: string, articleId: string, date: string) {
   const many = model.reactiveManyByIndex('articleId', articleId) as StockArticleDate[];
   return many.filter(stock => {
     return stock.storageId === storageId
