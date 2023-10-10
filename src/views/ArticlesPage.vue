@@ -36,6 +36,7 @@
       v-if="articles.length"
     )
       component(
+        ref="viewComponentRef"
         :is="viewComponent"
         :prop-columns="tableData.propColumns"
         :size="tableSize"
@@ -44,6 +45,7 @@
         @current-change="handleCurrentChange"
         @click="onArticleClick"
         @avatar-click="avatarClick"
+        :selected-id="selectedArticle?.id"
       )
     el-alert.empty(
       v-else
@@ -89,8 +91,17 @@ const search = ref('');
 const tableHeight = ref<number>(undefined);
 const selectedArticle = ref(null);
 const router = useRouter();
+const viewComponentRef = ref(null);
 
-useScrollToCreated({});
+useScrollToCreated({
+  ifIdExistsFn(id: string): boolean {
+    return viewComponentRef.value?.isReady()
+      && !!articles.value.find(a => a.id === id);
+  },
+  scrollToIdFn(id: string) {
+    return viewComponentRef.value?.scrollToId(id);
+  },
+});
 
 const copyTip = computed(() => {
   const { code, name } = selectedArticle.value || {};
@@ -124,7 +135,7 @@ const { t: localT } = useI18n({
   },
 });
 
-function setHeight(height) {
+function setHeight(height: number) {
   tableHeight.value = height;
 }
 
@@ -174,7 +185,7 @@ function setBarcode(value) {
   barcode.value = value ? value.code : null;
 }
 
-function onArticleClick(article) {
+function onArticleClick(article: { id: string }) {
   router.push({
     name: props.editRoute,
     params: {
@@ -183,11 +194,11 @@ function onArticleClick(article) {
   });
 }
 
-function handleCurrentChange(row) {
+function handleCurrentChange(row: object) {
   selectedArticle.value = row;
 }
 
-function avatarClick(article) {
+function avatarClick(article: { id: string }) {
   router.push({
     name: props.galleryRoute,
     params: {
@@ -203,7 +214,7 @@ function avatarClick(article) {
   flex: 1;
 }
 
-.stm-resize.table {
+.stm-resize {
   overflow-y: hidden;
 }
 
