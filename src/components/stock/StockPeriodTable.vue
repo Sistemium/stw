@@ -34,8 +34,8 @@ const emit = defineEmits<{
 
 const columns = computed<Column[]>(() => {
   const { columnWidth } = props;
-  const nameWidth = max([props.width - columnWidth * 6 - 6, 120]);
-  const width = Math.floor((props.width - nameWidth - 6) / 6);
+  const nameWidth = max([props.width - columnWidth * 6 - 6, 250]);
+  const width = max([Math.floor((props.width - nameWidth - 6) / 6), 50]);
   return [
     {
       class: 'article',
@@ -72,6 +72,7 @@ const columns = computed<Column[]>(() => {
     {
       align: 'right',
       width,
+      minWidth: 60,
       title: t('fields.cost'),
       dataKey: 'resultCost',
       cellRenderer: ({ cellData }) => <span>{ tn(cellData, 'decimal') }</span>,
@@ -89,6 +90,7 @@ function handleCLick({ rowData }) {
 
 .stock-period-table :deep(.article) {
   word-break: normal !important;
+  padding: 6px;
 }
 
 .stock-period-table {
