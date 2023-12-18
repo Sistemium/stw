@@ -117,6 +117,10 @@ async function stockWithdrawingSync(to: RouteRecord, from: RouteRecord, options:
     });
 
     await Promise.all(filter(counterpartyPromises));
+    const { currentStorageId } = store
+    if (currentStorageId) {
+      await fetchStocks(currentStorageId);
+    }
   } catch (e) {
     error('stockWithdrawingSync:', e);
   }
@@ -195,4 +199,13 @@ async function switchLoad(to: RouteRecord, from: RouteRecord) {
   function needLoading(re: RegExp) {
     return re.test(to.name as string) && !re.test(from.name as string);
   }
+}
+
+export async function fetchStocks(storageId: string) {
+  const date = dayjs().format('YYYY-MM-DD');
+  StockArticleDate.cachedFetch({
+    storageId,
+    date: { $lte: date },
+    nextDate: { $gt: date },
+  })
 }
