@@ -75,5 +75,6 @@ module.exports = {
     'vue/require-explicit-emits': 'off',
     'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': 'error',
+    '@typescript-eslint/no-explicit-any': 'off',
   },
 };
