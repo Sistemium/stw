@@ -1,36 +1,44 @@
 <template lang="pug">
 
-el-select.article-select(
+el-select-v2.article-select(
   v-model="currentId"
-  v-cancel-read-only
+  popper-class="article-select-popper"
+  :options="options"
   :clearable="true"
   :debounce="300"
-  filterable
-  :filter-method="filterSearch"
+  :props="selectProps"
+  :item-height="itemHeight"
+  :height="itemHeight*6"
+  :filterable="true"
+  :remote-method="filterSearch"
   :placeholder="placeholderValue"
   @change="changes => emit('update:modelValue', changes)"
 )
-  el-option(
-    v-for="article in options"
-    :key="article.id"
-    :label="article.name"
-    :value="article.id"
-  )
-    .name {{ article.name }}
-    .code(v-if="article.code") {{ article.code }}
+  template(#default="{ item: article }")
+    .article-option
+      .title
+        .name {{ article.name }}
+      .info
+        .code(v-if="article.code") {{ article.code }}
   template(#empty)
     slot(name="empty")
+      p.el-select-v2__empty {{ $t("validation.noData") }}
 
 </template>
 <script setup lang="ts">
 
-import Article from '@/models/Article';
-import { searchArticle } from '@/services/catalogue';
+import Article from '@/models/Article.js';
+import { searchArticle } from '@/services/catalogue.js';
 import i18n from '@/i18n';
 import upperFirst from 'lodash/upperFirst';
 import { computed, ref, watch } from 'vue';
 import orderBy from 'lodash/orderBy';
 
+defineSlots<{
+  empty(): never
+}>()
+
+const itemHeight = 50;
 
 const props = defineProps({
   modelValue: String,
@@ -42,6 +50,11 @@ const props = defineProps({
   },
   placeholder: String,
 });
+
+const selectProps = {
+  label: 'name',
+  value: 'id',
+};
 
 const emit = defineEmits<{
   (e: 'update:modelValue', value: string | null);
@@ -90,16 +103,37 @@ watch(options, optionsValue => {
 <style scoped lang="scss">
 @import "../../styles/variables";
 
-.el-select-dropdown__item {
-  display: block;
-  //flex-direction: column;
-  height: auto;
+.article-select {
+  text-align: left;
+}
+
+.article-option {
+  line-height: 25px;
+  width: 100%;
+  //display: flex;
+  //flex-direction: row;
+  //justify-content: space-between;
+
+  .info {
+    text-align: right;
+  }
 
   .code {
-    line-height: 1;
-    font-size: smaller;
+    //line-height: 1;
+    //font-size: smaller;
     color: $light-gray;
-    text-align: right;
+  }
+}
+
+</style>
+<style lang="scss">
+.article-select-popper {
+  min-width: 600px;
+  .el-select-dropdown__list {
+    width: auto !important;
+  }
+  .el-select-dropdown__option-item.is-selected::after {
+    display: none;
   }
 }
 </style>

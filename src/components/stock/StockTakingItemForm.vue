@@ -329,7 +329,7 @@ const { t } = useI18n({
 .el-form-item {
   display: block;
   text-align: right;
-  :deep(label) {
+  :deep(.el-form-item__label) {
     float: left;
   }
   :deep(.el-form-item__content) {
@@ -361,7 +361,7 @@ const { t } = useI18n({
   vertical-align: middle;
   font-size: 12px;
   color: $gray;
-  line-height: 24px;
+  line-height: 32px;
   font-weight: normal;
 }
 
