@@ -12,6 +12,7 @@ el-select-v2.article-select(
   :filterable="true"
   :remote-method="filterSearch"
   :placeholder="placeholderValue"
+  placement="bottom-end"
   @change="changes => emit('update:modelValue', changes)"
 )
   template(#default="{ item: article }")
