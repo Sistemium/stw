@@ -18,8 +18,10 @@ el-select-v2.article-select(
     .article-option
       .title
         .name {{ article.name }}
+        small.supplier(v-if="article.supplier") {{ article.supplier.stringValue }}
       .info
-        .code(v-if="article.code") {{ article.code }}
+        span.code(v-if="article.code") {{ article.code }}
+        small.commentary(v-if="article.commentary") {{ article.commentary.stringValue }}
   template(#empty)
     slot(name="empty")
       p.el-select-v2__empty {{ $t("validation.noData") }}
@@ -37,6 +39,8 @@ import orderBy from 'lodash/orderBy';
 defineSlots<{
   empty(): never
 }>()
+
+const { VITE_SUPPLIER_PROP, VITE_COMMENTARY_PROP } = import.meta.env;
 
 const itemHeight = 50;
 
@@ -70,7 +74,12 @@ const hasBarcodeFilter = computed(() => props.filters?.name === 'barcodeFilter')
 const options = computed(() => {
   const filtered = Article.reactiveFilter(props.filters);
   const res = hasBarcodeFilter.value ? filtered : filtered.filter(searchArticle(search.value));
-  return orderBy(res, ['name']);
+  return orderBy(res, ['name'])
+    .map(a => ({
+      ...a,
+      supplier: a.props.find(prop => prop.propId === VITE_SUPPLIER_PROP),
+      commentary: a.props.find(prop => prop.propId === VITE_COMMENTARY_PROP),
+    }));
 });
 
 const currentId = computed({
@@ -108,19 +117,28 @@ watch(options, optionsValue => {
 }
 
 .article-option {
+
+  border-top: solid 1px $gray-border-color;
+
   line-height: 25px;
   width: 100%;
-  //display: flex;
-  //flex-direction: row;
-  //justify-content: space-between;
 
-  .info {
-    text-align: right;
+  .title {
+    font-size: 13px;
+  }
+
+  .info, .title {
+    > * + * {
+      margin-left: $padding;
+    }
+
+    display: flex;
+    justify-content: space-between;
   }
 
   .code {
-    //line-height: 1;
-    //font-size: smaller;
+    //display: inline-block;
+    //min-width: 150px;
     color: $light-gray;
   }
 }
@@ -129,9 +147,11 @@ watch(options, optionsValue => {
 <style lang="scss">
 .article-select-popper {
   min-width: 600px;
+
   .el-select-dropdown__list {
     width: auto !important;
   }
+
   .el-select-dropdown__option-item.is-selected::after {
     display: none;
   }
