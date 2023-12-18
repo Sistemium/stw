@@ -11,9 +11,11 @@ el-select-v2.article-select(
   :height="itemHeight*6"
   :filterable="true"
   :remote-method="filterSearch"
+  :remote="true"
   :placeholder="placeholderValue"
   placement="bottom-end"
   @change="changes => emit('update:modelValue', changes)"
+  @visible-change="onVisibleChange"
 )
   template(#default="{ item: article }")
     .article-option
@@ -119,6 +121,12 @@ watch(options, optionsValue => {
     currentId.value = null;
   }
 }, { immediate: true });
+
+function onVisibleChange(visible: boolean) {
+  if (!visible) {
+    filterSearch('')
+  }
+}
 
 </script>
 <style scoped lang="scss">
