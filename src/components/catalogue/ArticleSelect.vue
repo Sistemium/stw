@@ -16,12 +16,16 @@ el-select-v2.article-select(
 )
   template(#default="{ item: article }")
     .article-option
-      .title
-        .name {{ article.name }}
-        small.supplier(v-if="article.supplier") {{ article.supplier.stringValue }}
-      .info
-        span.code(v-if="article.code") {{ article.code }}
-        small.commentary(v-if="article.commentary") {{ article.commentary.stringValue }}
+      article-avatar(
+        :article="article"
+      )
+      .item
+        .title
+          .name {{ article.name }}
+          small.supplier(v-if="article.supplier") {{ article.supplier.stringValue }}
+        .info
+          span.code(v-if="article.code") {{ article.code }}
+          small.commentary(v-if="article.commentary") {{ article.commentary.stringValue }}
   template(#empty)
     slot(name="empty")
       p.el-select-v2__empty {{ $t("validation.noData") }}
@@ -35,6 +39,7 @@ import i18n from '@/i18n';
 import upperFirst from 'lodash/upperFirst';
 import { computed, ref, watch } from 'vue';
 import orderBy from 'lodash/orderBy';
+import ArticleAvatar from '@/components/catalogue/ArticleAvatar.vue';
 
 defineSlots<{
   empty(): never
@@ -119,15 +124,24 @@ watch(options, optionsValue => {
 .article-option {
 
   border-top: solid 1px $gray-border-color;
-
-  line-height: 25px;
   width: 100%;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  .item {
+    line-height: 25px;
+    margin-left: $padding;
+    flex: 1;
+  }
 
   .title {
     font-size: 13px;
   }
 
   .info, .title {
+    min-height: 25px;
     > * + * {
       margin-left: $padding;
     }
@@ -137,8 +151,6 @@ watch(options, optionsValue => {
   }
 
   .code {
-    //display: inline-block;
-    //min-width: 150px;
     color: $light-gray;
   }
 }
