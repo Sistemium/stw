@@ -14,6 +14,7 @@
             type="info"
             :value="idx +1"
           )
+        article-view(:article-id="material.articleId")
         el-link(@click="removeMaterial(material)" :disabled="disabled")
           small {{ $t('delete') }}
       recipe-material-form(
@@ -34,6 +35,7 @@ import { onBeforeUpdate, ref } from 'vue';
 import { v4 } from 'uuid';
 import { eachSeries } from 'async';
 import RecipeMaterialForm from '@/components/production/RecipeMaterialForm.vue';
+import ArticleView from '@/components/catalogue/ArticleView.vue';
 import type { RecipeMaterial } from '@/models/Recipes';
 
 /* eslint-disable vue/no-mutating-props */
@@ -93,8 +95,11 @@ function onAddMaterial() {
 
 </script>
 <style scoped lang="scss">
-.idx {
+.article-view {
   flex: 1;
+  :deep(.name) {
+    display: none;
+  }
 }
 
 .materials-form {

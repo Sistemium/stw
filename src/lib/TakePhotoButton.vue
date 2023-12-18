@@ -49,7 +49,7 @@ function onDrop(acceptFiles) {
 }
 
 function imsUrl() {
-  const { org = '' } = store.state.auth?.account;
+  const { org = '' } = store.state.auth.account || {};
   const url = [
     `/ims/${org}?folder=${props.entityName}/${dayjs().format('YYYY-MM-DD')}`,
     props.trim && 'trim=true',

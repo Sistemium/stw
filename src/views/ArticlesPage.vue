@@ -36,6 +36,7 @@
       v-if="articles.length"
     )
       component(
+        ref="viewComponentRef"
         :is="viewComponent"
         :prop-columns="tableData.propColumns"
         :size="tableSize"
@@ -44,6 +45,7 @@
         @current-change="handleCurrentChange"
         @click="onArticleClick"
         @avatar-click="avatarClick"
+        :selected-id="selectedArticle?.id"
       )
     el-alert.empty(
       v-else
@@ -73,7 +75,7 @@ import PageTitle from '@/components/PageTitle.vue';
 import BarcodeView from '@/components/BarcodeScanner/BarcodeView.vue';
 import ArticleList from '@/components/catalogue/ArticleList.vue';
 import ArticleTable from '@/components/catalogue/ArticleTable.vue';
-import i18n from '@/i18n';
+import { t } from '@/lib/validations';
 import { DocumentCopy } from '@element-plus/icons-vue';
 import { catalogueData, searchArticle } from '@/services/catalogue.js';
 import { useScrollToCreated } from '@/services/scrolling';
@@ -89,12 +91,21 @@ const search = ref('');
 const tableHeight = ref<number>(undefined);
 const selectedArticle = ref(null);
 const router = useRouter();
+const viewComponentRef = ref(null);
 
-useScrollToCreated({});
+useScrollToCreated({
+  ifIdExistsFn(id: string): boolean {
+    return viewComponentRef.value?.isReady()
+      && !!articles.value.find(a => a.id === id);
+  },
+  scrollToIdFn(id: string) {
+    return viewComponentRef.value?.scrollToId(id);
+  },
+});
 
 const copyTip = computed(() => {
   const { code, name } = selectedArticle.value || {};
-  return t('copyTip', [code || name]);
+  return localT('copyTip', [code || name]);
 });
 
 const { showTable, tableSize } = useResponsiveTables();
@@ -110,7 +121,7 @@ const articles = computed(() => {
 
 const tableData = computed(() => catalogueData());
 
-const { t } = useI18n({
+const { t: localT } = useI18n({
   messages: {
     en: {
       copyTip: 'Click to copy "{0}" article',
@@ -124,20 +135,21 @@ const { t } = useI18n({
   },
 });
 
-function setHeight(height) {
+function setHeight(height: number) {
   tableHeight.value = height;
 }
 
 function downloadSchema() {
   return {
+    wrapText: true,
     columns: [
       {
         key: 'name',
-        title: i18n.global.t('fields.name'),
+        title: t('fields.name'),
         width: 50,
       }, {
         key: 'code',
-        title: i18n.global.t('fields.code'),
+        title: t('fields.code'),
         width: 25,
       },
       ...tableData.value.propColumns
@@ -173,7 +185,7 @@ function setBarcode(value) {
   barcode.value = value ? value.code : null;
 }
 
-function onArticleClick(article) {
+function onArticleClick(article: { id: string }) {
   router.push({
     name: props.editRoute,
     params: {
@@ -182,11 +194,11 @@ function onArticleClick(article) {
   });
 }
 
-function handleCurrentChange(row) {
+function handleCurrentChange(row: object) {
   selectedArticle.value = row;
 }
 
-function avatarClick(article) {
+function avatarClick(article: { id: string }) {
   router.push({
     name: props.galleryRoute,
     params: {
@@ -202,7 +214,7 @@ function avatarClick(article) {
   flex: 1;
 }
 
-.stm-resize.table {
+.stm-resize {
   overflow-y: hidden;
 }
 

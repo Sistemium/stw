@@ -27,10 +27,15 @@
     "storages": "Sandėliai",
     "pictures": "Nuotraukos",
     "stockReceivals": "Priemimas į sandėlį",
+    "stockReceiving": "Priemimas į sandėlį",
     "stockWithdrawals": "Iškrovimas iš sandėlio",
     "stockWithdrawing": "Iškrovimas iš sandėlio",
     "stockPeriod": "Likučiai",
+    "reports": "Ataskaitos",
     "measurements": "Išmatavimai"
+  },
+  "reports": {
+    "stockMovement": "Perkelimai"
   },
   "fields": {
     "address": "Adresas",
@@ -38,6 +43,7 @@
     "regCode": "Įmonės kodas",
     "vatCode": "PVM kodas",
     "name": "Pavadinimas",
+    "email": "El. paštas",
     "date": "Data",
     "dateB": "Data nuo",
     "toDate": "iki",
@@ -79,7 +85,10 @@
     "measure": "Matavimas",
     "measureUnit": "Matavimo vienetas",
     "unitsInPackage": "{0} pakuotėje",
-    "ord": "Eilės numeris"
+    "ord": "Eilės numeris",
+    "from": "Iš",
+    "to": "Į",
+    "id": "Identifikatorius"
   },
   "models": {
     "StockArticleDate": "Sandėlio operacijos"
@@ -156,6 +165,7 @@
     "noData": "Nėra duomenų"
   },
   "actions": {
+    "act": "{0} aktas",
     "add": "Pridėti {0}",
     "show": "Parodyti {0}",
     "hide": "Paslėpti {0}",

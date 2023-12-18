@@ -1,7 +1,7 @@
 <template lang="pug">
 
 drawer-edit.article-edit(
-  :title="$tGen('editing', 'article')"
+  :title="title"
   :save-fn="saveFn"
   :destroy-fn="destroyFn"
   :model-origin="modelOrigin"
@@ -23,10 +23,36 @@ drawer-edit.article-edit(
           ref="measurementForm"
           :model="model"
         )
-      el-tab-pane(:label="$t('concepts.recipe')")
+      el-tab-pane
+        template(#label)
+          span.tab-label {{ $t('concepts.recipe') }}
+          el-badge(
+            v-if="model.materials?.length"
+            type="info"
+            :value="model.materials?.length"
+            size="small"
+          )
+        .cost-info(v-if="model.materials?.length")
+          article-cost-info(
+            v-if="model.materials?.length && storageId && date"
+            :article-id="model.id"
+            :storage-id="storageId"
+            :date="date"
+            :vat-prices="false"
+            :vat-rate="0"
+            :materials="model.materials"
+            :units="1"
+            type="resultCost"
+          )
+          storage-select(v-model="invStore.currentStorageId")
         recipe-form(
           :model="model"
           ref="recipeFormRef"
+          :storage-id="storageId"
+          :date="date"
+          :vat-prices="false"
+          :vat-rate="0"
+          cost-type="resultCost"
         )
       //el-tab-pane(:label="$t('menu.barcodes')")
         .list-group
@@ -53,6 +79,7 @@ drawer-edit.article-edit(
 import { useRoute } from 'vue-router';
 import { computed, ref } from 'vue';
 import { useWindowSize } from '@vueuse/core';
+import { eachSeries } from 'async';
 import DrawerEdit from '@/lib/DrawerEdit.vue';
 import Resize from '@/lib/StmResize.vue';
 import TakePhotoButton from '@/lib/TakePhotoButton.vue';
@@ -66,7 +93,10 @@ import { createPicture } from '@/services/picturing';
 import Picture, { mapPictureInfo } from '@/models/Picture.js';
 import Article from '@/models/Article.js';
 import { setAvatar } from '@/components/catalogue/ArticlePicturing';
-import { eachSeries } from 'async';
+import ArticleCostInfo from '@/components/production/ArticleCostInfo.vue';
+import { useInvStore } from '@/store/invStore';
+import StorageSelect from '@/components/select/StorageSelect.vue';
+import { tGen } from '@/lib/validations';
 
 const props = defineProps<{
   articleId?: string,
@@ -74,6 +104,7 @@ const props = defineProps<{
   drawerStyle?: object,
 }>();
 
+const invStore = useInvStore();
 const form = ref(null);
 const measurementForm = ref(null);
 const recipeFormRef = ref(null);
@@ -93,10 +124,18 @@ const modelOrigin = computed(() => {
   return copyArticle.value || articleInstance();
 });
 
+const storageId = computed(() => invStore.currentStorageId);
+const date = ref(new Date().toJSON());
+
 const pictures = computed(() => Picture.reactiveFilter({ ownerXid: props.articleId })
   .map(mapPictureInfo('smallImage')));
 
-function validate(callback) {
+const title = computed(() => [
+  modelOrigin.value?.code,
+  tGen('editing', 'article'),
+].filter(x => x).join(' '));
+
+function validate(callback: (e: boolean) => void) {
   const validators = [
     form.value.validate,
     measurementForm.value.validate,
@@ -154,6 +193,15 @@ async function onPictureDone(article, picturesInfo, fileName) {
   :deep(.el-badge) {
     width: 100%;
   }
+}
+
+.tab-label + .el-badge {
+  margin-left: $padding;
+}
+
+.cost-info {
+  display: flex;
+  justify-content: space-between;
 }
 
 </style>

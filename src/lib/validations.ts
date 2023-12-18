@@ -1,5 +1,6 @@
 import cloneDeep from 'lodash/cloneDeep';
 import round from 'lodash/round';
+import isNumber from 'lodash/isNumber';
 import { ElLoading, ElMessage } from 'element-plus';
 import i18n from '@/i18n';
 
@@ -15,9 +16,7 @@ export default {
   methods: {
     $ts,
     $tAction: tAction,
-    $tGen(action, name) {
-      return this.$t(`actions.${action}`, [this.$t(`genitive.${name}`)]);
-    },
+    $tGen: tGen,
     $nr(num, decimals = 2) {
       return i18n.global.n(round(num, decimals), 'decimal');
     },
@@ -51,6 +50,10 @@ export function cloneInstance(res) {
 
 export function tAction(action: string, name: string): string {
   return t(`actions.${action}`, [t(`accusative.${name}`)]);
+}
+
+export function tGen(action, name) {
+  return t(`actions.${action}`, [t(`genitive.${name}`)]);
 }
 
 export function t(key: string, etc?: string[]): string {
@@ -88,4 +91,8 @@ export function $percent(value) {
 
 export function $ts(dateString, key = 'timestamp') {
   return i18n.global.d(new Date(dateString), key);
+}
+
+export function tn(num: number, format?: string): string {
+  return isNumber(num) ? i18n.global.n(num, format) : '';
 }

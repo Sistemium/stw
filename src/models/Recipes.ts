@@ -1,5 +1,5 @@
 export interface MaterialFields {
-  id: string;
+  id?: string;
   articleId: string;
   measureId: string;
   measureUnitId: string;
@@ -9,3 +9,5 @@ export interface MaterialFields {
 export interface RecipeMaterial extends MaterialFields {
   optionArticleIds?: string[];
 }
+
+export type CostType = 'initCost' | 'resultCost' | 'cost';

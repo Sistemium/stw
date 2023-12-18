@@ -27,10 +27,15 @@
     "storages": "Storages",
     "pictures": "Pictures",
     "stockReceivals": "Receiving to warehouse",
+    "stockReceiving": "Receiving to warehouse",
     "stockWithdrawals": "Withdrawals from warehouse",
     "stockWithdrawing": "Stock withdrawing",
     "stockPeriod": "Stock remains",
+    "reports": "Reports",
     "measurements": "Measurements"
+  },
+  "reports": {
+    "stockMovement": "Intra-movements"
   },
   "fields": {
     "address": "Address",
@@ -38,6 +43,7 @@
     "regCode": "Registration number",
     "vatCode": "VAT number",
     "name": "Name",
+    "email": "E-mail",
     "type": "Type",
     "consigneeType": "Consignee type",
     "consignee": "Consignee",
@@ -80,7 +86,10 @@
     "measure": "Measure",
     "measureUnit": "Unit of measure",
     "unitsInPackage": "{0} in a package",
-    "value": "Value"
+    "value": "Value",
+    "from": "From",
+    "to": "To",
+    "id": "ID"
   },
   "measures": {
     "weight": "Weight",
@@ -159,6 +168,7 @@
     "noData": "No data"
   },
   "actions": {
+    "act": "Declaration of {0}",
     "add": "Add {0}",
     "show": "Show {0}",
     "hide": "Hide {0}",

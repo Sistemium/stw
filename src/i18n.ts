@@ -42,7 +42,7 @@ const dateTimeFormatGeneric = {
 const numberFormats = {
   decimal: {
     style: 'decimal',
-    minimumFractionDigits: 2,
+    minimumFractionDigits: 0,
     maximumFractionDigits: 2,
   },
 }

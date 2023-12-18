@@ -2,7 +2,7 @@
 
 el-avatar.article-avatar(
   fit="cover"
-  icon="el-icon-picture-outline"
+  :icon="Picture"
   :id="id"
   shape="square"
   :size="size"
@@ -12,8 +12,9 @@ el-avatar.article-avatar(
 </template>
 <script setup>
 
-import Picture from '@/models/Picture';
+import model from '@/models/Picture';
 import { computed } from 'vue';
+import { Picture } from '@element-plus/icons-vue';
 
 const props = defineProps({
   article: Object,
@@ -21,7 +22,7 @@ const props = defineProps({
   id: String,
 });
 
-const picture = computed(() => Picture.reactiveGet(props.article.avatarPictureId) || {});
+const picture = computed(() => model.reactiveGet(props.article.avatarPictureId) || {});
 
 </script>
 <style scoped lang="scss">

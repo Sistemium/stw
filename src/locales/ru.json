@@ -27,10 +27,15 @@
     "storages": "Склады",
     "pictures": "Изображения",
     "stockReceivals": "Приход на склад",
+    "stockReceiving": "Приход на склад",
     "stockWithdrawals": "Отгрузки со склада",
     "stockWithdrawing": "Выдача со склада",
     "stockPeriod": "Остатки",
+    "reports": "Отчёты",
     "measurements": "Измерения"
+  },
+  "reports": {
+    "stockMovement": "Перемещения"
   },
   "fields": {
     "address": "Адрес",
@@ -38,6 +43,7 @@
     "regCode": "Код предприятия",
     "vatCode": "НСД код",
     "name": "Название",
+    "email": "Е-мейл",
     "date": "Дата",
     "dateB": "Дата с",
     "toDate": "по",
@@ -79,7 +85,10 @@
     "measure": "Мера",
     "measureUnit": "Единица измерения",
     "unitsInPackage": "{0} в упаковке",
-    "ord": "Порядковый номер"
+    "ord": "Порядковый номер",
+    "from": "Из",
+    "to": "Для",
+    "id": "Идентификатор"
   },
   "models": {
     "StockArticleDate": "Складские операции"
@@ -156,6 +165,7 @@
     "noData": "Нет данных"
   },
   "actions": {
+    "act": "Акт {0}",
     "add": "Добавить {0}",
     "show": "Показать {0}",
     "hide": "Скрыть {0}",

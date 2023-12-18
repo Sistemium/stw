@@ -1,100 +1,140 @@
 <template lang="pug">
-
-el-table.article-table(
-  ref="table"
-  :data="articles"
-  :height="height"
-  highlight-current-row
-  row-key="id"
-  :size="size"
-  stripe
-  @row-click="rowClick"
-  @current-change="handleCurrentChange"
-)
-  el-table-column(
-    class-name="avatar"
-    column-key="avatar"
-    :width="60"
-  )
-    template(#default="{ row }")
-      article-avatar(
-        :article="row"
-        :id="`id-${row.id}`"
-        size="default"
+.article-table(:style="{ height: `${height}px`}")
+  el-auto-resizer
+    template(#default="{ height: tableHeight, width }")
+      watch-emitter(
+        :value="width"
+        @change="value => {tableWidth = value}"
       )
-  el-table-column(
-    :label="$t('fields.name')"
-    prop="name"
-  )
-  el-table-column(
-    :label="$t('fields.code')"
-    prop="code"
-  )
-  el-table-column(
-    v-for="prop in propColumns"
-    :align="prop.align"
-    :key="prop.id"
-    :label="prop.name"
-    :prop="prop.id"
-  )
-  el-table-column(
-    align="center"
-    column-key="buttons"
-    :width="50"
-  )
-    el-icon.el-icon-edit()
-      Edit
-
+      el-table-v2(
+        v-if="tableWidth"
+        ref="tableInstance"
+        :key="tableWidth"
+        :columns="columns"
+        :data="articles"
+        :width="tableWidth"
+        :height="tableHeight"
+        fixed
+        :estimated-row-height="50"
+        :row-event-handlers="{ onClick: handleCLick }"
+        :row-class="({ rowData }) => rowData.id === selectedId && 'active'"
+      )
 </template>
-<script setup lang="ts">
+<script setup lang="tsx">
 
-import { ref } from 'vue';
-import { Edit } from '@element-plus/icons-vue';
+import { computed, ref } from 'vue';
+import max from 'lodash/max';
+import type { TableV2Instance, Column } from 'element-plus'
+import ToolButton from '@/lib/ToolButton.vue';
 import ArticleAvatar from '@/components/catalogue/ArticleAvatar.vue';
+import { t } from '@/lib/validations';
+import WatchEmitter from '@/lib/WatchEmitter.vue';
 
-defineProps<{
+const props = defineProps<{
   articles: object[],
   propColumns: object[],
   size?: string;
   height?: number;
+  selectedId?: string;
 }>();
 
 const emit = defineEmits<{
-  (e: 'avatarClick', row: object) : void;
-  (e: 'click', row: object) : void;
-  (e: 'currentChange', current: object, old: object) : void;
+  (e: 'avatarClick', row: object): void;
+  (e: 'click', row: object): void;
+  (e: 'currentChange', current: object): void;
 }>();
-const table = ref(null);
 
-function handleCurrentChange(current, old) {
-  emit('currentChange', current, old);
-}
+const tableWidth = ref(0);
+const tableInstance = ref<TableV2Instance>();
 
-function rowClick(row, column) {
-  if (!column) {
-    return;
-  }
-  const { columnKey } = column;
-  // eslint-disable-next-line default-case
-  switch (columnKey) {
-    case 'buttons':
-      emit('click', row);
-      break;
-    case 'avatar':
-      emit('avatarClick', row);
-      break;
-  }
+const columns = computed<Column[]>(() => {
+  const fullWidth = max([tableWidth.value, 900]) - 60 - 50 - 6;
+  const colNumber = props.propColumns.length + 2;
+  const colWidth = Math.floor(fullWidth / colNumber);
+  const nameWidth = fullWidth - colWidth * (colNumber - 1);
+  return [
+    {
+      key: 'avatar',
+      title: '',
+      width: 60,
+      cellRenderer: ({ rowData }) =>
+        <ArticleAvatar
+          article={rowData}
+          onClick={() => emit('avatarClick', rowData)}
+        ></ArticleAvatar>,
+    },
+    {
+      align: 'left',
+      key: 'name',
+      title: t('fields.name'),
+      dataKey: 'name',
+      width: nameWidth,
+    },
+    {
+      key: 'code',
+      title: t('fields.code'),
+      dataKey: 'code',
+      width: colWidth,
+    },
+    ...props.propColumns.map(prop => ({
+      key: prop.id,
+      title: prop.name,
+      dataKey: prop.id,
+      width: colWidth,
+      align: prop.align,
+    })),
+    {
+      key: 'buttons',
+      width: 50,
+      align: 'right',
+      cellRenderer: ({ rowData }) =>
+        <ToolButton
+          tool="edit"
+          circle={false}
+          onClick={() => emit('click', rowData)}>
+        </ToolButton>,
+    },
+  ]
+});
+
+defineExpose({
+  isReady() : boolean {
+    return !!tableInstance.value;
+  },
+  scrollToId(id: string): boolean {
+    const idx = props.articles.findIndex(item => item.id === id);
+    const { value: table } = tableInstance;
+    if (idx < 0 || !table) {
+      return false;
+    }
+    setTimeout(() => {
+      table.scrollToRow(idx ? idx - 1 : 0, 'start');
+    }, 100);
+    return true;
+  },
+});
+
+function handleCLick({ rowData }) {
+  emit('currentChange', rowData);
 }
 
 </script>
 <style scoped lang="scss">
+@import "../../styles/variables";
 
-.el-icon-edit {
-  cursor: pointer;
+.article-table {
+  text-align: left;
 }
 
-.article-table :deep(td.avatar .cell) {
-  text-overflow: unset;
+.article-table :deep(.el-table-v2__row-cell) {
+  padding: 6px;
+}
+
+.article-table :deep(.el-table-v2__row.active) {
+  background: $gray-background;
+  .el-table-v2__cell-text {
+    color: $primary-color;
+  }
 }
 
 </style>

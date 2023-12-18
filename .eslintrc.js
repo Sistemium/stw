@@ -1,3 +1,6 @@
+/* eslint-env node */
+require('@rushstack/eslint-patch/modern-module-resolution')
+
 module.exports = {
   root: true,
   env: {
@@ -5,9 +8,9 @@ module.exports = {
     es2021: true,
   },
   extends: [
-    'plugin:vue/vue3-recommended',
+    'plugin:vue/vue3-essential',
+    'eslint:recommended',
     'plugin:vue-pug/vue3-recommended',
-    '@vue/typescript/recommended',
     '@vue/eslint-config-typescript',
   ],
   parserOptions: {
@@ -75,5 +78,6 @@ module.exports = {
     'vue/require-explicit-emits': 'off',
     'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': 'error',
+    '@typescript-eslint/no-explicit-any': 'off',
   },
 };

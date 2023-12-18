@@ -1,4 +1,4 @@
-import StorageSelect from '@/components/stock/StorageSelect.vue';
+import StorageSelect from '@/components/select/StorageSelect.vue';
 
 export default {
   components: { StorageSelect },

@@ -1,0 +1,14 @@
+@import "@/styles/variables.scss";
+
+.filters {
+  display: flex;
+  justify-content: center;
+
+  :deep(> * + *) {
+    margin-left: $margin-right;
+  }
+
+  :deep(.el-date-editor) {
+    flex-grow: 0;
+  }
+}

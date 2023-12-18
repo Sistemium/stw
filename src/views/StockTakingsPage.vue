@@ -54,7 +54,7 @@ import StockTakingItem from '@/models/StockTakingItem';
 import AlertEmpty from '@/lib/AlertEmpty.vue';
 import Resize from '@/lib/StmResize.vue';
 import ToolButton from '@/lib/ToolButton.vue';
-import StorageSelect from '@/components/stock/StorageSelect.vue';
+import StorageSelect from '@/components/select/StorageSelect.vue';
 import PageTitle from '@/components/PageTitle.vue';
 import { useInvStore } from '@/store/invStore';
 import { useRouteParams } from '@/lib/updateRouteParams';

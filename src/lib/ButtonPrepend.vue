@@ -38,12 +38,16 @@ const emit = defineEmits<{
     height: 32px;
   }
 
-  :deep(.el-input__wrapper) {
+  :deep(.el-select-v2--default .el-select-v2__input-wrapper) {
+    height: 30px;
+  }
+
+  :deep(.el-input__wrapper), :deep(.el-select-v2__wrapper) {
     border-bottom-left-radius: 0;
     border-top-left-radius: 0;
   }
 
-  :deep(.el-select) {
+  :deep(.el-select), :deep(.el-select-v2) {
     width: 100%;
   }
 

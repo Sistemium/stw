@@ -1,73 +1,99 @@
 <template lang="pug">
 
-el-table.stock-period-table(
+el-table-v2.stock-period-table(
+  :key="width"
+  v-if="width"
+  :columns="columns"
   :data="data"
+  :width="width"
   :height="height"
-  @row-click="(row, column) => emit('rowClick', row, column)"
+  fixed
+  :estimated-row-height="50"
+  :row-event-handlers="{ onClick: handleCLick }"
 )
-  el-table-column(
-    :label="$t('concepts.article')"
-  )
-    template(#default="{ row }")
-      article-view(:article-id="row.articleId")
-  el-table-column(
-    prop="initUnits"
-    :label="$t('fields.initUnits')"
-    :width="columnWidth"
-  )
-  el-table-column(
-    prop="unitsIn"
-    :label="$t('fields.unitsIn')"
-    :width="columnWidth"
-  )
-  el-table-column(
-    prop="unitsOut"
-    :label="$t('fields.unitsOut')"
-    :width="columnWidth"
-  )
-  el-table-column(
-    prop="unitsSur"
-    :label="$t('fields.unitsSur')"
-    :width="columnWidth"
-  )
-  el-table-column(
-    prop="resultUnits"
-    :label="$t('fields.remains')"
-    :width="columnWidth"
-  )
-  el-table-column(
-    prop="resultCost"
-    :label="$t('fields.cost')"
-    :width="columnWidth"
-  )
-    template(#default="{ row }")
-      span(v-if="row.resultCost") {{ $n(row.resultCost) }}
 
 </template>
-<script setup lang="ts">
-
+<script setup lang="tsx">
+import max from 'lodash/max';
+import { computed } from 'vue';
 import ArticleView from '@/components/catalogue/ArticleView.vue';
 import type StockArticleDate from '@/models/StockArticleDates';
+import { t, tn } from '@/lib/validations';
+import type { Column } from 'element-plus'
 
-withDefaults(defineProps<{
+const props = withDefaults(defineProps<{
   data: StockArticleDate[];
   height?: number;
+  width?: number;
   columnWidth?: number;
 }>(), { columnWidth: 120 });
 
 const emit = defineEmits<{
-  (e: 'rowClick', row: StockArticleDate, column: object): void;
+  (e: 'rowClick', row: StockArticleDate): void;
 }>();
+
+const columns = computed<Column[]>(() => {
+  const { columnWidth } = props;
+  const nameWidth = max([props.width - columnWidth * 6 - 6, 250]);
+  const width = max([Math.floor((props.width - nameWidth - 6) / 6), 50]);
+  return [
+    {
+      class: 'article',
+      key: 'article',
+      title: t('concepts.article'),
+      width: nameWidth,
+      cellRenderer: ({ rowData }) => <ArticleView article-id={rowData.articleId}/>,
+    },
+    {
+      width,
+      title: t('fields.initUnits'),
+      dataKey: 'initUnits',
+    },
+    {
+      width,
+      title: t('fields.unitsIn'),
+      dataKey: 'unitsIn',
+    },
+    {
+      width,
+      title: t('fields.unitsOut'),
+      dataKey: 'unitsOut',
+    },
+    {
+      width,
+      title: t('fields.unitsSur'),
+      dataKey: 'unitsSur',
+    },
+    {
+      width,
+      title: t('fields.remains'),
+      dataKey: 'resultUnits',
+    },
+    {
+      align: 'right',
+      width,
+      minWidth: 60,
+      title: t('fields.cost'),
+      dataKey: 'resultCost',
+      cellRenderer: ({ cellData }) => <span>{ tn(cellData, 'decimal') }</span>,
+    },
+  ]
+});
+
+
+function handleCLick({ rowData }) {
+  emit('rowClick', rowData as StockArticleDate);
+}
 
 </script>
 <style scoped lang="scss">
 
-.stock-period-table :deep(.cell) {
-  word-break: normal;
+.stock-period-table :deep(.article) {
+  word-break: normal !important;
+  padding: 6px;
 }
 
-.el-table :deep(td) {
-  cursor: pointer;
+.stock-period-table {
+  text-align: left;
 }
-
 </style>
