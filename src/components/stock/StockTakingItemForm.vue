@@ -34,6 +34,7 @@ el-form.stock-taking-item-form(
       :button-icon="article ? Edit : Plus"
     )
       article-select(
+        :storage-id="currentStorageId"
         v-model="model.articleId"
         :filters="articleFilters"
       )
@@ -145,6 +146,7 @@ import Article from '@/models/Article.js';
 import type { StockOperationItem } from '@/models/StockOperations';
 import { useFormValidate } from '@/services/validating';
 // import formsMixin from '@/lib/formsMixin.js';
+import { useInvStore } from '@/store/invStore';
 
 const DEFAULT_MODE = 'units';
 
@@ -153,7 +155,9 @@ const props = defineProps<{
   editable: boolean;
 }>();
 
+const invStore = useInvStore();
 const { form, validate } = useFormValidate();
+const currentStorageId = computed(() => invStore.currentStorageId);
 
 defineExpose({ validate });
 

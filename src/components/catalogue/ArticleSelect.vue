@@ -27,6 +27,12 @@ el-select-v2.article-select(
         .info
           span.code(v-if="article.code") {{ article.code }}
           small.commentary(v-if="article.commentary") {{ article.commentary.stringValue }}
+          article-stock-info(
+            :article-id="article.id"
+            :storage-id="storageId"
+            :measure-unit-id="article.measureUnitId || 'piece'"
+          )
+      //.stock(v-if="storageId")
   template(#empty)
     slot(name="empty")
       p.el-select-v2__empty {{ $t("validation.noData") }}
@@ -41,6 +47,8 @@ import upperFirst from 'lodash/upperFirst';
 import { computed, ref, watch } from 'vue';
 import orderBy from 'lodash/orderBy';
 import ArticleAvatar from '@/components/catalogue/ArticleAvatar.vue';
+import ArticleStockInfo from '@/components/catalogue/ArticleStockInfo.vue';
+import type { Article as ArticleType } from '@/models/Articles'
 
 defineSlots<{
   empty(): never
@@ -50,15 +58,13 @@ const { VITE_SUPPLIER_PROP, VITE_COMMENTARY_PROP } = import.meta.env;
 
 const itemHeight = 50;
 
-const props = defineProps({
-  modelValue: String,
-  filters: {
-    type: [Object, Function],
-    default() {
-      return {};
-    },
-  },
-  placeholder: String,
+const props = withDefaults(defineProps<{
+  modelValue?: string;
+  filters?: Record<string, any> | ((a: ArticleType) => boolean);
+  placeholder?: string;
+  storageId?: string;
+}>(), {
+  filters: () => ({}),
 });
 
 const selectProps = {
@@ -139,16 +145,25 @@ watch(options, optionsValue => {
 
   .title {
     font-size: 13px;
+    color: $black;
   }
 
   .info, .title {
     min-height: 25px;
+    display: flex;
+    align-items: center;
     > * + * {
       margin-left: $padding;
     }
+  }
 
-    display: flex;
+  .title {
     justify-content: space-between;
+  }
+
+  .article-stock-info {
+    flex: 1;
+    text-align: right;
   }
 
   .code {
