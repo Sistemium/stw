@@ -1,4 +1,5 @@
 import log from 'sistemium-debug';
+import dayjs from 'dayjs';
 import store from '@/store';
 import Configuration from '@/models/Configuration';
 import ArticleProp from '@/models/ArticleProp';
@@ -10,7 +11,7 @@ import Storage from '@/models/Storage';
 import Picture from '@/models/Picture';
 import StockWithdrawing from '@/models/StockWithdrawing';
 import StockWithdrawingItem from '@/models/StockWithdrawingItem';
-// import StockWithdrawingProduct from '@/models/StockWithdrawingProduct';
+import StockArticleDate from '@/models/StockArticleDate';
 import StockReceiving from '@/models/StockReceiving';
 import StockReceivingItem from '@/models/StockReceivingItem';
 import Recipe from '@/models/Recipe';
@@ -21,8 +22,12 @@ import filter from 'lodash/filter';
 import find from 'lodash/find';
 import { ElLoading } from 'element-plus';
 import Model from '@/init/Model.js';
+import type { RouteLocationNormalized as RouteRecord } from 'vue-router'
+import { useInvStore } from '@/store/invStore';
 
 const { error, debug } = log('dataSync');
+
+type NextCallback = (redirect?: Partial<RouteRecord>) => Promise<void>
 
 const initPromiseInfo: {
   resolve?: (value?: unknown) => void;
@@ -34,7 +39,7 @@ const initPromise = new Promise((resolve, reject) => {
   initPromiseInfo.reject = reject;
 });
 
-export function initGuard(to, from, next) {
+export function initGuard(to: RouteRecord, from: RouteRecord, next: NextCallback) {
   initPromise.then(() => next());
 }
 
@@ -50,7 +55,7 @@ export async function initData() {
   initPromiseInfo.resolve();
 }
 
-async function stockWithdrawingIdSync(to, model, positionsModel, field) {
+async function stockWithdrawingIdSync(to: RouteRecord, model: Model, positionsModel: Model, field: string) {
 
   const { [field]: stockOperationId } = to.params;
   if (!stockOperationId) {
@@ -83,7 +88,7 @@ interface SyncOptions {
   field: string;
 }
 
-async function stockWithdrawingSync(to, from, options: SyncOptions) {
+async function stockWithdrawingSync(to: RouteRecord, from: RouteRecord, options: SyncOptions) {
   const {
     model,
     positionsModel,
@@ -91,6 +96,7 @@ async function stockWithdrawingSync(to, from, options: SyncOptions) {
   } = options;
 
   const loading = ElLoading.service({});
+  const store = useInvStore();
 
   try {
     const data = await model.findAll({});
@@ -127,17 +133,17 @@ async function stockTakingSync() {
   await StockTaking.findAll();
 }
 
-export async function authGuard(to, from, next) {
+export async function authGuard(to: RouteRecord, from: RouteRecord, next: NextCallback) {
 
   const authorized = store.getters['auth/IS_AUTHORIZED'];
 
   if (to.meta.public) {
-    next();
+    await next();
     return;
   }
 
   if (!authorized) {
-    next({
+    await next({
       path: '/auth',
       query: {
         ...to.query,
@@ -154,14 +160,18 @@ export async function authGuard(to, from, next) {
     error(e);
   }
 
-  next();
+  await next();
 
 }
 
-const LOADERS: Map<RegExp, (to?: object, from?: object, next?: () => void) => Promise<void>> = new Map([
-  [/Recipe/i, async () => { await Recipe.findAll() }],
+type LoaderFn = (to?: RouteRecord, from?: RouteRecord, next?: () => void) => Promise<void>
+
+const LOADERS: Map<RegExp, LoaderFn> = new Map([
+  [/Recipe/i, async () => {
+    await Recipe.findAll()
+  }],
   [/StockTaking/i, stockTakingSync],
-  [/StockWithdraw/i, (to, from) => stockWithdrawingSync(to, from, {
+  [/StockWithdraw/i, (to: RouteRecord, from: RouteRecord) => stockWithdrawingSync(to, from, {
     model: StockWithdrawing,
     positionsModel: StockWithdrawingItem,
     field: 'stockWithdrawingId',
@@ -175,14 +185,14 @@ const LOADERS: Map<RegExp, (to?: object, from?: object, next?: () => void) => Pr
 
 const LOADER_KEYS = Array.from(LOADERS.keys());
 
-async function switchLoad(to, from) {
+async function switchLoad(to: RouteRecord, from: RouteRecord) {
   const key = find(LOADER_KEYS, needLoading);
 
   if (key) {
     await LOADERS.get(key)(to, from);
   }
 
-  function needLoading(re) {
-    return re.test(to.name) && !re.test(from.name);
+  function needLoading(re: RegExp) {
+    return re.test(to.name as string) && !re.test(from.name as string);
   }
 }
