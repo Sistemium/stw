@@ -50,8 +50,11 @@ export default new RouteMapper({
     }),
   },
   stockPeriod: {
-    component: () => import(/* webpackChunkName: "stock" */ '../views/StockPeriodPage.vue'),
+    component: () => import(/* webpackChunkName: "articles" */ '../views/StockPeriodPage.vue'),
     beforeEnter: initGuard,
+    children: {
+      gallery: articlePicturesRoute('stockPeriod'),
+    },
   },
   stockMovementReport: {
     component: () => import(/* webpackChunkName: "stock" */ '../views/StockMovementReportPage.vue'),
@@ -68,7 +71,7 @@ export default new RouteMapper({
       useScanner: true,
     },
     children: {
-      gallery: articlePicturesRoute,
+      gallery: articlePicturesRoute('articles'),
     },
   },
   // recipes: {

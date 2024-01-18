@@ -30,6 +30,7 @@
         stock-period-table(
           :data="filteredData"
           @row-click="rowClick"
+          @avatar-click="avatarClick"
           :height="tableHeight"
           :width="width"
         )
@@ -42,6 +43,8 @@
     :date-e="queryParams.dateE"
   )
 
+  router-view
+
 </template>
 <script setup lang="ts">
 
@@ -52,7 +55,7 @@ import map from 'lodash/map';
 import pick from 'lodash/pick';
 import keyBy from 'lodash/keyBy';
 import round from 'lodash/round';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { findStockPeriod } from '@/services/warehousing.js';
 import StockPeriodTable from '@/components/stock/StockPeriodTable.vue';
 import SearchInput from '@/lib/SearchInput.vue';
@@ -65,7 +68,6 @@ import Resize from '@/lib/StmResize.vue';
 import ToolButton from '@/lib/ToolButton.vue';
 import { useRouteParams } from '@/lib/updateRouteParams';
 import { t } from '@/lib/validations';
-// import Article from '@/models/Article.js';
 import Storage from '@/models/Storage.js';
 import { useStorage } from '@/services/stockoperating';
 
@@ -77,6 +79,7 @@ const monthAgo = today.add(-1, 'month');
 const dateRange = ref([monthAgo, today]);
 const data = ref([]);
 const route = useRoute();
+const router = useRouter();
 const search = ref('');
 const articleId = ref<string | null>(route.query.articleId?.toString() || null);
 const showDetails = ref(!!articleId.value);
@@ -85,6 +88,10 @@ const storageSelectRef = ref(null);
 const { updateRouteParams } = useRouteParams();
 
 const { storageId } = useStorage();
+
+const props = defineProps<{
+  galleryRoute: string;
+}>();
 
 const queryParams = computed(() => {
   const [dateB, dateE] = dateRange.value;
@@ -200,6 +207,15 @@ function rowClick(row) {
   articleId.value = row.articleId;
   updateRouteParams({}, {
     articleId: row.articleId,
+  });
+}
+
+function avatarClick({ articleId }) {
+  router.push({
+    name: props.galleryRoute,
+    params: {
+      articleId,
+    },
   });
 }
 

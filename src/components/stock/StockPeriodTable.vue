@@ -18,6 +18,7 @@ import max from 'lodash/max';
 import { computed } from 'vue';
 import ArticleView from '@/components/catalogue/ArticleView.vue';
 import type StockArticleDate from '@/models/StockArticleDates';
+import ArticleAvatar from '@/components/catalogue/ArticleAvatar.vue';
 import { t, tn } from '@/lib/validations';
 import type { Column } from 'element-plus'
 
@@ -29,14 +30,28 @@ const props = withDefaults(defineProps<{
 }>(), { columnWidth: 120 });
 
 const emit = defineEmits<{
+  (e: 'avatarClick', row: object): void;
   (e: 'rowClick', row: StockArticleDate): void;
 }>();
 
 const columns = computed<Column[]>(() => {
   const { columnWidth } = props;
   const nameWidth = max([props.width - columnWidth * 6 - 6, 250]);
-  const width = max([Math.floor((props.width - nameWidth - 6) / 6), 50]);
+  const width = max([Math.floor((props.width - nameWidth - 6 - 60) / 6), 50]);
   return [
+    {
+      key: 'avatar',
+      title: '',
+      width: 60,
+      cellRenderer: ({ rowData }) =>
+        <ArticleAvatar
+          article-id={rowData.articleId}
+          onClick={(e: Event) => {
+            e.stopPropagation()
+            emit('avatarClick', rowData)
+          }}
+        ></ArticleAvatar>,
+    },
     {
       class: 'article',
       key: 'article',
@@ -75,7 +90,7 @@ const columns = computed<Column[]>(() => {
       minWidth: 60,
       title: t('fields.cost'),
       dataKey: 'resultCost',
-      cellRenderer: ({ cellData }) => <span>{ tn(cellData, 'decimal') }</span>,
+      cellRenderer: ({ cellData }) => <span>{tn(cellData, 'decimal')}</span>,
     },
   ]
 });
