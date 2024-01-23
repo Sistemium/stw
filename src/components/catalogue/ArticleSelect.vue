@@ -30,6 +30,7 @@ el-select-v2.article-select(
           span.code(v-if="article.code") {{ article.code }}
           small.commentary(v-if="article.commentary") {{ article.commentary.stringValue }}
           article-stock-info(
+            v-if="storageId"
             :article-id="article.id"
             :storage-id="storageId"
             :measure-unit-id="article.measureUnitId || 'piece'"

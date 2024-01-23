@@ -3,7 +3,6 @@ import Storage from '@/models/Storage';
 import Person from '@/models/Person';
 import StockPeriod from '@/models/StockPeriod';
 import StockArticleDate from '@/models/StockArticleDate';
-// import StockWithdrawingProduct from '@/models/StockWithdrawingProduct';
 import Configuration from '@/models/Configuration';
 import Article from '@/models/Article';
 import sumBy from 'lodash/sumBy';
@@ -25,8 +24,18 @@ import StockTakingItem from '@/models/StockTakingItem';
 import StockTaking from '@/models/StockTaking';
 import { testArticle } from '@/services/catalogue';
 import { likeLt } from '@/services/lt';
+import Model from '@/init/Model'
+import type { VatConfig } from '@/services/vatConfiguring'
 
-export function stockTakingItemInstance({ stockTakingId, articleId, barcode, vatRate }) {
+interface STI {
+  stockTakingId: string
+  articleId: string
+  barcode?: string
+  vatRate: number
+}
+
+export function stockTakingItemInstance(item: STI) {
+  const { stockTakingId, articleId, barcode, vatRate } = item
   return {
     stockTakingId,
     articleId,
@@ -46,7 +55,14 @@ export function stockTakingItemInstance({ stockTakingId, articleId, barcode, vat
   };
 }
 
-export function stockOperationItemInstance(operationName, props) {
+export type StockOperationName = 'stockTaking' | 'stockWithdrawing' | 'stockReceiving'
+export type CounterpartyType = 'Person' | 'LegalEntity' | 'Storage'
+export interface CounterPartyRef {
+  counterpartyType: CounterpartyType
+  counterpartyId: string
+}
+
+export function stockOperationItemInstance(operationName: StockOperationName, props: Record<string, any>) {
   const { stockOperationId } = props;
   return {
     [`${operationName}Id`]: stockOperationId,
@@ -68,7 +84,7 @@ export function stockOperationItemInstance(operationName, props) {
   };
 }
 
-export const CONSIGNEE_TYPES = new Map([
+export const CONSIGNEE_TYPES = new Map<CounterpartyType, Model>([
   ['Person', Person],
   ['LegalEntity', LegalEntity],
   ['Storage', Storage],
@@ -78,7 +94,7 @@ export function counterpartyModel(type) {
   return type && CONSIGNEE_TYPES.get(type);
 }
 
-export function getCounterparty({ counterpartyType, counterpartyId }) {
+export function getCounterparty({ counterpartyType, counterpartyId }: CounterPartyRef) {
   const model = CONSIGNEE_TYPES.get(counterpartyType);
   if (!model) {
     return null;
@@ -86,7 +102,7 @@ export function getCounterparty({ counterpartyType, counterpartyId }) {
   return model.reactiveGet(counterpartyId);
 }
 
-export function stockOperationToViewData(item, positionsModel, operationName) {
+export function stockOperationToViewData(item: Record<string, any>, positionsModel: Model, operationName: StockOperationName) {
   const childFilter = { [`${operationName}Id`]: item.id };
   const counterparty = getCounterparty(item);
   const positions = positionsModel.reactiveFilter(childFilter);
@@ -115,10 +131,10 @@ export function vatConfig(date = new Date()) {
     dateB: { $lte: stringDate },
     dateE: { $gte: stringDate },
   });
-  return config || {};
+  return (config || {}) as VatConfig;
 }
 
-export function searchOperations(search, itemsModel, parentKey) {
+export function searchOperations(search: string, itemsModel: Model, parentKey: string) {
   if (!search) {
     return () => true;
   }
@@ -132,24 +148,24 @@ export function searchOperations(search, itemsModel, parentKey) {
   };
 }
 
-function counterPartyTest(model, id, re) {
-  return re.test(get(model.reactiveGet(id), 'name'));
+function counterPartyTest(model: Model, id: string, re: RegExp) {
+  return re.test(get(model.reactiveGet(id) as Record<string, any>, 'name'));
 }
 
-function positionsTest(positions, re) {
+function positionsTest(positions: { articleId: string}[], re: RegExp) {
   if (!positions) {
     return false;
   }
   return positions.find(({ articleId }) => testArticle(Article.reactiveGet(articleId), re));
 }
 
-export function configPriceField(operationName, date = new Date()) {
+export function configPriceField(operationName: StockOperationName, date = new Date()) {
   const { rules } = vatConfig(date);
   const vatPrices = rules && rules.vatPrices[operationName];
   return vatPrices ? 'vatPrice' : 'price';
 }
 
-export async function findStockPeriod(storageId, dateB, dateE) {
+export async function findStockPeriod(storageId: string, dateB: Date, dateE: Date) {
   const data = await StockPeriod.find({
     storageId,
     dateB,
@@ -167,7 +183,7 @@ export async function findStockPeriod(storageId, dateB, dateE) {
   return orderBy(res, 'articleName');
 }
 
-export async function findStockPeriodOperations(articleId, storageId, dateB, dateE) {
+export async function findStockPeriodOperations(articleId: string, storageId: string, dateB: Date, dateE: Date) {
   const data = await StockArticleDate.find({
     articleId,
     storageId,
@@ -198,7 +214,9 @@ async function loadOperationsFix(operations = []) {
   return loadOperationsInOut(operations, StockTakingItem, StockTaking, 'stockTakingId');
 }
 
-async function loadOperationsInOut(operations, itemsModel, parentModel, relation) {
+type Operation = Record<string, any> & { operationId: string }
+
+async function loadOperationsInOut(operations: Operation[], itemsModel: Model, parentModel: Model, relation: string) {
   const ids = map(operations, 'operationId');
   await loadNotCachedIds(itemsModel, ids);
   const items = itemsModel.filter({ id: { $in: ids } });

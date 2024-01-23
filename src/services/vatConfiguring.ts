@@ -1,4 +1,5 @@
-import { computed, ComputedRef } from 'vue';
+import { computed } from 'vue';
+import type { ComputedRef } from 'vue';
 import { vatConfig as vatConfigFn } from '@/services/warehousing.js';
 
 interface VatOperationConfig {
@@ -7,7 +8,7 @@ interface VatOperationConfig {
   priceField: string;
 }
 
-interface VatConfig {
+export interface VatConfig {
   rules: {
     vatPrices: {
       stockReceiving: boolean;
@@ -17,7 +18,7 @@ interface VatConfig {
   },
 }
 
-export function useVatConfig(operationName): {
+export function useVatConfig(operationName: 'stockReceiving' | 'stockWithdrawing'): {
   vatConfig: ComputedRef<VatConfig>;
   vatOperationConfig: ComputedRef<VatOperationConfig>;
 } {

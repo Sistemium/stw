@@ -1,5 +1,6 @@
 import matches from 'lodash/matches';
 import { useRoute, useRouter } from 'vue-router';
+import type { BaseItem } from '@/init/Model'
 
 
 export function useRouteParams() {
@@ -9,7 +10,7 @@ export function useRouteParams() {
 
   return { updateRouteParams, route, router };
 
-  async function updateRouteParams(updateParams = {}, updateQuery = {}, updateName?: string) {
+  async function updateRouteParams(updateParams: BaseItem = {}, updateQuery: BaseItem = {}, updateName?: string) {
 
     const { name, params = {}, query = {} } = route;
 
@@ -35,7 +36,7 @@ export function useRouteParams() {
       && matches(newQuery)(query)
       && newName === name;
 
-    if (sameState) {
+    if (sameState || !newName) {
       return;
     }
 

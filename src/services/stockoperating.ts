@@ -2,10 +2,10 @@ import flatten from 'lodash/flatten';
 import orderBy from 'lodash/orderBy';
 import dayjs from 'dayjs';
 import { computed } from 'vue';
-import { StockOperation, StockOperationItem } from '@/models/StockOperations';
+import type { StockOperation, StockOperationItem } from '@/models/StockOperations';
 import Article from '@/models/Article.js';
 import Storage from '@/models/Storage.js';
-import { MaterialFields } from '@/models/Recipes';
+import type { MaterialFields } from '@/models/Recipes';
 import { t, tGen } from '@/lib/validations';
 import { getCounterparty } from '@/services/warehousing.js';
 import { useInvStore } from '@/store/invStore';
@@ -94,7 +94,7 @@ export interface StockOperationReportItem extends StockOperationItem {
   date: string;
 }
 
-export async function withdrawingReportData(storageId, counterpartyId, dateB, dateE): Promise<StockOperationReportItem[]> {
+export async function withdrawingReportData(storageId: string, counterpartyId: string, dateB: string, dateE: string): Promise<StockOperationReportItem[]> {
 
   const headers = await StockWithdrawing.find({
     storageId,
