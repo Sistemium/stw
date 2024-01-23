@@ -1,7 +1,7 @@
 import find from 'lodash/find';
 import ReactiveModel from 'sistemium-data-vue';
 import type { PictureInfo } from '@/models/Pictures';
-import ApiModel from '@/models/ApiModels';
+import type ApiModel from '@/models/ApiModels';
 
 export async function createPicture(
   model: ReactiveModel,

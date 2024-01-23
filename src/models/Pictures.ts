@@ -1,4 +1,4 @@
-import ApiModel from '@/models/ApiModels';
+import type ApiModel from '@/models/ApiModels';
 
 export interface PictureInfo {
   name: string;

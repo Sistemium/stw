@@ -1,5 +1,5 @@
-import ApiModel from '@/models/ApiModels';
-import model from '@/models/ArticleProp.js';
+import type ApiModel from '@/models/ApiModels';
+import model from '@/models/ArticleProp';
 
 export default interface ArticleProp extends ApiModel {
   name: string;
@@ -9,7 +9,7 @@ export default interface ArticleProp extends ApiModel {
   isRequired: boolean;
 }
 
-export function filterArticleProps(filter) : ArticleProp[] {
+export function filterArticleProps(filter: Record<string, any>) : ArticleProp[] {
   return model.reactiveFilter(filter);
 }
 

@@ -47,19 +47,19 @@ router.isReady().then(() => {
   debug('router:ready');
   const loading = ElLoading.service({});
   store.dispatch('auth/AUTH_INIT')
-    .then(authorized => {
+    .then((authorized: boolean) => {
       if (authorized) {
         return store.dispatch('inv/SUBSCRIBE_SOCKET_STATUS');
       }
       return loading.close();
     })
-    .catch(e => {
+    .catch((e: any) => {
       error('auth', e);
       loading.close();
     });
 });
 
-const unsubscribe = store.subscribe(mutation => {
+const unsubscribe = store.subscribe((mutation: { type: string; payload: Record<string, any>; }) => {
   const { type, payload } = mutation;
   debug(type, payload);
   if (type === 'auth/SET_AUTHORIZED') {

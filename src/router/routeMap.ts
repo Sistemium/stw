@@ -85,6 +85,9 @@ export default new RouteMapper({
     component: () => import(/* webpackChunkName: "articles" */ '../views/ArticlePropsPage.vue'),
     editing: () => import(/* webpackChunkName: "articles" */ '../components/ArticlePropertyEdit.vue'),
   },
+  articlePricing: {
+    component: () => import(/* webpackChunkName: "articles" */ '../views/ArticlePricing.vue'),
+  },
   about: {
     public: true,
     component: () => import(/* webpackChunkName: "public" */ '../views/AboutPage.vue'),

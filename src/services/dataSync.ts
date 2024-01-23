@@ -21,13 +21,13 @@ import groupBy from 'lodash/groupBy';
 import filter from 'lodash/filter';
 import find from 'lodash/find';
 import { ElLoading } from 'element-plus';
-import Model from '@/init/Model.js';
-import type { RouteLocationNormalized as RouteRecord } from 'vue-router'
+import Model from '@/init/Model';
+import type { NavigationGuardNext, RouteLocationNormalized as RouteRecord } from 'vue-router'
 import { useInvStore } from '@/store/invStore';
 
 const { error, debug } = log('dataSync');
 
-type NextCallback = (redirect?: Partial<RouteRecord>) => Promise<void>
+type NextCallback = NavigationGuardNext //(redirect?: Partial<RouteRecord>) => Promise<void>
 
 const initPromiseInfo: {
   resolve?: (value?: unknown) => void;
@@ -39,7 +39,7 @@ const initPromise = new Promise((resolve, reject) => {
   initPromiseInfo.reject = reject;
 });
 
-export function initGuard(to: RouteRecord, from: RouteRecord, next: NextCallback) {
+export function initGuard(_to: RouteRecord, _from: RouteRecord, next: NextCallback) {
   initPromise.then(() => next());
 }
 
@@ -52,7 +52,7 @@ export async function initData() {
   await Recipe.findAll();
   await Storage.findAll();
   await Picture.findAll();
-  initPromiseInfo.resolve();
+  initPromiseInfo.resolve?.call(initPromiseInfo);
 }
 
 async function stockWithdrawingIdSync(to: RouteRecord, model: Model, positionsModel: Model, field: string) {
@@ -63,7 +63,7 @@ async function stockWithdrawingIdSync(to: RouteRecord, model: Model, positionsMo
   }
 
   await positionsModel.find({ [field]: stockOperationId });
-  const record = await model.findByID(stockOperationId);
+  const record: Record<string, any> = await model.findByID(stockOperationId as string);
 
   if (!record) {
     return;
@@ -74,7 +74,7 @@ async function stockWithdrawingIdSync(to: RouteRecord, model: Model, positionsMo
     return;
   }
 
-  const counterpartySource = counterpartyModel(counterpartyType);
+  const counterpartySource = counterpartyModel(counterpartyType) as Model;
 
   if (!counterpartySource.getByID(counterpartyId)) {
     await counterpartySource.findByID(counterpartyId);
@@ -88,7 +88,7 @@ interface SyncOptions {
   field: string;
 }
 
-async function stockWithdrawingSync(to: RouteRecord, from: RouteRecord, options: SyncOptions) {
+async function stockWithdrawingSync(to: RouteRecord, _from: RouteRecord, options: SyncOptions) {
   const {
     model,
     positionsModel,
@@ -142,12 +142,12 @@ export async function authGuard(to: RouteRecord, from: RouteRecord, next: NextCa
   const authorized = store.getters['auth/IS_AUTHORIZED'];
 
   if (to.meta.public) {
-    await next();
+    next();
     return;
   }
 
   if (!authorized) {
-    await next({
+    next({
       path: '/auth',
       query: {
         ...to.query,
@@ -164,11 +164,11 @@ export async function authGuard(to: RouteRecord, from: RouteRecord, next: NextCa
     error(e);
   }
 
-  await next();
+  next();
 
 }
 
-type LoaderFn = (to?: RouteRecord, from?: RouteRecord, next?: () => void) => Promise<void>
+type LoaderFn = (to: RouteRecord, from: RouteRecord, next?: () => void) => Promise<void>
 
 const LOADERS: Map<RegExp, LoaderFn> = new Map([
   [/Recipe/i, async () => {
@@ -193,7 +193,7 @@ async function switchLoad(to: RouteRecord, from: RouteRecord) {
   const key = find(LOADER_KEYS, needLoading);
 
   if (key) {
-    await LOADERS.get(key)(to, from);
+    await LOADERS.get(key)?.call(null, to, from);
   }
 
   function needLoading(re: RegExp) {

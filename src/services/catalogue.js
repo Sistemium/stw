@@ -5,7 +5,7 @@ import map from 'lodash/map';
 import uniq from 'lodash/uniq';
 import each from 'lodash/each';
 import orderBy from 'lodash/orderBy';
-import ArticleProp, { TYPES_DEFAULTS, VALUE_TYPES } from '@/models/ArticleProp.js';
+import ArticleProp, { TYPES_DEFAULTS, VALUE_TYPES } from '@/models/ArticleProp.ts';
 import Article from '@/models/Article.js';
 import * as PackageType from '@/models/PackageType.js';
 import { likeLt } from '@/services/lt.js';
