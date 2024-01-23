@@ -9,10 +9,10 @@ export default interface ArticleProp extends ApiModel {
   isRequired: boolean;
 }
 
-export function filterArticleProps(filter: Record<string, any>) : ArticleProp[] {
-  return model.reactiveFilter(filter);
+export function filterArticleProps(filter: Record<string, any>) {
+  return model.reactiveFilter(filter) as ArticleProp[];
 }
 
-export function getArticleProp(id : string) : ArticleProp {
-  return model.reactiveGet(id);
+export function getArticleProp(id : string) {
+  return model.reactiveGet(id) as ArticleProp;
 }
