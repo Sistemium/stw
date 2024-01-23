@@ -50,7 +50,7 @@ import { computed, ref, watch } from 'vue';
 import orderBy from 'lodash/orderBy';
 import ArticleAvatar from '@/components/catalogue/ArticleAvatar.vue';
 import ArticleStockInfo from '@/components/catalogue/ArticleStockInfo.vue';
-import type { Article as ArticleType } from '@/models/Articles'
+import type { IArticle as ArticleType } from '@/models/Articles'
 
 defineSlots<{
   empty(): never

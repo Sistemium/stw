@@ -33,14 +33,14 @@ el-form.recipe-form(
 <script setup lang="ts">
 
 import { ref } from 'vue';
-import type { Article } from '@/models/Articles';
+import type { IArticle } from '@/models/Articles';
 import MaterialsForm from '@/components/production/MaterialsForm.vue';
 import ArticleCostInfo from '@/components/production/ArticleCostInfo.vue';
 import type { CostType } from '@/models/Recipes';
 // import { useFormValidate } from '@/services/validating';
 
 const props = defineProps<{
-  model: Article;
+  model: IArticle;
   storageId?: string;
   date: string;
   vatRate: number;

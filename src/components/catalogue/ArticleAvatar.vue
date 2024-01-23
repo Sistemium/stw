@@ -15,7 +15,7 @@ el-avatar.article-avatar(
 import model from '@/models/Picture';
 import { computed } from 'vue';
 import { Picture } from '@element-plus/icons-vue';
-import type { Article as ArticleType } from '@/models/Articles'
+import type { IArticle as ArticleType } from '@/models/Articles'
 import Article from '@/models/Article';
 
 const props = defineProps<{

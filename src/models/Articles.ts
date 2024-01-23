@@ -16,7 +16,7 @@ export interface ArticleProperty extends ArticleProp {
 //   units: number;
 // }
 
-export interface Article extends ApiModel {
+export interface IArticle extends ApiModel {
   name: string;
   code?: string;
 
