@@ -1,31 +1,32 @@
-import LegalEntity from '@/models/LegalEntity';
-import Storage from '@/models/Storage';
-import Person from '@/models/Person';
-import StockPeriod from '@/models/StockPeriod';
-import StockArticleDate from '@/models/StockArticleDate';
-import Configuration from '@/models/Configuration';
-import Article from '@/models/Article';
-import sumBy from 'lodash/sumBy';
-import get from 'lodash/get';
-import i18n from '@/i18n';
-import omit from 'lodash/omit';
-import map from 'lodash/map';
-import isDate from 'lodash/isDate';
-import orderBy from 'lodash/orderBy';
-import flatten from 'lodash/flatten';
-import filter from 'lodash/filter';
-import groupBy from 'lodash/groupBy';
-import StockReceivingItem from '@/models/StockReceivingItem';
-import uniq from 'lodash/uniq';
-import StockReceiving from '@/models/StockReceiving';
-import StockWithdrawingItem from '@/models/StockWithdrawingItem';
-import StockWithdrawing from '@/models/StockWithdrawing';
-import StockTakingItem from '@/models/StockTakingItem';
-import StockTaking from '@/models/StockTaking';
-import { testArticle } from '@/services/catalogue';
-import { likeLt } from '@/services/lt';
-import Model from '@/init/Model'
+import LegalEntity from '@/models/LegalEntity'
+import Storage from '@/models/Storage'
+import Person from '@/models/Person'
+import StockPeriod from '@/models/StockPeriod'
+import StockArticleDate from '@/models/StockArticleDate'
+import Configuration from '@/models/Configuration'
+import Article from '@/models/Article'
+import sumBy from 'lodash/sumBy'
+import get from 'lodash/get'
+import i18n from '@/i18n'
+import omit from 'lodash/omit'
+import map from 'lodash/map'
+import isDate from 'lodash/isDate'
+import orderBy from 'lodash/orderBy'
+import flatten from 'lodash/flatten'
+import filter from 'lodash/filter'
+import groupBy from 'lodash/groupBy'
+import StockReceivingItem from '@/models/StockReceivingItem'
+import uniq from 'lodash/uniq'
+import StockReceiving from '@/models/StockReceiving'
+import StockWithdrawingItem from '@/models/StockWithdrawingItem'
+import StockWithdrawing from '@/models/StockWithdrawing'
+import StockTakingItem from '@/models/StockTakingItem'
+import StockTaking from '@/models/StockTaking'
+import { testArticle } from '@/services/catalogue'
+import { likeLt } from '@/services/lt'
+import Model, { type BaseItem } from '@/init/Model'
 import type { VatConfig } from '@/services/vatConfiguring'
+import type { CounterpartyType, StockOperationName } from '@/models/StockOperations'
 
 interface STI {
   stockTakingId: string
@@ -55,11 +56,9 @@ export function stockTakingItemInstance(item: STI) {
   };
 }
 
-export type StockOperationName = 'stockTaking' | 'stockWithdrawing' | 'stockReceiving'
-export type CounterpartyType = 'Person' | 'LegalEntity' | 'Storage'
-export interface CounterPartyRef {
-  counterpartyType: CounterpartyType
-  counterpartyId: string
+export interface CounterPartyRef extends Record<string, any> {
+  counterpartyType?: CounterpartyType
+  counterpartyId: string | null
 }
 
 export function stockOperationItemInstance(operationName: StockOperationName, props: Record<string, any>) {
@@ -90,29 +89,33 @@ export const CONSIGNEE_TYPES = new Map<CounterpartyType, Model>([
   ['Storage', Storage],
 ]);
 
-export function counterpartyModel(type) {
+export function counterpartyModel(type: CounterpartyType) {
   return type && CONSIGNEE_TYPES.get(type);
 }
 
 export function getCounterparty({ counterpartyType, counterpartyId }: CounterPartyRef) {
+  if (!counterpartyType) {
+    return null
+  }
   const model = CONSIGNEE_TYPES.get(counterpartyType);
-  if (!model) {
+  if (!model || !counterpartyId) {
     return null;
   }
   return model.reactiveGet(counterpartyId);
 }
 
-export function stockOperationToViewData(item: Record<string, any>, positionsModel: Model, operationName: StockOperationName) {
+export function stockOperationToViewData(item: BaseItem<CounterPartyRef>, positionsModel: Model, operationName: StockOperationName) {
   const childFilter = { [`${operationName}Id`]: item.id };
   const counterparty = getCounterparty(item);
-  const positions = positionsModel.reactiveFilter(childFilter);
+  const positions: BaseItem[] = positionsModel.reactiveFilter(childFilter);
   const priceField = configPriceField(operationName);
-  const costFn = p => (p[priceField] || 0) * (p.units || 0);
+  const costFn = (p: BaseItem) => (p[priceField] || 0) * (p.units || 0);
   // const products = operationName === 'stockWithdrawing'
   //   ? StockWithdrawingProduct.reactiveFilter(childFilter) : [];
   const totalCost = sumBy(positions, costFn);
   return {
     ...item,
+    // @ts-ignore
     processing: i18n.global.t(`workflow.${item.processing || 'progress'}`),
     // date: this.$ts(item.date, 'short'),
     counterparty,
@@ -139,7 +142,7 @@ export function searchOperations(search: string, itemsModel: Model, parentKey: s
     return () => true;
   }
   const re = likeLt(search);
-  return operation => {
+  return (operation: BaseItem) => {
     const { commentText, counterpartyId, counterpartyType } = operation;
     return re.test(commentText)
       || (counterpartyType === 'LegalEntity' && counterPartyTest(LegalEntity, counterpartyId, re))
@@ -152,7 +155,7 @@ function counterPartyTest(model: Model, id: string, re: RegExp) {
   return re.test(get(model.reactiveGet(id) as Record<string, any>, 'name'));
 }
 
-function positionsTest(positions: { articleId: string}[], re: RegExp) {
+function positionsTest(positions: { articleId?: string}[], re: RegExp) {
   if (!positions) {
     return false;
   }
@@ -202,34 +205,35 @@ export async function findStockPeriodOperations(articleId: string, storageId: st
   };
 }
 
-async function loadOperationsIn(operations = []) {
+async function loadOperationsIn(operations: BaseItem[] = []) {
   return loadOperationsInOut(operations, StockReceivingItem, StockReceiving, 'stockReceivingId');
 }
 
-async function loadOperationsOut(operations = []) {
+async function loadOperationsOut(operations: BaseItem[] = []) {
   return loadOperationsInOut(operations, StockWithdrawingItem, StockWithdrawing, 'stockWithdrawingId');
 }
 
-async function loadOperationsFix(operations = []) {
+async function loadOperationsFix(operations: BaseItem[] = []) {
   return loadOperationsInOut(operations, StockTakingItem, StockTaking, 'stockTakingId');
 }
 
-type Operation = Record<string, any> & { operationId: string }
-
-async function loadOperationsInOut(operations: Operation[], itemsModel: Model, parentModel: Model, relation: string) {
+async function loadOperationsInOut(operations: BaseItem[], itemsModel: Model, parentModel: Model, relation: string) {
   const ids = map(operations, 'operationId');
   await loadNotCachedIds(itemsModel, ids);
   const items = itemsModel.filter({ id: { $in: ids } });
   await loadRelation(parentModel, items, relation);
   const parentIds = uniq(filter(map(items, relation)));
   const parents = parentModel.filter({ id: { $in: parentIds } });
-  await loadCounterparty(parents);
+  await loadCounterparty(parents as CounterPartyRef[]);
   const res = items.map(operation => {
     const parent = parentModel.getByID(operation[relation]);
+    if (!parent) {
+      throw Error('Empty parent in loadOperationsInOut')
+    }
     return {
       ...operation,
       date: get(parent, 'date'),
-      counterParty: getCounterparty(parent),
+      counterParty: getCounterparty(parent as CounterPartyRef),
       parentId: parent.id,
       commentText: parent.commentText,
     };
@@ -237,7 +241,7 @@ async function loadOperationsInOut(operations: Operation[], itemsModel: Model, p
   return orderBy(res, 'date');
 }
 
-async function loadCounterparty(records = []) {
+async function loadCounterparty(records: CounterPartyRef[] = []) {
   const withLegalEntity = filter(records, { counterpartyType: 'LegalEntity' });
   await loadRelation(LegalEntity, withLegalEntity, 'counterpartyId');
   const withPerson = filter(records, { counterpartyType: 'Person' });
@@ -246,26 +250,13 @@ async function loadCounterparty(records = []) {
   await loadRelation(Storage, withStorage, 'counterpartyId');
 }
 
-/**
- *
- * @param {HybridDataModel} model
- * @param {Array} records
- * @param {string} relation
- * @return {Promise<void>}
- */
 
-async function loadRelation(model, records, relation) {
-  const ids = filter(uniq(map(records, relation)));
+async function loadRelation(model: Model, records: BaseItem[], relation: string) {
+  const ids = filter<string>(uniq(map(records, relation)));
   await loadNotCachedIds(model, ids);
 }
 
-/**
- *
- * @param {HybridDataModel} model
- * @param {Array} ids
- * @return {Promise<void>}
- */
-async function loadNotCachedIds(model, ids = []) {
+async function loadNotCachedIds(model: Model, ids: string[] = []) {
   const toLoad = ids.filter(id => !model.getByID(id));
   await model.findByMany(toLoad);
 }
