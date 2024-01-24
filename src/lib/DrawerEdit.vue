@@ -35,7 +35,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import pick from 'lodash/pick';
 import merge from 'lodash/merge';
 import FormButtons from 'sistemium-vue/components/FormButtons.vue';
-import matchesDeep from 'sistemium-data/src/util/matchesDeep.js';
+import matchesDeep from 'sistemium-data/lib/util/matchesDeep.js';
 import { localizedDeleteError } from '@/services/erroring.js';
 import i18n from '@/i18n';
 // import { useLog } from '@/services/debugging';

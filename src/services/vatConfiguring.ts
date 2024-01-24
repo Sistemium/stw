@@ -13,6 +13,7 @@ export interface VatConfig {
     vatPrices: {
       stockReceiving: boolean;
       stockWithdrawing: boolean;
+      stockTaking: boolean;
     }
     defaultRate: number;
   },

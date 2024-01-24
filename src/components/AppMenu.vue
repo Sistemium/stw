@@ -47,7 +47,7 @@
 import { computed, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import LangMenu from 'sistemium-vue/components/LangMenu.vue';
-import { toggleTabBar, isNative as isNativeFn } from 'sistemium-data/src/util/native.js';
+import { toggleTabBar, isNative as isNativeFn } from 'sistemium-data/lib/util/native.js';
 import { routes } from '@/router';
 import i18n from '@/i18n';
 import type Language from '@/models/Languages';

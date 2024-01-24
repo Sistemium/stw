@@ -1,4 +1,4 @@
-import * as native from 'sistemium-data/src/util/native';
+import * as native from 'sistemium-data/lib/util/native';
 import noop from 'lodash/noop';
 
 const BARCODE_SCANNER_FN = 'BARCODE_SCANNER_FN';

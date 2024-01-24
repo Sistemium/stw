@@ -1,5 +1,5 @@
-import type ApiModel from '@/models/ApiModels';
-import type { MaterialFields } from '@/models/Recipes';
+import type ApiModel from '@/models/ApiModels'
+import type { MaterialFields } from '@/models/Recipes'
 
 export interface ArticleQuantityFields {
 
@@ -51,4 +51,10 @@ export interface StockOperationViewData extends  StockOperation {
   positionsCount: number;
   units: number;
   totalCost: number;
+}
+
+export type StockOperationName = 'stockTaking' | 'stockWithdrawing' | 'stockReceiving'
+
+export interface IStockWithdrawingItem extends StockOperationItem {
+  stockWithdrawingId: string
 }

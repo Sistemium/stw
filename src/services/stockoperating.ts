@@ -7,7 +7,7 @@ import Article from '@/models/Article.js';
 import Storage from '@/models/Storage.js';
 import type { MaterialFields } from '@/models/Recipes';
 import { t, tGen } from '@/lib/validations';
-import { getCounterparty } from '@/services/warehousing.js';
+import { type CounterPartyRef, getCounterparty } from '@/services/warehousing.js'
 import { useInvStore } from '@/store/invStore';
 import StockWithdrawing from '@/models/StockWithdrawing.js';
 import StockWithdrawingItem from '@/models/StockWithdrawingItem.js';
@@ -58,7 +58,7 @@ export function useStorage() {
 
 export function actHeadRows(stockOperation: StockOperation, operationName: string, counterpartyRole: string) {
   const { date, storageId } = stockOperation;
-  const counterparty = getCounterparty(stockOperation);
+  const counterparty = getCounterparty(stockOperation as CounterPartyRef);
   return [
     {
       title: tGen('act', operationName),
@@ -117,7 +117,7 @@ export async function withdrawingReportData(storageId: string, counterpartyId: s
     const stockWithdrawing = StockWithdrawing.getByID(item.stockWithdrawingId);
     return {
       ...item,
-      date: stockWithdrawing.date,
+      date: stockWithdrawing?.date,
     };
   }), ['date']);
 
