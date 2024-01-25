@@ -3,13 +3,14 @@ import round from 'lodash/round';
 import isNumber from 'lodash/isNumber';
 import { ElLoading, ElMessage } from 'element-plus';
 import i18n from '@/i18n';
+import type { BaseItem } from '@/init/Model'
 
 export default {
 
   directives: {
-    cancelReadOnly(el) {
+    cancelReadOnly(el: Element) {
       const input = el.querySelector('.el-input__inner');
-      input.removeAttribute('readonly');
+      input?.removeAttribute('readonly');
     },
   },
 
@@ -17,14 +18,14 @@ export default {
     $ts,
     $tAction: tAction,
     $tGen: tGen,
-    $nr(num, decimals = 2) {
+    $nr(num: number, decimals = 2) {
       return i18n.global.n(round(num, decimals), 'decimal');
     },
   },
 };
 
-export function $requiredRule(fieldOrArray) {
-  const res = {};
+export function $requiredRule(fieldOrArray: string | string[]) {
+  const res: BaseItem = {};
   const fields = Array.isArray(fieldOrArray) ? fieldOrArray : [fieldOrArray];
   fields.forEach(field => {
     const [, concept] = field.match(/(.+)Id$/) || [];
@@ -37,7 +38,7 @@ export function $requiredRule(fieldOrArray) {
   return res;
 }
 
-export function cloneInstance(res) {
+export function cloneInstance(res: BaseItem) {
   return res && {
     ...cloneDeep(res),
     cts: undefined,
@@ -52,7 +53,7 @@ export function tAction(action: string, name: string): string {
   return t(`actions.${action}`, [t(`accusative.${name}`)]);
 }
 
-export function tGen(action, name) {
+export function tGen(action: string, name: string) {
   return t(`actions.${action}`, [t(`genitive.${name}`)]);
 }
 
@@ -65,7 +66,7 @@ export function t(key: string, etc?: string[]): string {
   return i18n.global.t(key, etc);
 }
 
-export async function saveWithLoading(asyncFunction) {
+export async function saveWithLoading(asyncFunction: () => Promise<any>) {
   const loading = ElLoading.service({});
   let result;
   try {
@@ -85,14 +86,16 @@ export async function saveWithLoading(asyncFunction) {
   return result;
 }
 
-export function $percent(value) {
+export function $percent(value: number) {
   return `${i18n.global.n(value * 100.0)}%`;
 }
 
-export function $ts(dateString, key = 'timestamp') {
+export function $ts(dateString: string, key = 'timestamp') {
   return i18n.global.d(new Date(dateString), key);
 }
 
 export function tn(num: number, format?: string): string {
-  return isNumber(num) ? i18n.global.n(num, format) : '';
+  return isNumber(num) ? i18n.global.n(num, format || 'decimal') : '';
 }
+
+export const td = $ts

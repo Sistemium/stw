@@ -51,6 +51,7 @@
     "supplierType": "Supplier type",
     "supplier": "Supplier",
     "date": "Date",
+    "startsFrom": "Effective from",
     "dateB": "Date from",
     "toDate": "to",
     "valueType": "Value type",

@@ -19,7 +19,7 @@
 import { computed, reactive, watch } from 'vue'
 import ArticleAvatar from '@/components/catalogue/ArticleAvatar.vue'
 import type { IArticlePricing } from '@/models/ArticlePricing'
-import { t, tn } from '@/lib/validations'
+import { t, tn, td } from '@/lib/validations'
 import type { Column } from 'element-plus'
 import max from 'lodash/max'
 import ArticleView from '@/components/catalogue/ArticleView.vue'
@@ -31,6 +31,7 @@ const props = withDefaults(defineProps<{
   width?: number
   columnWidth?: number
   editing: boolean
+  date: string
 }>(), {
   columnWidth: 150,
   width: 0,
@@ -51,7 +52,7 @@ const emit = defineEmits<{
 }>()
 
 const columns = computed<Column[]>(() => {
-  const count = 1
+  const count = 2
   const { columnWidth } = props
   const nameWidth = max([props.width - columnWidth * count - 6 - 60, 250]) || 0
   const width = max([Math.floor((props.width - nameWidth - count - 60) / count), 150]) || 0
@@ -76,6 +77,14 @@ const columns = computed<Column[]>(() => {
       title: t('concepts.article'),
       width: nameWidth,
       cellRenderer: ({ rowData }) => <ArticleView article-id={rowData.articleId} />,
+    },
+    {
+      width,
+      align: 'center',
+      title: t('fields.startsFrom'),
+      dataKey: 'date',
+      minWidth: 60,
+      cellRenderer: renderDate,
     },
     {
       width,
@@ -106,6 +115,13 @@ function renderSpan({ cellData }: { cellData: any }) {
   return <span>{tn(cellData, 'decimal')}</span>
 }
 
+function renderDate({ cellData }: { cellData: string }) {
+  if (!cellData || cellData === props.date) {
+    return <span></span>
+  }
+  return <span>{td(cellData, 'short')}</span>
+}
+
 function renderInput({ cellData, rowData }: { cellData: any, rowData: IArticlePricing }) {
   return <el-input-number
     controls={false}
@@ -117,7 +133,10 @@ function renderInput({ cellData, rowData }: { cellData: any, rowData: IArticlePr
   ></el-input-number>
 }
 
-const editingArticle: { articleId: string, price?: number | null } = { articleId: '', price: undefined }
+const editingArticle: { articleId: string, price?: number | null } = {
+  articleId: '',
+  price: undefined,
+}
 
 function onPriceFocus(articleId: string) {
   editingArticle.articleId = articleId

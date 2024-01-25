@@ -39,6 +39,7 @@
             article-pricing-table(
               :article-pricing="articlePricingFiltered"
               :width="width"
+              :date="date"
               :editing="editing"
               :column-width="150"
               :height="resized"
@@ -112,7 +113,7 @@ const articlePricing = computed(() => {
     return Object.assign({
       pricingId: pricingId.value,
       articleId: a.id,
-      date: date.value,
+      // date: date.value,
       price: undefined,
     }, existing)
   })

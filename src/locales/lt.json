@@ -46,6 +46,7 @@
     "name": "Pavadinimas",
     "email": "El. paštas",
     "date": "Data",
+    "startsFrom": "Nuo",
     "dateB": "Data nuo",
     "toDate": "iki",
     "type": "Tipas",
