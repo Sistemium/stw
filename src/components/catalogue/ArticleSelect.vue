@@ -1,11 +1,13 @@
 <template lang="pug">
 
 el-select-v2.article-select(
+  ref="selectRef"
   v-model="currentId"
   popper-class="article-select-popper"
   :options="options"
   :clearable="true"
   :debounce="300"
+  :automatic-dropdown="true"
   :props="selectProps"
   :item-height="itemHeight"
   :height="itemHeight*6"
@@ -13,7 +15,7 @@ el-select-v2.article-select(
   :remote-method="filterSearch"
   :remote="true"
   :placeholder="placeholderValue"
-  placement="bottom-end"
+  placement="bottom-start"
   @change="changes => emit('update:modelValue', changes)"
   @visible-change="onVisibleChange"
 )
@@ -45,27 +47,27 @@ el-select-v2.article-select(
 
 import Article from '@/models/Article.js';
 import { searchArticle } from '@/services/catalogue.js';
-import i18n from '@/i18n';
 import upperFirst from 'lodash/upperFirst';
 import { computed, ref, watch } from 'vue';
 import orderBy from 'lodash/orderBy';
 import ArticleAvatar from '@/components/catalogue/ArticleAvatar.vue';
 import ArticleStockInfo from '@/components/catalogue/ArticleStockInfo.vue';
 import type { IArticle as ArticleType } from '@/models/Articles'
+import { t } from '@/lib/validations'
 
 defineSlots<{
   empty(): never
 }>()
 
 const { VITE_SUPPLIER_PROP, VITE_COMMENTARY_PROP } = import.meta.env;
-
+const selectRef = ref()
 const itemHeight = 50;
 
 const props = withDefaults(defineProps<{
-  modelValue?: string;
-  filters?: Record<string, any> | ((a: ArticleType) => boolean);
-  placeholder?: string;
-  storageId?: string;
+  modelValue?: string | null
+  filters?: Record<string, any> | ((a: ArticleType) => boolean)
+  placeholder?: string
+  storageId?: string
 }>(), {
   filters: () => ({}),
 });
@@ -76,11 +78,11 @@ const selectProps = {
 };
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: string | null);
+  (e: 'update:modelValue', value?: string | null): void;
 }>();
 
 const placeholderValue = computed(() => {
-  const string = i18n.global.t('actions.select', [i18n.global.t('accusative.article')]);
+  const string = t('actions.select', [t('accusative.article')]);
   return props.placeholder || upperFirst(string.toString());
 });
 
@@ -105,6 +107,13 @@ const currentId = computed({
     emit('update:modelValue', id);
   },
 });
+
+defineExpose({
+  focus() {
+    selectRef.value?.focus()
+  }
+})
+
 
 function filterSearch(str: string) {
   search.value = str;
