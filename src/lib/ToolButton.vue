@@ -18,6 +18,7 @@ import {
   Edit,
   Loading,
   Refresh,
+  Check,
 } from '@element-plus/icons-vue';
 
 const ICONS = {
@@ -26,6 +27,7 @@ const ICONS = {
   refresh: Refresh,
   loading: Loading,
   back: Back,
+  check: Check,
 };
 
 const props = defineProps({
