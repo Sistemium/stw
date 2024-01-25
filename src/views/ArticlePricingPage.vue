@@ -9,26 +9,14 @@
           v-model="date"
           format="YYYY-MM-DD"
         )
-        search-input(
-          v-model="search"
-        )
       .tools
+        search-input(v-model="search")
         tool-button(
           :disabled="!pricingId"
           :tool="editing ? 'check' : 'edit'"
           @click="onEdit()"
         )
-        //tool-button(
-        //  :disabled="!pricingId || editing"
-        //  tool="add"
-        //  @click="onAdd()"
-        //)
 
-    //article-pricing-row-edit(
-    //  v-model="edit"
-    //  :columns="tableColumns"
-    //  @done="onAdd"
-    //)
     resize(
       :padding="20"
       v-loading="loading"
@@ -65,7 +53,6 @@ import Article from '@/models/Article'
 import { fetchArticlePricing } from '@/services/dataSync'
 import ToolButton from '@/lib/ToolButton.vue'
 import { useRouteParams } from '@/lib/updateRouteParams'
-// import ArticlePricingRowEdit from '@/components/catalogue/ArticlePricingRowEdit.vue'
 import SearchInput from '@/lib/SearchInput.vue'
 import { likeLt } from '@/services/lt'
 import DateStringPicker from '@/lib/DateStringPicker.vue'
@@ -77,7 +64,6 @@ interface ColumnInfo {
 
 const { route, updateRouteParams } = useRouteParams()
 const pricingId = ref(route.query.pricingId as string)
-// const edit = ref({ price: 0, articleId: '' })
 const tableColumns = ref<ColumnInfo[]>([])
 const editing = ref<boolan>(false)
 const search = ref<string>('')
@@ -87,9 +73,9 @@ const loading = ref<boolean>(false)
 const articlePricingFiltered = computed(() => {
   const data = articlePricing.value.map(ap => ({
     ...ap,
-    article: Article.getByID(ap.articleId),
+    articleName: Article.reactiveGet(ap.articleId)?.name,
   }))
-  const sorted = orderBy(data, item => item.article?.name)
+  const sorted = orderBy(data.filter(d => d.articleName), item => item.articleName)
   const { value } = search
   if (!value) {
     return sorted
@@ -162,13 +148,6 @@ async function onPriceChange(articleId: string, price: number) {
   }
 }
 
-// function onAdd() {
-//   ArticlePricing.createOne({ ...edit.value, date: date.value, pricingId: pricingId.value })
-//     .then(() => {
-//       edit.value = { price: 0, articleId: '' }
-//     })
-// }
-
 function onEdit() {
   editing.value = !editing.value
 }
@@ -196,7 +175,7 @@ function onColumnsResize(columns: ColumnInfo[]) {
   text-align: right;
 }
 
-.searchers {
+.searchers, .tools {
   :deep(> * + *) {
     margin-left: $margin-right;
   }
