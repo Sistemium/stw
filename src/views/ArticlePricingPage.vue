@@ -126,11 +126,10 @@ watch([pricingId, date], async ([id, date]) => {
   })
   if (id) {
     loading.value = true
-    await fetchArticlePricing(id, date)
+    await fetchArticlePricing(id)
       .finally(() => {
         loading.value = false
       })
-
   }
 })
 

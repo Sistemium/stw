@@ -179,9 +179,9 @@ const LOADERS: Map<RegExp, LoaderFn> = new Map([
     await Recipe.findAll()
   }],
   [/articlePricing/i, async (to: RouteRecord) => {
-    const { pricingId, date } = to.query
-    if (pricingId && date) {
-      await fetchArticlePricing(pricingId as string, date as string)
+    const { pricingId } = to.query
+    if (pricingId) {
+      await fetchArticlePricing(pricingId as string)
     }
   }],
   [/StockTaking/i, stockTakingSync],
@@ -220,11 +220,11 @@ export async function fetchStocks(storageId: string) {
   })
 }
 
-export async function fetchArticlePricing(pricingId: string, date: string) {
+export async function fetchArticlePricing(pricingId: string) {
   // const date = dayjs().format('YYYY-MM-DD');
   ArticlePricing.cachedFetch({
     pricingId,
-    date: { $lte: date },
+    // date: { $lte: date },
     // nextDate: { $gt: date },
   })
 }
