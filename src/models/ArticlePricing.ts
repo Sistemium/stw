@@ -5,7 +5,7 @@ export interface IArticlePricing extends ApiModel {
   pricingId: string
   articleId: string
   price: number
-  date: Date
+  date: string
   masterId?: string
   siteId?: string
 }

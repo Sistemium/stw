@@ -26,6 +26,7 @@ import type { NavigationGuardNext, RouteLocationNormalized as RouteRecord } from
 import { useInvStore } from '@/store/invStore';
 import Pricing from '@/models/Pricing'
 import ArticlePricing from '@/models/ArticlePricing'
+import type { CounterpartyType } from '@/models/StockOperations'
 
 const { error, debug } = log('dataSync');
 
@@ -111,7 +112,7 @@ async function stockWithdrawingSync(to: RouteRecord, _from: RouteRecord, options
 
     const byType = groupBy(filter(data, 'counterpartyType'), 'counterpartyType');
     const counterpartyPromises = map(byType, (items, type) => {
-      const counterpartySource = counterpartyModel(type);
+      const counterpartySource = counterpartyModel(type as CounterpartyType);
       if (!counterpartySource) {
         error('stockWithdrawingSync:', 'wrong type', type);
         return null;
@@ -178,9 +179,9 @@ const LOADERS: Map<RegExp, LoaderFn> = new Map([
     await Recipe.findAll()
   }],
   [/articlePricing/i, async (to: RouteRecord) => {
-    const { pricingId } = to.query
-    if (pricingId) {
-      await fetchArticlePricing(pricingId as string)
+    const { pricingId, date } = to.query
+    if (pricingId && date) {
+      await fetchArticlePricing(pricingId as string, date as string)
     }
   }],
   [/StockTaking/i, stockTakingSync],
@@ -219,11 +220,11 @@ export async function fetchStocks(storageId: string) {
   })
 }
 
-export async function fetchArticlePricing(pricingId: string) {
+export async function fetchArticlePricing(pricingId: string, date: string) {
   // const date = dayjs().format('YYYY-MM-DD');
   ArticlePricing.cachedFetch({
     pricingId,
-    // date: { $lte: date },
+    date: { $lte: date },
     // nextDate: { $gt: date },
   })
 }

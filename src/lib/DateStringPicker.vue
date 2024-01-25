@@ -7,14 +7,16 @@ el-date-picker.date-string-picker(
 )
 
 </template>
-<script setup>
+<script setup lang="ts">
 
+import dayjs from 'dayjs'
 import isDate from 'lodash/isDate';
 import { computed } from 'vue';
 
-const props = defineProps({
-  modelValue: String,
-});
+const props = defineProps<{
+  modelValue: string
+  format?: string
+}>();
 
 const emit = defineEmits(['update:modelValue']);
 
@@ -28,7 +30,8 @@ const date = computed({
     return value && isDate(value) ? value : new Date(value);
   },
   set(value) {
-    emit('update:modelValue', value ? value.toJSON() : null);
+    const out = (props.format && value) ? dayjs(value).format(props.format) : value?.toJSON()
+    emit('update:modelValue', value ? out : null);
   },
 });
 

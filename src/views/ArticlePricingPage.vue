@@ -5,6 +5,10 @@
     .filters
       .searchers
         pricing-select(v-model="pricingId")
+        date-string-picker(
+          v-model="date"
+          format="YYYY-MM-DD"
+        )
         search-input(
           v-model="search"
         )
@@ -45,14 +49,17 @@
 </template>
 
 <script setup lang="ts">
+import dayjs from 'dayjs'
+import map from 'lodash/map'
 import keyBy from 'lodash/keyBy'
+import groupBy from 'lodash/groupBy'
 import orderBy from 'lodash/orderBy'
 import { computed, ref, watch } from 'vue'
 import Resize from '@/lib/StmResize.vue'
 import PageTitle from '@/components/PageTitle.vue'
 import PricingSelect from '@/components/select/PricingSelect.vue'
 import ArticlePricingTable from '@/components/catalogue/ArticlePricingTable.vue'
-import ArticlePricing from '@/models/ArticlePricing'
+import ArticlePricing, { type IArticlePricing } from '@/models/ArticlePricing'
 import Article from '@/models/Article'
 import { fetchArticlePricing } from '@/services/dataSync'
 import ToolButton from '@/lib/ToolButton.vue'
@@ -60,6 +67,7 @@ import { useRouteParams } from '@/lib/updateRouteParams'
 // import ArticlePricingRowEdit from '@/components/catalogue/ArticlePricingRowEdit.vue'
 import SearchInput from '@/lib/SearchInput.vue'
 import { likeLt } from '@/services/lt'
+import DateStringPicker from '@/lib/DateStringPicker.vue'
 
 interface ColumnInfo {
   width: number
@@ -72,7 +80,7 @@ const pricingId = ref(route.query.pricingId as string)
 const tableColumns = ref<ColumnInfo[]>([])
 const editing = ref<boolan>(false)
 const search = ref<string>('')
-const date = ref(new Date())
+const date = ref(dayjs().format('YYYY-MM-DD'))
 const loading = ref<boolean>(false)
 
 const articlePricingFiltered = computed(() => {
@@ -92,7 +100,8 @@ const articlePricingFiltered = computed(() => {
 })
 
 const articlePricing = computed(() => {
-  const data = ArticlePricing.reactiveManyByIndex('pricingId', pricingId.value)
+  const raw = ArticlePricing.reactiveManyByIndex('pricingId', pricingId.value)
+  const data = map(groupBy(raw, 'articleId'), mapLastPrice) as IArticlePricing[]
   if (!editing.value) {
     return data
   }
@@ -104,16 +113,19 @@ const articlePricing = computed(() => {
       pricingId: pricingId.value,
       articleId: a.id,
       date: date.value,
-      price: 0,
+      price: undefined,
     }, existing)
   })
 })
 
-watch(pricingId, async (id: string) => {
-  await updateRouteParams({}, { pricingId: id || undefined })
+watch([pricingId, date], async ([id, date]) => {
+  await updateRouteParams({}, {
+    pricingId: id || undefined,
+    date: date || undefined,
+  })
   if (id) {
     loading.value = true
-    await fetchArticlePricing(id)
+    await fetchArticlePricing(id, date)
       .finally(() => {
         loading.value = false
       })
@@ -121,12 +133,22 @@ watch(pricingId, async (id: string) => {
   }
 })
 
+function mapLastPrice(items: IArticlePricing[]) {
+  return orderBy(items.filter(i => i.date <= date.value), 'date').at(-1)
+}
+
 async function onPriceChange(articleId: string, price: number) {
-  const existing = articlePricing.value.find(ap => ap.articleId === articleId)
+  const existing = articlePricing.value.find(ap => {
+    return ap.articleId === articleId && ap.date === date.value
+  })
   loading.value = true
   try {
     if (existing?.id) {
-      await ArticlePricing.updateOne({ id: existing.id, price })
+      if (!price) {
+        await ArticlePricing.destroy(existing.id)
+      } else {
+        await ArticlePricing.updateOne({ id: existing.id, price })
+      }
     } else {
       await ArticlePricing.createOne({
         date: date.value,
@@ -175,7 +197,7 @@ function onColumnsResize(columns: ColumnInfo[]) {
 }
 
 .searchers {
-  > * + * {
+  :deep(> * + *) {
     margin-left: $margin-right;
   }
 }

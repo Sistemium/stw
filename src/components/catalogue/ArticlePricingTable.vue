@@ -79,7 +79,7 @@ const columns = computed<Column[]>(() => {
     },
     {
       width,
-      align: 'right',
+      align: 'center',
       title: t('fields.price'),
       dataKey: 'price',
       minWidth: 60,
@@ -117,15 +117,16 @@ function renderInput({ cellData, rowData }: { cellData: any, rowData: IArticlePr
   ></el-input-number>
 }
 
-const editingArticle = { articleId: '', price: 0 }
+const editingArticle: { articleId: string, price?: number | null } = { articleId: '', price: undefined }
 
 function onPriceFocus(articleId: string) {
   editingArticle.articleId = articleId
-  editingArticle.price = priceMap.get(articleId) || 0
+  editingArticle.price = priceMap.get(articleId)
 }
 
 function onPriceBlur(articleId: string) {
-  const price = priceMap.get(articleId) || 0
+  const price = priceMap.get(articleId)
+  console.log(editingArticle, price)
   if (editingArticle.price !== price) {
     emit('priceChange', articleId, price)
   }
