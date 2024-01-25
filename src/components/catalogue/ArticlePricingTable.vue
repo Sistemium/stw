@@ -12,6 +12,8 @@
       :estimated-row-height="50"
       :row-event-handlers="{ onClick: handleCLick }"
     )
+      template(#empty)
+        alert-empty
 
 </template>
 
@@ -24,6 +26,7 @@ import type { Column } from 'element-plus'
 import max from 'lodash/max'
 import ArticleView from '@/components/catalogue/ArticleView.vue'
 import { useEnter } from '@/services/validating'
+import AlertEmpty from '@/lib/AlertEmpty.vue'
 
 const props = withDefaults(defineProps<{
   articlePricing: IArticlePricing[]
@@ -176,6 +179,10 @@ function handleCLick({ rowData }: { rowData: IArticlePricing }) {
 
 .article-pricing-table {
   text-align: left;
+}
+
+.alert-empty {
+  margin-top: $margin;
 }
 
 </style>
