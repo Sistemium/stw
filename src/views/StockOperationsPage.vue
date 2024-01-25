@@ -232,10 +232,6 @@ function onBack() {
   margin-bottom: $padding;
 }
 
-.storage-select {
-  width: 200px;
-}
-
 .el-aside {
   margin-right: $margin-top;
 
