@@ -16,20 +16,26 @@
 </template>
 
 <script setup lang="tsx">
-import { computed, watch } from 'vue'
+import { computed, reactive, watch } from 'vue'
 import ArticleAvatar from '@/components/catalogue/ArticleAvatar.vue'
 import type { IArticlePricing } from '@/models/ArticlePricing'
 import { t, tn } from '@/lib/validations'
 import type { Column } from 'element-plus'
 import max from 'lodash/max'
 import ArticleView from '@/components/catalogue/ArticleView.vue'
+import { useEnter } from '@/services/validating'
 
 const props = withDefaults(defineProps<{
   articlePricing: IArticlePricing[]
   height?: number
   width?: number
   columnWidth?: number
-}>(), { columnWidth: 150, width: 0 })
+  editing: boolean
+}>(), {
+  columnWidth: 150,
+  width: 0,
+  editing: false,
+})
 
 interface ColumnInfo {
   width: number
@@ -41,6 +47,7 @@ const emit = defineEmits<{
   (e: 'avatarClick', row: IArticlePricing): void
   (e: 'rowClick', row: IArticlePricing): void
   (e: 'resize', columns: ColumnInfo[]): void
+  (e: 'priceChange', articleId: string, price: number): void
 }>()
 
 const columns = computed<Column[]>(() => {
@@ -76,10 +83,53 @@ const columns = computed<Column[]>(() => {
       title: t('fields.price'),
       dataKey: 'price',
       minWidth: 60,
-      cellRenderer: ({ cellData }) => <span>{tn(cellData, 'decimal')}</span>,
+      cellRenderer: props.editing ? renderInput : renderSpan,
     },
   ]
 })
+
+const priceMap = reactive<Map<string, number>>(new Map())
+
+watch(props.articlePricing, articlePricing => {
+  articlePricing.forEach(ap => {
+    priceMap.set(ap.articleId, ap.price)
+  })
+})
+
+useEnter((e: EventTarget | null) => {
+  if (e && document.activeElement === e) {
+    e.blur()
+  }
+})
+
+function renderSpan({ cellData }: { cellData: any }) {
+  return <span>{tn(cellData, 'decimal')}</span>
+}
+
+function renderInput({ cellData, rowData }: { cellData: any, rowData: IArticlePricing }) {
+  return <el-input-number
+    controls={false}
+    v-select-on-focus
+    model-value={cellData}
+    onUpdate:modelValue={(p: number) => priceMap.set(rowData.articleId, p)}
+    onFocus={() => onPriceFocus(rowData.articleId)}
+    onBlur={() => onPriceBlur(rowData.articleId)}
+  ></el-input-number>
+}
+
+const editingArticle = { articleId: '', price: 0 }
+
+function onPriceFocus(articleId: string) {
+  editingArticle.articleId = articleId
+  editingArticle.price = priceMap.get(articleId) || 0
+}
+
+function onPriceBlur(articleId: string) {
+  const price = priceMap.get(articleId) || 0
+  if (editingArticle.price !== price) {
+    emit('priceChange', articleId, price)
+  }
+}
 
 watch(columns, (cols: Column[]) => {
   const res = cols.map(({ width, key, dataKey }) => ({
