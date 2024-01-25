@@ -24,6 +24,8 @@ import { ElLoading } from 'element-plus';
 import Model from '@/init/Model';
 import type { NavigationGuardNext, RouteLocationNormalized as RouteRecord } from 'vue-router'
 import { useInvStore } from '@/store/invStore';
+import Pricing from '@/models/Pricing'
+import ArticlePricing from '@/models/ArticlePricing'
 
 const { error, debug } = log('dataSync');
 
@@ -52,6 +54,7 @@ export async function initData() {
   await Recipe.findAll();
   await Storage.findAll();
   await Picture.findAll();
+  await Pricing.findAll();
   initPromiseInfo.resolve?.call(initPromiseInfo);
 }
 
@@ -174,6 +177,12 @@ const LOADERS: Map<RegExp, LoaderFn> = new Map([
   [/Recipe/i, async () => {
     await Recipe.findAll()
   }],
+  [/articlePricing/i, async (to: RouteRecord) => {
+    const { pricingId } = to.query
+    if (pricingId) {
+      await fetchArticlePricing(pricingId as string)
+    }
+  }],
   [/StockTaking/i, stockTakingSync],
   [/StockWithdraw/i, (to: RouteRecord, from: RouteRecord) => stockWithdrawingSync(to, from, {
     model: StockWithdrawing,
@@ -207,5 +216,14 @@ export async function fetchStocks(storageId: string) {
     storageId,
     date: { $lte: date },
     nextDate: { $gt: date },
+  })
+}
+
+export async function fetchArticlePricing(pricingId: string) {
+  // const date = dayjs().format('YYYY-MM-DD');
+  ArticlePricing.cachedFetch({
+    pricingId,
+    // date: { $lte: date },
+    // nextDate: { $gt: date },
   })
 }
