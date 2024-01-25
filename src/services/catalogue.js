@@ -8,7 +8,7 @@ import orderBy from 'lodash/orderBy';
 import ArticleProp, { TYPES_DEFAULTS, VALUE_TYPES } from '@/models/ArticleProp.ts';
 import Article from '@/models/Article.ts';
 import * as PackageType from '@/models/PackageType.js';
-import { likeLt } from '@/services/lt.js';
+import { likeLt } from '@/services/lt.ts';
 
 export function compoundName(filters) {
   const res = map(filters, filter => {

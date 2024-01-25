@@ -14,7 +14,7 @@ const LT_LETTERS = {
 
 };
 
-export function likeLt(string) {
+export function likeLt(string: string) {
 
   let res = escapeRegExp(string);
 
