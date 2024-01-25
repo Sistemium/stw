@@ -1,5 +1,5 @@
 export default interface ApiModel {
-  id?: string;
+  id: string;
   ts?: string;
   cts?: string;
   deviceCts?: string;
