@@ -31,23 +31,27 @@ const emit = defineEmits<{
   align-items: flex-start;
 
   :deep(.el-select--small .el-input__wrapper) {
-    height: 24px;
+    //height: 24px;
   }
 
   :deep(.el-select--default .el-input__wrapper) {
-    height: 32px;
+    //height: 32px;
   }
 
-  :deep(.el-select-v2--default .el-select-v2__input-wrapper) {
-    height: 30px;
+  :deep(.el-select--default .el-select__input-wrapper) {
+    //height: 30px;
   }
 
-  :deep(.el-input__wrapper), :deep(.el-select-v2__wrapper) {
+  :deep(.el-select--default .el-select__wrapper) {
+    height: 34px;
+  }
+
+  :deep(.el-input__wrapper), :deep(.el-select__wrapper) {
     border-bottom-left-radius: 0;
     border-top-left-radius: 0;
   }
 
-  :deep(.el-select), :deep(.el-select-v2) {
+  :deep(.el-select), :deep(.el-select) {
     width: 100%;
   }
 

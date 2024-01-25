@@ -140,6 +140,10 @@ function onPositionsClick(stockTaking) {
   }
 }
 
+.storage-select {
+  width: 200px;
+}
+
 .el-aside {
   .filters {
     flex-direction: column;

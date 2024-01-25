@@ -21,7 +21,7 @@
     "axios": "^0.21.0",
     "dayjs": "^1.11.8",
     "downloadjs": "^1.4.7",
-    "element-plus": "~2.4.4",
+    "element-plus": "^2.5.3",
     "lodash": "^4.17.21",
     "pinia": "^2.1.7",
     "qs": "^6.11.0",
