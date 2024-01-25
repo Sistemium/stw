@@ -14,6 +14,7 @@
   "typeToSearch": "Please type a keyword",
   "menu": {
     "about": "About",
+    "articlePricing": "Pricing",
     "auth": "Authorization",
     "barcodes": "Barcodes",
     "home": "Home",
