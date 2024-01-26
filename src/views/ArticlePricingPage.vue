@@ -5,11 +5,11 @@
     .filters
       .searchers
         pricing-select(v-model="pricingId")
+        site-select(v-model="siteId")
         date-string-picker(
           v-model="date"
           format="YYYY-MM-DD"
         )
-        site-select(v-model="siteId")
         employee-select(v-model="masterId")
       .tools
         search-input(v-model="search")
@@ -65,6 +65,7 @@ import EmployeeSelect from '@/components/select/EmployeeSelect.vue'
 import SiteSelect from '@/components/select/SiteSelect.vue'
 import { tAction } from '@/lib/validations'
 import AlertEmpty from '@/lib/AlertEmpty.vue'
+import { useSite } from '@/services/storeHelpers'
 
 interface ColumnInfo {
   width: number
@@ -79,7 +80,7 @@ const search = ref<string>('')
 const date = ref(dayjs().format('YYYY-MM-DD'))
 const loading = ref<boolean>(false)
 const masterId = ref<string>()
-const siteId = ref<string>()
+const { siteId } = useSite()
 
 const articlePricingFiltered = computed(() => {
   const data = articlePricing.value.map(ap => ({
@@ -103,6 +104,9 @@ const emptyText = computed(() => {
   }
   if (!pricingId.value) {
     return tAction('select', 'pricing')
+  }
+  if (!siteId.value) {
+    return tAction('select', 'site')
   }
   return undefined
 })

@@ -128,7 +128,7 @@ const { t: localT } = useI18n({
   },
 });
 
-watch(props.articlePricing, articlePricing => {
+watch(() => props.articlePricing, articlePricing => {
   articlePricing.forEach(ap => {
     priceMap.set(ap.articleId, ap.price)
   })
@@ -156,9 +156,9 @@ function renderComment({ rowData }: { rowData: IArticlePricing }) {
   if (rowData.masterId) {
     res.push(<small>{localT('masterSpecial')}</small>)
   }
-  if (rowData.siteId) {
-    res.push(<small>{localT('siteSpecial')}</small>)
-  }
+  // if (rowData.siteId) {
+  //   res.push(<small>{localT('siteSpecial')}</small>)
+  // }
   return res
 }
 
