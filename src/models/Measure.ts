@@ -8,9 +8,15 @@ export const DEFAULT_MEASURE_UNIT_ID = 'piece'
 export type MeasureID = 'weight' | 'volume' | 'length' | 'quantity'
 export type MeasureUnitID = 'gram' | 'kilogram' | 'tonne'
   | 'millilitre' | 'litre' | 'centimetre'
-  | 'metre'
+  | 'metre' | 'piece'
 
-export const Measure = [
+interface IMeasure {
+  id: MeasureID
+  unit: Partial<Record<MeasureUnitID, number>>
+  measureType: string
+}
+
+export const Measure: IMeasure[] = [
   {
     id: 'weight',
     unit: { gram: 0.001, kilogram: 1, tonne: 1000 },
@@ -37,7 +43,7 @@ export function keyedMeasures() {
   return keyBy(Measure, 'id')
 }
 
-export function measures() {
+export function measures(): (IMeasure & { name: string })[] {
   return Measure.map(measure => ({
     ...measure,
     name: t(`measures.${measure.id}`),
