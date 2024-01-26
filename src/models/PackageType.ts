@@ -55,8 +55,10 @@ export const PackageType: IPackageType[] = [
 ];
 
 export function packageTypes(localeArg: LocaleCode, fallbackLocaleArg?: LocaleCode) {
-  const locale = localeArg || i18n.global.locale;
-  const fallbackLocale: LocaleCode = fallbackLocaleArg || i18n.global.fallbackLocale as LocaleCode || 'en';
+  // @ts-ignore
+  const locale = localeArg || i18n.global.locale.value;
+  // @ts-ignore
+  const fallbackLocale: LocaleCode = fallbackLocaleArg || i18n.global.fallbackLocale.value as LocaleCode || 'en';
   return PackageType.map(packageType => ({
     ...packageType,
     name: packageType.name[locale] || packageType.name[fallbackLocale],
@@ -68,7 +70,8 @@ export function packageTypes(localeArg: LocaleCode, fallbackLocaleArg?: LocaleCo
 const BY_ID = mapValues(keyBy<LocaleCode>(['en', 'lt', 'ru']), locale => keyBy(packageTypes(locale), 'id'));
 
 export function getById(id: string, locale?: LocaleCode) {
-  return BY_ID[locale || i18n.global.locale][id];
+  const found = BY_ID[locale || i18n.global.locale]
+  return found ? found[id] : undefined;
 }
 
 export function unitsInPackageLabel(measureUnitId: string) {
