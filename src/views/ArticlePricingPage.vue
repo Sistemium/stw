@@ -94,7 +94,15 @@ const articlePricingFiltered = computed(() => {
   }
   const re = likeLt(value)
   return sorted.filter(ap => {
-    return re.test(ap.articleName)
+    if (re.test(ap.articleName)) {
+      return true
+    }
+    const article = Article.reactiveGet(ap.articleId)
+    if (!article) {
+      return false
+    }
+    return re.test(article.code || '')
+      || article.props.find(p => p.stringValue && re.test(p.stringValue))
   })
 })
 
