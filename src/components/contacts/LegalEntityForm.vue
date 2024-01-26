@@ -24,11 +24,11 @@ el-form.legal-entity-form(
 
 import { computed } from 'vue';
 import { $requiredRule } from '@/lib/validations';
-import type { LegalEntity } from '@/models/LegalEntities';
 import { useFormValidate } from '@/services/validating';
+import type { ILegalEntity } from '@/models/LegalEntity'
 
 defineProps<{
-  model: LegalEntity;
+  model: ILegalEntity;
   disabled?: boolean;
 }>();
 
