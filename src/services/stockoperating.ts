@@ -35,8 +35,8 @@ export function stockOperationAct(items: StockOperationItem[]): StockOperationAc
     const article = Article.reactiveGet(item.articleId);
     return {
       ...item,
-      name: article?.name,
-      code: article?.code,
+      name: article?.name || '',
+      code: article?.code || '',
     };
   });
 }
