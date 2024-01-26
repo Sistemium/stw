@@ -1,3 +1,5 @@
+import type { BaseItem } from '@/init/Model'
+
 export default {
   path: 'progress/:stockTakingId',
   name: 'stockTakingProgress',
@@ -6,7 +8,7 @@ export default {
     menuHidden: true,
   },
   component: () => import('../views/StockTakingPage.vue'),
-  props({ params: { stockTakingId } }) {
+  props({ params: { stockTakingId } }: BaseItem) {
     return {
       stockTakingId,
       editItemRoute: 'stockTakingItemEdit',
@@ -18,7 +20,7 @@ export default {
     {
       path: 'create',
       name: 'stockTakingItemCreate',
-      props: ({ params: { stockTakingId }, query: { barcode } }) => ({
+      props: ({ params: { stockTakingId }, query: { barcode } }: BaseItem) => ({
         stockTakingId,
         barcode,
         from: { name: 'stockTakingProgress' },
@@ -28,7 +30,7 @@ export default {
     {
       path: 'editItem/:stockTakingItemId',
       name: 'stockTakingItemEdit',
-      props: ({ params: { stockTakingItemId, stockTakingId } }) => ({
+      props: ({ params: { stockTakingItemId, stockTakingId } }: BaseItem) => ({
         stockTakingItemId,
         stockTakingId,
         from: { name: 'stockTakingProgress' },

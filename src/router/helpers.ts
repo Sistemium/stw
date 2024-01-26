@@ -1,9 +1,11 @@
+import type { BaseItem } from '@/init/Model'
+
 export function itemRouteHelper(
-  name,
-  component,
-  parentName = '',
-  props = {},
-  itemName = 'Item',
+  name: string,
+  component: () => Promise<any>,
+  parentName: string = '',
+  props: BaseItem = {},
+  itemName: string = 'Item',
 ) {
   const parentId = `${parentName || name}Id`;
   const itemId = `${parentName || name}ItemId`;
@@ -11,7 +13,7 @@ export function itemRouteHelper(
     path: `edit${itemName}/:${itemId}`,
     name: `${name}${itemName}Edit`,
     component,
-    props: ({ params: { [parentId]: parentParam, [itemId]: itemParam } }) => ({
+    props: ({ params: { [parentId]: parentParam, [itemId]: itemParam } }: BaseItem) => ({
       [parentId]: parentParam,
       [itemId]: itemParam,
       from: {
@@ -26,7 +28,7 @@ export function itemRouteHelper(
     path: `create${itemName}`,
     name: `${name}${itemName}Create`,
     component,
-    props: ({ params: { [parentId]: parentParam } }) => ({
+    props: ({ params: { [parentId]: parentParam } }: BaseItem) => ({
       [parentId]: parentParam,
       from: {
         name,

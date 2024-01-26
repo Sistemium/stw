@@ -1,6 +1,7 @@
 import { itemRouteHelper } from '@/router/helpers';
+import type { BaseItem } from '@/init/Model'
 
-export default function stockOperationsRoute(options) {
+export default function stockOperationsRoute(options: BaseItem) {
 
   const {
     rootState,
@@ -58,7 +59,7 @@ export default function stockOperationsRoute(options) {
         name: operationName,
         path: 'details/:stockOperationId',
         component: () => import(/* webpackChunkName: "out" */ '../views/StockOperationPage.vue'),
-        props({ params: { stockOperationId } }) {
+        props({ params: { stockOperationId } }: BaseItem) {
           return {
             editRoute: `${operationName}ItemEdit`,
             createRoute: `${operationName}ItemCreate`,
