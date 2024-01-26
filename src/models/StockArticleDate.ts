@@ -34,4 +34,4 @@ export default new Model<IStockArticleDate>({
     articleId: String,
   },
   methods: {},
-});
+})
