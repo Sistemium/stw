@@ -15,9 +15,8 @@ import { computed, watch } from 'vue';
 import filter from 'lodash/filter';
 import uniq from 'lodash/uniq';
 import sumBy from 'lodash/sumBy';
-import type StockArticleDate from '@/models/StockArticleDates';
 import type { CostType, MaterialFields } from '@/models/Recipes';
-import model from '@/models/StockArticleDate.js';
+import model, { type IStockArticleDate } from '@/models/StockArticleDate.js'
 import { t } from '@/lib/validations';
 
 const props = defineProps<{
@@ -107,7 +106,7 @@ watch(() => [props.articleId, props.storageId, props.date].join('|'), async () =
 }, { immediate: true });
 
 function stockArticleDateReactive(storageId: string, articleId: string, date: string) {
-  const many = model.reactiveManyByIndex('articleId', articleId) as StockArticleDate[];
+  const many = model.reactiveManyByIndex('articleId', articleId) as IStockArticleDate[];
   return many.filter(stock => {
     return stock.storageId === storageId
       && stock.date <= date

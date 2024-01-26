@@ -17,13 +17,13 @@ el-table-v2.stock-period-table(
 import max from 'lodash/max';
 import { computed } from 'vue';
 import ArticleView from '@/components/catalogue/ArticleView.vue';
-import type StockArticleDate from '@/models/StockArticleDates';
 import ArticleAvatar from '@/components/catalogue/ArticleAvatar.vue';
 import { t, tn } from '@/lib/validations';
 import type { Column } from 'element-plus'
+import type { IStockArticleDate } from '@/models/StockArticleDate'
 
 const props = withDefaults(defineProps<{
-  data: StockArticleDate[];
+  data: IStockArticleDate[];
   height?: number;
   width?: number;
   columnWidth?: number;
@@ -31,7 +31,7 @@ const props = withDefaults(defineProps<{
 
 const emit = defineEmits<{
   (e: 'avatarClick', row: object): void;
-  (e: 'rowClick', row: StockArticleDate): void;
+  (e: 'rowClick', row: IStockArticleDate): void;
 }>();
 
 const columns = computed<Column[]>(() => {
@@ -97,7 +97,7 @@ const columns = computed<Column[]>(() => {
 
 
 function handleCLick({ rowData }) {
-  emit('rowClick', rowData as StockArticleDate);
+  emit('rowClick', rowData as IStockArticleDate);
 }
 
 </script>
