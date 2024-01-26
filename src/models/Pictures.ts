@@ -13,7 +13,7 @@ export interface IMSResponse {
   pictures: PictureInfo[],
 }
 
-export interface Picture extends ApiModel {
+export interface IPicture extends ApiModel {
   name: string;
   href: string;
   thumbnailHref: string;

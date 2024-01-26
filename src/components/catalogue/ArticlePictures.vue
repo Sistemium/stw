@@ -11,10 +11,10 @@
 
 </template>
 <script setup lang="ts">
-import type { Picture } from '@/models/Pictures';
+import type { IPicture } from '@/models/Pictures';
 
 defineProps<{
-  pictures: Picture[],
+  pictures: IPicture[],
 }>();
 
 </script>
