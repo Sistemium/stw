@@ -2,10 +2,21 @@ import i18n from '@/i18n';
 import upperFirst from 'lodash/upperFirst';
 import keyBy from 'lodash/keyBy';
 import mapValues from 'lodash/mapValues';
+import { t } from '@/lib/validations'
 
 export const DEFAULT_PACKAGE_TYPE_ID = 'box';
 
-export const PackageType = [
+type LocaleCode = 'en' | 'ru' | 'lt'
+
+interface IPackageType {
+  id: string
+  name: Record<LocaleCode, string>
+  measureType: string
+  short: Record<LocaleCode, string>
+  genitive: Record<LocaleCode, string>
+}
+
+export const PackageType: IPackageType[] = [
   {
     id: 'box',
     name: { en: 'Box', lt: 'Dėžė', ru: 'Коробка' },
@@ -43,9 +54,9 @@ export const PackageType = [
   },
 ];
 
-export function packageTypes(localeArg, fallbackLocaleArg) {
-  const locale = localeArg || i18n.global.locale.value;
-  const fallbackLocale = fallbackLocaleArg || i18n.global.fallbackLocale.value;
+export function packageTypes(localeArg: LocaleCode, fallbackLocaleArg?: LocaleCode) {
+  const locale = localeArg || i18n.global.locale;
+  const fallbackLocale: LocaleCode = fallbackLocaleArg || i18n.global.fallbackLocale as LocaleCode || 'en';
   return PackageType.map(packageType => ({
     ...packageType,
     name: packageType.name[locale] || packageType.name[fallbackLocale],
@@ -54,18 +65,18 @@ export function packageTypes(localeArg, fallbackLocaleArg) {
   }));
 }
 
-const BY_ID = mapValues(keyBy(['en', 'lt', 'ru']), locale => keyBy(packageTypes(locale), 'id'));
+const BY_ID = mapValues(keyBy<LocaleCode>(['en', 'lt', 'ru']), locale => keyBy(packageTypes(locale), 'id'));
 
-export function getById(id, locale = '') {
-  return BY_ID[locale || i18n.global.locale.value][id];
+export function getById(id: string, locale?: LocaleCode) {
+  return BY_ID[locale || i18n.global.locale][id];
 }
 
-export function unitsInPackageLabel(measureUnitId) {
-  const units = i18n.global.t(`units.genitive.${measureUnitId}`);
-  return upperFirst(i18n.global.t('fields.unitsInPackage', [units]).toString());
+export function unitsInPackageLabel(measureUnitId: string) {
+  const units = t(`units.genitive.${measureUnitId}`);
+  return upperFirst(t('fields.unitsInPackage', [units]).toString());
 }
 
-export function shortenedPackage(packageTypeId) {
+export function shortenedPackage(packageTypeId: string) {
   if (!packageTypeId) {
     return null;
   }
@@ -73,8 +84,8 @@ export function shortenedPackage(packageTypeId) {
   return packageType ? packageType.shortened : packageTypeId;
 }
 
-export function numberOf(packageTypeId) {
+export function numberOf(packageTypeId: string) {
   const packageType = getById(packageTypeId);
   const gen = packageType ? packageType.genitive : packageTypeId;
-  return upperFirst(i18n.global.t('units.quantityOf', [gen]).toString());
+  return upperFirst(t('units.quantityOf', [gen]).toString());
 }

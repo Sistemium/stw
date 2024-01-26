@@ -88,7 +88,7 @@ import PropTags from '@/components/props/PropTags.vue';
 import * as catalogue from '@/services/catalogue.js';
 import PropOption from '@/models/PropOption.js';
 import { filterArticleProps, getArticleProp } from '@/models/ArticleProps';
-import type ArticleProp from '@/models/ArticleProps';
+import type { IArticleProp } from '@/models/ArticleProps';
 import { $requiredRule, t } from '@/lib/validations';
 import type { IArticle, ArticleProperty } from '@/models/Articles';
 import orderBy from 'lodash/orderBy';
@@ -149,7 +149,7 @@ const rules = computed(() => {
 
 interface FormArticleProperty extends ArticleProperty {
   component: ArticleFormComponent;
-  prop: ArticleProp;
+  prop: IArticleProp;
   options: object[];
 }
 
