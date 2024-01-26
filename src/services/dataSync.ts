@@ -27,6 +27,8 @@ import { useInvStore } from '@/store/invStore';
 import Pricing from '@/models/Pricing'
 import ArticlePricing from '@/models/ArticlePricing'
 import type { CounterpartyType } from '@/models/StockOperations'
+import Employee from '@/models/Employee'
+import Site from '@/models/Site'
 
 const { error, debug } = log('dataSync');
 
@@ -183,6 +185,8 @@ const LOADERS: Map<RegExp, LoaderFn> = new Map([
     if (pricingId) {
       await fetchArticlePricing(pricingId as string)
     }
+    await Employee.cachedFetch()
+    await Site.cachedFetch()
   }],
   [/StockTaking/i, stockTakingSync],
   [/StockWithdraw/i, (to: RouteRecord, from: RouteRecord) => stockWithdrawingSync(to, from, {

@@ -179,6 +179,7 @@
     "select": "pasirink {0}"
   },
   "accusative": {
+    "date": "datą",
     "property": "ypatybę",
     "profile": "Profilį",
     "picture": "nuotrauką",
@@ -190,7 +191,10 @@
     "recipe": "receptą",
     "material": "sudedamojį dalį",
     "productItem": "gamybos poziciją",
-    "article": "prekę"
+    "article": "prekę",
+    "pricing": "kainyną",
+    "employee": "darbuotoją",
+    "site": "padalinį"
   },
   "genitive": {
     "property": "Ypatybės",

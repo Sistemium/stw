@@ -9,6 +9,8 @@
           v-model="date"
           format="YYYY-MM-DD"
         )
+        site-select(v-model="siteId")
+        employee-select(v-model="masterId")
       .tools
         search-input(v-model="search")
         tool-button(
@@ -17,7 +19,10 @@
           @click="onEdit()"
         )
 
+    alert-empty(v-if="emptyText" :title="emptyText")
+
     resize(
+      v-else
       :padding="20"
       v-loading="loading"
     )
@@ -56,6 +61,10 @@ import { useRouteParams } from '@/lib/updateRouteParams'
 import SearchInput from '@/lib/SearchInput.vue'
 import { likeLt } from '@/services/lt'
 import DateStringPicker from '@/lib/DateStringPicker.vue'
+import EmployeeSelect from '@/components/select/EmployeeSelect.vue'
+import SiteSelect from '@/components/select/SiteSelect.vue'
+import { tAction } from '@/lib/validations'
+import AlertEmpty from '@/lib/AlertEmpty.vue'
 
 interface ColumnInfo {
   width: number
@@ -69,6 +78,8 @@ const editing = ref<boolan>(false)
 const search = ref<string>('')
 const date = ref(dayjs().format('YYYY-MM-DD'))
 const loading = ref<boolean>(false)
+const masterId = ref<string>()
+const siteId = ref<string>()
 
 const articlePricingFiltered = computed(() => {
   const data = articlePricing.value.map(ap => ({
@@ -82,12 +93,30 @@ const articlePricingFiltered = computed(() => {
   }
   const re = likeLt(value)
   return sorted.filter(ap => {
-    return ap.article && re.test(ap.article.name)
+    return re.test(ap.articleName)
   })
 })
 
+const emptyText = computed(() => {
+  if (!date.value) {
+    return tAction('select', 'date')
+  }
+  if (!pricingId.value) {
+    return tAction('select', 'pricing')
+  }
+  return undefined
+})
+
 const articlePricing = computed(() => {
+  if (!date.value) {
+    return []
+  }
   const raw = ArticlePricing.reactiveManyByIndex('pricingId', pricingId.value)
+    .filter(ap => {
+      return ap.date <= date.value
+        && (!ap.masterId || masterId.value === ap.masterId)
+        && (!ap.siteId || siteId.value === ap.siteId)
+    })
   const data = map(groupBy(raw, 'articleId'), mapLastPrice) as IArticlePricing[]
   if (!editing.value) {
     return data
@@ -120,12 +149,23 @@ watch([pricingId, date], async ([id, date]) => {
 })
 
 function mapLastPrice(items: IArticlePricing[]) {
-  return orderBy(items.filter(i => i.date <= date.value), 'date').at(-1)
+  let hasMaster = false
+  const filtered = items.filter(i => {
+    if (i.masterId) {
+      hasMaster = true
+    }
+    return i.masterId || !hasMaster
+  })
+    .filter(i => i.masterId || !hasMaster)
+  return orderBy(filtered, 'date').at(-1)
 }
 
 async function onPriceChange(articleId: string, price: number) {
   const existing = articlePricing.value.find(ap => {
-    return ap.articleId === articleId && ap.date === date.value
+    return ap.articleId === articleId
+      && ap.date === date.value
+      && (ap.masterId === masterId.value || !masterId.value)
+      && (ap.siteId === siteId.value || !siteId.value)
   })
   loading.value = true
   try {
@@ -136,9 +176,14 @@ async function onPriceChange(articleId: string, price: number) {
         await ArticlePricing.updateOne({ id: existing.id, price })
       }
     } else {
+      if (!price) {
+        throw Error('Empty price onPriceChange')
+      }
       await ArticlePricing.createOne({
         date: date.value,
         pricingId: pricingId.value,
+        masterId: masterId.value || null,
+        siteId: siteId.value || null,
         articleId,
         price,
       })
@@ -163,11 +208,6 @@ function onColumnsResize(columns: ColumnInfo[]) {
 
 .filters {
   justify-content: space-between;
-
-  .pricing-select {
-    width: 200px;
-  }
-
   margin-bottom: $margin-right;
 }
 
@@ -179,5 +219,9 @@ function onColumnsResize(columns: ColumnInfo[]) {
   :deep(> * + *) {
     margin-left: $margin-right;
   }
+}
+
+.alert-empty {
+  margin-top: $margin;
 }
 </style>

@@ -19,6 +19,7 @@
 
 <script setup lang="tsx">
 import { computed, reactive, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import ArticleAvatar from '@/components/catalogue/ArticleAvatar.vue'
 import type { IArticlePricing } from '@/models/ArticlePricing'
 import { t, tn, td } from '@/lib/validations'
@@ -51,14 +52,14 @@ const emit = defineEmits<{
   (e: 'avatarClick', row: IArticlePricing): void
   (e: 'rowClick', row: IArticlePricing): void
   (e: 'resize', columns: ColumnInfo[]): void
-  (e: 'priceChange', articleId: string, price: number): void
+  (e: 'priceChange', articleId: string, price?: number): void
 }>()
 
 const columns = computed<Column[]>(() => {
-  const count = 2
+  const count = 3
   const { columnWidth } = props
   const nameWidth = max([props.width - columnWidth * count - 6 - 60, 250]) || 0
-  const width = max([Math.floor((props.width - nameWidth - count - 60) / count), 150]) || 0
+  const width = max([Math.floor((props.width - nameWidth - 6 - 60) / count), 150]) || 0
   return [
     {
       key: 'avatar',
@@ -92,6 +93,14 @@ const columns = computed<Column[]>(() => {
     {
       width,
       align: 'center',
+      title: t('fields.commentText'),
+      dataKey: 'masterId',
+      minWidth: 60,
+      cellRenderer: renderComment,
+    },
+    {
+      width,
+      align: 'center',
       title: t('fields.price'),
       dataKey: 'price',
       minWidth: 60,
@@ -101,6 +110,23 @@ const columns = computed<Column[]>(() => {
 })
 
 const priceMap = reactive<Map<string, number>>(new Map())
+
+const { t: localT } = useI18n({
+  messages: {
+    en: {
+      masterSpecial: 'Special for the employee',
+      siteSpecial: 'Department special',
+    },
+    lt: {
+      masterSpecial: 'Ypatinga darbuotojui',
+      siteSpecial: 'Padalinio kaina',
+    },
+    ru: {
+      masterSpecial: 'Специальная для сотрудника',
+      siteSpecial: 'Цена в филиале',
+    },
+  },
+});
 
 watch(props.articlePricing, articlePricing => {
   articlePricing.forEach(ap => {
@@ -123,6 +149,17 @@ function renderDate({ cellData }: { cellData: string }) {
     return <span></span>
   }
   return <span>{td(cellData, 'short')}</span>
+}
+
+function renderComment({ rowData }: { rowData: IArticlePricing }) {
+  const res = []
+  if (rowData.masterId) {
+    res.push(<small>{localT('masterSpecial')}</small>)
+  }
+  if (rowData.siteId) {
+    res.push(<small>{localT('siteSpecial')}</small>)
+  }
+  return res
 }
 
 function renderInput({ cellData, rowData }: { cellData: any, rowData: IArticlePricing }) {
@@ -148,7 +185,6 @@ function onPriceFocus(articleId: string) {
 
 function onPriceBlur(articleId: string) {
   const price = priceMap.get(articleId)
-  console.log(editingArticle, price)
   if (editingArticle.price !== price) {
     emit('priceChange', articleId, price)
   }

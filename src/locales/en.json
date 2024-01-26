@@ -178,10 +178,12 @@
     "editing": "{0} editing",
     "signIn": "Sign in",
     "welcome": "Welcome, {0}!",
+    "choose": "Choose {0}",
     "logout": "Sign out",
     "select": "select {0}"
   },
   "accusative": {
+    "date": "date",
     "property": "property",
     "profile": "Profile",
     "picture": "picture",
@@ -193,7 +195,10 @@
     "recipe": "recipe",
     "material": "material",
     "productItem": "production item",
-    "article": "article"
+    "article": "article",
+    "pricing": "pricing",
+    "employee": "employee",
+    "site": "department"
   },
   "genitive": {
     "property": "Property",

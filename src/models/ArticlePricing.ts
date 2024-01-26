@@ -6,8 +6,8 @@ export interface IArticlePricing extends ApiModel {
   articleId: string
   price: number
   date: string
-  masterId?: string
-  siteId?: string
+  masterId?: string | null
+  siteId?: string | null
 }
 
 export default new Model<IArticlePricing>({

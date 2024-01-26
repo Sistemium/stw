@@ -179,6 +179,7 @@
     "select": "выбери {0}"
   },
   "accusative": {
+    "date": "дату",
     "property": "свойство",
     "profile": "Профиль",
     "picture": "картинку",
@@ -190,7 +191,10 @@
     "recipe": "рецепт",
     "material": "компонент",
     "productItem": "позицию производства",
-    "article": "номенклатуру"
+    "article": "номенклатуру",
+    "pricing": "тип цен",
+    "employee": "работника",
+    "site": "подразделение"
   },
   "genitive": {
     "property": "признака",
