@@ -1,6 +1,7 @@
 import { computed } from 'vue';
 import type { ComputedRef } from 'vue';
 import { vatConfig as vatConfigFn } from '@/services/warehousing.js';
+import type { StockOperationName } from '@/models/StockOperations'
 
 interface VatOperationConfig {
   vatRate: number;
@@ -19,7 +20,7 @@ export interface VatConfig {
   },
 }
 
-export function useVatConfig(operationName: 'stockReceiving' | 'stockWithdrawing'): {
+export function useVatConfig(operationName: StockOperationName): {
   vatConfig: ComputedRef<VatConfig>;
   vatOperationConfig: ComputedRef<VatOperationConfig>;
 } {

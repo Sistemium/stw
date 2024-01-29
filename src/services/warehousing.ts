@@ -31,8 +31,8 @@ import type { IArticle } from '@/models/Articles'
 
 interface STI {
   stockTakingId: string
-  articleId: string
-  barcode?: string
+  articleId: string | null
+  barcode?: string | null
   vatRate: number
 }
 

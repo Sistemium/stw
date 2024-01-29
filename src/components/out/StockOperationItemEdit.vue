@@ -31,7 +31,7 @@ import { stockOperationItemInstance } from '@/services/warehousing.js';
 import StockOperationItemForm from '@/components/out/StockOperationItemForm.vue';
 import { useVatConfig } from '@/services/vatConfiguring';
 import { drawerEditingProps, useDrawerEditing } from '@/services/drawerEditing';
-import type { StockOperation } from '@/models/StockOperations';
+import type { StockOperation, StockOperationName } from '@/models/StockOperations'
 import DrawerEdit from '@/lib/DrawerEdit.vue';
 
 const props = defineProps({
@@ -40,21 +40,21 @@ const props = defineProps({
   stockOperationItemId: String,
   barcode: String,
   operationName: { type: String, required: true },
-  model: ReactiveModel,
-  positionsModel: ReactiveModel,
+  model: { type: ReactiveModel, required: true },
+  positionsModel: { type: ReactiveModel, required: true },
 });
 
 const form = ref(null);
 const { destroyFn, saveFn } = useDrawerEditing(props.positionsModel);
-const { vatOperationConfig } = useVatConfig(props.operationName);
+const { vatOperationConfig } = useVatConfig(props.operationName as StockOperationName);
 const stockOperation = computed(() => props.model.reactiveGet(props.stockOperationId) as StockOperation);
 
 const modelOrigin = computed(() => {
   const { stockOperationItemId: id, stockOperationId, barcode = null } = props;
   const { vatRate } = vatOperationConfig.value;
   return id
-    ? props.positionsModel.reactiveGet(id)
-    : stockOperationItemInstance(props.operationName, {
+    ? props.positionsModel?.reactiveGet(id)
+    : stockOperationItemInstance(props.operationName as StockOperationName, {
       stockOperationId,
       barcode,
       articleId: null,
@@ -63,7 +63,7 @@ const modelOrigin = computed(() => {
 });
 
 const finished = computed(() => {
-  return !workflow.step(stockOperation.value?.processing).editable;
+  return !workflow.step(stockOperation.value?.processing)?.editable;
 });
 
 const editable = computed(() => {
