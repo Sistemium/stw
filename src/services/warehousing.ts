@@ -1,7 +1,7 @@
 import LegalEntity from '@/models/LegalEntity'
 import Storage from '@/models/Storage'
 import Person from '@/models/Person'
-import StockPeriod from '@/models/StockPeriod'
+import StockPeriod, { type IStockPeriod } from '@/models/StockPeriod'
 import StockArticleDate from '@/models/StockArticleDate'
 import Configuration from '@/models/Configuration'
 import Article from '@/models/Article'
@@ -27,6 +27,7 @@ import { likeLt } from '@/services/lt'
 import Model, { type BaseItem } from '@/init/Model'
 import type { VatConfig } from '@/services/vatConfiguring'
 import type { CounterpartyType, StockOperationName } from '@/models/StockOperations'
+import type { IArticle } from '@/models/Articles'
 
 interface STI {
   stockTakingId: string
@@ -168,7 +169,7 @@ export function configPriceField(operationName: StockOperationName, date = new D
   return vatPrices ? 'vatPrice' : 'price';
 }
 
-export async function findStockPeriod(storageId: string, dateB: Date, dateE: Date) {
+export async function findStockPeriod(storageId: string, dateB: string | Date, dateE: string | Date) {
   const data = await StockPeriod.find({
     storageId,
     dateB,
@@ -183,7 +184,7 @@ export async function findStockPeriod(storageId: string, dateB: Date, dateE: Dat
     };
   })
     .filter(({ article }) => article);
-  return orderBy(res, 'articleName');
+  return orderBy(res, 'articleName') as (IStockPeriod & { article: IArticle })[];
 }
 
 export async function findStockPeriodOperations(articleId: string, storageId: string, dateB: Date, dateE: Date) {

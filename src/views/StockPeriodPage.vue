@@ -70,20 +70,21 @@ import { useRouteParams } from '@/lib/updateRouteParams';
 import { t } from '@/lib/validations';
 import Storage from '@/models/Storage.js';
 import { useStorage } from '@/services/stockoperating';
-
-// mixins: [storageSelectMixin],
+import type { IStockPeriod } from '@/models/StockPeriod'
+import type { IArticle } from '@/models/Articles'
+import type { IArticleProp } from '@/models/ArticleProps'
 
 const today = dayjs().endOf('day');
 const monthAgo = today.add(-1, 'month');
 
 const dateRange = ref([monthAgo, today]);
-const data = ref([]);
+const data = ref<(IStockPeriod & { article: IArticle })[]>([]);
 const route = useRoute();
 const router = useRouter();
 const search = ref('');
 const articleId = ref<string | null>(route.query.articleId?.toString() || null);
 const showDetails = ref(!!articleId.value);
-const tableHeight = ref<number>(undefined);
+const tableHeight = ref<number>();
 const storageSelectRef = ref(null);
 const { updateRouteParams } = useRouteParams();
 
@@ -109,7 +110,7 @@ const filteredData = computed(() => {
     : data.value;
 });
 
-function downloadSchema(tableData) {
+function downloadSchema(tableData: { rows: IArticle[], propColumns: IArticleProp[] }) {
   return {
     wrapText: true,
     columns: [
@@ -183,7 +184,7 @@ function downloadExcelData() {
   };
 }
 
-function setHeight(height) {
+function setHeight(height: number) {
   tableHeight.value = height;
 }
 
@@ -192,7 +193,7 @@ async function refreshClick() {
   await refresh(storageId, dateB, dateE);
 }
 
-async function refresh(storageId, dateB, dateE) {
+async function refresh(storageId: string, dateB: string, dateE: string) {
   const loading = ElLoading.service({});
   try {
     data.value = await findStockPeriod(storageId, dateB, dateE);
@@ -202,7 +203,7 @@ async function refresh(storageId, dateB, dateE) {
   loading.close();
 }
 
-function rowClick(row) {
+function rowClick(row: { articleId: string }) {
   showDetails.value = true;
   articleId.value = row.articleId;
   updateRouteParams({}, {
@@ -210,7 +211,7 @@ function rowClick(row) {
   });
 }
 
-function avatarClick({ articleId }) {
+function avatarClick({ articleId }: { articleId: string }) {
   router.push({
     name: props.galleryRoute,
     params: {

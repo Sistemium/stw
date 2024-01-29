@@ -123,7 +123,7 @@ export function articlePackages(article: IArticle) {
 export function catalogueData() {
   const allProps = new Map();
   const rows = map(Article.reactiveFilter(), item => {
-    const res: BaseItem = {
+    const res: IArticle & BaseItem = {
       ...item,
     };
     each(item.props, ({ propId, stringValue, numberValue }) => {
