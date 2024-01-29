@@ -1,7 +1,11 @@
 <template lang="pug">
   .article-pricing-page.page
     page-title(title="menu.articlePricing")
-
+      tool-button.ml-1(
+        tool="refresh"
+        @click="refreshClick"
+        :busy="loading"
+      )
     .filters
       .searchers
         pricing-select(v-model="pricingId")
@@ -152,13 +156,17 @@ watch([pricingId, date], async ([id, date]) => {
     date: date || undefined,
   })
   if (id) {
-    loading.value = true
-    await fetchArticlePricing(id)
-      .finally(() => {
-        loading.value = false
-      })
+    await refresh()
   }
 })
+
+async function refresh() {
+  loading.value = true
+  await fetchArticlePricing(pricingId.value)
+    .finally(() => {
+      loading.value = false
+    })
+}
 
 function mapLastPrice(items: IArticlePricing[]) {
   let hasMaster = false
@@ -211,6 +219,10 @@ function onEdit() {
 
 function onColumnsResize(columns: ColumnInfo[]) {
   tableColumns.value = columns
+}
+
+async function refreshClick() {
+  await refresh()
 }
 
 </script>
