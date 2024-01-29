@@ -58,3 +58,11 @@ export type StockOperationName = 'stockTaking' | 'stockWithdrawing' | 'stockRece
 export interface IStockWithdrawingItem extends StockOperationItem {
   stockWithdrawingId: string
 }
+
+export interface IStockReceivingItem extends StockOperationItem {
+  stockReceivingId: string
+}
+
+export interface IStockTakingItem extends StockOperationItem {
+  stockTakingId: string
+}

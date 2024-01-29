@@ -1,7 +1,8 @@
 import Model from '@/init/Model';
 import Workflow from '@/lib/Workflow';
+import type { StockOperation } from '@/models/StockOperations'
 
-export default new Model({
+export default new Model<StockOperation>({
   collection: 'StockWithdrawing',
   schema: {
     storageId: String,
