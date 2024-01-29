@@ -40,17 +40,17 @@ const route = useRoute();
 const router = useRouter();
 
 const from = computed(() => route.query.from as string);
-const accessToken = computed(() => route.query['access-token']);
+const accessToken = computed(() => route.query['access-token'] as string);
 const isAuthorized = computed(() => store.getters[`auth/${g.IS_AUTHORIZED}`]);
 const isAuthorizing = computed(() => store.getters[`auth/${g.IS_AUTHORIZING}`]);
 const account = computed(() => store.getters[`auth/${g.ACCOUNT}`]);
 
-function login (token) {
+function login (token: string) {
   return store.dispatch(`auth/${a.AUTH_INIT}`, token);
 }
 
 function logout () {
-  return store.dispatch(a.LOGOFF);
+  return store.dispatch(`auth/${a.LOGOFF}`);
 }
 
 function onAuth() {
