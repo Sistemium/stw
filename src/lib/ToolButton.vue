@@ -5,11 +5,11 @@ el-button.tool-button(
   :size="size"
   :disabled="disabled || null"
   :circle="circle"
-  @click="emit('click')"
+  @click="e => emit('click', e)"
 )
 
 </template>
-<script setup>
+<script setup lang="ts">
 
 import { computed } from 'vue';
 import {
@@ -21,7 +21,7 @@ import {
   Check,
 } from '@element-plus/icons-vue';
 
-const ICONS = {
+const ICONS: Record<string, any> = {
   add: CirclePlus,
   edit: Edit,
   refresh: Refresh,
@@ -57,7 +57,9 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['click']);
+const emit = defineEmits<{
+  (e: 'click', ev: any): void
+}>();
 
 const icon = computed(() => {
   const { tool, busy } = props;
