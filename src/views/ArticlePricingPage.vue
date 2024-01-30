@@ -1,6 +1,7 @@
 <template lang="pug">
   .article-pricing-page.page
     page-title(title="menu.articlePricing")
+      pricing-select.ml-1(v-model="pricingId" auto-select)
       tool-button.ml-1(
         tool="refresh"
         @click="refreshClick"
@@ -8,7 +9,6 @@
       )
     .filters
       .searchers
-        pricing-select(v-model="pricingId" auto-select)
         site-select(v-model="siteId" auto-select)
         date-string-picker(
           v-model="date"
@@ -76,8 +76,17 @@ interface ColumnInfo {
   key: string
 }
 
-const { route, updateRouteParams } = useRouteParams()
-const pricingId = ref(route.query.pricingId as string)
+const { route, updateRouteParams, router } = useRouteParams()
+const pricingId = computed({
+  get: () => route.params.pricingId as string,
+  set(pricingId?: string) {
+    if (!pricingId) {
+      router.push({ name: 'pricing' })
+      return
+    }
+    updateRouteParams({ pricingId })
+  }
+})
 const tableColumns = ref<ColumnInfo[]>([])
 const editing = ref<boolan>(false)
 const search = ref<string>('')
@@ -150,9 +159,9 @@ const articlePricing = computed(() => {
   })
 })
 
-watch([pricingId, date], async ([id, date]) => {
+watch([pricingId, siteId, date], async ([id, siteId, date]) => {
   await updateRouteParams({}, {
-    pricingId: id || undefined,
+    siteId: siteId || undefined,
     date: date || undefined,
   })
   if (id) {

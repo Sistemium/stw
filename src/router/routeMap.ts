@@ -12,6 +12,8 @@ import stockTakingRoute from '@/router/stockTakingRoute';
 import stockOperationsRoute from '@/router/stockOperationsRoute';
 
 import { initGuard } from '@/services/dataSync';
+import Pricing from '@/models/Pricing'
+import type { BaseItem } from '@/init/Model'
 // import Recipe from '@/models/Recipe';
 
 export default new RouteMapper({
@@ -85,8 +87,23 @@ export default new RouteMapper({
     component: () => import(/* webpackChunkName: "articles" */ '../views/ArticlePropsPage.vue'),
     editing: () => import(/* webpackChunkName: "articles" */ '../components/ArticlePropertyEdit.vue'),
   },
-  articlePricing: {
-    component: () => import(/* webpackChunkName: "articles" */ '../views/ArticlePricingPage.vue'),
+  pricing: {
+    model: Pricing,
+    component: () => import(/* webpackChunkName: "articles" */ '../views/PricingPage.vue'),
+    editing: () => import(/* webpackChunkName: "articles" */ '../components/pricing/PricingEdit.vue'),
+    children: {
+      articlePricing: {
+        name: `articlePricing`,
+        path: ':pricingId/articles',
+        props({ params: { pricingId } }: BaseItem) {
+          return {
+            from: { name: 'pricing' },
+            pricingId,
+          };
+        },
+        component: () => import(/* webpackChunkName: "articles" */ '../views/ArticlePricingPage.vue'),
+      },
+    },
   },
   about: {
     public: true,
