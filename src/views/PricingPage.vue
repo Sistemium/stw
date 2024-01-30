@@ -63,4 +63,8 @@ function onClick(pricing: { id: string }) {
 .page {
   max-width: 1024px;
 }
+.stm-resize {
+  max-width: 400px;
+  margin: auto;
+}
 </style>
