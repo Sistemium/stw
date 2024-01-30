@@ -21,8 +21,12 @@ import { orderByName } from '@/services/util'
 const options = computed(() => orderByName(Pricing.reactiveFilter()))
 const pricingId = defineModel<string>()
 
+const props = defineProps<{
+  autoSelect?: boolean
+}>()
+
 watch(options, o => {
-  if (o.length === 1) {
+  if (o.length === 1 && props.autoSelect) {
     pricingId.value = o[0].id
   }
 }, { immediate: true })

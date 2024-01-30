@@ -8,7 +8,7 @@
       )
     .filters
       .searchers
-        pricing-select(v-model="pricingId")
+        pricing-select(v-model="pricingId" auto-select)
         site-select(v-model="siteId")
         date-string-picker(
           v-model="date"
