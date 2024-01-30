@@ -62,6 +62,7 @@
       "no": "Ne"
     },
     "code": "Serijinis kodas",
+    "pricing": "Kainynas",
     "price": "Kaina",
     "vatPrice": "Kaina su PVM",
     "vatRate": "PVM",

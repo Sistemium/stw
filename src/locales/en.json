@@ -63,6 +63,7 @@
     },
     "code": "Serial code",
     "price": "Price",
+    "pricing": "Pricing",
     "vatPrice": "Price with VAT",
     "vatRate": "VAT",
     "totalCost": "Cost",
