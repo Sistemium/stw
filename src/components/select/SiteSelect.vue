@@ -21,8 +21,12 @@ import Site from '@/models/Site'
 const options = computed(() => orderByName(Site.reactiveFilter()))
 const modelId = defineModel<string>()
 
+const props = defineProps<{
+  autoSelect?: boolean
+}>()
+
 watch(options, o => {
-  if (o.length === 1) {
+  if (o.length === 1 && props.autoSelect) {
     modelId.value = o[0].id
   }
 }, { immediate: true })
