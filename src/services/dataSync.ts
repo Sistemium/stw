@@ -29,6 +29,7 @@ import ArticlePricing from '@/models/ArticlePricing'
 import type { CounterpartyType } from '@/models/StockOperations'
 import Employee from '@/models/Employee'
 import Site from '@/models/Site'
+import { eachSeries } from 'async';
 
 const { error, debug } = log('dataSync');
 
@@ -58,6 +59,7 @@ export async function initData() {
   await Storage.findAll();
   await Picture.findAll();
   await Pricing.findAll();
+  await Site.cachedFetch()
   initPromiseInfo.resolve?.call(initPromiseInfo);
 }
 
@@ -186,7 +188,9 @@ const LOADERS: Map<RegExp, LoaderFn> = new Map([
       await fetchArticlePricing(pricingId as string)
     }
     await Employee.cachedFetch()
-    await Site.cachedFetch()
+  }],
+  [/storages/i, async () => {
+    await Employee.cachedFetch()
   }],
   [/StockTaking/i, stockTakingSync],
   [/StockWithdraw/i, (to: RouteRecord, from: RouteRecord) => stockWithdrawingSync(to, from, {
@@ -204,11 +208,11 @@ const LOADERS: Map<RegExp, LoaderFn> = new Map([
 const LOADER_KEYS = Array.from(LOADERS.keys());
 
 async function switchLoad(to: RouteRecord, from: RouteRecord) {
-  const key = find(LOADER_KEYS, needLoading);
+  const keys = filter(LOADER_KEYS, needLoading);
 
-  if (key) {
+  await eachSeries(keys, async key => {
     await LOADERS.get(key)?.call(null, to, from);
-  }
+  })
 
   function needLoading(re: RegExp) {
     return re.test(to.name as string) && !re.test(from.name as string);
