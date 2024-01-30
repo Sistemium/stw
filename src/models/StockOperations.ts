@@ -22,7 +22,7 @@ export interface StockOperationItem extends ArticleQuantityFields {
   price?: number;
   vatRate?: number;
   vatPrice?: number;
-  materials: MaterialFields[];
+  materials: MaterialFields[] | null;
 }
 
 export interface CounterParty extends ApiModel {
@@ -33,7 +33,7 @@ export type CounterpartyType = 'Storage' | 'LegalEntity' | 'Person' | null;
 export interface StockOperation {
   id?: string;
   date?: string | Date;
-  storageId?: string;
+  storageId?: string | null;
   partnerId?: string;
   counterpartyType?: CounterpartyType;
   counterpartyId?: string;
@@ -41,6 +41,7 @@ export interface StockOperation {
   commentText?: string;
   deviceCts?: string;
   sourceId?: string;
+  pricingId?: string
 }
 
 export interface StockOperationViewData extends  StockOperation {

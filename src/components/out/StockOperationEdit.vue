@@ -45,12 +45,13 @@ const form = ref(null);
 const modelOrigin = computed((): StockOperation => {
   const { stockOperationId } = props;
   return stockOperationId
-    ? props.model.reactiveGet(stockOperationId) as StockOperation
+    ? props.model.reactiveGet(stockOperationId)
     : {
       date: new Date().toJSON(),
       processing: 'progress',
       counterpartyType: null,
       counterpartyId: null,
+      pricingId: null,
       storageId: route.query.storageId as string || null,
       commentText: null,
       deviceCts: new Date().toJSON(),

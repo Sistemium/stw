@@ -5,7 +5,7 @@ export interface IPricing extends ApiModel {
   name: string
 }
 
-export default new Model({
+export default new Model<IPricing>({
   collection: 'Pricing',
   schema: {},
   methods: {},
