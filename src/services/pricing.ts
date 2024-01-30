@@ -15,3 +15,16 @@ export function getPricing(pricingId: string, articleId: string, date: string, s
     .find(p => !hasMaster || p.masterId)
   return matching?.price || 0
 }
+
+
+export function useSetPrices(props: { model: BaseItem }) {
+
+  return {
+    setOtherPrice(vatPrices: boolean, vatRate: number, price: number | null | undefined) {
+      const otherField = vatPrices ? 'price' : 'vatPrice'
+      const fn = vatPrices ? (v: number = 0) => v / (1.0 + vatRate) : (v: number = 0) => v * (1.0 + vatRate)
+      props.model[otherField] = price ? round(fn(price), 2) : null
+    },
+  }
+
+}
