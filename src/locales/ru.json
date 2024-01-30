@@ -67,6 +67,7 @@
     "pricing": "Прайс-лист",
     "price": "Цена",
     "vatPrice": "Цена с НДС",
+    "withoutVatPrice": "Цена бeз НДС",
     "withVat": "C НДС",
     "withoutVat": "Без НДС",
     "vatRate": "НДС",

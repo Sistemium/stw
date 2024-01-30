@@ -68,6 +68,7 @@
     "price": "Price",
     "pricing": "Pricing",
     "vatPrice": "Price with VAT",
+    "withoutVatPrice": "Price without VAT",
     "withVat": "With VAT",
     "withoutVat": "Without VAT",
     "vatRate": "VAT",

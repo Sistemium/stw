@@ -36,6 +36,7 @@ const props = withDefaults(defineProps<{
   columnWidth?: number
   editing: boolean
   date: string
+  vatPrices: boolean
 }>(), {
   columnWidth: 150,
   width: 0,
@@ -101,7 +102,7 @@ const columns = computed<Column[]>(() => {
     {
       width,
       align: 'center',
-      title: t('fields.price'),
+      title: t(`fields.${props.vatPrices ? 'vatPrice' : 'withoutVatPrice'}`),
       dataKey: 'price',
       minWidth: 60,
       cellRenderer: props.editing ? renderInput : renderSpan,

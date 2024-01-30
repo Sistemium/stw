@@ -68,6 +68,7 @@
     "pricing": "Kainynas",
     "price": "Kaina",
     "vatPrice": "Kaina su PVM",
+    "withoutVatPrice": "Kaina be PVM",
     "withVat": "Su PVM",
     "withoutVat": "Be PVM",
     "vatRate": "PVM",

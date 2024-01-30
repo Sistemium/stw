@@ -37,6 +37,7 @@
               :article-pricing="articlePricingFiltered"
               :width="width"
               :date="date"
+              :vat-prices="pricing?.vatPrices"
               :editing="editing"
               :column-width="150"
               :height="resized"
@@ -70,6 +71,7 @@ import SiteSelect from '@/components/select/SiteSelect.vue'
 import { tAction } from '@/lib/validations'
 import AlertEmpty from '@/lib/AlertEmpty.vue'
 import { useSite } from '@/services/storeHelpers'
+import Pricing from '@/models/Pricing'
 
 interface ColumnInfo {
   width: number
@@ -94,6 +96,7 @@ const date = ref(dayjs().format('YYYY-MM-DD'))
 const loading = ref<boolean>(false)
 const masterId = ref<string>()
 const { siteId } = useSite()
+const pricing = computed(() => Pricing.reactiveGet(pricingId.value))
 
 const articlePricingFiltered = computed(() => {
   const data = articlePricing.value.map(ap => ({
