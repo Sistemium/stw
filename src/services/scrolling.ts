@@ -23,14 +23,16 @@ export function useScrollToCreated(config: ScrollConfig) {
   const {
     // container,
     blink = true,
-    watchFor = () => route.query.createdId,
+    watchFor,
     watchToRepeat = null,
     scrollToIdFn = scrollToIdDefault,
     ifIdExistsFn = (id: string) => !!window.document.getElementById(`id-${id}`),
   } = config;
   const waitCount = ref(0);
 
-  const watchForFn = typeof watchFor === 'string' ? (() => route.params[watchFor]) : watchFor;
+  const watchForFn = typeof watchFor === 'string'
+    ? (() => route.params[watchFor] as string)
+    : (watchFor || (() => route.query.createdId as string));
 
   onMounted(() => {
     watch(watchForFn, id => {
@@ -52,7 +54,7 @@ export function useScrollToCreated(config: ScrollConfig) {
   })
 
 
-  function waitUntilId(id) {
+  function waitUntilId(id: string) {
     if (ifIdExistsFn(id)) {
       // console.info('waitUntilId', id, true);
       waitCount.value = 0;
@@ -110,6 +112,3 @@ export function useScrollToCreated(config: ScrollConfig) {
   }
 
 }
-
-
-
