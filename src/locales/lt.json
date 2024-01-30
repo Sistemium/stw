@@ -15,6 +15,7 @@
   "menu": {
     "about": "Apie",
     "articlePricing": "Kainynas",
+    "pricing": "Kainynai",
     "auth": "Prisijungimas",
     "barcodes": "Brūkš. kodai",
     "home": "Pradžia",
@@ -67,6 +68,8 @@
     "pricing": "Kainynas",
     "price": "Kaina",
     "vatPrice": "Kaina su PVM",
+    "withVat": "Su PVM",
+    "withoutVat": "Be PVM",
     "vatRate": "PVM",
     "totalCost": "Kaina iš viso",
     "cost": "Savikaina",
@@ -201,6 +204,7 @@
     "site": "padalinį"
   },
   "genitive": {
+    "pricing": "Kainyno",
     "property": "Ypatybės",
     "article": "Prekės",
     "option": "Parinkties",

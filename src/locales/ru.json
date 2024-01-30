@@ -14,7 +14,8 @@
   "typeToSearch": "Наберите несколько букв для поиска",
   "menu": {
     "about": "О программе",
-    "articlePricing": "Прайс-листы",
+    "articlePricing": "Прайс-лист",
+    "pricing": "Прайс-листы",
     "auth": "Вход в систему",
     "barcodes": "Штрих-коды",
     "home": "Начало",
@@ -66,6 +67,8 @@
     "pricing": "Прайс-лист",
     "price": "Цена",
     "vatPrice": "Цена с НДС",
+    "withVat": "C НДС",
+    "withoutVat": "Без НДС",
     "vatRate": "НДС",
     "totalCost": "Стоимость",
     "cost": "Себестоимость",
@@ -201,6 +204,7 @@
     "site": "подразделение"
   },
   "genitive": {
+    "pricing": "прайс-листа",
     "property": "признака",
     "article": "номенклатуры",
     "option": "выбора",

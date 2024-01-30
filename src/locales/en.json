@@ -14,7 +14,8 @@
   "typeToSearch": "Please type a keyword",
   "menu": {
     "about": "About",
-    "articlePricing": "Pricing",
+    "articlePricing": "Article pricing",
+    "pricing": "Pricing",
     "auth": "Authorization",
     "barcodes": "Barcodes",
     "home": "Home",
@@ -67,6 +68,8 @@
     "price": "Price",
     "pricing": "Pricing",
     "vatPrice": "Price with VAT",
+    "withVat": "With VAT",
+    "withoutVat": "Without VAT",
     "vatRate": "VAT",
     "totalCost": "Cost",
     "cost": "Self cost",
@@ -205,6 +208,7 @@
     "site": "department"
   },
   "genitive": {
+    "pricing": "Pricing",
     "property": "Property",
     "article": "Article",
     "option": "Option",
