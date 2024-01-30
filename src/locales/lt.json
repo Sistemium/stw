@@ -48,6 +48,7 @@
     "date": "Data",
     "startsFrom": "Nuo",
     "dateB": "Data nuo",
+    "site": "Padalinys",
     "toDate": "iki",
     "type": "Tipas",
     "consigneeType": "Gavėjo tipas",
@@ -62,6 +63,7 @@
       "no": "Ne"
     },
     "code": "Serijinis kodas",
+    "employee": "Darbuotojas",
     "pricing": "Kainynas",
     "price": "Kaina",
     "vatPrice": "Kaina su PVM",
@@ -162,6 +164,7 @@
     "number": "Skaičius"
   },
   "validation": {
+    "otherSite": "Priklauso kitam padaliniui",
     "required": "{0} yra privalomas",
     "formInvalid": "Klaidingai užpildyta forma",
     "constrainedDelete": "Negalima ištrinti šio įrašo, nes yra \"{0}\"",

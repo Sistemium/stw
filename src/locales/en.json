@@ -48,11 +48,13 @@
     "type": "Type",
     "consigneeType": "Consignee type",
     "consignee": "Consignee",
+    "employee": "Employee",
     "supplierType": "Supplier type",
     "supplier": "Supplier",
     "date": "Date",
     "startsFrom": "Effective from",
     "dateB": "Date from",
+    "site": "Department",
     "toDate": "to",
     "valueType": "Value type",
     "required": "Required",
@@ -165,6 +167,7 @@
     "suffix": "Suffix"
   },
   "validation": {
+    "otherSite": "Belongs to another department",
     "required": "{0} is required",
     "formInvalid": "The form is filled out with errors",
     "constrainedDelete": "Can't delete this record because there are \"{0}\"",
