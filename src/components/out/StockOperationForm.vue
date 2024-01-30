@@ -26,6 +26,12 @@ el-form.stock-operation-form(
       )
 
   el-form-item(
+    :label="$t('fields.pricing')"
+    prop="pricingId"
+  )
+    pricing-select(v-model="model.pricingId")
+
+  el-form-item(
     :label="$t(counterpartyLabel.type)"
     prop="counterpartyType"
   )
@@ -89,6 +95,7 @@ import StorageEdit from '@/components/stock/StorageEdit.vue';
 import { $requiredRule } from '@/lib/validations';
 import type { StockOperation } from '@/models/StockOperations';
 import { useFormValidate } from '@/services/validating';
+import PricingSelect from '@/components/select/PricingSelect.vue'
 
 const props = defineProps<{
   model: StockOperation;
@@ -119,13 +126,16 @@ const cpMap = new Map([
   ['LegalEntity', LegalEntityEdit],
 ]);
 
-const counterpartyEditComponent = computed(() => cpMap.get(props.model.counterpartyType));
+const counterpartyEditComponent = computed(() => {
+  const { counterpartyType } = props.model
+  return counterpartyType && cpMap.get(counterpartyType)
+});
 
 function addCounterparty() {
   showDrawer.value = true;
 }
 
-function counterpartySaved(counterparty) {
+function counterpartySaved(counterparty?: { id: string }) {
   if (counterparty) {
     setTimeout(() => {
       props.model.counterpartyId = counterparty.id;

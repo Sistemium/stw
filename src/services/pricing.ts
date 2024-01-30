@@ -1,8 +1,10 @@
 import ArticlePricing from '@/models/ArticlePricing'
 import { orderByDateDesc } from '@/services/util'
+import type { BaseItem } from '@/init/Model'
+import round from 'lodash/round'
 
 
-export function getPricing(pricingId: string, articleId: string, date: string, siteId?: string, masterId?: string) {
+export function getPricing(pricingId: string, articleId: string, date: string, siteId?: string, masterId?: string | null) {
   const prices = ArticlePricing.reactiveManyByIndex('pricingId', pricingId)
     .filter(ap => {
       return ap.articleId === articleId

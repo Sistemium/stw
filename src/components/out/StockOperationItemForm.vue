@@ -1,6 +1,7 @@
 <template lang="pug">
 
 el-tabs.stock-operation-item-form(:class="tabClass")
+
   el-tab-pane(:label="$t('concepts.article')")
     stock-taking-item-form(
       :model="model"
@@ -9,7 +10,10 @@ el-tabs.stock-operation-item-form(:class="tabClass")
     )
       template(#article-extra)
         vat-mode-switch(v-model="formVatPrices" v-if="editable")
-        price-form(:model="model" :vat-prices="formVatPrices")
+        price-form(
+          :model="model"
+          :vat-prices="formVatPrices"
+        )
         article-cost-info(
           v-if="model.articleId && storageId && date"
           :article-id="model.articleId"
@@ -33,6 +37,7 @@ el-tabs.stock-operation-item-form(:class="tabClass")
           type="resultCost"
           :label-suffix="$t('after.stockReceiving')"
         )
+
   el-tab-pane(:label="$t('menu.materials')" v-if="model.materials")
     el-form(:model="model" :disabled="!editable")
       materials-form(:materials="model.materials" :disabled="!editable")
@@ -56,10 +61,13 @@ import StockTakingItemForm from '@/components/stock/StockTakingItemForm.vue';
 import MaterialsForm from '@/components/production/MaterialsForm.vue';
 import ArticleCostInfo from '@/components/production/ArticleCostInfo.vue';
 import PriceForm from '@/components/out/PriceForm.vue';
-import Article from '@/models/Article.js';
+import Article from '@/models/Article';
+import Storage from '@/models/Storage';
 import VatModeSwitch from '@/components/out/VatModeSwitch.vue';
 import type { StockOperationItem } from '@/models/StockOperations';
 import { useFormValidate } from '@/services/validating';
+import { type IPricing } from '@/models/Pricing'
+import { getPricing, useSetPrices } from '@/services/pricing'
 
 const props = defineProps<{
   editable: boolean;
@@ -69,9 +77,11 @@ const props = defineProps<{
   vatRate?: number;
   storageId?: string;
   date?: string;
+  pricing?: IPricing
 }>();
 
 const { form, validate } = useFormValidate();
+const { setOtherPrice } = useSetPrices(props)
 
 defineExpose({ validate });
 
@@ -83,10 +93,26 @@ const articleMaterials = computed(() => {
   return materials;
 });
 const tabClass = computed(() => !articleMaterials.value && 'single');
+const storage = computed(() => Storage.reactiveGet(props.storageId));
 
-watch(() => props.model.articleId, () => {
+watch(() => props.model.articleId, articleId => {
   // eslint-disable-next-line vue/no-mutating-props
   props.model.materials = cloneDeep(articleMaterials.value);
+  const { date, pricing } = props
+  if (articleId && date && pricing) {
+    const { vatPrices } = pricing
+    const priceField = vatPrices ? 'vatPrice' : 'price'
+    const price = getPricing(
+      pricing.id,
+      articleId,
+      date,
+      storage.value?.siteId,
+      storage.value?.employeeId,
+    )
+    // eslint-disable-next-line vue/no-mutating-props
+    props.model[priceField] = price
+    setOtherPrice(vatPrices, props.vatRate || 0, price)
+  }
 });
 
 </script>

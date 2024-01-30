@@ -3,6 +3,7 @@ import Model from '@/init/Model'
 
 export interface IPricing extends ApiModel {
   name: string
+  vatPrices: boolean
 }
 
 export default new Model<IPricing>({
