@@ -207,7 +207,7 @@ function handleCLick({ rowData }: { rowData: IArticlePricing }) {
 </script>
 
 <style scoped lang="scss">
-@import "@/styles/variables.scss";
+@import "@/styles/variables";
 
 .article-pricing-table :deep(.article) {
   word-break: normal !important;

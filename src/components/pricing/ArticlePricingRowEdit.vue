@@ -61,7 +61,7 @@ watch(model, ({ articleId }) => {
 </script>
 
 <style scoped lang="scss">
-@import "@/styles/variables.scss";
+@import "@/styles/variables";
 
 .article-select {
   box-sizing: border-box;
