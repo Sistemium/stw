@@ -8,7 +8,7 @@ export function useSite() {
     get() {
       return store.currentSiteId
     },
-    set(v: string) {
+    set(v: string | undefined) {
       store.currentSiteId = v
     }
   })

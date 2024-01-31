@@ -1,7 +1,7 @@
 <template lang="pug">
   el-select.site-select(
     :model-value="modelId"
-    :clearable="false"
+    :clearable="!autoSelect"
     :placeholder="$t('actions.select', [$t('accusative.site')])"
     @update:model-value="id => { modelId = id }"
   )
@@ -30,6 +30,13 @@ watch(options, o => {
     modelId.value = o[0].id
   }
 }, { immediate: true })
+
+watch(() => props.autoSelect, autoSelect => {
+  if (options.value.length === 1 && autoSelect) {
+    modelId.value = options.value[0].id
+  }
+}, { immediate: true })
+
 
 </script>
 

@@ -66,6 +66,7 @@
     },
     "code": "Serial code",
     "price": "Price",
+    "requireSite": "Require to specify department",
     "pricing": "Pricing",
     "vatPrice": "Price with VAT",
     "withoutVatPrice": "Price without VAT",

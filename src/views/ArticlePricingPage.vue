@@ -7,9 +7,9 @@
         @click="refreshClick"
         :busy="loading"
       )
-    .filters
+    .filters(v-if="pricing")
       .searchers
-        site-select(v-model="siteId" auto-select)
+        site-select(v-model="siteId" :auto-select="pricing.requireSite")
         date-string-picker(
           v-model="date"
           format="YYYY-MM-DD"
@@ -34,10 +34,11 @@
         el-auto-resizer
           template(#default="{ width }")
             article-pricing-table(
+              v-if="pricing"
               :article-pricing="articlePricingFiltered"
               :width="width"
               :date="date"
-              :vat-prices="pricing?.vatPrices"
+              :vat-prices="pricing.vatPrices"
               :editing="editing"
               :column-width="150"
               :height="resized"
@@ -57,7 +58,7 @@ import { computed, ref, watch } from 'vue'
 import Resize from '@/lib/StmResize.vue'
 import PageTitle from '@/components/PageTitle.vue'
 import PricingSelect from '@/components/select/PricingSelect.vue'
-import ArticlePricingTable from '@/components/catalogue/ArticlePricingTable.vue'
+import ArticlePricingTable from '@/components/pricing/ArticlePricingTable.vue'
 import ArticlePricing, { type IArticlePricing } from '@/models/ArticlePricing'
 import Article from '@/models/Article'
 import { fetchArticlePricing } from '@/services/dataSync'
@@ -129,7 +130,7 @@ const emptyText = computed(() => {
   if (!pricingId.value) {
     return tAction('select', 'pricing')
   }
-  if (!siteId.value) {
+  if (!siteId.value && pricing.value?.requireSite) {
     return tAction('select', 'site')
   }
   return undefined
@@ -169,6 +170,12 @@ watch([pricingId, siteId, date], async ([id, siteId, date]) => {
   })
   if (id) {
     await refresh()
+  }
+})
+
+watch(pricing, p => {
+  if (!p.requireSite) {
+    siteId.value = undefined
   }
 })
 

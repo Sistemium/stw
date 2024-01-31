@@ -183,7 +183,7 @@ const LOADERS: Map<RegExp, LoaderFn> = new Map([
     await Recipe.findAll()
   }],
   [/articlePricing/i, async (to: RouteRecord) => {
-    const { pricingId } = to.query
+    const { pricingId } = to.params
     if (pricingId) {
       await fetchArticlePricing(pricingId as string)
     }

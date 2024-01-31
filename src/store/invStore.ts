@@ -12,7 +12,7 @@ export const useInvStore = defineStore({
   id: 'inv',
   state: () => ({
     currentStorageId: useStorage<string>(`${VITE_LS_PREFIX}.CURRENT_STORAGE`, ''),
-    currentSiteId: useStorage<string>(`${VITE_LS_PREFIX}.CURRENT_SITE`, ''),
+    currentSiteId: useStorage<string | undefined>(`${VITE_LS_PREFIX}.CURRENT_SITE`, ''),
     scannedBarcode: undefined,
   }),
   actions: {

@@ -18,6 +18,11 @@ el-form.storage-form(
   )
     el-switch(v-model="model.vatPrices")
 
+  el-form-item(
+    :label="$t('fields.requireSite')"
+  )
+    el-switch(v-model="model.requireSite")
+
 </template>
 
 <script setup lang="ts">

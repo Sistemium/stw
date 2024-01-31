@@ -66,6 +66,7 @@
     "code": "Серийный код",
     "pricing": "Прайс-лист",
     "price": "Цена",
+    "requireSite": "Требует указать подразделение",
     "vatPrice": "Цена с НДС",
     "withoutVatPrice": "Цена бeз НДС",
     "withVat": "C НДС",
