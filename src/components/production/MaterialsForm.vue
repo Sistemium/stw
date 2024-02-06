@@ -1,8 +1,6 @@
 <template lang="pug">
 
 .materials-form
-  //template(v-if="materials.length")
-    tool-button(tool="add" @click="onAddMaterial")
   .materials
     .material(
       v-for="(material, idx) in materials"
@@ -36,28 +34,33 @@ import { v4 } from 'uuid';
 import { eachSeries } from 'async';
 import RecipeMaterialForm from '@/components/production/RecipeMaterialForm.vue';
 import ArticleView from '@/components/catalogue/ArticleView.vue';
-import type { RecipeMaterial } from '@/models/Recipes';
+import type { MaterialFields, RecipeMaterial } from '@/models/Recipes'
 
 /* eslint-disable vue/no-mutating-props */
 const props = defineProps<{
-  materials: RecipeMaterial[] | null;
+  materials: Partial<RecipeMaterial>[] | null;
   disabled?: boolean;
 }>();
-
 const emit = defineEmits<{
-  (e: 'create', materials: RecipeMaterial[]): void;
+  (e: 'create', materials: Partial<RecipeMaterial>[] | null): void;
 }>();
 
-const itemRefs = ref([]);
+type Validator = (result: boolean) => any
+
+const itemRefs = ref<{ validate(cb: Validator): any }[]>([]);
 
 onBeforeUpdate(() => {
   itemRefs.value = [];
 });
 
+defineSlots<{
+  material(props: { material: Partial<MaterialFields> }): any
+}>()
+
 defineExpose({
-  validate(callback) {
+  validate(callback: Validator) {
     eachSeries(itemRefs.value, (item, cb) => {
-      item.validate(itemValid => {
+      item.validate((itemValid: boolean) => {
         cb(itemValid ? null : Error('invalid item'));
       });
     }, err => {
@@ -66,8 +69,11 @@ defineExpose({
   },
 })
 
-function removeMaterial(material) {
+function removeMaterial(material: RecipeMaterial) {
   const { materials } = props;
+  if (!materials) {
+    return
+  }
   const idx = materials.indexOf(material);
   if (idx < 0) {
     return;
@@ -81,10 +87,10 @@ function removeMaterial(material) {
 function onAddMaterial() {
   const material = {
     id: v4(),
-    articleId: null,
-    measureId: null,
-    measureUnitId: null,
-    units: null,
+    articleId: undefined,
+    measureId: undefined,
+    measureUnitId: undefined,
+    units: undefined,
   };
   if (props.materials) {
     props.materials.push(material);
