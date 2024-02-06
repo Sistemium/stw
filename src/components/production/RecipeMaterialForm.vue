@@ -8,6 +8,7 @@ el-form.recipe-material-form(
 )
   el-form-item(prop="articleId")
     article-select(
+      :storage-id="currentStorageId"
       v-model="model.articleId"
     )
   el-form-item(
@@ -27,13 +28,16 @@ import ArticleModel  from '@/models/Article.js';
 import type { MaterialFields } from '@/models/Recipes';
 import { $requiredRule } from '@/lib/validations';
 import { useFormValidate } from '@/services/validating';
+import { useInvStore } from '@/store/invStore'
 /* eslint-disable vue/no-mutating-props */
 
 const props = defineProps<{
-  model: MaterialFields;
+  model: Partial<MaterialFields>;
   disabled?: boolean;
 }>();
 
+const invStore = useInvStore()
+const currentStorageId = computed(() => invStore.currentStorageId)
 const article = computed(() => ArticleModel.reactiveGet(props.model?.articleId));
 const measureUnitId = computed(() => article.value?.measureUnitId || Measure.DEFAULT_MEASURE_UNIT_ID);
 const measureId = computed(() => article.value?.measureId || Measure.DEFAULT_MEASURE_ID);
