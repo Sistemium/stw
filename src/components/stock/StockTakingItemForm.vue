@@ -183,7 +183,7 @@ const barcodeIcon = computed(() => {
 const articleFilters = computed(() => {
   const { barcode } = props.model;
   if (barcode && !isShowingAllArticles.value) {
-    return function barcodeFilter({ barcodes }) {
+    return function barcodeFilter({ barcodes }: { barcodes: string[] }) {
       return barcodes && barcodes.includes(barcode);
     };
   }
@@ -261,6 +261,9 @@ function addArticle() {
 
 function onAddBarcodeClick() {
   const { model: { barcode } } = props;
+  if (!barcode) {
+    return
+  }
   saveWithLoading(async () => {
     await addBarcodeToArticle(barcode, article.value);
     isShowingAllArticles.value = false;
@@ -271,7 +274,7 @@ function toggleShowAllArticles() {
   isShowingAllArticles.value = !isShowingAllArticles.value;
 }
 
-function modeChange(newMode) {
+function modeChange(newMode: 'units' | 'other') {
   if (newMode === DEFAULT_MODE) {
     Object.assign(props.model, {
       packageTypeId: null,
@@ -293,7 +296,7 @@ function modeChange(newMode) {
   }
 }
 
-function packageByProps(packageTypeId, unitsInPackage) {
+function packageByProps(packageTypeId?: string, unitsInPackage?: number) {
   return find(packageOptions.value, ({ packageTypeId, unitsInPackage }));
 }
 

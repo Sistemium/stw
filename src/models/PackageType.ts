@@ -54,9 +54,9 @@ export const PackageType: IPackageType[] = [
   },
 ];
 
-export function packageTypes(localeArg: LocaleCode, fallbackLocaleArg?: LocaleCode) {
+export function packageTypes(localeArg?: LocaleCode, fallbackLocaleArg?: LocaleCode) {
   // @ts-ignore
-  const locale = localeArg || i18n.global.locale.value;
+  const locale = localeArg || i18n.global.locale.value as LocaleCode;
   // @ts-ignore
   const fallbackLocale: LocaleCode = fallbackLocaleArg || i18n.global.fallbackLocale.value as LocaleCode || 'en';
   return PackageType.map(packageType => ({
