@@ -1,50 +1,50 @@
 <template lang="pug">
-  .article-pricing-page.page
-    page-title(title="menu.articlePricing")
-      pricing-select.ml-1(v-model="pricingId" auto-select)
-      tool-button.ml-1(
-        tool="refresh"
-        @click="refreshClick"
-        :busy="loading"
-      )
-    .filters(v-if="pricing")
-      .searchers
-        site-select(v-model="siteId" :auto-select="pricing.requireSite")
-        date-string-picker(
-          v-model="date"
-          format="YYYY-MM-DD"
-        )
-        employee-select(v-model="masterId")
-      .tools
-        search-input(v-model="search")
-        tool-button(
-          :disabled="!pricingId"
-          :tool="editing ? 'check' : 'edit'"
-          @click="onEdit()"
-        )
-
-    alert-empty(v-if="emptyText" :title="emptyText")
-
-    resize(
-      v-else
-      :padding="20"
-      v-loading="loading"
+.article-pricing-page.page
+  page-title(title="menu.articlePricing")
+    pricing-select.ml-1(v-model="pricingId" auto-select)
+    tool-button.ml-1(
+      tool="refresh"
+      @click="refreshClick"
+      :busy="loading"
     )
-      template(#default="{ resized } ")
-        el-auto-resizer
-          template(#default="{ width }")
-            article-pricing-table(
-              v-if="pricing"
-              :article-pricing="articlePricingFiltered"
-              :width="width"
-              :date="date"
-              :vat-prices="pricing.vatPrices"
-              :editing="editing"
-              :column-width="150"
-              :height="resized"
-              @resize="onColumnsResize"
-              @price-change="onPriceChange"
-            )
+  .filters(v-if="pricing")
+    .searchers
+      site-select(v-model="siteId" :auto-select="pricing.requireSite")
+      date-string-picker(
+        v-model="date"
+        format="YYYY-MM-DD"
+      )
+      employee-select(v-model="masterId")
+    .tools
+      search-input(v-model="search")
+      tool-button(
+        :disabled="!pricingId"
+        :tool="editing ? 'check' : 'edit'"
+        @click="onEdit()"
+      )
+
+  alert-empty(v-if="emptyText" :title="emptyText")
+
+  resize(
+    v-else
+    :padding="20"
+    v-loading="loading"
+  )
+    template(#default="{ resized } ")
+      el-auto-resizer
+        template(#default="{ width }")
+          article-pricing-table(
+            v-if="pricing"
+            :article-pricing="articlePricingFiltered"
+            :width="width"
+            :date="date"
+            :vat-prices="pricing.vatPrices"
+            :editing="editing"
+            :column-width="150"
+            :height="resized"
+            @resize="onColumnsResize"
+            @price-change="onPriceChange"
+          )
 
 </template>
 
@@ -88,7 +88,7 @@ const pricingId = computed({
       return
     }
     updateRouteParams({ pricingId })
-  }
+  },
 })
 const tableColumns = ref<ColumnInfo[]>([])
 const editing = ref<boolan>(false)
@@ -214,10 +214,7 @@ async function onPriceChange(articleId: string, price: number) {
       } else {
         await ArticlePricing.updateOne({ id: existing.id, price })
       }
-    } else {
-      if (!price) {
-        throw Error('Empty price onPriceChange')
-      }
+    } else if (price) {
       await ArticlePricing.createOne({
         date: date.value,
         pricingId: pricingId.value,
