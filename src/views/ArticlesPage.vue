@@ -86,12 +86,12 @@ const props = defineProps<{
   galleryRoute: string;
 }>();
 
-const barcode = ref(null);
+const barcode = ref<string>('');
 const search = ref('');
-const tableHeight = ref<number>(undefined);
-const selectedArticle = ref(null);
+const tableHeight = ref<number>();
+const selectedArticle = ref();
 const router = useRouter();
-const viewComponentRef = ref(null);
+const viewComponentRef = ref();
 
 useScrollToCreated({
   ifIdExistsFn(id: string): boolean {
@@ -114,12 +114,12 @@ const viewComponentName = computed(() => showTable.value ? 'table' : 'list');
 
 const articles = computed(() => {
   const rowFilter = !barcode.value
-    ? searchArticle(search.value, tableData.value.propColumns)
-    : ({ barcodes }) => barcodes && barcodes.includes(barcode);
+    ? searchArticle(search.value)
+    : ({ barcodes }: { barcodes: string[] }) => barcodes && barcodes.includes(barcode.value);
   return filter(tableData.value.rows, rowFilter);
 });
 
-const tableData = computed(() => catalogueData());
+const tableData = computed(catalogueData);
 
 const { t: localT } = useI18n({
   messages: {
@@ -181,8 +181,8 @@ function onCopy() {
   });
 }
 
-function setBarcode(value) {
-  barcode.value = value ? value.code : null;
+function setBarcode(value: { code: string }) {
+  barcode.value = value ? value.code : '';
 }
 
 function onArticleClick(article: { id: string }) {

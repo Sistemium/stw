@@ -16,8 +16,8 @@ picture-gallery(
 
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
-import Article from '@/models/Article.js';
-import Picture from '@/models/Picture.js';
+import Article from '@/models/Article';
+import Picture from '@/models/Picture';
 import PictureGallery from '@/lib/PictureGallery.vue';
 import type ApiModel from '@/models/ApiModels';
 import { setAvatar, removeArticlePicture } from '@/components/catalogue/ArticlePicturing';
@@ -31,7 +31,7 @@ const article = computed(() => Article.reactiveGet(props.articleId) || {})
 const activeId = computed(() => route.query.activeId as string);
 const images = computed(() => Picture.reactiveFilter({ ownerXid: props.articleId }) as ApiModel[]);
 
-async function onUploaded(picture) {
+async function onUploaded(picture: { id: string }) {
   if (images.value.length === 1) {
     await setAvatar(article.value, picture);
   }

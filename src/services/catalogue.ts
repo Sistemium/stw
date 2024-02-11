@@ -84,20 +84,20 @@ export async function addBarcodeToArticle(barcode: string, article: IArticle) {
   return Article.createOne(props);
 }
 
-export function searchArticle(search: string, propColumns = []): (x: IArticle) => boolean {
+export function searchArticle(search: string): (x: IArticle) => boolean {
   if (!search) {
     return (x: IArticle) => !!x;
   }
-  return (article: IArticle) => testArticle(article, likeLt(search), propColumns);
+  return (article: IArticle) => testArticle(article, likeLt(search));
 }
 
-export function testArticle(article: IArticle, re: RegExp, propColumns = []) {
+export function testArticle(article: IArticle, re: RegExp) {
   if (!article) {
     return false;
   }
   return re.test(article.name)
     || re.test(article.code || '')
-    || !!propColumns.find(({ id }) => re.test(article[id]))
+    // || !!propColumns.find(({ stringValuestringValue }) => re.test(article[id]))
     || !!article.props?.find(({ stringValue }) => re.test(stringValue || ''));
 }
 
