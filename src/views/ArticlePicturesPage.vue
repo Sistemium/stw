@@ -25,14 +25,23 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 const props = defineProps<{
-  from: object;
+  from?: object;
   articleId: string;
 }>();
 
 const router = useRouter();
 const visible = ref(true);
 
+const emit = defineEmits<{
+  ( e: 'closed'): void
+}>()
+
 function handleClose() {
+  if (!props.from) {
+    visible.value = false
+    emit('closed')
+    return
+  }
   router.push(props.from)
     .catch(e => console.error('handleClose', e));
 }

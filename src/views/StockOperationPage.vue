@@ -27,6 +27,7 @@
           @click="onItemClick"
           v-if="stockOperationItems.length"
           :price-field="priceField"
+          @avatarClick="onAvatarClick"
         )
         alert-empty(
           v-else
@@ -45,14 +46,18 @@
         :operation-name="operationName"
       )
   router-view
-
+  article-pictures-page(
+    v-if="galleryArticleId"
+    :article-id="galleryArticleId"
+    @closed="galleryArticleId = ''"
+  )
 </template>
 <script setup lang="ts">
 
 import map from 'lodash/map';
 import pick from 'lodash/fp/pick';
 import dayjs from 'dayjs';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import ReactiveModel from 'sistemium-data-vue';
 import ToolButton from '@/lib/ToolButton.vue';
@@ -70,6 +75,8 @@ import { useRouteParams } from '@/lib/updateRouteParams';
 import DownloadExcelButton from '@/lib/DownloadExcelButton.vue';
 import { t } from '@/lib/validations';
 import { actHeadRows, stockOperationAct } from '@/services/stockoperating';
+import type { BaseItem } from 'sistemium-data'
+import ArticlePicturesPage from '@/views/ArticlePicturesPage.vue'
 
 
 const props = defineProps<{
@@ -97,9 +104,13 @@ const priceField = computed(() => {
 
 const stockOperationItems = computed(() => {
   const { stockOperationId } = props;
-  return props.positionsModel.reactiveFilter({
+  if (!stockOperationId) {
+    return []
+  }
+  const filter: BaseItem = {
     [`${props.operationName}Id`]: stockOperationId,
-  }) as StockOperationItem[];
+  }
+  return props.positionsModel?.reactiveFilter(filter) as StockOperationItem[];
 });
 
 const stockOperation = computed<StockOperation>(() => {
@@ -107,6 +118,7 @@ const stockOperation = computed<StockOperation>(() => {
 });
 
 const { disabled } = useOperationDisabled(stockOperation, workflow);
+const galleryArticleId = ref('')
 
 const downloadExcelName = computed(() => {
   return [
@@ -134,6 +146,9 @@ function downloadColumns() {
   ];
 }
 
+function onAvatarClick(articleId: string) {
+  galleryArticleId.value = articleId
+}
 
 function downloadExcelData() {
   const columns = downloadColumns();

@@ -6,6 +6,11 @@
     :key="item.id"
     @click="emit('click', item)"
   )
+    article-avatar(
+      :article-id="item.articleId"
+      size="default"
+      @click.stop.prevent="emit('avatarClick', item.articleId)"
+    )
     .title
       article-view(:article-id="item.articleId")
     .right
@@ -29,6 +34,7 @@
 import ArticleView from '@/components/catalogue/ArticleView.vue';
 import { shortenedPackage } from '@/models/PackageType.js';
 import type { StockOperationItem } from '@/models/StockOperations';
+import ArticleAvatar from '@/components/catalogue/ArticleAvatar.vue'
 
 withDefaults(defineProps<{
   items: StockOperationItem[];
@@ -36,10 +42,18 @@ withDefaults(defineProps<{
 }>(), { priceField: 'price' });
 
 const emit = defineEmits<{
-  (e: 'click', item: StockOperationItem);
+  (e: 'click', item: StockOperationItem): void
+  (e: 'avatarClick', articleId: string): void
 }>();
 
 </script>
 <style scoped lang="scss">
 @import "../../styles/pageLists";
+.list-group-item {
+  justify-content: flex-start;
+  .title {
+    flex: 1;
+    margin-left: $padding;
+  }
+}
 </style>
