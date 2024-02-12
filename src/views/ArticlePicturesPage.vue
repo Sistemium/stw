@@ -13,7 +13,7 @@ el-dialog.article-pictures-page(
     :article-id="articleId"
     :avatars="true"
     :carousel-type="null"
-    :has-authoring="true"
+    :has-authoring="authoring"
     @image-click="handleClose"
   )
 
@@ -25,8 +25,9 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 const props = defineProps<{
-  from?: object;
-  articleId: string;
+  from?: Record<string, any>
+  articleId: string
+  authoring?: boolean
 }>();
 
 const router = useRouter();

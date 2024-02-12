@@ -49,6 +49,7 @@
   article-pictures-page(
     v-if="galleryArticleId"
     :article-id="galleryArticleId"
+    :authoring="false"
     @closed="galleryArticleId = ''"
   )
 </template>

@@ -9,6 +9,7 @@ export default function (from: string) {
       return {
         from: { name: from },
         articleId,
+        authoring: true,
       };
     },
   };

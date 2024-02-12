@@ -6,6 +6,7 @@ picture-gallery(
   :images="images"
   :new-image-properties="{ ownerXid: articleId, target: 'Article' }"
   :model="Picture"
+  :has-authoring="hasAuthoring"
   @set-avatar-click="setAvatar"
   @remove-click="image => removeArticlePicture(article, image)"
   @uploaded="onUploaded"
@@ -24,6 +25,7 @@ import { setAvatar, removeArticlePicture } from '@/components/catalogue/ArticleP
 
 const props = defineProps<{
   articleId: string;
+  hasAuthoring: boolean
 }>();
 
 const route = useRoute();
