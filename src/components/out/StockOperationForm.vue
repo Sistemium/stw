@@ -14,6 +14,14 @@ el-form.stock-operation-form(
     date-string-picker(v-model="model.date")
 
   el-form-item(
+    :label="$t('fields.ndoc')"
+    prop="ndoc"
+  )
+    el-input(
+      v-model="model.ndoc"
+    )
+
+  el-form-item(
     :label="$t('fields.storage')"
     prop="storageId"
   )

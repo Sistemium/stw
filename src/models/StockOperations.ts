@@ -33,6 +33,7 @@ export type CounterpartyType = 'Storage' | 'LegalEntity' | 'Person' | null;
 export interface StockOperation {
   id?: string;
   date?: string | Date;
+  ndoc?: string;
   storageId?: string | null;
   partnerId?: string;
   counterpartyType?: CounterpartyType;
