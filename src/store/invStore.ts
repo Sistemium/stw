@@ -12,11 +12,12 @@ export const useInvStore = defineStore({
   id: 'inv',
   state: () => ({
     currentStorageId: useStorage<string>(`${VITE_LS_PREFIX}.CURRENT_STORAGE`, ''),
-    scannedBarcode: null as BarcodeScan,
+    currentSiteId: useStorage<string | undefined>(`${VITE_LS_PREFIX}.CURRENT_SITE`, ''),
+    scannedBarcode: undefined,
   }),
   actions: {
     clearBarcode() {
-      this.scannedBarcode = null;
+      this.scannedBarcode = undefined;
     },
   },
 });

@@ -73,6 +73,11 @@ import ReactiveModel from 'sistemium-data-vue';
 import { ElMessage, ElNotification } from 'element-plus';
 import { PictureFilled } from '@element-plus/icons-vue';
 import { createPicture } from '@/services/picturing';
+import type { PictureInfo } from '@/models/Pictures'
+
+defineSlots<{
+  photoButton(): any
+}>()
 
 const emit = defineEmits<{
   (e: 'removeClick', image: ApiModel): void;
@@ -91,15 +96,14 @@ const props = withDefaults(defineProps<{
   images: ApiModel[];
   avatarId?: string;
   activeId?: string;
-  model: ReactiveModel;
+  model: ReactiveModel<any>;
 }>(), {
   hasAuthoring: false,
   carouselType: 'card',
   showEmpty: true,
-  initialId: null,
 });
 
-const carouselRef = ref(null);
+const carouselRef = ref<{ setActiveItem(item: number): void }>();
 const busy = ref(false);
 const carouselItem = ref(0);
 const currentImage = computed(() => props.images[carouselItem.value]);
@@ -112,7 +116,11 @@ const isAvatar = computed(() => {
 const buttonText = computed(() => isAvatar.value ? t('thisIsAvatar') : t('makeAvatar'));
 
 watch(() => props.activeId, id => {
-  nextTick(() => setActiveItemById(id));
+  nextTick(() => {
+    if (id) {
+      setActiveItemById(id)
+    }
+  });
 });
 
 const id = props.initialId || props.avatarId;
@@ -138,11 +146,11 @@ const { t } = useI18n({
   },
 });
 
-function onItemChange(item) {
+function onItemChange(item: number) {
   carouselItem.value = item;
 }
 
-async function unUploadError(err) {
+async function unUploadError(err: any) {
   busy.value = false;
   const { message = JSON.stringify(err) } = err;
   console.error('unUploadError', message);
@@ -152,7 +160,7 @@ async function unUploadError(err) {
   });
 }
 
-async function onUpload(picturesInfo, fileName) {
+async function onUpload(picturesInfo: PictureInfo[], fileName: string) {
 
   try {
     const properties = {
@@ -162,7 +170,7 @@ async function onUpload(picturesInfo, fileName) {
     const picture : ApiModel = await createPicture(props.model, picturesInfo, properties);
 
     emit('uploaded', picture, fileName);
-  } catch (e) {
+  } catch (e: any) {
     ElNotification({
       message: e.message,
       type: 'error',
@@ -173,7 +181,7 @@ async function onUpload(picturesInfo, fileName) {
 
 }
 
-function setActiveItemById(id) {
+function setActiveItemById(id: string) {
   const initial = findIndex(props.images, { id });
   if (initial > -1) {
     carouselRef.value?.setActiveItem(initial);

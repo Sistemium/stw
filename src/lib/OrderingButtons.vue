@@ -43,7 +43,7 @@ const index = computed(() => props.items.indexOf(props.item));
 
 /* eslint-disable vue/no-mutating-props */
 
-function reorder(change) {
+function reorder(change: number) {
   const { value: ord1 } = index;
   const ord2 = ord1 + change;
   props.items.splice(ord1, 1);

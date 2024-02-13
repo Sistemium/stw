@@ -58,13 +58,13 @@ import {
 } from '@/models/PackageType.js';
 import MeasureUnitSelect from '@/components/select/MeasureUnitSelect.vue';
 import MeasureSelect from '@/components/select/MeasureSelect.vue';
-import type { Article } from '@/models/Articles';
+import type { IArticle } from '@/models/Articles';
 import { $requiredRule } from '@/lib/validations';
 import { useFormValidate } from '@/services/validating';
 
 
 const props = defineProps<{
-  model: Article,
+  model: IArticle,
 }>();
 
 const { form, validate } = useFormValidate();

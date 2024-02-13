@@ -14,6 +14,14 @@ el-form.stock-operation-form(
     date-string-picker(v-model="model.date")
 
   el-form-item(
+    :label="$t('fields.ndoc')"
+    prop="ndoc"
+  )
+    el-input(
+      v-model="model.ndoc"
+    )
+
+  el-form-item(
     :label="$t('fields.storage')"
     prop="storageId"
   )
@@ -24,6 +32,21 @@ el-form.stock-operation-form(
         :label="name"
         :value="id"
       )
+
+  el-form-item(
+    :label="$t('fields.pricing')"
+    prop="pricingId"
+  )
+    pricing-select(v-model="model.pricingId")
+
+  el-form-item(
+    :label="$t('fields.markup')"
+    prop="markup"
+    v-if="operationName === 'stockWithdrawing'"
+  )
+    el-input-number(
+      v-model="model.markup"
+    )
 
   el-form-item(
     :label="$t(counterpartyLabel.type)"
@@ -76,65 +99,70 @@ el-form.stock-operation-form(
 </template>
 <script setup lang="ts">
 /* eslint-disable vue/no-mutating-props */
-import { computed, ref } from 'vue';
-import WorkflowButton from '@/lib/WorkflowButton.vue';
-import Storage from '@/models/Storage';
-import { workflow } from '@/models/StockWithdrawing';
-import DateStringPicker from '@/lib/DateStringPicker.vue';
-import ButtonPrepend from '@/lib/ButtonPrepend.vue';
-import CounterpartyTypeSwitch from '@/components/CounterpartyTypeSwitch.vue';
-import CounterpartySelect from '@/components/CounterpartySelect.vue';
-import LegalEntityEdit from '@/components/contacts/LegalEntityEdit.vue';
-import StorageEdit from '@/components/stock/StorageEdit.vue';
-import { $requiredRule } from '@/lib/validations';
-import type { StockOperation } from '@/models/StockOperations';
-import { useFormValidate } from '@/services/validating';
+import { computed, ref } from 'vue'
+import WorkflowButton from '@/lib/WorkflowButton.vue'
+import Storage from '@/models/Storage'
+import { workflow } from '@/models/StockWithdrawing'
+import DateStringPicker from '@/lib/DateStringPicker.vue'
+import ButtonPrepend from '@/lib/ButtonPrepend.vue'
+import CounterpartyTypeSwitch from '@/components/CounterpartyTypeSwitch.vue'
+import CounterpartySelect from '@/components/CounterpartySelect.vue'
+import LegalEntityEdit from '@/components/contacts/LegalEntityEdit.vue'
+import StorageEdit from '@/components/stock/StorageEdit.vue'
+import { $requiredRule } from '@/lib/validations'
+import type { StockOperation } from '@/models/StockOperations'
+import { useFormValidate } from '@/services/validating'
+import PricingSelect from '@/components/select/PricingSelect.vue'
 
 const props = defineProps<{
-  model: StockOperation;
-  disabled: boolean;
-  counterpartyRole: string;
-}>();
+  model: StockOperation
+  disabled: boolean
+  counterpartyRole: string
+  operationName?: string
+}>()
 
-const { form, validate } = useFormValidate();
+const { form, validate } = useFormValidate()
 
-defineExpose({ validate });
+defineExpose({ validate })
 
-const showDrawer = ref(false);
+const showDrawer = ref(false)
 
 const counterpartyLabel = computed(() => {
-  const { counterpartyRole } = props;
+  const { counterpartyRole } = props
   return {
     type: `fields.${counterpartyRole}Type`,
     choice: `fields.${counterpartyRole}`,
-  };
-});
+  }
+})
 
-const rules = $requiredRule(['date', 'storageId']);
+const rules = $requiredRule(['date', 'storageId'])
 
-const storages = computed(() => Storage.reactiveFilter());
+const storages = computed(() => Storage.reactiveFilter())
 
 const cpMap = new Map([
   ['Storage', StorageEdit],
   ['LegalEntity', LegalEntityEdit],
-]);
+])
 
-const counterpartyEditComponent = computed(() => cpMap.get(props.model.counterpartyType));
+const counterpartyEditComponent = computed(() => {
+  const { counterpartyType } = props.model
+  return counterpartyType && cpMap.get(counterpartyType)
+})
 
 function addCounterparty() {
-  showDrawer.value = true;
+  showDrawer.value = true
 }
 
-function counterpartySaved(counterparty) {
+function counterpartySaved(counterparty?: { id: string }) {
   if (counterparty) {
     setTimeout(() => {
-      props.model.counterpartyId = counterparty.id;
-    }, 0);
+      props.model.counterpartyId = counterparty.id
+    }, 0)
   }
 }
 
 function counterpartyEditClosed() {
-  showDrawer.value = false;
+  showDrawer.value = false
 }
 
 </script>

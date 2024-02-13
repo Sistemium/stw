@@ -35,7 +35,7 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: string | null);
+  (e: 'update:modelValue', value: string | null): void
 }>();
 
 const loading = ref(false);

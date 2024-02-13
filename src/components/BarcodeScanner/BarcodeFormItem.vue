@@ -18,25 +18,28 @@ el-form-item.barcode-form-item(
 
 import { computed } from 'vue';
 
-const props = defineProps({
-  prop: {
-    type: String,
-    default: 'barcode',
-  },
-  modelValue: String,
+const props = withDefaults(defineProps<{
+  modelValue: string
+  prop: string
+}>(), {
+  prop:  'barcode',
 });
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: string);
+  (e: 'update:modelValue', value: string): void
 }>();
 
 const barcode = computed({
   get() {
     return props.modelValue;
   },
-  set(value) {
+  set(value: string) {
     emit('update:modelValue', value);
   },
 });
+
+defineSlots<{
+  prepend(): any
+}>()
 
 </script>

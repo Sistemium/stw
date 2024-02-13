@@ -1,6 +1,9 @@
 import { createI18n } from 'vue-i18n';
+// @ts-ignore
 import uiEn from 'element-plus/dist/locale/en';
+// @ts-ignore
 import uiRu from 'element-plus/dist/locale/ru';
+// @ts-ignore
 import uiLt from 'element-plus/dist/locale/lt';
 import ru from '@/locales/ru.json';
 import en from '@/locales/en.json';
@@ -72,7 +75,7 @@ const i18n = createI18n({
 
 export default i18n;
 
-export function saveLocale(locale) {
+export function saveLocale(locale: string) {
   localStorage.setItem(LS_KEY_I18N_LOCALE, locale);
 }
 

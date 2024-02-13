@@ -1,5 +1,5 @@
 // import { barCodeScannerOn } from '@/services/scanning';
-import { isNative, setSyncerInfoCallback } from 'sistemium-data/src/util/native';
+import { isNative, setSyncerInfoCallback } from 'sistemium-data/lib/util/native';
 import * as m from './mutations';
 import * as g from './getters';
 

@@ -2,6 +2,7 @@
   "message": "Linkėjimai sandėlio darbuotojams!",
   "about": "Tai sandėlio valdymo programa",
   "savingError": "Nepavyko išsaugoti",
+  "numberLabel": "Nr.",
   "saved": "Išsaugota",
   "saving": "Išsaugojimas",
   "cancel": "Atšaukti",
@@ -14,6 +15,8 @@
   "typeToSearch": "Įveskite kelias paieškos raides",
   "menu": {
     "about": "Apie",
+    "articlePricing": "Kainynas",
+    "pricing": "Kainynai",
     "auth": "Prisijungimas",
     "barcodes": "Brūkš. kodai",
     "home": "Pradžia",
@@ -45,7 +48,10 @@
     "name": "Pavadinimas",
     "email": "El. paštas",
     "date": "Data",
+    "ndoc": "Dokumento nr.",
+    "startsFrom": "Nuo",
     "dateB": "Data nuo",
+    "site": "Padalinys",
     "toDate": "iki",
     "type": "Tipas",
     "consigneeType": "Gavėjo tipas",
@@ -60,8 +66,15 @@
       "no": "Ne"
     },
     "code": "Serijinis kodas",
+    "employee": "Darbuotojas",
+    "pricing": "Kainynas",
     "price": "Kaina",
+    "markup": "Antkainis %",
+    "requireSite": "Reikia nurodyti padalinį",
     "vatPrice": "Kaina su PVM",
+    "withoutVatPrice": "Kaina be PVM",
+    "withVat": "Su PVM",
+    "withoutVat": "Be PVM",
     "vatRate": "PVM",
     "totalCost": "Kaina iš viso",
     "cost": "Savikaina",
@@ -86,6 +99,7 @@
     "measureUnit": "Matavimo vienetas",
     "unitsInPackage": "{0} pakuotėje",
     "ord": "Eilės numeris",
+    "total": "Iš viso",
     "from": "Iš",
     "to": "Į",
     "id": "Identifikatorius"
@@ -159,6 +173,7 @@
     "number": "Skaičius"
   },
   "validation": {
+    "otherSite": "Priklauso kitam padaliniui",
     "required": "{0} yra privalomas",
     "formInvalid": "Klaidingai užpildyta forma",
     "constrainedDelete": "Negalima ištrinti šio įrašo, nes yra \"{0}\"",
@@ -177,6 +192,7 @@
     "select": "pasirink {0}"
   },
   "accusative": {
+    "date": "datą",
     "property": "ypatybę",
     "profile": "Profilį",
     "picture": "nuotrauką",
@@ -188,9 +204,13 @@
     "recipe": "receptą",
     "material": "sudedamojį dalį",
     "productItem": "gamybos poziciją",
-    "article": "prekę"
+    "article": "prekę",
+    "pricing": "kainyną",
+    "employee": "darbuotoją",
+    "site": "padalinį"
   },
   "genitive": {
+    "pricing": "Kainyno",
     "property": "Ypatybės",
     "article": "Prekės",
     "option": "Parinkties",
@@ -209,7 +229,8 @@
     "positions": "poz",
     "units": "vnt",
     "boxes": "dėž",
-    "products": "gam"
+    "products": "gam",
+    "selfCost": "sav."
   },
   "workflow": {
     "start": "Pradėti",

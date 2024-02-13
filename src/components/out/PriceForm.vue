@@ -20,31 +20,27 @@
 import round from 'lodash/round';
 import { computed, watch } from 'vue';
 import { $percent } from '@/lib/validations';
+import { useSetPrices } from '@/services/pricing'
 
 const props = defineProps<{
   model: {
-    vatPrice?: number;
-    price?: number;
-    vatRate: number;
+    vatPrice?: number | null;
+    price?: number | null;
+    vatRate?: number;
   };
   vatPrices: boolean;
 }>();
 
-const editablePrice = computed(() => {
+const editablePrice = computed<number | undefined | null>(() => {
   return props.vatPrices ? props.model.vatPrice : props.model.price;
 });
 
-watch(editablePrice, price => {
-  setPrices(price);
-});
+const { setOtherPrice } = useSetPrices(props)
 
-function setPrices(price) {
-  const { vatPrices, model: { vatRate } } = props;
-  const otherField = vatPrices ? 'price' : 'vatPrice';
-  const fn = vatPrices ? v => v / (1.0 + vatRate) : v => v * (1.0 + vatRate);
-  // eslint-disable-next-line vue/no-mutating-props
-  props.model[otherField] = price === null ? null : round(fn(price), 2);
-}
+watch(editablePrice, (price?: number | null) => {
+  const { vatPrices, model: { vatRate = 0 } } = props;
+  setOtherPrice(vatPrices, vatRate, price)
+});
 
 </script>
 <style scoped lang="scss">

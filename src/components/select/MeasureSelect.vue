@@ -24,8 +24,8 @@ defineProps<{
 }>();
 
 const emit = defineEmits<{
-  (e: 'update:model-value', value: string);
-  (e: 'change', value: string);
+  (e: 'update:model-value', value: string): void;
+  (e: 'change', value: string): void;
 }>();
 
 const measures = computed(measuresFn);

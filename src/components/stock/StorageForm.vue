@@ -4,6 +4,7 @@ el-form.storage-form(
   ref="form"
   :model="model"
   :rules="rules"
+  :disabled="disabled"
 )
 
   el-form-item(
@@ -21,26 +22,51 @@ el-form.storage-form(
     el-input(v-model="model.name")
 
   el-form-item(
+    :label="$t('fields.site')"
+    prop="siteId"
+  )
+    site-select(
+      v-if="hasSiteAccess"
+      v-model="model.siteId"
+    )
+    .blink.px-1(v-else) {{ $t('validation.otherSite') }}
+
+  el-form-item(
+    :label="$t('fields.employee')"
+    prop="employeeId"
+    v-if="model.type === 'personal'"
+  )
+    employee-select(
+      v-if="hasSiteAccess"
+      v-model="model.employeeId"
+    )
+    .blink.px-1(v-else) {{ $t('validation.otherSite') }}
+
+  el-form-item(
     :label="$t('fields.email')"
-    prop="name"
+    prop="email"
   )
     el-input(v-model="model.email")
 
 </template>
-<script setup>
+<script setup lang="ts">
+import { computed } from 'vue'
+import { $requiredRule } from '@/lib/validations'
+import { hasSiteAuth, useFormValidate } from '@/services/validating'
+import SiteSelect from '@/components/select/SiteSelect.vue'
+import type { BaseItem } from '@/init/Model'
+import EmployeeSelect from '@/components/select/EmployeeSelect.vue'
 
-import { computed } from 'vue';
-import { $requiredRule } from '@/lib/validations';
-import { useFormValidate } from '@/services/validating';
+const props = defineProps<{
+  model: BaseItem,
+  disabled: boolean,
+}>()
 
-defineProps({
-  model: Object,
-});
+const { form, validate } = useFormValidate()
 
-const { form, validate } = useFormValidate();
+defineExpose({ validate })
 
-defineExpose({ validate });
-
-const rules = computed(() => $requiredRule('name'));
+const rules = computed(() => $requiredRule('name'))
+const hasSiteAccess = computed(() => !props.model?.siteId || hasSiteAuth(props.model.siteId))
 
 </script>

@@ -19,20 +19,24 @@ drawer-edit.stock-operation-item-edit(
       :vat-rate="vatOperationConfig.vatRate"
       :storage-id="stockOperation.storageId"
       :date="stockOperation.date"
+      :pricing="pricing"
+      :markup="stockOperation.markup"
     )
 
 </template>
 <script setup lang="ts">
 
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import ReactiveModel from 'sistemium-data-vue';
 import { workflow } from '@/models/StockWithdrawing.js';
 import { stockOperationItemInstance } from '@/services/warehousing.js';
 import StockOperationItemForm from '@/components/out/StockOperationItemForm.vue';
 import { useVatConfig } from '@/services/vatConfiguring';
 import { drawerEditingProps, useDrawerEditing } from '@/services/drawerEditing';
-import type { StockOperation } from '@/models/StockOperations';
+import type { StockOperation, StockOperationName } from '@/models/StockOperations'
 import DrawerEdit from '@/lib/DrawerEdit.vue';
+import Pricing from '@/models/Pricing'
+import { fetchArticlePricing } from '@/services/dataSync'
 
 const props = defineProps({
   ...drawerEditingProps,
@@ -40,30 +44,39 @@ const props = defineProps({
   stockOperationItemId: String,
   barcode: String,
   operationName: { type: String, required: true },
-  model: ReactiveModel,
-  positionsModel: ReactiveModel,
+  model: { type: ReactiveModel, required: true },
+  positionsModel: { type: ReactiveModel, required: true },
 });
 
 const form = ref(null);
 const { destroyFn, saveFn } = useDrawerEditing(props.positionsModel);
-const { vatOperationConfig } = useVatConfig(props.operationName);
+const { vatOperationConfig } = useVatConfig(props.operationName as StockOperationName);
 const stockOperation = computed(() => props.model.reactiveGet(props.stockOperationId) as StockOperation);
+const pricing = computed(() => Pricing.reactiveGet(stockOperation.value?.pricingId))
 
 const modelOrigin = computed(() => {
   const { stockOperationItemId: id, stockOperationId, barcode = null } = props;
   const { vatRate } = vatOperationConfig.value;
-  return id
-    ? props.positionsModel.reactiveGet(id)
-    : stockOperationItemInstance(props.operationName, {
-      stockOperationId,
-      barcode,
-      articleId: null,
-      vatRate,
-    });
+  if (id) {
+    return props.positionsModel?.reactiveGet(id)
+  }
+  return stockOperationItemInstance(props.operationName as StockOperationName, {
+    stockOperationId,
+    barcode,
+    articleId: null,
+    vatRate,
+  });
 });
 
+watch(pricing, p => {
+  if (p) {
+    fetchArticlePricing(p.id)
+      .catch(e => console.error(e))
+  }
+})
+
 const finished = computed(() => {
-  return !workflow.step(stockOperation.value?.processing).editable;
+  return !workflow.step(stockOperation.value?.processing)?.editable;
 });
 
 const editable = computed(() => {

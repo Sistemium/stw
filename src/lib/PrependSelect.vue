@@ -2,6 +2,7 @@
 
 button-prepend.prepend-select(@button-click="emit('buttonClick')")
   el-select(
+    filterable
     :model-value="modelValue"
     @change="v => emit('update:modelValue', v)"
   )

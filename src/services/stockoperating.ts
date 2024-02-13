@@ -2,12 +2,12 @@ import flatten from 'lodash/flatten';
 import orderBy from 'lodash/orderBy';
 import dayjs from 'dayjs';
 import { computed } from 'vue';
-import { StockOperation, StockOperationItem } from '@/models/StockOperations';
+import type { StockOperation, StockOperationItem } from '@/models/StockOperations';
 import Article from '@/models/Article.js';
 import Storage from '@/models/Storage.js';
-import { MaterialFields } from '@/models/Recipes';
+import type { MaterialFields } from '@/models/Recipes';
 import { t, tGen } from '@/lib/validations';
-import { getCounterparty } from '@/services/warehousing.js';
+import { type CounterPartyRef, getCounterparty } from '@/services/warehousing.js'
 import { useInvStore } from '@/store/invStore';
 import StockWithdrawing from '@/models/StockWithdrawing.js';
 import StockWithdrawingItem from '@/models/StockWithdrawingItem.js';
@@ -17,17 +17,21 @@ interface StockOperationActItem extends MaterialFields {
   code: string;
 }
 
+type PricedMaterials = MaterialFields & { price?: number, vatPrice?: number }
+
 export function stockOperationAct(items: StockOperationItem[]): StockOperationActItem[] {
 
-  const materializedItems = flatten(items.map(item => {
+  const materializedItems: PricedMaterials[] = flatten(items.map(item => {
     const { materials, units } = item;
     if (!materials) {
-      return [item as MaterialFields];
+      return item;
     }
     return materials
-      .map(material => ({
+      .map<PricedMaterials>(material => ({
         ...material,
         units: units * material.units,
+        price: undefined,
+        vatPrice: undefined,
       }));
   }));
 
@@ -35,8 +39,10 @@ export function stockOperationAct(items: StockOperationItem[]): StockOperationAc
     const article = Article.reactiveGet(item.articleId);
     return {
       ...item,
-      name: article?.name,
-      code: article?.code,
+      total: item.price ? item.price * item.units : undefined,
+      totalWithVat: item.vatPrice ? item.vatPrice * item.units : undefined,
+      name: article?.name || '',
+      code: article?.code || '',
     };
   });
 }
@@ -58,7 +64,7 @@ export function useStorage() {
 
 export function actHeadRows(stockOperation: StockOperation, operationName: string, counterpartyRole: string) {
   const { date, storageId } = stockOperation;
-  const counterparty = getCounterparty(stockOperation);
+  const counterparty = getCounterparty(stockOperation as CounterPartyRef);
   return [
     {
       title: tGen('act', operationName),
@@ -66,7 +72,7 @@ export function actHeadRows(stockOperation: StockOperation, operationName: strin
     {},
     {
       label: t('concepts.storage'),
-      value: Storage.reactiveGet(storageId)?.name,
+      value: Storage.reactiveGet(storageId || undefined)?.name,
     },
     {
       label: t('fields.date'),
@@ -91,10 +97,10 @@ export function actHeadRows(stockOperation: StockOperation, operationName: strin
 }
 
 export interface StockOperationReportItem extends StockOperationItem {
-  date: string;
+  date?: string | Date;
 }
 
-export async function withdrawingReportData(storageId, counterpartyId, dateB, dateE): Promise<StockOperationReportItem[]> {
+export async function withdrawingReportData(storageId: string, counterpartyId: string, dateB: string, dateE: string): Promise<StockOperationReportItem[]> {
 
   const headers = await StockWithdrawing.find({
     storageId,
@@ -109,7 +115,7 @@ export async function withdrawingReportData(storageId, counterpartyId, dateB, da
     return [];
   }
 
-  const ids = headers.map(({ id }) => id);
+  const ids = headers.map(({ id }) => id as string);
 
   const items = await StockWithdrawingItem.findByMany(ids, { field: 'stockWithdrawingId' });
 
@@ -117,7 +123,7 @@ export async function withdrawingReportData(storageId, counterpartyId, dateB, da
     const stockWithdrawing = StockWithdrawing.getByID(item.stockWithdrawingId);
     return {
       ...item,
-      date: stockWithdrawing.date,
+      date: stockWithdrawing?.date,
     };
   }), ['date']);
 

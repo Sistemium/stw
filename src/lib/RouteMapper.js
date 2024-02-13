@@ -43,7 +43,7 @@ function configToRoute(name, options) {
     rootState: name,
     model,
     ...(options.props || {}),
-  } : undefined;
+  } : {};
 
   const children = routeChildren(name, options, collection);
 
@@ -119,7 +119,7 @@ function childProps(type, options, params) {
 function routeChildren(name, options, collection) {
 
   if (!collection) {
-    return undefined;
+    return [];
   }
 
   const parentKeyId = options.parentIdProp || nameId(collection);

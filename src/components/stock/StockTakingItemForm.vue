@@ -139,14 +139,15 @@ import { $requiredRule, saveWithLoading } from '@/lib/validations';
 import ArticleSelect from '@/components/catalogue/ArticleSelect.vue';
 import ArticleEdit from '@/components/catalogue/ArticleEdit.vue';
 import BarcodeFormItem from '@/components/BarcodeScanner/BarcodeFormItem.vue';
-import * as PackageType from '@/models/PackageType.js';
-import { addBarcodeToArticle, articlePackages } from '@/services/catalogue.js';
-import * as Measure from '@/models/Measure.js';
-import Article from '@/models/Article.js';
+import * as PackageType from '@/models/PackageType';
+import { addBarcodeToArticle, articlePackages } from '@/services/catalogue';
+import * as Measure from '@/models/Measure';
+import Article from '@/models/Article';
 import type { StockOperationItem } from '@/models/StockOperations';
 import { useFormValidate } from '@/services/validating';
 // import formsMixin from '@/lib/formsMixin.js';
 import { useInvStore } from '@/store/invStore';
+import type { IArticle } from '@/models/Articles'
 
 const DEFAULT_MODE = 'units';
 
@@ -160,6 +161,10 @@ const { form, validate } = useFormValidate();
 const currentStorageId = computed(() => invStore.currentStorageId);
 
 defineExpose({ validate });
+
+defineSlots<{
+  'article-extra'(): any
+}>()
 
 const showDrawer = ref(false);
 const spareUnits = ref(0);
@@ -183,7 +188,7 @@ const barcodeIcon = computed(() => {
 const articleFilters = computed(() => {
   const { barcode } = props.model;
   if (barcode && !isShowingAllArticles.value) {
-    return function barcodeFilter({ barcodes }) {
+    return function barcodeFilter({ barcodes }: { barcodes: string[] }) {
       return barcodes && barcodes.includes(barcode);
     };
   }
@@ -244,7 +249,7 @@ function articleEditClosed() {
   showDrawer.value = false;
 }
 
-function articleSaved(articleObj) {
+function articleSaved(articleObj: IArticle) {
   if (articleObj) {
     setTimeout(() => {
       props.model.articleId = articleObj.id;
@@ -261,6 +266,9 @@ function addArticle() {
 
 function onAddBarcodeClick() {
   const { model: { barcode } } = props;
+  if (!barcode) {
+    return
+  }
   saveWithLoading(async () => {
     await addBarcodeToArticle(barcode, article.value);
     isShowingAllArticles.value = false;
@@ -271,7 +279,7 @@ function toggleShowAllArticles() {
   isShowingAllArticles.value = !isShowingAllArticles.value;
 }
 
-function modeChange(newMode) {
+function modeChange(newMode: 'units' | 'other') {
   if (newMode === DEFAULT_MODE) {
     Object.assign(props.model, {
       packageTypeId: null,
@@ -293,7 +301,7 @@ function modeChange(newMode) {
   }
 }
 
-function packageByProps(packageTypeId, unitsInPackage) {
+function packageByProps(packageTypeId?: string, unitsInPackage?: number) {
   return find(packageOptions.value, ({ packageTypeId, unitsInPackage }));
 }
 

@@ -1,8 +1,8 @@
 import type ApiModel from '@/models/ApiModels';
 import { RecipeMaterial } from '@/models/Recipes';
-import type ArticleProp from '@/models/ArticleProps';
+import type { IArticleProp } from '@/models/ArticleProps';
 
-export interface ArticleProperty extends ArticleProp {
+export interface ArticleProperty extends IArticleProp {
   propId: string;
   stringValue?: string;
   numberValue?: number;
@@ -16,7 +16,7 @@ export interface ArticleProperty extends ArticleProp {
 //   units: number;
 // }
 
-export interface Article extends ApiModel {
+export interface IArticle extends ApiModel {
   name: string;
   code?: string;
 

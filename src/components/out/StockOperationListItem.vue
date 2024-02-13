@@ -6,6 +6,7 @@
 )
   .title
     .date {{ $ts(source.date, 'short') }}
+      span.ndoc(v-if="source.ndoc") &nbsp;{{$t('numberLabel')}} {{ source.ndoc }}
     .counterparty(v-if="source.counterpartyName") {{ source.counterpartyName }}
     .comment-text(v-if="source.commentText") {{ source.commentText }}
   .right

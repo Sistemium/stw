@@ -41,6 +41,7 @@ import VatModeSwitch from '@/components/out/VatModeSwitch.vue';
 import PriceForm from '@/components/out/PriceForm.vue';
 import { useVatConfig } from '@/services/vatConfiguring';
 import ArticleCostInfo from '@/components/production/ArticleCostInfo.vue';
+import type { BaseItem } from '@/init/Model'
 
 const props = defineProps({
   stockTakingId: { type: String, required: true },
@@ -68,14 +69,14 @@ const modelOrigin = computed(() => {
 
 const editable = computed(() => {
   const { processing } = stockTaking.value || {};
-  return workflow.step(processing).editable;
+  return workflow.step(processing)?.editable;
 });
 
-async function saveFn(obj) {
+async function saveFn(obj: BaseItem) {
   return StockTakingItem.createOne(obj);
 }
 
-async function destroyFn(id) {
+async function destroyFn(id: string) {
   return StockTakingItem.destroy(id);
 }
 

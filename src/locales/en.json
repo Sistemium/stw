@@ -2,6 +2,7 @@
   "message": "Greetings to the warehouse workers!",
   "about": "This is an application for warehouse management",
   "savingError": "Saving error",
+  "numberLabel": "Nr.",
   "saved": "Saved",
   "saving": "Saving",
   "cancel": "Cancel",
@@ -14,6 +15,8 @@
   "typeToSearch": "Please type a keyword",
   "menu": {
     "about": "About",
+    "articlePricing": "Article pricing",
+    "pricing": "Pricing",
     "auth": "Authorization",
     "barcodes": "Barcodes",
     "home": "Home",
@@ -43,14 +46,18 @@
     "regCode": "Registration number",
     "vatCode": "VAT number",
     "name": "Name",
+    "ndoc": "Document nr.",
     "email": "E-mail",
     "type": "Type",
     "consigneeType": "Consignee type",
     "consignee": "Consignee",
+    "employee": "Employee",
     "supplierType": "Supplier type",
     "supplier": "Supplier",
     "date": "Date",
+    "startsFrom": "Effective from",
     "dateB": "Date from",
+    "site": "Department",
     "toDate": "to",
     "valueType": "Value type",
     "required": "Required",
@@ -61,7 +68,13 @@
     },
     "code": "Serial code",
     "price": "Price",
+    "requireSite": "Require to specify department",
+    "pricing": "Pricing",
+    "markup": "Mark-up %",
     "vatPrice": "Price with VAT",
+    "withoutVatPrice": "Price without VAT",
+    "withVat": "With VAT",
+    "withoutVat": "Without VAT",
     "vatRate": "VAT",
     "totalCost": "Cost",
     "cost": "Self cost",
@@ -78,6 +91,7 @@
     "storage": "Storage",
     "naming": "Part of name",
     "ord": "Order number",
+    "total": "Total",
     "initUnits": "Units at start",
     "remains": "Remains",
     "unitsIn": "Units in",
@@ -162,6 +176,7 @@
     "suffix": "Suffix"
   },
   "validation": {
+    "otherSite": "Belongs to another department",
     "required": "{0} is required",
     "formInvalid": "The form is filled out with errors",
     "constrainedDelete": "Can't delete this record because there are \"{0}\"",
@@ -176,10 +191,12 @@
     "editing": "{0} editing",
     "signIn": "Sign in",
     "welcome": "Welcome, {0}!",
+    "choose": "Choose {0}",
     "logout": "Sign out",
     "select": "select {0}"
   },
   "accusative": {
+    "date": "date",
     "property": "property",
     "profile": "Profile",
     "picture": "picture",
@@ -191,9 +208,13 @@
     "recipe": "recipe",
     "material": "material",
     "productItem": "production item",
-    "article": "article"
+    "article": "article",
+    "pricing": "pricing",
+    "employee": "employee",
+    "site": "department"
   },
   "genitive": {
+    "pricing": "Pricing",
     "property": "Property",
     "article": "Article",
     "option": "Option",
@@ -212,7 +233,8 @@
     "positions": "pos",
     "units": "unt",
     "boxes": "bx",
-    "products": "prod"
+    "products": "prod",
+    "selfCost": "s.c."
   },
   "workflow": {
     "start": "Start",

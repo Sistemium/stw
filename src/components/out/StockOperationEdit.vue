@@ -15,6 +15,7 @@ drawer-edit.stock-operation-edit(
       :model="drawerModel"
       :counterparty-role="counterpartyRole"
       :disabled="disabled"
+      :operationName="operationName"
     )
 
 </template>
@@ -45,12 +46,13 @@ const form = ref(null);
 const modelOrigin = computed((): StockOperation => {
   const { stockOperationId } = props;
   return stockOperationId
-    ? props.model.reactiveGet(stockOperationId) as StockOperation
+    ? props.model.reactiveGet(stockOperationId)
     : {
       date: new Date().toJSON(),
       processing: 'progress',
       counterpartyType: null,
       counterpartyId: null,
+      pricingId: null,
       storageId: route.query.storageId as string || null,
       commentText: null,
       deviceCts: new Date().toJSON(),
@@ -62,7 +64,7 @@ const disabled = computed(() => {
   return value?.processing === 'finished' || !!value?.sourceId;
 });
 
-async function saveFn(obj) {
+async function saveFn(obj: StockOperation) {
   const { id: stockOperationId } = await props.model.createOne(obj) as ApiModel;
   if (!props.stockOperationId) {
     setTimeout(() => {
@@ -77,7 +79,7 @@ async function saveFn(obj) {
   return props.model.reactiveGet(stockOperationId);
 }
 
-function destroyFn(id) {
+function destroyFn(id: string) {
   return props.model.destroy(id);
 }
 

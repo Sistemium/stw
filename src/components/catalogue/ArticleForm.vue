@@ -88,9 +88,9 @@ import PropTags from '@/components/props/PropTags.vue';
 import * as catalogue from '@/services/catalogue.js';
 import PropOption from '@/models/PropOption.js';
 import { filterArticleProps, getArticleProp } from '@/models/ArticleProps';
-import type ArticleProp from '@/models/ArticleProps';
+import type { IArticleProp } from '@/models/ArticleProps';
 import { $requiredRule, t } from '@/lib/validations';
-import type { Article, ArticleProperty } from '@/models/Articles';
+import type { IArticle, ArticleProperty } from '@/models/Articles';
 import orderBy from 'lodash/orderBy';
 import PrependSelect from '@/lib/PrependSelect.vue';
 import { useFormValidate } from '@/services/validating';
@@ -101,7 +101,7 @@ interface ArticleFormComponent {
 }
 
 const props = defineProps<{
-  model: Article;
+  model: IArticle;
 }>();
 
 const { form, validate } = useFormValidate();
@@ -149,7 +149,7 @@ const rules = computed(() => {
 
 interface FormArticleProperty extends ArticleProperty {
   component: ArticleFormComponent;
-  prop: ArticleProp;
+  prop: IArticleProp;
   options: object[];
 }
 

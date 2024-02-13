@@ -28,7 +28,7 @@
   router-view
 
 </template>
-<script setup>
+<script setup lang="ts">
 import PageTitle from '@/components/PageTitle.vue';
 import StoragesList from '@/components/stock/StoragesList.vue';
 import Storage from '@/models/Storage';
@@ -38,15 +38,15 @@ import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 import orderBy from 'lodash/orderBy';
 
-const props = defineProps({
-  editRoute: String,
-  createRoute: String,
-});
+const props = defineProps<{
+  editRoute: string
+  createRoute: string
+}>();
 
 const router = useRouter();
 const storages = computed(() => orderBy(Storage.reactiveFilter(), 'name'));
 
-function onStorageClick(storage) {
+function onStorageClick(storage: { id: string }) {
   router.push({
     name: props.editRoute,
     params: {

@@ -1,5 +1,6 @@
-import type ApiModel from '@/models/ApiModels';
-import type { MaterialFields } from '@/models/Recipes';
+import type ApiModel from '@/models/ApiModels'
+import type { MaterialFields } from '@/models/Recipes'
+import type { CounterPartyRef } from '@/services/warehousing'
 
 export interface ArticleQuantityFields {
 
@@ -22,7 +23,7 @@ export interface StockOperationItem extends ArticleQuantityFields {
   price?: number;
   vatRate?: number;
   vatPrice?: number;
-  materials: MaterialFields[];
+  materials: MaterialFields[] | null;
 }
 
 export interface CounterParty extends ApiModel {
@@ -30,17 +31,20 @@ export interface CounterParty extends ApiModel {
 }
 
 export type CounterpartyType = 'Storage' | 'LegalEntity' | 'Person' | null;
-export interface StockOperation {
+export interface StockOperation extends CounterPartyRef {
   id?: string;
   date?: string | Date;
-  storageId?: string;
+  ndoc?: string;
+  storageId?: string | null;
   partnerId?: string;
   counterpartyType?: CounterpartyType;
-  counterpartyId?: string;
+  counterpartyId?: string | null;
   processing?: string;
   commentText?: string;
   deviceCts?: string;
   sourceId?: string;
+  pricingId?: string
+  markup?: number
 }
 
 export interface StockOperationViewData extends  StockOperation {
@@ -51,4 +55,18 @@ export interface StockOperationViewData extends  StockOperation {
   positionsCount: number;
   units: number;
   totalCost: number;
+}
+
+export type StockOperationName = 'stockTaking' | 'stockWithdrawing' | 'stockReceiving'
+
+export interface IStockWithdrawingItem extends StockOperationItem {
+  stockWithdrawingId: string
+}
+
+export interface IStockReceivingItem extends StockOperationItem {
+  stockReceivingId: string
+}
+
+export interface IStockTakingItem extends StockOperationItem {
+  stockTakingId: string
 }

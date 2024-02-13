@@ -59,3 +59,8 @@ const groups = computed(() => ['facility', 'personal']
   .filter(({ options }) => options.length));
 
 </script>
+<style lang="scss">
+.storage-select {
+  width: 200px;
+}
+</style>

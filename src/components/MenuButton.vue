@@ -19,8 +19,8 @@ el-dropdown.menu-button(
 </template>
 
 <script setup lang="ts">
-
 import { useRouter } from 'vue-router';
+import type { RouteLocationRaw } from 'vue-router';
 
 withDefaults(defineProps<{
   label: string;
@@ -35,7 +35,7 @@ withDefaults(defineProps<{
 
 const router = useRouter();
 
-function onCommand(command) {
+function onCommand(command: RouteLocationRaw) {
   router.push(command);
 }
 

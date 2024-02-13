@@ -7,8 +7,7 @@ span.article-stock-info
 
 import { computed } from 'vue';
 import orderBy from 'lodash/orderBy'
-import model from '@/models/StockArticleDate';
-import type StockArticleDate from '@/models/StockArticleDates';
+import model, { type IStockArticleDate } from '@/models/StockArticleDate'
 
 const props = defineProps<{
   storageId: string;
@@ -18,7 +17,7 @@ const props = defineProps<{
   units?: number;
 }>();
 
-const stock = computed<StockArticleDate | undefined>(() => {
+const stock = computed<IStockArticleDate | undefined>(() => {
   const [res] = orderBy(model.reactiveManyByIndex('articleId', props.articleId), ['date'], ['desc']);
   return res;
 });

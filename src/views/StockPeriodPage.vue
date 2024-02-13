@@ -30,6 +30,7 @@
         stock-period-table(
           :data="filteredData"
           @row-click="rowClick"
+          @avatar-click="avatarClick"
           :height="tableHeight"
           :width="width"
         )
@@ -42,6 +43,8 @@
     :date-e="queryParams.dateE"
   )
 
+  router-view
+
 </template>
 <script setup lang="ts">
 
@@ -52,7 +55,7 @@ import map from 'lodash/map';
 import pick from 'lodash/pick';
 import keyBy from 'lodash/keyBy';
 import round from 'lodash/round';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { findStockPeriod } from '@/services/warehousing.js';
 import StockPeriodTable from '@/components/stock/StockPeriodTable.vue';
 import SearchInput from '@/lib/SearchInput.vue';
@@ -65,26 +68,31 @@ import Resize from '@/lib/StmResize.vue';
 import ToolButton from '@/lib/ToolButton.vue';
 import { useRouteParams } from '@/lib/updateRouteParams';
 import { t } from '@/lib/validations';
-// import Article from '@/models/Article.js';
 import Storage from '@/models/Storage.js';
 import { useStorage } from '@/services/stockoperating';
-
-// mixins: [storageSelectMixin],
+import type { IStockPeriod } from '@/models/StockPeriod'
+import type { IArticle } from '@/models/Articles'
+import type { IArticleProp } from '@/models/ArticleProps'
 
 const today = dayjs().endOf('day');
 const monthAgo = today.add(-1, 'month');
 
 const dateRange = ref([monthAgo, today]);
-const data = ref([]);
+const data = ref<(IStockPeriod & { article: IArticle })[]>([]);
 const route = useRoute();
+const router = useRouter();
 const search = ref('');
 const articleId = ref<string | null>(route.query.articleId?.toString() || null);
 const showDetails = ref(!!articleId.value);
-const tableHeight = ref<number>(undefined);
+const tableHeight = ref<number>();
 const storageSelectRef = ref(null);
 const { updateRouteParams } = useRouteParams();
 
 const { storageId } = useStorage();
+
+const props = defineProps<{
+  galleryRoute: string;
+}>();
 
 const queryParams = computed(() => {
   const [dateB, dateE] = dateRange.value;
@@ -102,7 +110,7 @@ const filteredData = computed(() => {
     : data.value;
 });
 
-function downloadSchema(tableData) {
+function downloadSchema(tableData: { rows: IArticle[], propColumns: IArticleProp[] }) {
   return {
     wrapText: true,
     columns: [
@@ -176,7 +184,7 @@ function downloadExcelData() {
   };
 }
 
-function setHeight(height) {
+function setHeight(height: number) {
   tableHeight.value = height;
 }
 
@@ -185,7 +193,7 @@ async function refreshClick() {
   await refresh(storageId, dateB, dateE);
 }
 
-async function refresh(storageId, dateB, dateE) {
+async function refresh(storageId: string, dateB: string, dateE: string) {
   const loading = ElLoading.service({});
   try {
     data.value = await findStockPeriod(storageId, dateB, dateE);
@@ -195,11 +203,20 @@ async function refresh(storageId, dateB, dateE) {
   loading.close();
 }
 
-function rowClick(row) {
+function rowClick(row: { articleId: string }) {
   showDetails.value = true;
   articleId.value = row.articleId;
   updateRouteParams({}, {
     articleId: row.articleId,
+  });
+}
+
+function avatarClick({ articleId }: { articleId: string }) {
+  router.push({
+    name: props.galleryRoute,
+    params: {
+      articleId,
+    },
   });
 }
 

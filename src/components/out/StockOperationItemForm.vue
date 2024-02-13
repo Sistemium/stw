@@ -1,6 +1,7 @@
 <template lang="pug">
 
 el-tabs.stock-operation-item-form(:class="tabClass")
+
   el-tab-pane(:label="$t('concepts.article')")
     stock-taking-item-form(
       :model="model"
@@ -9,7 +10,10 @@ el-tabs.stock-operation-item-form(:class="tabClass")
     )
       template(#article-extra)
         vat-mode-switch(v-model="formVatPrices" v-if="editable")
-        price-form(:model="model" :vat-prices="formVatPrices")
+        price-form(
+          :model="model"
+          :vat-prices="formVatPrices"
+        )
         article-cost-info(
           v-if="model.articleId && storageId && date"
           :article-id="model.articleId"
@@ -20,6 +24,7 @@ el-tabs.stock-operation-item-form(:class="tabClass")
           :materials="model.materials"
           :units="1"
           type="initCost"
+          @update-value="onUpdateCost"
         )
         article-cost-info(
           v-if="model.articleId && model.stockReceivingId && finished"
@@ -33,6 +38,7 @@ el-tabs.stock-operation-item-form(:class="tabClass")
           type="resultCost"
           :label-suffix="$t('after.stockReceiving')"
         )
+
   el-tab-pane(:label="$t('menu.materials')" v-if="model.materials")
     el-form(:model="model" :disabled="!editable")
       materials-form(:materials="model.materials" :disabled="!editable")
@@ -50,16 +56,20 @@ el-tabs.stock-operation-item-form(:class="tabClass")
 </template>
 <script setup lang="ts">
 
-import { computed, ref, watch } from 'vue';
-import cloneDeep from 'lodash/cloneDeep';
-import StockTakingItemForm from '@/components/stock/StockTakingItemForm.vue';
-import MaterialsForm from '@/components/production/MaterialsForm.vue';
-import ArticleCostInfo from '@/components/production/ArticleCostInfo.vue';
-import PriceForm from '@/components/out/PriceForm.vue';
-import Article from '@/models/Article.js';
-import VatModeSwitch from '@/components/out/VatModeSwitch.vue';
-import type { StockOperationItem } from '@/models/StockOperations';
-import { useFormValidate } from '@/services/validating';
+import { computed, ref, watch } from 'vue'
+import cloneDeep from 'lodash/cloneDeep'
+import round from 'lodash/round'
+import StockTakingItemForm from '@/components/stock/StockTakingItemForm.vue'
+import MaterialsForm from '@/components/production/MaterialsForm.vue'
+import ArticleCostInfo from '@/components/production/ArticleCostInfo.vue'
+import PriceForm from '@/components/out/PriceForm.vue'
+import Article from '@/models/Article'
+import Storage from '@/models/Storage'
+import VatModeSwitch from '@/components/out/VatModeSwitch.vue'
+import type { StockOperationItem } from '@/models/StockOperations'
+import { useFormValidate } from '@/services/validating'
+import { type IPricing } from '@/models/Pricing'
+import { getPricing, useSetPrices } from '@/services/pricing'
 
 const props = defineProps<{
   editable: boolean;
@@ -69,25 +79,54 @@ const props = defineProps<{
   vatRate?: number;
   storageId?: string;
   date?: string;
-}>();
+  pricing?: IPricing
+  markup?: number
+}>()
 
-const { form, validate } = useFormValidate();
+const { form, validate } = useFormValidate()
+const { setOtherPrice } = useSetPrices(props)
 
-defineExpose({ validate });
+defineExpose({ validate })
 
-const formVatPrices = ref(props.vatPrices);
+const formVatPrices = ref(props.vatPrices)
 
-const article = computed(() => Article.reactiveGet(props.model.articleId));
+const article = computed(() => Article.reactiveGet(props.model.articleId))
 const articleMaterials = computed(() => {
-  const { materials = null } = article.value || {};
-  return materials;
-});
-const tabClass = computed(() => !articleMaterials.value && 'single');
+  const { materials = null } = article.value || {}
+  return materials
+})
+const tabClass = computed(() => !articleMaterials.value && 'single')
+const storage = computed(() => Storage.reactiveGet(props.storageId))
 
-watch(() => props.model.articleId, () => {
+watch(() => props.model.articleId, articleId => {
   // eslint-disable-next-line vue/no-mutating-props
-  props.model.materials = cloneDeep(articleMaterials.value);
-});
+  props.model.materials = cloneDeep(articleMaterials.value)
+  const { date, pricing } = props
+  if (articleId && date && pricing) {
+    const { vatPrices } = pricing
+    const priceField = vatPrices ? 'vatPrice' : 'price'
+    const price = getPricing(
+      pricing.id,
+      articleId,
+      date,
+      storage.value?.siteId,
+      storage.value?.employeeId,
+    )
+    // eslint-disable-next-line vue/no-mutating-props
+    formVatPrices.value = vatPrices
+    props.model[priceField] = price
+    setOtherPrice(vatPrices, props.vatRate || 0, price)
+  }
+})
+
+function onUpdateCost(cost: number) {
+  if (props.markup) {
+    const { value: vatPrices } = formVatPrices
+    const priceField = vatPrices ? 'vatPrice' : 'price'
+    // eslint-disable-next-line vue/no-mutating-props
+    props.model[priceField] = round(cost * (1 + props.markup / 100), 2)
+  }
+}
 
 </script>
 <style scoped lang="scss">

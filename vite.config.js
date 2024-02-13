@@ -1,5 +1,5 @@
 import vue from '@vitejs/plugin-vue';
-import eslint from 'vite-plugin-eslint';
+// import eslint from 'vite-plugin-eslint';
 import { fileURLToPath, URL } from 'node:url';
 import { defineConfig, loadEnv } from 'vite';
 import legacy from '@vitejs/plugin-legacy';
@@ -16,9 +16,9 @@ export default defineConfig(({ mode }) => {
     // },
     plugins: [
       vue({}),
-      eslint({
-        include: ['src/**/*.ts', 'src/**/*.vue', 'src/*.ts', 'src/*.vue'],
-      }),
+      // eslint({
+      //   include: ['src/**/*.ts', 'src/**/*.vue', 'src/*.ts', 'src/*.vue'],
+      // }),
       vueJsx(),
       legacy({
         ignoreBrowserslistConfig: true,
