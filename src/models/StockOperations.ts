@@ -43,6 +43,7 @@ export interface StockOperation {
   deviceCts?: string;
   sourceId?: string;
   pricingId?: string
+  markup?: number
 }
 
 export interface StockOperationViewData extends  StockOperation {

@@ -70,6 +70,7 @@
     "price": "Price",
     "requireSite": "Require to specify department",
     "pricing": "Pricing",
+    "markup": "Mark-up %",
     "vatPrice": "Price with VAT",
     "withoutVatPrice": "Price without VAT",
     "withVat": "With VAT",

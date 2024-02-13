@@ -24,6 +24,7 @@ el-tabs.stock-operation-item-form(:class="tabClass")
           :materials="model.materials"
           :units="1"
           type="initCost"
+          @update-value="onUpdateCost"
         )
         article-cost-info(
           v-if="model.articleId && model.stockReceivingId && finished"
@@ -117,6 +118,15 @@ watch(() => props.model.articleId, articleId => {
     setOtherPrice(vatPrices, props.vatRate || 0, price)
   }
 })
+
+function onUpdateCost(cost: number) {
+  if (props.markup) {
+    const { value: vatPrices } = formVatPrices
+    const priceField = vatPrices ? 'vatPrice' : 'price'
+    // eslint-disable-next-line vue/no-mutating-props
+    props.model[priceField] = round(cost * (1 + props.markup / 100), 2)
+  }
+}
 
 </script>
 <style scoped lang="scss">

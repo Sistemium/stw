@@ -69,6 +69,7 @@
     "employee": "Darbuotojas",
     "pricing": "Kainynas",
     "price": "Kaina",
+    "markup": "Antkainis %",
     "requireSite": "Reikia nurodyti padalinį",
     "vatPrice": "Kaina su PVM",
     "withoutVatPrice": "Kaina be PVM",

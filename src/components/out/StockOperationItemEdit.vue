@@ -20,6 +20,7 @@ drawer-edit.stock-operation-item-edit(
       :storage-id="stockOperation.storageId"
       :date="stockOperation.date"
       :pricing="pricing"
+      :markup="stockOperation.markup"
     )
 
 </template>

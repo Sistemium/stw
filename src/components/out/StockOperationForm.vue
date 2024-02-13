@@ -40,6 +40,15 @@ el-form.stock-operation-form(
     pricing-select(v-model="model.pricingId")
 
   el-form-item(
+    :label="$t('fields.markup')"
+    prop="markup"
+    v-if="operationName === 'stockWithdrawing'"
+  )
+    el-input-number(
+      v-model="model.markup"
+    )
+
+  el-form-item(
     :label="$t(counterpartyLabel.type)"
     prop="counterpartyType"
   )
@@ -106,10 +115,11 @@ import { useFormValidate } from '@/services/validating'
 import PricingSelect from '@/components/select/PricingSelect.vue'
 
 const props = defineProps<{
-  model: StockOperation;
-  disabled: boolean;
-  counterpartyRole: string;
-}>();
+  model: StockOperation
+  disabled: boolean
+  counterpartyRole: string
+  operationName?: string
+}>()
 
 const { form, validate } = useFormValidate()
 
@@ -137,6 +147,7 @@ const cpMap = new Map([
 const counterpartyEditComponent = computed(() => {
   const { counterpartyType } = props.model
   return counterpartyType && cpMap.get(counterpartyType)
+})
 
 function addCounterparty() {
   showDrawer.value = true
