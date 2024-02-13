@@ -17,17 +17,21 @@ interface StockOperationActItem extends MaterialFields {
   code: string;
 }
 
+type PricedMaterials = MaterialFields & { price?: number, vatPrice?: number }
+
 export function stockOperationAct(items: StockOperationItem[]): StockOperationActItem[] {
 
-  const materializedItems = flatten(items.map(item => {
+  const materializedItems: PricedMaterials[] = flatten(items.map(item => {
     const { materials, units } = item;
     if (!materials) {
-      return [item as MaterialFields];
+      return item;
     }
     return materials
-      .map(material => ({
+      .map<PricedMaterials>(material => ({
         ...material,
         units: units * material.units,
+        price: undefined,
+        vatPrice: undefined,
       }));
   }));
 
@@ -35,6 +39,8 @@ export function stockOperationAct(items: StockOperationItem[]): StockOperationAc
     const article = Article.reactiveGet(item.articleId);
     return {
       ...item,
+      total: item.price ? item.price * item.units : undefined,
+      totalWithVat: item.vatPrice ? item.vatPrice * item.units : undefined,
       name: article?.name || '',
       code: article?.code || '',
     };

@@ -145,6 +145,8 @@ const downloadExcelName = computed(() => {
 });
 
 function downloadColumns() {
+  const { vatPrices } = vatOperationConfig.value
+  const priceField = vatPrices ? 'vatPrice' : 'price';
   return [
     {
       key: 'code',
@@ -158,6 +160,14 @@ function downloadColumns() {
     }, {
       key: 'units',
       title: t('fields.quantity'),
+      width: 15,
+    }, {
+      key: priceField,
+      title: t(`fields.${priceField}`),
+      width: 15,
+    },  {
+      key: vatPrices ? 'totalWithVat': 'total',
+      title: t('fields.total'),
       width: 15,
     },
   ];
