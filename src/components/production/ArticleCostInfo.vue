@@ -1,6 +1,6 @@
 <template lang="pug">
-el-form-item(:label="label")
-  span {{ $nr(cost) }}
+el-form-item.article-cost-info(:label="label")
+  span {{ $nr(cost) }} &euro;
   template(v-if="units > 1 && cost")
     small x
     span {{ units }}
@@ -29,9 +29,10 @@ const props = defineProps<{
   materials?: MaterialFields[];
   type?: CostType;
   labelSuffix?: string;
+  customLabel?: string
 }>();
 
-const label = computed(() => [
+const label = computed(() => props.customLabel || [
   t('fields.cost'),
   props.labelSuffix,
   props.vatPrices && t('after.withVat'),

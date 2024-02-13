@@ -85,6 +85,7 @@ import StorageSelect from '@/components/select/StorageSelect.vue';
 import PageTitle from '@/components/PageTitle.vue';
 import { useScrollToCreated } from '@/services/scrolling';
 import type { StockOperation } from '@/models/StockOperations';
+import type { BaseItem } from '@/init/Model'
 
 const props = defineProps<{
   model: ReactiveModel;
@@ -101,10 +102,10 @@ const { updateRouteParams } = useRouteParams();
 const route = useRoute();
 const { showTable, tableSize, windowWidth } = useResponsiveTables();
 const store = useInvStore();
-const tableHeight = ref<number>(undefined);
+const tableHeight = ref<number>();
 // TODO: auto open if empty
-const storageSelectRef = ref(null);
-const operationListRef = ref(null);
+const storageSelectRef = ref();
+const operationListRef = ref<{ scrollToId(id: string): boolean }>();
 
 useScrollToCreated({
   blink: false,
@@ -149,7 +150,7 @@ const stockOperations = computed(() => {
   }
   const data = props.model.reactiveManyByIndex('storageId', storageId.value);
   const filtered = search.value
-    ? data.filter(searchOperations(search.value, props.positionsModel, `${props.operationName}Id`))
+    ? data.filter<BaseItem>(searchOperations(search.value, props.positionsModel, `${props.operationName}Id`))
     : data;
   return orderBy(filtered, ['date', 'cts'], ['desc', 'desc']);
 });

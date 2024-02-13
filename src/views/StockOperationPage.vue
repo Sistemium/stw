@@ -22,13 +22,22 @@
           :disabled="disabled"
         )
       resize(:padding="20")
-        stock-operation-item-list(
-          :items="stockOperationItems"
-          @click="onItemClick"
+        template(
           v-if="stockOperationItems.length"
-          :price-field="priceField"
-          @avatarClick="onAvatarClick"
         )
+          stock-operation-item-list(
+            :items="stockOperationItems"
+            @click="onItemClick"
+            :price-field="priceField"
+            @avatarClick="onAvatarClick"
+            :date="stockOperation.date"
+            :vat-prices="vatOperationConfig.vatPrices"
+            :storage-id="stockOperation.storageId"
+          )
+          .total(v-if="stockOperation?.totalCost")
+            label {{ $t("fields.total") }}:&nbsp;
+            strong {{ stockOperation?.totalCost }} &euro;
+
         alert-empty(
           v-else
           @click="onAddItem"
@@ -67,17 +76,22 @@ import AlertEmpty from '@/lib/AlertEmpty.vue';
 import WorkflowTransitions from '@/lib/WorkflowTransitions.vue';
 import StockOperationItemList from '@/components/out/StockOperationItemList.vue';
 import StockOperationEdit from '@/components/out/StockOperationEdit.vue';
-import { configPriceField } from '@/services/warehousing.js';
+import { configPriceField, stockOperationToViewData } from '@/services/warehousing.js'
 import { workflow } from '@/models/StockWithdrawing.js';
 import { useBusy } from '@/views/pages';
 import { useOperationDisabled } from '@/services/workflowing';
-import type { StockOperation, StockOperationItem } from '@/models/StockOperations';
+import type {
+  StockOperation,
+  StockOperationItem,
+  StockOperationName,
+} from '@/models/StockOperations'
 import { useRouteParams } from '@/lib/updateRouteParams';
 import DownloadExcelButton from '@/lib/DownloadExcelButton.vue';
 import { t } from '@/lib/validations';
 import { actHeadRows, stockOperationAct } from '@/services/stockoperating';
 import type { BaseItem } from 'sistemium-data'
 import ArticlePicturesPage from '@/views/ArticlePicturesPage.vue'
+import { useVatConfig } from '@/services/vatConfiguring'
 
 
 const props = defineProps<{
@@ -86,10 +100,10 @@ const props = defineProps<{
     name: string;
     params?: object;
   };
-  model: ReactiveModel;
-  positionsModel?: ReactiveModel;
-  counterpartyRole?: string;
-  operationName: string;
+  model: ReactiveModel<StockOperation>;
+  positionsModel: ReactiveModel;
+  counterpartyRole: string;
+  operationName: StockOperationName
   rootState?: string;
   editRoute?: string;
   createRoute?: string;
@@ -98,6 +112,7 @@ const props = defineProps<{
 const router = useRouter();
 const { setBusy, isBusy } = useBusy();
 const { updateRouteParams } = useRouteParams();
+const { vatOperationConfig } = useVatConfig(props.operationName)
 
 const priceField = computed(() => {
   return configPriceField(props.operationName, stockOperation.value.date);
@@ -114,8 +129,8 @@ const stockOperationItems = computed(() => {
   return props.positionsModel?.reactiveFilter(filter) as StockOperationItem[];
 });
 
-const stockOperation = computed<StockOperation>(() => {
-  return props.model.reactiveGet(props.stockOperationId) || {};
+const stockOperation = computed(() => {
+  return stockOperationToViewData(props.model.reactiveGet(props.stockOperationId), props.positionsModel, props.operationName);
 });
 
 const { disabled } = useOperationDisabled(stockOperation, workflow);
@@ -172,23 +187,23 @@ function onAddItem() {
   }, {}, props.createRoute);
 }
 
-function onItemClick(item) {
+function onItemClick(item: StockOperation) {
   updateRouteParams({
     stockOperationId: props.stockOperationId,
     stockOperationItemId: item.id,
   }, {}, props.editRoute);
 }
 
-function onEditClose(record) {
+function onEditClose(record: StockOperation) {
   if (!record) {
     router.replace({
-      name: props.from.name,
+      name: props.from?.name,
       query: router.currentRoute.value.query,
     });
   }
 }
 
-function onProcessing(processing) {
+function onProcessing(processing: string) {
   setBusy(props.model.updateOne({ id: props.stockOperationId, processing }));
 }
 
@@ -205,5 +220,11 @@ function onProcessing(processing) {
   @include responsive-only(xxs) {
     text-align: right;
   }
+}
+
+.total {
+  padding: $padding;
+  text-align: right;
+  font-size: 14px;
 }
 </style>

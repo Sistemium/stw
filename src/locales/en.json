@@ -91,6 +91,7 @@
     "storage": "Storage",
     "naming": "Part of name",
     "ord": "Order number",
+    "total": "Total",
     "initUnits": "Units at start",
     "remains": "Remains",
     "unitsIn": "Units in",
@@ -232,7 +233,8 @@
     "positions": "pos",
     "units": "unt",
     "boxes": "bx",
-    "products": "prod"
+    "products": "prod",
+    "selfCost": "s.c."
   },
   "workflow": {
     "start": "Start",

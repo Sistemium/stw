@@ -99,6 +99,7 @@
     "measureUnit": "Matavimo vienetas",
     "unitsInPackage": "{0} pakuotėje",
     "ord": "Eilės numeris",
+    "total": "Iš viso",
     "from": "Iš",
     "to": "Į",
     "id": "Identifikatorius"
@@ -228,7 +229,8 @@
     "positions": "poz",
     "units": "vnt",
     "boxes": "dėž",
-    "products": "gam"
+    "products": "gam",
+    "selfCost": "sav."
   },
   "workflow": {
     "start": "Pradėti",

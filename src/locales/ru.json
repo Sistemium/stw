@@ -99,6 +99,7 @@
     "measureUnit": "Единица измерения",
     "unitsInPackage": "{0} в упаковке",
     "ord": "Порядковый номер",
+    "total": "Итого",
     "from": "Из",
     "to": "Для",
     "id": "Идентификатор"
@@ -228,7 +229,8 @@
     "positions": "поз",
     "units": "шт",
     "boxes": "кор",
-    "products": "изд"
+    "products": "изд",
+    "selfCost": "себ."
   },
   "workflow": {
     "start": "Начать",

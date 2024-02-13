@@ -1,5 +1,6 @@
 import type ApiModel from '@/models/ApiModels'
 import type { MaterialFields } from '@/models/Recipes'
+import type { CounterPartyRef } from '@/services/warehousing'
 
 export interface ArticleQuantityFields {
 
@@ -30,14 +31,14 @@ export interface CounterParty extends ApiModel {
 }
 
 export type CounterpartyType = 'Storage' | 'LegalEntity' | 'Person' | null;
-export interface StockOperation {
+export interface StockOperation extends CounterPartyRef {
   id?: string;
   date?: string | Date;
   ndoc?: string;
   storageId?: string | null;
   partnerId?: string;
   counterpartyType?: CounterpartyType;
-  counterpartyId?: string;
+  counterpartyId?: string | null;
   processing?: string;
   commentText?: string;
   deviceCts?: string;

@@ -38,7 +38,7 @@ export const workflowProps = {
 }
 
 export function useOperationDisabled(operation: ComputedRef<{
-  processing: string
+  processing?: string
 }>, workflow: Workflow) {
   const disabled = computed(() => {
     const { processing } = operation.value

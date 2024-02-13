@@ -66,7 +66,7 @@ export function actHeadRows(stockOperation: StockOperation, operationName: strin
     {},
     {
       label: t('concepts.storage'),
-      value: Storage.reactiveGet(storageId)?.name,
+      value: Storage.reactiveGet(storageId || undefined)?.name,
     },
     {
       label: t('fields.date'),
@@ -91,7 +91,7 @@ export function actHeadRows(stockOperation: StockOperation, operationName: strin
 }
 
 export interface StockOperationReportItem extends StockOperationItem {
-  date: string;
+  date?: string | Date;
 }
 
 export async function withdrawingReportData(storageId: string, counterpartyId: string, dateB: string, dateE: string): Promise<StockOperationReportItem[]> {
@@ -109,7 +109,7 @@ export async function withdrawingReportData(storageId: string, counterpartyId: s
     return [];
   }
 
-  const ids = headers.map(({ id }) => id);
+  const ids = headers.map(({ id }) => id as string);
 
   const items = await StockWithdrawingItem.findByMany(ids, { field: 'stockWithdrawingId' });
 

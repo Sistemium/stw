@@ -59,7 +59,7 @@ export function stockTakingItemInstance(item: STI) {
 
 export interface CounterPartyRef extends Record<string, any> {
   counterpartyType?: CounterpartyType
-  counterpartyId: string | null
+  counterpartyId?: string | null
 }
 
 export function stockOperationItemInstance(operationName: StockOperationName, props: Record<string, any>) {
@@ -105,7 +105,16 @@ export function getCounterparty({ counterpartyType, counterpartyId }: CounterPar
   return model.reactiveGet(counterpartyId);
 }
 
-export function stockOperationToViewData(item: BaseItem<CounterPartyRef>, positionsModel: Model, operationName: StockOperationName) {
+interface StockOperationViewData extends CounterPartyRef {
+  processing: string
+  counterparty: BaseItem | null
+  counterpartyName: string
+  positionsCount: number | null
+  units: number | null
+  totalCost: string | null
+}
+
+export function stockOperationToViewData(item: BaseItem<CounterPartyRef>, positionsModel: Model, operationName: StockOperationName): StockOperationViewData {
   const childFilter = { [`${operationName}Id`]: item.id };
   const counterparty = getCounterparty(item);
   const positions: BaseItem[] = positionsModel.reactiveFilter(childFilter);
@@ -128,7 +137,7 @@ export function stockOperationToViewData(item: BaseItem<CounterPartyRef>, positi
   };
 }
 
-export function vatConfig(date = new Date()) {
+export function vatConfig(date: Date | string = new Date()) {
   const stringDate = isDate(date) ? date.toISOString() : date;
   const [config] = Configuration.reactiveFilter({
     type: 'vat',
@@ -138,7 +147,7 @@ export function vatConfig(date = new Date()) {
   return (config || {}) as VatConfig;
 }
 
-export function searchOperations(search: string, itemsModel: Model, parentKey: string) {
+export function searchOperations(search: string, itemsModel: Model, parentKey: string): (_: BaseItem) => boolean {
   if (!search) {
     return () => true;
   }
@@ -148,7 +157,7 @@ export function searchOperations(search: string, itemsModel: Model, parentKey: s
     return re.test(commentText)
       || (counterpartyType === 'LegalEntity' && counterPartyTest(LegalEntity, counterpartyId, re))
       || (counterpartyType === 'Storage' && counterPartyTest(Storage, counterpartyId, re))
-      || positionsTest(itemsModel.reactiveManyByIndex(parentKey, operation.id), re);
+      || !!positionsTest(itemsModel.reactiveManyByIndex(parentKey, operation.id), re);
   };
 }
 
@@ -163,7 +172,7 @@ function positionsTest(positions: { articleId?: string}[], re: RegExp) {
   return positions.find(({ articleId }) => testArticle(Article.reactiveGet(articleId), re));
 }
 
-export function configPriceField(operationName: StockOperationName, date = new Date()) {
+export function configPriceField(operationName: StockOperationName, date: Date | string = new Date()) {
   const { rules } = vatConfig(date);
   const vatPrices = rules && rules.vatPrices[operationName];
   return vatPrices ? 'vatPrice' : 'price';

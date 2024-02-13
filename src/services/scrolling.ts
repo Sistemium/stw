@@ -12,7 +12,7 @@ interface ScrollConfig {
   blink?: boolean;
   watchFor?: string | (() => string);
   watchToRepeat?: () => string | boolean;
-  scrollToIdFn?: (id: string) => boolean;
+  scrollToIdFn?: (id: string) => boolean | undefined;
   ifIdExistsFn?: (id: string, duration?: number) => boolean;
 }
 
