@@ -55,17 +55,18 @@ el-tabs.stock-operation-item-form(:class="tabClass")
 </template>
 <script setup lang="ts">
 
-import { computed, ref, watch } from 'vue';
-import cloneDeep from 'lodash/cloneDeep';
-import StockTakingItemForm from '@/components/stock/StockTakingItemForm.vue';
-import MaterialsForm from '@/components/production/MaterialsForm.vue';
-import ArticleCostInfo from '@/components/production/ArticleCostInfo.vue';
-import PriceForm from '@/components/out/PriceForm.vue';
-import Article from '@/models/Article';
-import Storage from '@/models/Storage';
-import VatModeSwitch from '@/components/out/VatModeSwitch.vue';
-import type { StockOperationItem } from '@/models/StockOperations';
-import { useFormValidate } from '@/services/validating';
+import { computed, ref, watch } from 'vue'
+import cloneDeep from 'lodash/cloneDeep'
+import round from 'lodash/round'
+import StockTakingItemForm from '@/components/stock/StockTakingItemForm.vue'
+import MaterialsForm from '@/components/production/MaterialsForm.vue'
+import ArticleCostInfo from '@/components/production/ArticleCostInfo.vue'
+import PriceForm from '@/components/out/PriceForm.vue'
+import Article from '@/models/Article'
+import Storage from '@/models/Storage'
+import VatModeSwitch from '@/components/out/VatModeSwitch.vue'
+import type { StockOperationItem } from '@/models/StockOperations'
+import { useFormValidate } from '@/services/validating'
 import { type IPricing } from '@/models/Pricing'
 import { getPricing, useSetPrices } from '@/services/pricing'
 
@@ -78,26 +79,27 @@ const props = defineProps<{
   storageId?: string;
   date?: string;
   pricing?: IPricing
-}>();
+  markup?: number
+}>()
 
-const { form, validate } = useFormValidate();
+const { form, validate } = useFormValidate()
 const { setOtherPrice } = useSetPrices(props)
 
-defineExpose({ validate });
+defineExpose({ validate })
 
-const formVatPrices = ref(props.vatPrices);
+const formVatPrices = ref(props.vatPrices)
 
-const article = computed(() => Article.reactiveGet(props.model.articleId));
+const article = computed(() => Article.reactiveGet(props.model.articleId))
 const articleMaterials = computed(() => {
-  const { materials = null } = article.value || {};
-  return materials;
-});
-const tabClass = computed(() => !articleMaterials.value && 'single');
-const storage = computed(() => Storage.reactiveGet(props.storageId));
+  const { materials = null } = article.value || {}
+  return materials
+})
+const tabClass = computed(() => !articleMaterials.value && 'single')
+const storage = computed(() => Storage.reactiveGet(props.storageId))
 
 watch(() => props.model.articleId, articleId => {
   // eslint-disable-next-line vue/no-mutating-props
-  props.model.materials = cloneDeep(articleMaterials.value);
+  props.model.materials = cloneDeep(articleMaterials.value)
   const { date, pricing } = props
   if (articleId && date && pricing) {
     const { vatPrices } = pricing
@@ -110,10 +112,11 @@ watch(() => props.model.articleId, articleId => {
       storage.value?.employeeId,
     )
     // eslint-disable-next-line vue/no-mutating-props
+    formVatPrices.value = vatPrices
     props.model[priceField] = price
     setOtherPrice(vatPrices, props.vatRate || 0, price)
   }
-});
+})
 
 </script>
 <style scoped lang="scss">
