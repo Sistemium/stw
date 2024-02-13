@@ -147,6 +147,7 @@ import type { StockOperationItem } from '@/models/StockOperations';
 import { useFormValidate } from '@/services/validating';
 // import formsMixin from '@/lib/formsMixin.js';
 import { useInvStore } from '@/store/invStore';
+import type { IArticle } from '@/models/Articles'
 
 const DEFAULT_MODE = 'units';
 
@@ -160,6 +161,10 @@ const { form, validate } = useFormValidate();
 const currentStorageId = computed(() => invStore.currentStorageId);
 
 defineExpose({ validate });
+
+defineSlots<{
+  'article-extra'(): any
+}>()
 
 const showDrawer = ref(false);
 const spareUnits = ref(0);
@@ -244,7 +249,7 @@ function articleEditClosed() {
   showDrawer.value = false;
 }
 
-function articleSaved(articleObj) {
+function articleSaved(articleObj: IArticle) {
   if (articleObj) {
     setTimeout(() => {
       props.model.articleId = articleObj.id;

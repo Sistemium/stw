@@ -87,7 +87,10 @@ export function shortenedPackage(packageTypeId: string) {
   return packageType ? packageType.shortened : packageTypeId;
 }
 
-export function numberOf(packageTypeId: string) {
+export function numberOf(packageTypeId?: string) {
+  if (!packageTypeId) {
+    return undefined
+  }
   const packageType = getById(packageTypeId);
   const gen = packageType ? packageType.genitive : packageTypeId;
   return upperFirst(t('units.quantityOf', [gen]).toString());

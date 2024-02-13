@@ -37,7 +37,7 @@ const label = computed(() => [
   props.vatPrices && t('after.withVat'),
 ].filter(x => x).join(' '));
 
-const data = computed<{ initCost: number, resultCost?: number }>(() => {
+const data = computed<{ initCost: number, resultCost?: number, cost?: number }>(() => {
   if (!props.materials) {
     return stockArticleDateReactive(props.storageId, props.articleId, props.date);
   }
@@ -48,7 +48,7 @@ const data = computed<{ initCost: number, resultCost?: number }>(() => {
       const initCost = initCostObj[type];
       return initCost && units ? units * initCost : 0;
     }),
-  };
+  } as Record<CostType, number>
 });
 
 const cost = computed(() => {
@@ -57,6 +57,9 @@ const cost = computed(() => {
     return 0;
   }
   const price = props.type ? value[props.type] : (value.initCost || value.resultCost);
+  if (!price) {
+    return 0
+  }
   return price * (props.vatPrices ? (1 + props.vatRate) : 1) || 0;
 });
 
@@ -73,6 +76,14 @@ const findSensor = computed(() => [
   props.date,
   props.storageId,
 ].join('|'));
+
+const emit = defineEmits<{
+  (e: 'updateValue', cost: number): void
+}>()
+
+watch(cost, c => {
+  emit('updateValue', c)
+}, { immediate: true })
 
 watch(findSensor, async () => {
   const { value: articleIds } = materialArticleIds;
