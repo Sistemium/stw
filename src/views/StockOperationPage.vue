@@ -33,6 +33,7 @@
             :date="stockOperation.date"
             :vat-prices="vatOperationConfig.vatPrices"
             :storage-id="stockOperation.storageId"
+            :show-self-cost="operationName==='stockWithdrawing'"
           )
           .total(v-if="stockOperation?.totalCost")
             label {{ $t("fields.total") }}:&nbsp;

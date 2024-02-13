@@ -29,6 +29,7 @@
       .cost(v-if="item.price")
         .price {{ item[priceField] }} &euro;
       article-cost-info(
+        v-if="showSelfCost"
         :article-id="item.articleId"
         :storage-id="storageId"
         :date="date"
@@ -54,6 +55,7 @@ withDefaults(defineProps<{
   vatPrices: boolean
   storageId: string
   date: string
+  showSelfCost?: boolean
 }>(), { priceField: 'price' });
 
 const emit = defineEmits<{
