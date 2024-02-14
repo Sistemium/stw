@@ -26,7 +26,7 @@ import { testArticle } from '@/services/catalogue'
 import { likeLt } from '@/services/lt'
 import Model, { type BaseItem } from '@/init/Model'
 import type { VatConfig } from '@/services/vatConfiguring'
-import type { CounterpartyType, StockOperationName } from '@/models/StockOperations'
+import type { CounterpartyType, StockOperation, StockOperationName } from '@/models/StockOperations'
 import type { IArticle } from '@/models/Articles'
 
 interface STI {
@@ -105,7 +105,7 @@ export function getCounterparty({ counterpartyType, counterpartyId }: CounterPar
   return model.reactiveGet(counterpartyId);
 }
 
-interface StockOperationViewData extends CounterPartyRef {
+interface StockOperationViewData extends StockOperation {
   processingLabel: string
   counterparty: BaseItem | null
   counterpartyName: string
@@ -114,7 +114,7 @@ interface StockOperationViewData extends CounterPartyRef {
   totalCost: string | null
 }
 
-export function stockOperationToViewData(item: BaseItem<CounterPartyRef>, positionsModel: Model, operationName: StockOperationName): StockOperationViewData {
+export function stockOperationToViewData(item: StockOperation, positionsModel: Model, operationName: StockOperationName): StockOperationViewData {
   const childFilter = { [`${operationName}Id`]: item.id };
   const counterparty = getCounterparty(item);
   const positions: BaseItem[] = positionsModel.reactiveFilter(childFilter);
