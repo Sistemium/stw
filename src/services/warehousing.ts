@@ -106,7 +106,7 @@ export function getCounterparty({ counterpartyType, counterpartyId }: CounterPar
 }
 
 interface StockOperationViewData extends CounterPartyRef {
-  processing: string
+  processingLabel: string
   counterparty: BaseItem | null
   counterpartyName: string
   positionsCount: number | null
@@ -126,7 +126,7 @@ export function stockOperationToViewData(item: BaseItem<CounterPartyRef>, positi
   return {
     ...item,
     // @ts-ignore
-    processing: i18n.global.t(`workflow.${item.processing || 'progress'}`),
+    processingLabel: i18n.global.t(`workflow.${item.processing || 'progress'}`),
     // date: this.$ts(item.date, 'short'),
     counterparty,
     counterpartyName: get(counterparty, 'name'),

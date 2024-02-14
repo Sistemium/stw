@@ -10,7 +10,7 @@
     .counterparty(v-if="source.counterpartyName") {{ source.counterpartyName }}
     .comment-text(v-if="source.commentText") {{ source.commentText }}
   .right
-    .processing {{ source.processing }}
+    .processing {{ source.processingLabel }}
     .positions(
       v-if="source.positionsCount"
     ) {{ source.positionsCount }} {{ $t('shortened.positions') }}.
