@@ -16,8 +16,9 @@ import filter from 'lodash/filter';
 import uniq from 'lodash/uniq';
 import sumBy from 'lodash/sumBy';
 import type { CostType, MaterialFields } from '@/models/Recipes';
-import model, { type IStockArticleDate } from '@/models/StockArticleDate.js'
+import StockArticleDate from '@/models/StockArticleDate.js'
 import { t } from '@/lib/validations';
+import { stockArticleDateReactive } from '@/services/warehousing'
 
 const props = defineProps<{
   storageId: string;
@@ -91,7 +92,7 @@ watch(findSensor, async () => {
   if (!articleIds.length) {
     return;
   }
-  await model.find({
+  await StockArticleDate.find({
     storageId: props.storageId,
     articleId: { $in: articleIds },
     date: { $lte: props.date },
@@ -109,7 +110,7 @@ watch(() => [props.articleId, props.storageId, props.date].join('|'), async () =
   if (materials || !storageId || !articleId || !date) {
     return;
   }
-  await model.find({
+  await StockArticleDate.find({
     storageId,
     articleId,
     date: { $lte: date },
@@ -117,14 +118,6 @@ watch(() => [props.articleId, props.storageId, props.date].join('|'), async () =
   });
 }, { immediate: true });
 
-function stockArticleDateReactive(storageId: string, articleId: string, date: string) {
-  const many = model.reactiveManyByIndex('articleId', articleId) as IStockArticleDate[];
-  return many.filter(stock => {
-    return stock.storageId === storageId
-      && stock.date <= date
-      && stock.nextDate >= date;
-  })[0];
-}
 
 </script>
 

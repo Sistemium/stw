@@ -270,3 +270,12 @@ async function loadNotCachedIds(model: Model, ids: string[] = []) {
   const toLoad = ids.filter(id => !model.getByID(id));
   await model.findByMany(toLoad);
 }
+
+export function stockArticleDateReactive(storageId: string, articleId: string, date: string) {
+  const many = StockArticleDate.reactiveManyByIndex('articleId', articleId)
+  return many.filter(stock => {
+    return stock.storageId === storageId
+      && stock.date <= date
+      && stock.nextDate >= date;
+  })[0];
+}
