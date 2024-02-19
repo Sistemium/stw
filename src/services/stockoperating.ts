@@ -7,19 +7,22 @@ import Article from '@/models/Article.js';
 import Storage from '@/models/Storage.js';
 import type { MaterialFields } from '@/models/Recipes';
 import { t, tGen } from '@/lib/validations';
-import { type CounterPartyRef, getCounterparty } from '@/services/warehousing.js'
+import { type CounterPartyRef, getCounterparty, stockArticleDateReactive } from '@/services/warehousing.js'
 import { useInvStore } from '@/store/invStore';
 import StockWithdrawing from '@/models/StockWithdrawing.js';
 import StockWithdrawingItem from '@/models/StockWithdrawingItem.js';
+import round from 'lodash/round';
 
 interface StockOperationActItem extends MaterialFields {
-  name: string;
-  code: string;
+  name: string
+  code: string
+  cost: number
+  vatCost: number
 }
 
-type PricedMaterials = MaterialFields & { price?: number, vatPrice?: number }
+type PricedMaterials = MaterialFields & { price?: number, vatPrice?: number, vatRate?: number }
 
-export function stockOperationAct(items: StockOperationItem[]): StockOperationActItem[] {
+export function stockOperationAct(items: StockOperationItem[], storageId: string, date: string): StockOperationActItem[] {
 
   const materializedItems: PricedMaterials[] = flatten(items.map(item => {
     const { materials, units } = item;
@@ -32,17 +35,21 @@ export function stockOperationAct(items: StockOperationItem[]): StockOperationAc
         units: units * material.units,
         price: undefined,
         vatPrice: undefined,
+        vatRate: item.vatRate,
       }));
   }));
 
   return materializedItems.map(item => {
     const article = Article.reactiveGet(item.articleId);
+    const cost = stockArticleDateReactive(storageId, article?.id, date)?.resultCost || 0
     return {
       ...item,
       total: item.price ? item.price * item.units : undefined,
       totalWithVat: item.vatPrice ? item.vatPrice * item.units : undefined,
       name: article?.name || '',
       code: article?.code || '',
+      cost: round(cost, 2),
+      vatCost: round(cost * ((item.vatRate || 0) + 1), 2),
     };
   });
 }

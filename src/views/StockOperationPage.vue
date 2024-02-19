@@ -37,7 +37,10 @@
           )
           .total(v-if="stockOperation?.totalCost")
             label {{ $t("fields.total") }}:&nbsp;
-            strong {{ stockOperation?.totalCost }} &euro;
+            strong {{ $nr(stockOperation?.totalCost) }} &euro;
+          .total(v-if="isWithdrawing")
+            label {{ $t("fields.totalSelfCost") }}:&nbsp;
+            strong {{ $nr(totalSelfCost) }} &euro;
 
         alert-empty(
           v-else
@@ -65,6 +68,7 @@
 </template>
 <script setup lang="ts">
 
+import sumBy from 'lodash/sumBy';
 import map from 'lodash/map';
 import pick from 'lodash/fp/pick';
 import dayjs from 'dayjs';
@@ -130,9 +134,21 @@ const stockOperationItems = computed(() => {
   return props.positionsModel?.reactiveFilter(filter) as StockOperationItem[];
 });
 
+const isWithdrawing = computed(() => props.operationName === 'stockWithdrawing')
+
 const stockOperation = computed(() => {
   return stockOperationToViewData(props.model.reactiveGet(props.stockOperationId), props.positionsModel, props.operationName);
 });
+
+const totalSelfCost = computed(() => {
+  const { storageId, date } = stockOperation.value
+  const { vatPrices } = vatOperationConfig.value
+  const costField = vatPrices ? 'vatCost' : 'cost';
+  const data = stockOperationAct(stockOperationItems.value, storageId as string, date as string)
+  return sumBy(data, item => {
+    return (item[costField] * item.units) || 0
+  })
+})
 
 const { disabled } = useOperationDisabled(stockOperation, workflow);
 const galleryArticleId = ref('')
@@ -147,6 +163,7 @@ const downloadExcelName = computed(() => {
 function downloadColumns() {
   const { vatPrices } = vatOperationConfig.value
   const priceField = vatPrices ? 'vatPrice' : 'price';
+  const costField = vatPrices ? 'vatCost' : 'cost';
   return [
     {
       key: 'code',
@@ -165,9 +182,13 @@ function downloadColumns() {
       key: priceField,
       title: t(`fields.${priceField}`),
       width: 15,
-    },  {
+    }, {
       key: vatPrices ? 'totalWithVat': 'total',
       title: t('fields.total'),
+      width: 15,
+    }, {
+      key: costField,
+      title: t(`fields.cost`),
       width: 15,
     },
   ];
@@ -179,6 +200,7 @@ function onAvatarClick(articleId: string) {
 
 function downloadExcelData() {
   const columns = downloadColumns();
+  const { storageId, date } = stockOperation.value
 
   return {
     schema: {
@@ -187,7 +209,7 @@ function downloadExcelData() {
       pageSetup: { paperSize: 9, orientation: 'portrait', fitToWidth: 1 },
       grid: { style: 'thin' },
     },
-    data: stockOperationAct(stockOperationItems.value)
+    data: stockOperationAct(stockOperationItems.value, storageId as string, date as string)
       .map(pick(map(columns, 'key'))),
   };
 }

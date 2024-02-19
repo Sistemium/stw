@@ -1,17 +1,18 @@
 <template lang="pug">
 el-form-item.article-cost-info(:label="label")
-  span {{ $nr(cost) }} &euro;
+  span {{ cost }} &euro;
   template(v-if="units > 1 && cost")
     small x
     span {{ units }}
     small &equals;
-    span {{ $n(units * cost, 'decimal') }}
+    span {{ $nr(units * cost) }}
 
 </template>
 
 <script setup lang="ts">
 
 import { computed, watch } from 'vue';
+import round from 'lodash/round';
 import filter from 'lodash/filter';
 import uniq from 'lodash/uniq';
 import sumBy from 'lodash/sumBy';
@@ -47,7 +48,7 @@ const data = computed<{ initCost: number, resultCost?: number, cost?: number }>(
   return {
     [type]: sumBy(props.materials, ({ articleId, units }) => {
       const initCostObj = stockArticleDateReactive(props.storageId, articleId, props.date) || {};
-      const initCost = initCostObj[type];
+      const initCost = round(initCostObj[type] * (props.vatPrices ? (1 + props.vatRate) : 1), 2);
       return initCost && units ? units * initCost : 0;
     }),
   } as Record<CostType, number>
@@ -62,7 +63,7 @@ const cost = computed(() => {
   if (!price) {
     return 0
   }
-  return price * (props.vatPrices ? (1 + props.vatRate) : 1) || 0;
+  return round(price, 2) || 0;
 });
 
 const materialArticleIds = computed<string[]>(() => {

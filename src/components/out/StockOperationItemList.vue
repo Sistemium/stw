@@ -37,7 +37,7 @@
         :vat-rate="item.vatRate"
         :materials="item.materials"
         :units="1"
-        type="initCost"
+        type="resultCost"
         :custom-label="$t('shortened.selfCost')"
       )
 

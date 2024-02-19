@@ -51,6 +51,7 @@ el-tabs.stock-operation-item-form(:class="tabClass")
             :vat-prices="formVatPrices"
             :vat-rate="vatRate"
             :units="material.units"
+            :type="finished ? 'resultCost' : 'initCost'"
           )
 
 </template>

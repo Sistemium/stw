@@ -28,6 +28,7 @@ import Model, { type BaseItem } from '@/init/Model'
 import type { VatConfig } from '@/services/vatConfiguring'
 import type { CounterpartyType, StockOperation, StockOperationName } from '@/models/StockOperations'
 import type { IArticle } from '@/models/Articles'
+import keyBy from 'lodash/keyBy'
 
 interface STI {
   stockTakingId: string
@@ -111,7 +112,7 @@ interface StockOperationViewData extends StockOperation {
   counterpartyName: string
   positionsCount: number | null
   units: number | null
-  totalCost: string | null
+  totalCost: number
 }
 
 export function stockOperationToViewData(item: StockOperation, positionsModel: Model, operationName: StockOperationName): StockOperationViewData {
@@ -133,7 +134,7 @@ export function stockOperationToViewData(item: StockOperation, positionsModel: M
     positionsCount: positions.length,
     // productsCount: products.length,
     units: sumBy(positions, 'units'),
-    totalCost: totalCost ? i18n.global.n(totalCost) : null,
+    totalCost,
   };
 }
 

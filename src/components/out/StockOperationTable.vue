@@ -7,7 +7,7 @@ el-table.stock-operation-table(
   :height="height"
 )
   el-table-column(
-    prop="processing"
+    prop="processingLabel"
     :label="$t('fields.processing')"
     :width="columnSize"
   )

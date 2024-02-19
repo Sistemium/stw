@@ -92,6 +92,7 @@
     "naming": "Part of name",
     "ord": "Order number",
     "total": "Total",
+    "totalSelfCost": "Total self cost",
     "initUnits": "Units at start",
     "remains": "Remains",
     "unitsIn": "Units in",
