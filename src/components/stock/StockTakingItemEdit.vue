@@ -25,7 +25,7 @@ drawer-edit.stock-taking-item-edit(
           :vat-prices="formVatPrices"
           :vat-rate="modelOrigin.vatRate"
           :units="1"
-          type="initCost"
+          type="resultCost"
         )
 
 </template>

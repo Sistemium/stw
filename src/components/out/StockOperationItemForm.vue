@@ -23,7 +23,7 @@ el-tabs.stock-operation-item-form(:class="tabClass")
           :vat-rate="vatRate"
           :materials="model.materials"
           :units="1"
-          type="initCost"
+          type="resultCost"
           @update-value="onUpdateCost"
         )
         article-cost-info(
