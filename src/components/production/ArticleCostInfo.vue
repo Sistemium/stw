@@ -41,7 +41,7 @@ const label = computed(() => props.customLabel || [
 ].filter(x => x).join(' '));
 
 const data = computed<{ initCost: number, resultCost?: number, cost?: number }>(() => {
-  if (!props.materials) {
+  if (!props.materials?.length) {
     return stockArticleDateReactive(props.storageId, props.articleId, props.date);
   }
   const type = props.type || 'initCost';

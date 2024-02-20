@@ -26,7 +26,7 @@ export function stockOperationAct(items: StockOperationItem[], storageId: string
 
   const materializedItems: PricedMaterials[] = flatten(items.map(item => {
     const { materials, units } = item;
-    if (!materials) {
+    if (!materials?.length) {
       return item;
     }
     return materials
