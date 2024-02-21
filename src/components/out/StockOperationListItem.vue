@@ -17,7 +17,7 @@
     //.products(
     //  v-if="source.productsCount"
     //) {{ source.productsCount }} {{ $t('shortened.products') }}.
-    .total-cost(v-if="source.totalCost") {{ source.totalCost }} &euro;
+    .total-cost(v-if="source.totalCost") {{ $nr(source.totalCost) }} &euro;
 
 </template>
 <script setup lang="ts">
