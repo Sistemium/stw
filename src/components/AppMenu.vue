@@ -194,4 +194,8 @@ strong, .hamburger {
   left: 0;
 }
 
+#nav > .router-link-active {
+  color: #42b983;
+}
+
 </style>
