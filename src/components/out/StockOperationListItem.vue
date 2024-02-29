@@ -6,7 +6,7 @@
 )
   .title
     .date {{ $ts(source.date, 'short') }}
-      span.ndoc(v-if="source.ndoc") &nbsp;{{$t('numberLabel')}} {{ source.ndoc }}
+      span.ndoc(v-if="source.ndoc") &nbsp;{{ source.ndoc }}
     .counterparty(v-if="source.counterpartyName") {{ source.counterpartyName }}
     .comment-text(v-if="source.commentText") {{ source.commentText }}
   .right
@@ -34,7 +34,7 @@ defineProps<{
 <style scoped lang="scss">
 @import "../../styles/pageLists";
 
-.comment-text {
+.comment-text, span.ndoc {
   color: $gray;
   font-size: smaller;
 }

@@ -49,6 +49,8 @@
     "email": "El. paštas",
     "date": "Data",
     "ndoc": "Dokumento nr.",
+    "series": "Serija",
+    "number": "Numeris",
     "startsFrom": "Nuo",
     "dateB": "Data nuo",
     "site": "Padalinys",

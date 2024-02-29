@@ -47,6 +47,8 @@
     "vatCode": "VAT number",
     "name": "Name",
     "ndoc": "Document nr.",
+    "series": "Series",
+    "number": "Number",
     "email": "E-mail",
     "type": "Type",
     "consigneeType": "Consignee type",

@@ -14,14 +14,6 @@ el-form.stock-operation-form(
     date-string-picker(v-model="model.date")
 
   el-form-item(
-    :label="$t('fields.ndoc')"
-    prop="ndoc"
-  )
-    el-input(
-      v-model="model.ndoc"
-    )
-
-  el-form-item(
     :label="$t('fields.storage')"
     prop="storageId"
   )
@@ -32,6 +24,12 @@ el-form.stock-operation-form(
         :label="name"
         :value="id"
       )
+
+  el-form-item(
+    :label="$t('fields.ndoc')"
+    prop="ndoc"
+  )
+    invoice-number-edit(v-model="model.ndoc")
 
   el-form-item(
     :label="$t('fields.pricing')"
@@ -113,6 +111,7 @@ import { $requiredRule } from '@/lib/validations'
 import type { StockOperation } from '@/models/StockOperations'
 import { useFormValidate } from '@/services/validating'
 import PricingSelect from '@/components/select/PricingSelect.vue'
+import InvoiceNumberEdit from '@/components/InvoiceNumberEdit.vue'
 
 const props = defineProps<{
   model: StockOperation
