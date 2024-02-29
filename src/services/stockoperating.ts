@@ -29,7 +29,7 @@ export function stockOperationAct(items: StockOperationItem[], storageId: string
     if (!materials?.length) {
       return item;
     }
-    return materials
+    const res = materials
       .map<PricedMaterials>(material => ({
         ...material,
         units: units * material.units,
@@ -37,6 +37,12 @@ export function stockOperationAct(items: StockOperationItem[], storageId: string
         vatPrice: undefined,
         vatRate: item.vatRate,
       }));
+    if (Article.reactiveGet(item.articleId)?.isSKU) {
+      res.push({
+        ...item,
+      })
+    }
+    return res
   }));
 
   return materializedItems.map(item => {

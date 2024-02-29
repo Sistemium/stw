@@ -20,6 +20,7 @@ import type { CostType, MaterialFields } from '@/models/Recipes';
 import StockArticleDate from '@/models/StockArticleDate.js'
 import { t } from '@/lib/validations';
 import { stockArticleDateReactive } from '@/services/warehousing'
+import Article from '@/models/Article'
 
 const props = defineProps<{
   storageId: string;
@@ -44,9 +45,13 @@ const data = computed<{ initCost: number, resultCost?: number, cost?: number }>(
   if (!props.materials?.length) {
     return stockArticleDateReactive(props.storageId, props.articleId, props.date);
   }
+  const materials: { articleId: string, units?: number }[] = [...props.materials]
+  if (Article.reactiveGet(props.articleId)?.isSKU) {
+    materials.push({ articleId: props.articleId, units: props.units })
+  }
   const type = props.type || 'initCost';
   return {
-    [type]: sumBy(props.materials, ({ articleId, units }) => {
+    [type]: sumBy(materials, ({ articleId, units }) => {
       const initCostObj = stockArticleDateReactive(props.storageId, articleId, props.date) || {};
       const initCost = round(initCostObj[type] * (props.vatPrices ? (1 + props.vatRate) : 1), 2);
       return initCost && units ? units * initCost : 0;
