@@ -18,6 +18,11 @@ el-table.stock-operation-table(
     :formatter="(r,c,date) => $ts(date, 'short')"
   )
   el-table-column(
+    prop="ndoc"
+    :label="$t('fields.ndoc')"
+    :width="columnSize"
+  )
+  el-table-column(
     prop="counterpartyName"
     :label="counterpartyLabel"
   )
@@ -44,6 +49,7 @@ el-table.stock-operation-table(
     prop="totalCost"
     :label="$t('fields.totalCost')"
     width="120"
+    :formatter="(r, c, val) => $n(val)"
   )
 
 </template>

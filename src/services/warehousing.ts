@@ -156,6 +156,7 @@ export function searchOperations(search: string, itemsModel: Model, parentKey: s
   return (operation: BaseItem) => {
     const { commentText, counterpartyId, counterpartyType } = operation;
     return re.test(commentText)
+      || re.test(operation.ndoc)
       || (counterpartyType === 'LegalEntity' && counterPartyTest(LegalEntity, counterpartyId, re))
       || (counterpartyType === 'Storage' && counterPartyTest(Storage, counterpartyId, re))
       || !!positionsTest(itemsModel.reactiveManyByIndex(parentKey, operation.id), re);
