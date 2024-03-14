@@ -4,6 +4,7 @@ el-popover.article-avatar(
   placement="right"
   :width="350"
   trigger="hover"
+  :disabled="!picture.href"
 )
   template(#reference)
     el-avatar.article-avatar(
@@ -13,9 +14,15 @@ el-popover.article-avatar(
       shape="square"
       :size="size"
       :src="picture.thumbnailHref"
+      @click="emit('click')"
     )
-  template(#default)
-    el-image(:src="picture.href")
+  template(
+    #default
+  )
+    el-image(
+      :src="picture.href"
+    )
+
 
 </template>
 <script setup lang="ts">
@@ -35,6 +42,9 @@ const props = defineProps<{
 
 const article = computed(() => props.article || Article.reactiveGet(props.articleId))
 const picture = computed(() => model.reactiveGet(article.value?.avatarPictureId) || {})
+const emit = defineEmits<{
+  (e: 'click'): void
+}>()
 
 </script>
 <style scoped lang="scss">
