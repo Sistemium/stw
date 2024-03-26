@@ -6,6 +6,7 @@
 
     el-tab-pane(:lazy="true" :label="$t('concepts.items')")
       .buttons
+        attachments-list(:owner-id="stockOperationId")
         workflow-transitions(
           :workflow="workflow"
           :model-value="stockOperation.processing"
@@ -97,6 +98,7 @@ import { actHeadRows, stockOperationAct } from '@/services/stockoperating';
 import type { BaseItem } from 'sistemium-data'
 import ArticlePicturesPage from '@/views/ArticlePicturesPage.vue'
 import { useVatConfig } from '@/services/vatConfiguring'
+import AttachmentsList from '@/components/AttachmentsList.vue'
 
 
 const props = defineProps<{
