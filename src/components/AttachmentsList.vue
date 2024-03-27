@@ -32,7 +32,6 @@
     el-button(
       :disabled="files.length > 1"
       circle
-      type="primary"
       :icon="Upload"
       size="small"
     )
