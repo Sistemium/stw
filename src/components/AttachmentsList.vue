@@ -5,6 +5,7 @@
       v-for="file in files"
       :key="file.id"
     )
+      el-link(:icon="Download" :href="file.url")
       el-popconfirm(
         :title="$t('reallyDelete')"
         @confirm="deleteFile(file)"
@@ -13,7 +14,7 @@
       )
         template(#reference)
           el-link.red(:icon="Delete")
-      el-link(size="small" :href="file.url")
+      el-link(size="small"  @click="showPdf(file)")
         small {{ file.originalName || file.name }}
 
   el-upload(
@@ -36,6 +37,12 @@
       size="small"
     )
 
+  p-d-f-dialog(
+    v-model="showDialog"
+    v-if="showDialogPdf"
+    :file="showDialogPdf"
+  )
+
 </template>
 
 <script setup lang="ts">
@@ -43,7 +50,8 @@ import { computed, ref, watch } from 'vue'
 import File, { type IFile } from '@/models/File'
 import type { UploadFile } from 'element-plus'
 import { useStore } from 'vuex'
-import { Upload, Delete } from '@element-plus/icons-vue'
+import { Upload, Delete, Download } from '@element-plus/icons-vue'
+import PDFDialog from '@/components/PDFDialog.vue'
 
 const props = defineProps<{
   ownerId: string
@@ -55,6 +63,18 @@ const files = computed(() => File.reactiveFilter({ ownerId: props.ownerId }))
 const headers = computed(() => ({
   authorization: store.getters['auth/ACCESS_TOKEN'],
 }))
+
+const showDialogPdf = ref<IFile>()
+const showDialog = computed({
+  get() {
+    return !!showDialogPdf.value
+  },
+  set(value) {
+    if (!value) {
+      showDialogPdf.value = undefined
+    }
+  }
+})
 
 interface Uploaded {
   url: string
@@ -79,6 +99,10 @@ async function deleteFile(file: IFile) {
     .finally(() => {
       loading.value = false
     })
+}
+
+function showPdf(file: IFile) {
+  showDialogPdf.value = file
 }
 
 </script>

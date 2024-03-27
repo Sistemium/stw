@@ -16,6 +16,7 @@
     "@sentry/tracing": "^7.51.2",
     "@sentry/vue": "^7.51.2",
     "@syncfusion/ej2-vue-barcode-generator": "^20.1.55",
+    "@tato30/vue-pdf": "^1.9.6",
     "@vueuse/core": "^10.0.2",
     "async": "^3.2.4",
     "axios": "^0.21.0",
