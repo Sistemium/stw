@@ -18,6 +18,7 @@
         small {{ file.originalName || file.name }}
 
   el-upload(
+    :key="ownerId"
     :disabled="files.length > 1"
     action="/api/upload"
     accept="application/pdf"
