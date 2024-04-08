@@ -31,6 +31,7 @@ import ArticleMatcher from '@/components/catalogue/ArticleMatcher.vue';
 import * as g from '@/store/inv/getters';
 import * as m from '@/store/inv/mutations';
 import BarcodeView from '@/components/BarcodeScanner/BarcodeView.vue';
+import SimpleLabel from '@/lib/SimpleLabel.vue'
 
 const { mapGetters, mapMutations } = createNamespacedHelpers('inv');
 
@@ -118,6 +119,7 @@ export default {
     this.$watchImmediate('value', this.onArticle);
   },
   components: {
+    SimpleLabel,
     BarcodeView,
     ArticleMatcher,
   },
