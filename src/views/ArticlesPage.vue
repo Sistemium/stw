@@ -63,7 +63,6 @@ import { computed, ref } from 'vue';
 import type { Component } from 'vue';
 import { useI18n } from 'vue-i18n';
 import map from 'lodash/map';
-import { useRouter } from 'vue-router';
 import pick from 'lodash/pick';
 import filter from 'lodash/filter';
 import SearchInput from '@/lib/SearchInput.vue';
@@ -79,6 +78,7 @@ import { t } from '@/lib/validations';
 import { DocumentCopy } from '@element-plus/icons-vue';
 import { catalogueData, searchArticle } from '@/services/catalogue.js';
 import { useScrollToCreated } from '@/services/scrolling';
+import { useRouteParams } from '@/lib/updateRouteParams'
 
 const props = defineProps<{
   editRoute: string;
@@ -87,11 +87,18 @@ const props = defineProps<{
 }>();
 
 const barcode = ref<string>('');
-const search = ref('');
 const tableHeight = ref<number>();
 const selectedArticle = ref();
-const router = useRouter();
+const { route, router, updateRouteParams } = useRouteParams()
 const viewComponentRef = ref();
+const search = computed({
+  get() {
+    return route.query.search;
+  },
+  set(search) {
+    updateRouteParams({}, { search: search || undefined });
+  },
+});
 
 useScrollToCreated({
   ifIdExistsFn(id: string): boolean {
