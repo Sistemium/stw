@@ -12,8 +12,8 @@ el-form.storage-form(
     prop="type"
   )
     el-radio-group(v-model="model.type")
-      el-radio-button(label="facility") {{ $t('concepts.facility') }}
-      el-radio-button(label="personal") {{ $t('concepts.personal') }}
+      el-radio-button(value="facility") {{ $t('concepts.facility') }}
+      el-radio-button(value="personal") {{ $t('concepts.personal') }}
 
   el-form-item(
     :label="$t('fields.name')"

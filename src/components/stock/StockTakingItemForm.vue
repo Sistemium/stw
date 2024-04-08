@@ -53,13 +53,13 @@ el-form.stock-taking-item-form(
         v-model="mode"
         @change="modeChange"
       )
-        el-radio-button(label="other") {{ $t('concepts.other') }}
+        el-radio-button(value="other") {{ $t('concepts.other') }}
         el-radio-button(
           v-for="p in packageOptions"
           :key="p.id"
-          :label="p.id"
+          :value="p.id"
         ) {{ p.name }} x {{ p.unitsInPackage }}
-        el-radio-button(:label="defaultMode") {{ $t(`units.${measureUnitId}`) }}
+        el-radio-button(:value="defaultMode") {{ $t(`units.${measureUnitId}`) }}
 
     template(v-if="mode === 'other' || (!editable && model.packageTypeId)")
       el-form-item(

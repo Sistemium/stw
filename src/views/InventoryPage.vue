@@ -9,8 +9,8 @@
     el-radio-group(
       v-model="matcherMode"
     )
-      el-radio-button(label="add" :disabled="true") {{ $t('addArticle') }}
-      el-radio-button(label="find") {{ $t('findArticle') }}
+      el-radio-button(value="add" :disabled="true") {{ $t('addArticle') }}
+      el-radio-button(value="find") {{ $t('findArticle') }}
     article-matcher(@found="onArticle")
 
   template(v-if="canAddBarcode")
