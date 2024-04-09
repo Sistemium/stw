@@ -211,6 +211,7 @@ function avatarClick(article: { id: string }) {
     params: {
       articleId: article.id,
     },
+    query: route.query,
   });
 }
 

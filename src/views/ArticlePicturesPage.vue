@@ -22,7 +22,7 @@ el-dialog.article-pictures-page(
 
 import ArticlePictureGallery from '@/components/catalogue/ArticlePictureGallery.vue';
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRouteParams } from '@/lib/updateRouteParams'
 
 const props = defineProps<{
   from?: Record<string, any>
@@ -30,7 +30,7 @@ const props = defineProps<{
   authoring?: boolean
 }>();
 
-const router = useRouter();
+const { updateRouteParams, route } = useRouteParams()
 const visible = ref(true);
 
 const emit = defineEmits<{
@@ -43,7 +43,7 @@ function handleClose() {
     emit('closed')
     return
   }
-  router.push(props.from)
+  updateRouteParams({ articleId: undefined }, route.query, props.from.name)
     .catch(e => console.error('handleClose', e));
 }
 
