@@ -37,9 +37,8 @@ import merge from 'lodash/merge';
 import FormButtons from 'sistemium-vue/components/FormButtons.vue';
 import matchesDeep from 'sistemium-data/lib/util/matchesDeep.js';
 import { localizedDeleteError } from '@/services/erroring.js';
-import i18n from '@/i18n';
 import type { BaseItem } from '@/init/Model'
-import { useI18n } from 'vue-i18n';
+import { t } from '@/lib/validations';
 
 const props = defineProps({
   title: String,
@@ -95,7 +94,6 @@ nextTick(() => {
 });
 
 const drawerComponent = computed(() => props.isDrawer ? 'el-drawer' : 'el-card');
-const { t } = useI18n()
 // const loading = computed(() => !!loadingMessage.value);
 const isDeletable = computed(() => props.deletable && !!props.modelOrigin?.id);
 const changed = computed(() => props.forceModified || hasChanges.value);
@@ -122,7 +120,7 @@ function onDeleteClick() {
   performOperation(() => props.destroyFn(id)
     .then(() => {
       emit('deleted', id);
-    }).catch(e => {
+    }).catch((e: any) => {
       throw localizedDeleteError(e);
     }));
 }
@@ -137,7 +135,7 @@ function onSaveClick() {
     if (valid) {
       performOperation(save);
     } else {
-      ElMessage.warning(i18n.global.t('validation.formInvalid').toString());
+      ElMessage.warning(t('validation.formInvalid').toString());
     }
   });
 }
@@ -161,7 +159,7 @@ function handleClose(record: any) {
     query.createdId = record.id;
   }
   router.replace(merge({ ...(props.afterCloseTo || props.from) }, { query }))
-    .catch(e => console.error('handleClose', e));
+    .catch((e: any) => console.error('handleClose', e));
 }
 
 function cancelClick(record: any) {
@@ -172,7 +170,7 @@ function cancelClick(record: any) {
   handleClose(record);
 }
 
-async function performOperation(op) {
+async function performOperation(op: () => Partial<any>) {
 
   showLoading();
 
@@ -188,7 +186,7 @@ async function performOperation(op) {
 
 }
 
-function showError(e) {
+function showError(e: Error) {
   return ElMessage.error({
     message: e.message,
     // offset: 20,
@@ -200,7 +198,7 @@ function showError(e) {
 
 function showLoading(message = '') {
   loadingMessage.value = ElMessage({
-    message: message || `${i18n.global.t('saving')} ...`,
+    message: message || `${t('saving')} ...`,
     duration: 0,
   });
 }
