@@ -30,6 +30,10 @@ el-select-v2.article-select(
           small.supplier(v-if="article.supplier") {{ article.supplier.stringValue }}
         .info
           span.code(v-if="article.code") {{ article.code }}
+          el-icon(
+            v-if="article.materials"
+          )
+            document
           small.commentary(v-if="article.commentary") {{ article.commentary.stringValue }}
           article-stock-info(
             v-if="storageId"
@@ -50,6 +54,7 @@ import { searchArticle } from '@/services/catalogue.js';
 import upperFirst from 'lodash/upperFirst';
 import { computed, ref, watch } from 'vue';
 import orderBy from 'lodash/orderBy';
+import { Document } from '@element-plus/icons-vue'
 import ArticleAvatar from '@/components/catalogue/ArticleAvatar.vue';
 import ArticleStockInfo from '@/components/catalogue/ArticleStockInfo.vue';
 import type { IArticle as ArticleType } from '@/models/Articles'
@@ -194,7 +199,7 @@ function onVisibleChange(visible: boolean) {
 .article-select-popper {
   min-width: 600px;
 
-  .el-select-dropdown__list {
+  .el-select-dropdown__list, .el-select-dropdown {
     width: auto !important;
   }
 
