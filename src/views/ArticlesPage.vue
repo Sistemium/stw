@@ -198,6 +198,7 @@ function onArticleClick(article: { id: string }) {
     params: {
       articleId: article.id,
     },
+    query: route.query,
   });
 }
 

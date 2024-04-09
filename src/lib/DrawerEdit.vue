@@ -38,9 +38,8 @@ import FormButtons from 'sistemium-vue/components/FormButtons.vue';
 import matchesDeep from 'sistemium-data/lib/util/matchesDeep.js';
 import { localizedDeleteError } from '@/services/erroring.js';
 import i18n from '@/i18n';
-// import { useLog } from '@/services/debugging';
-//
-// const { debug } = useLog();
+import type { BaseItem } from '@/init/Model'
+import { useI18n } from 'vue-i18n';
 
 const props = defineProps({
   title: String,
@@ -61,13 +60,13 @@ const props = defineProps({
   },
   saveFn: {
     type: Function,
-    async default(props) {
+    async default(props: any) {
       console.error('saveFn not implemented', props);
     },
   },
   destroyFn: {
     type: Function,
-    async default(id) {
+    async default(id: string) {
       console.error('destroyFn not implemented', id);
     },
   },
@@ -79,24 +78,24 @@ const props = defineProps({
 });
 
 const emit = defineEmits<{
-  (e: 'deleted', id: string);
-  (e: 'error', error: Error);
+  (e: 'deleted', id: string | null): void
+  (e: 'error', error: Error): void
 }>();
 
 const drawer = ref(null);
-const loadingMessage = ref(null);
+const loadingMessage = ref();
 const drawerOpen = ref(false);
-const model = ref(null);
+const model = ref();
 const router = useRouter();
 const route = useRoute();
-const $parent = ref(null);
+const $parent = ref();
 
 nextTick(() => {
   drawerOpen.value = true;
 });
 
 const drawerComponent = computed(() => props.isDrawer ? 'el-drawer' : 'el-card');
-
+const { t } = useI18n()
 // const loading = computed(() => !!loadingMessage.value);
 const isDeletable = computed(() => props.deletable && !!props.modelOrigin?.id);
 const changed = computed(() => props.forceModified || hasChanges.value);
@@ -107,7 +106,7 @@ const hasChanges = computed(() => {
 });
 
 onMounted(() => {
-  $parent.value = getCurrentInstance().parent;
+  $parent.value = getCurrentInstance()?.parent;
 });
 
 watch(() => props.modelOrigin, modelOrigin => {
@@ -130,11 +129,11 @@ function onDeleteClick() {
 
 function getValidateForm() {
   const fn = props.validateFn || $parent.value?.refs?.form?.validate;
-  return fn || (cb => typeof cb === 'function' && cb(true));
+  return fn || ((cb: any) => typeof cb === 'function' && cb(true));
 }
 
 function onSaveClick() {
-  getValidateForm()(valid => {
+  getValidateForm()((valid: any) => {
     if (valid) {
       performOperation(save);
     } else {
@@ -145,16 +144,16 @@ function onSaveClick() {
 
 function save() {
   return props.saveFn(model.value)
-    .then(record => {
-      $parent.value.emit('saved', record);
+    .then((record: BaseItem) => {
+      $parent.value?.emit('saved', record);
       return record;
     });
 }
 
-function handleClose(record) {
+function handleClose(record: any) {
   if (!props.from) {
     drawerOpen.value = false;
-    $parent.value.emit('closed', record);
+    $parent.value?.emit('closed', record);
     return;
   }
   const query = pick(route.query, 'search') as { [key: string]: string };
@@ -165,7 +164,7 @@ function handleClose(record) {
     .catch(e => console.error('handleClose', e));
 }
 
-function cancelClick(record) {
+function cancelClick(record: any) {
   if (!drawer.value) {
     console.error('cancelClick', 'drawer ref is empty');
     return;
@@ -181,7 +180,7 @@ async function performOperation(op) {
     const res = await op();
     hideLoading();
     cancelClick(res);
-  } catch (e) {
+  } catch (e: any) {
     hideLoading();
     emit('error', e);
     showError(e);
