@@ -45,6 +45,15 @@ el-form.article-measurement-form(
       :min="1"
     )
 
+  el-form-item(
+    prop="tareArticleId"
+    :label="$t('fields.tare')"
+  )
+    article-select(
+      v-model="model.tareArticleId"
+      show-code
+    )
+
 </template>
 <script setup lang="ts">
 /* eslint-disable vue/no-mutating-props */
@@ -61,6 +70,7 @@ import MeasureSelect from '@/components/select/MeasureSelect.vue';
 import type { IArticle } from '@/models/Articles';
 import { $requiredRule } from '@/lib/validations';
 import { useFormValidate } from '@/services/validating';
+import ArticleSelect from '@/components/catalogue/ArticleSelect.vue'
 
 
 const props = defineProps<{

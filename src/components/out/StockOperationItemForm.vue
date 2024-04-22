@@ -26,6 +26,16 @@ el-tabs.stock-operation-item-form(:class="tabClass")
           type="resultCost"
           @update-value="onUpdateCost"
         )
+
+        template(
+          v-if="model.tare"
+        )
+          el-form-item(:label="$t('fields.tare')")
+          recipe-material-form(
+            :model="model.tare"
+            :units="false"
+          )
+
         article-cost-info(
           v-if="model.articleId && model.stockReceivingId && finished"
           :article-id="model.articleId"
@@ -41,7 +51,10 @@ el-tabs.stock-operation-item-form(:class="tabClass")
 
   el-tab-pane(:label="$t('menu.materials')" v-if="model.materials")
     el-form(:model="model" :disabled="!editable")
-      materials-form(:materials="model.materials" :disabled="!editable")
+      materials-form(
+        :materials="model.materials"
+        :disabled="!editable"
+      )
         template(#material="{ material: material }")
           article-cost-info(
             v-if="material?.articleId && storageId && date"
@@ -71,6 +84,7 @@ import type { StockOperationItem } from '@/models/StockOperations'
 import { useFormValidate } from '@/services/validating'
 import { type IPricing } from '@/models/Pricing'
 import { getPricing, useSetPrices } from '@/services/pricing'
+import RecipeMaterialForm from '@/components/production/RecipeMaterialForm.vue'
 
 const props = defineProps<{
   editable: boolean;
@@ -100,9 +114,26 @@ const tabClass = computed(() => !articleMaterials.value && 'single')
 const storage = computed(() => Storage.reactiveGet(props.storageId))
 
 watch(() => props.model.articleId, articleId => {
+  const { value: materials } = articleMaterials
+  const { vatRate } = props
   // eslint-disable-next-line vue/no-mutating-props
-  props.model.materials = cloneDeep(articleMaterials.value)
+  props.model.materials = materials && cloneDeep(materials)
+    .map(m => ({
+      ...m,
+      // vatRate,
+    }));
   const { date, pricing } = props
+  const tareArticleId = article.value?.tareArticleId
+  if (tareArticleId) {
+    // eslint-disable-next-line vue/no-mutating-props
+    props.model.tare = {
+      articleId: tareArticleId,
+      price: 0,
+      vatPrice: 0,
+      units: 1,
+      vatRate,
+    }
+  }
   if (articleId && date && pricing) {
     const { vatPrices } = pricing
     const priceField = vatPrices ? 'vatPrice' : 'price'
@@ -113,8 +144,8 @@ watch(() => props.model.articleId, articleId => {
       storage.value?.siteId,
       storage.value?.employeeId,
     )
-    // eslint-disable-next-line vue/no-mutating-props
     formVatPrices.value = vatPrices
+    // eslint-disable-next-line vue/no-mutating-props
     props.model[priceField] = price
     setOtherPrice(vatPrices, props.vatRate || 0, price)
   }

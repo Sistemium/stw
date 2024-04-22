@@ -10,6 +10,7 @@ el-form.recipe-material-form(
     article-select(
       :storage-id="currentStorageId"
       v-model="model.articleId"
+      show-code
     )
   el-form-item(
     v-if="units"
