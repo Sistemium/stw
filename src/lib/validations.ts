@@ -86,7 +86,7 @@ export async function saveWithLoading(asyncFunction: () => Promise<any>) {
   return result;
 }
 
-export function $percent(value: number) {
+export function $percent(value: number = 0) {
   return `${i18n.global.n(value * 100.0)}%`;
 }
 
