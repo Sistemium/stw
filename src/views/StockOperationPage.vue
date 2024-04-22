@@ -97,7 +97,7 @@ import { t } from '@/lib/validations';
 import { actHeadRows, stockOperationAct } from '@/services/stockoperating';
 import type { BaseItem } from 'sistemium-data'
 import ArticlePicturesPage from '@/views/ArticlePicturesPage.vue'
-import { useVatConfig } from '@/services/vatConfiguring'
+import { useVatOperationConfig } from '@/services/vatConfiguring'
 import AttachmentsList from '@/components/AttachmentsList.vue'
 
 
@@ -119,7 +119,7 @@ const props = defineProps<{
 const router = useRouter();
 const { setBusy, isBusy } = useBusy();
 const { updateRouteParams } = useRouteParams();
-const { vatOperationConfig } = useVatConfig(props.operationName)
+const { vatOperationConfig } = useVatOperationConfig(props.operationName)
 
 const priceField = computed(() => {
   return configPriceField(props.operationName, stockOperation.value.date);

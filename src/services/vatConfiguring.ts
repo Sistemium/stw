@@ -20,7 +20,14 @@ export interface VatConfig {
   },
 }
 
-export function useVatConfig(operationName: StockOperationName): {
+export function useVatConfig() {
+  const vatConfig = computed<VatConfig>(() => vatConfigFn());
+  return {
+    vatConfig,
+  }
+}
+
+export function useVatOperationConfig(operationName: StockOperationName): {
   vatConfig: ComputedRef<VatConfig>;
   vatOperationConfig: ComputedRef<VatOperationConfig>;
 } {

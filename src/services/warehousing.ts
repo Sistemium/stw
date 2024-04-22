@@ -145,7 +145,7 @@ export function vatConfig(date: Date | string = new Date()) {
     dateB: { $lte: stringDate },
     dateE: { $gte: stringDate },
   });
-  return (config || {}) as VatConfig;
+  return (config || { defaultRate: 0 }) as VatConfig;
 }
 
 export function searchOperations(search: string, itemsModel: Model, parentKey: string): (_: BaseItem) => boolean {

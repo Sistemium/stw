@@ -39,7 +39,7 @@ import StockTakingItemForm from '@/components/stock/StockTakingItemForm.vue';
 import { stockTakingItemInstance } from '@/services/warehousing.js';
 import VatModeSwitch from '@/components/out/VatModeSwitch.vue';
 import PriceForm from '@/components/out/PriceForm.vue';
-import { useVatConfig } from '@/services/vatConfiguring';
+import { useVatOperationConfig } from '@/services/vatConfiguring';
 import ArticleCostInfo from '@/components/production/ArticleCostInfo.vue';
 import type { BaseItem } from '@/init/Model'
 
@@ -50,7 +50,7 @@ const props = defineProps({
   barcode: String,
 });
 
-const { vatOperationConfig } = useVatConfig('stockReceiving');
+const { vatOperationConfig } = useVatOperationConfig('stockReceiving');
 
 const formVatPrices = ref(vatOperationConfig.value.vatPrices);
 

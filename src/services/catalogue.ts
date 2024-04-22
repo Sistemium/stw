@@ -61,6 +61,7 @@ export function articleInstance() {
     props,
     boxes: [],
     isCustomName: false,
+    isSKU: true,
     measureId: null,
     measureUnitId: null,
     unitPackageTypeId: null, // optional
