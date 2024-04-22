@@ -113,7 +113,12 @@ const recipeFormRef = ref(null);
 const currentTab = ref('0');
 const route = useRoute();
 const { width } = useWindowSize();
-const drawerWidth = computed(() => width.value > 450 ? '450px' : '370px');
+const drawerWidth = computed(() => {
+  if (width.value > 1100) {
+    return '550px'
+  }
+  return width.value > 450 ? '450px' : '370px'
+});
 const copyArticle = computed(() => {
   const { copyId } = route.query;
   return cloneInstance(Article.reactiveGet(copyId as string));
