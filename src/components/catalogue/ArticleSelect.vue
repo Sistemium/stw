@@ -54,6 +54,7 @@ import { searchArticle } from '@/services/catalogue.js';
 import upperFirst from 'lodash/upperFirst';
 import { computed, ref, watch } from 'vue';
 import orderBy from 'lodash/orderBy';
+import trim from 'lodash/trim';
 import { Document } from '@element-plus/icons-vue'
 import ArticleAvatar from '@/components/catalogue/ArticleAvatar.vue';
 import ArticleStockInfo from '@/components/catalogue/ArticleStockInfo.vue';
@@ -73,12 +74,13 @@ const props = withDefaults(defineProps<{
   filters?: Record<string, any> | ((a: ArticleType) => boolean)
   placeholder?: string
   storageId?: string
+  showCode?: boolean
 }>(), {
   filters: () => ({}),
 });
 
 const selectProps = {
-  label: 'name',
+  label: props.showCode ? 'displayName' : 'name',
   value: 'id',
 };
 
@@ -101,6 +103,7 @@ const options = computed(() => {
       ...a,
       supplier: a.props.find(prop => prop.propId === VITE_SUPPLIER_PROP),
       commentary: a.props.find(prop => prop.propId === VITE_COMMENTARY_PROP),
+      displayName: trim(`${a.code} ${a.name}`),
     }));
 });
 
