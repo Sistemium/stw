@@ -17,8 +17,10 @@
           small {{ $t('delete') }}
       recipe-material-form(
         :model="material"
+        :vat-prices="vatPrices"
         :ref="el => el && itemRefs.push(el)"
         :disabled="disabled"
+        :prices="prices"
       )
         template(#default)
           slot(name="material" :material="material")
@@ -40,6 +42,9 @@ import type { MaterialFields, RecipeMaterial } from '@/models/Recipes'
 const props = defineProps<{
   materials: Partial<RecipeMaterial>[] | null;
   disabled?: boolean;
+  vatPrices?: boolean;
+  vatRate?: number;
+  prices?: boolean;
 }>();
 const emit = defineEmits<{
   (e: 'create', materials: Partial<RecipeMaterial>[] | null): void;
@@ -91,6 +96,9 @@ function onAddMaterial() {
     measureId: undefined,
     measureUnitId: undefined,
     units: undefined,
+    price: undefined,
+    vatPrice: undefined,
+    vatRate: props.vatRate || 0,
   };
   if (props.materials) {
     props.materials.push(material);

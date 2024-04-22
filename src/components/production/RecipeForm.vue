@@ -14,6 +14,7 @@ el-form.recipe-form(
     :materials="model.materials || null"
     ref="materialsFormRef"
     @create="onCreate"
+    :prices="vatRate !== undefined"
   )
     template(
       #material="{ material: material }"
@@ -45,7 +46,7 @@ const props = defineProps<{
   model: IArticle;
   storageId?: string;
   date: string;
-  vatRate: number;
+  vatRate?: number;
   vatPrices: boolean;
   costType: CostType;
 }>();

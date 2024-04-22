@@ -12,10 +12,16 @@ el-form.recipe-material-form(
       v-model="model.articleId"
     )
   el-form-item(
+    v-if="units"
     :label="$t('units.quantityOf', [$t(`units.genitive.${measureUnitId}`)])"
     prop="units"
   )
     el-input-number(v-model="model.units" :min="0")
+  price-form(
+    v-if="prices"
+    :model="model"
+    :vat-prices="vatPrices"
+  )
   slot
 
 </template>
@@ -29,12 +35,16 @@ import type { MaterialFields } from '@/models/Recipes';
 import { $requiredRule } from '@/lib/validations';
 import { useFormValidate } from '@/services/validating';
 import { useInvStore } from '@/store/invStore'
+import PriceForm from '@/components/out/PriceForm.vue'
 /* eslint-disable vue/no-mutating-props */
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   model: Partial<MaterialFields>;
   disabled?: boolean;
-}>();
+  vatPrices?: boolean;
+  prices?: boolean;
+  units?: boolean;
+}>(), { units: true, prices: false, vatPrices: false, disabled: false });
 
 const invStore = useInvStore()
 const currentStorageId = computed(() => invStore.currentStorageId)
