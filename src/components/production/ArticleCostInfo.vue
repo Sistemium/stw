@@ -26,7 +26,7 @@ const props = defineProps<{
   storageId: string;
   articleId: string;
   date: string;
-  vatRate: number;
+  vatRate?: number;
   vatPrices: boolean;
   units?: number;
   materials?: MaterialFields[];
@@ -53,7 +53,7 @@ const data = computed<{ initCost: number, resultCost?: number, cost?: number }>(
   return {
     [type]: sumBy(materials, ({ articleId, units }) => {
       const initCostObj = stockArticleDateReactive(props.storageId, articleId, props.date) || {};
-      const initCost = round(initCostObj[type] * (props.vatPrices ? (1 + props.vatRate) : 1), 2);
+      const initCost = round(initCostObj[type] * (props.vatPrices ? (1 + (props.vatRate || 0)) : 1), 2);
       return initCost && units ? units * initCost : 0;
     }),
   } as Record<CostType, number>
