@@ -51,7 +51,6 @@ drawer-edit.article-edit(
           :storage-id="storageId"
           :date="date"
           :vat-prices="false"
-          :vat-rate="0"
           cost-type="resultCost"
         )
       //el-tab-pane(:label="$t('menu.barcodes')")
