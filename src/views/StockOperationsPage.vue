@@ -3,15 +3,25 @@
 .stock-withdrawals-page
 
   page-title(:title="`menu.${rootState}`")
-    menu-button(
-      label="menu.reports"
-      :options="reports"
+    //menu-button(
+    //  label="menu.reports"
+    //  :options="reports"
+    //)
+    download-excel-button(
+      :data-fn="downloadExcelData"
+      :name="downloadExcelName"
     )
 
   el-container
     component(:is="showDetails ? 'el-aside' : 'el-main'")
       .filters
         search-input(v-model="search")
+        .date-picker
+          el-date-picker(
+            v-model="dateRange"
+            type="daterange"
+            :unlink-panels="true"
+          )
         .buttons
           storage-select(
             v-model="storageId"
@@ -65,14 +75,16 @@
 </template>
 <script setup lang="ts">
 import find from 'lodash/find';
+import flatten from 'lodash/flatten';
 import { stockOperationToViewData, searchOperations } from '@/services/warehousing.js';
 import StockOperationList from '@/components/out/StockOperationList.vue';
 import StockOperationTable from '@/components/out/StockOperationTable.vue';
 import StockOperationListItem from '@/components/out/StockOperationListItem.vue';
-import MenuButton from '@/components/MenuButton.vue';
+// import MenuButton from '@/components/MenuButton.vue';
 import SearchInput from '@/lib/SearchInput.vue';
 import Resize from '@/lib/StmResize.vue';
 import ToolButton from '@/lib/ToolButton.vue';
+import dayjs from 'dayjs';
 import { computed, ref } from 'vue';
 import { useRouteParams } from '@/lib/updateRouteParams';
 import { useRoute } from 'vue-router';
@@ -86,6 +98,9 @@ import PageTitle from '@/components/PageTitle.vue';
 import { useScrollToCreated } from '@/services/scrolling';
 import type { StockOperation } from '@/models/StockOperations';
 import type { BaseItem } from '@/init/Model'
+import { t } from '@/lib/validations'
+import DownloadExcelButton from '@/lib/DownloadExcelButton.vue'
+import Article from '@/models/Article'
 
 const props = defineProps<{
   model: ReactiveModel;
@@ -97,7 +112,8 @@ const props = defineProps<{
   createRoute: string;
 }>();
 
-
+const today = dayjs().endOf('day');
+const monthAgo = today.add(-1, 'month');
 const { updateRouteParams } = useRouteParams();
 const route = useRoute();
 const { showTable, tableSize, windowWidth } = useResponsiveTables();
@@ -148,7 +164,9 @@ const stockOperations = computed(() => {
   if (!storageId.value) {
     return [];
   }
-  const data = props.model.reactiveManyByIndex('storageId', storageId.value);
+  const [dateB, dateE] = dateRange.value.map(d => dayjs(d).toJSON())
+  const data = props.model.reactiveManyByIndex('storageId', storageId.value)
+    .filter(({ date  }) => date >= dateB && date <= dateE);
   const filtered = search.value
     ? data.filter<BaseItem>(searchOperations(search.value, props.positionsModel, `${props.operationName}Id`))
     : data;
@@ -159,6 +177,22 @@ const showDetails = computed(() => {
   return route.name === props.editRoute
     || !!find(route.matched, matchDetails);
 });
+
+const dateRange = computed({
+  get() {
+    const { dateB, dateE } = route.query
+    return [
+      dayjs(dateB || monthAgo).toDate(),
+      dayjs(dateE || today).toDate(),
+    ];
+  },
+  set([dateB, dateE]) {
+    updateRouteParams({}, {
+      dateB: dayjs(dateB).toJSON(),
+      dateE: dayjs(dateE).toJSON(),
+    })
+  }
+})
 
 function matchDetails({ name }) {
   return name.match(`^${props.editRoute}(ItemEdit)?`);
@@ -180,7 +214,7 @@ const storageId = computed({
   },
 });
 
-const reports = [{ label: 'reports.stockMovement', to: 'stockMovementReport' }];
+// const reports = [{ label: 'reports.stockMovement', to: 'stockMovementReport' }];
 
 function setHeight(height) {
   tableHeight.value = height;
@@ -202,6 +236,96 @@ function onBack() {
   updateRouteParams({
     stockOperationId: undefined,
   }, {}, props.rootState);
+}
+
+/*
+Excel
+ */
+
+const downloadExcelName = computed(() => {
+  const [dateB, dateE] = dateRange.value.map(d => dayjs(d).format('YYYY-MM-DD'))
+  return [
+    t(`menu.${props.operationName}`),
+    dateB,
+    dateE,
+  ].join('-');
+});
+
+function downloadExcelData() {
+  const parentCol = `${props.operationName}Id`
+  const data = viewData.value.map((item) => {
+    const positions: BaseItem[] = props.positionsModel.reactiveManyByIndex(parentCol, item.id as string);
+    const date = dayjs(item.date).format('YYYY-MM-DD')
+    const counterpartyType = t(`fields.counterparty.${item.counterpartyType || 'undefined'}`)
+    return positions.map(position => {
+      const article = Article.getByID(position.articleId)
+      return {
+        ...item,
+        ...position,
+        articleName: article?.name,
+        articleCode: article?.code,
+        counterpartyType,
+        date,
+      }
+    })
+  })
+  return {
+    schema: downloadSchema(),
+    data: flatten(data),
+  }
+}
+
+function downloadSchema() {
+  const counterpartyLabel = t(`fields.${props.counterpartyRole}`)
+
+  return {
+    wrapText: true,
+    columns: [
+      {
+        key: 'id',
+        title: 'ID',
+        width: 0,
+      }, {
+        key: 'date',
+        title: t('fields.date'),
+        width: 15,
+      }, {
+        key: 'ndoc',
+        title: t('fields.ndoc'),
+        width: 15,
+      }, {
+        key: 'counterpartyType',
+        title:  t(`fields.${props.counterpartyRole}Type`),
+        width: 30,
+      }, {
+        key: 'commentText',
+        title: t('fields.commentText'),
+        width: 55,
+      }, {
+        key: 'counterpartyName',
+        title: counterpartyLabel,
+        width: 55,
+      }, {
+        key: 'articleName',
+        title: t('concepts.article'),
+        width: 55,
+      }, {
+        key: 'articleCode',
+        title: t('fields.code'),
+        width: 30,
+      }, {
+        key: 'units',
+        title: t('fields.units'),
+        width: 15,
+      }, {
+        key: 'price',
+        title: t('fields.price'),
+        width: 15,
+      },
+      // ...tableData.propColumns
+      //   .map(({ id, name }) => ({ key: id, title: name, width: 25 })),
+    ],
+  };
 }
 
 </script>
@@ -240,6 +364,11 @@ function onBack() {
     flex-direction: column;
   }
 
+  .date-picker {
+    width: auto;
+    margin-bottom: $padding;
+  }
+
   .search-input {
     width: 100%;
     margin-bottom: $padding;
@@ -266,8 +395,13 @@ function onBack() {
   padding: 0;
 }
 
-.menu-button {
+.download-excel-button {
   float: right;
+}
+
+.date-picker :deep(.el-date-editor) {
+  width: auto;
+  margin: auto;
 }
 
 </style>
