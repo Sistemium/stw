@@ -3,14 +3,16 @@
 .stock-withdrawals-page
 
   page-title(:title="`menu.${rootState}`")
-    //menu-button(
-    //  label="menu.reports"
-    //  :options="reports"
-    //)
-    download-excel-button(
-      :data-fn="downloadExcelData"
-      :name="downloadExcelName"
+    menu-button(
+      label="menu.reports"
+      :options="reports"
     )
+      template(#items)
+        li.el-dropdown-menu__item
+          download-excel-button(
+            :data-fn="downloadExcelData"
+            :name="downloadExcelName"
+          )
 
   el-container
     component(:is="showDetails ? 'el-aside' : 'el-main'")
@@ -80,7 +82,7 @@ import { stockOperationToViewData, searchOperations } from '@/services/warehousi
 import StockOperationList from '@/components/out/StockOperationList.vue';
 import StockOperationTable from '@/components/out/StockOperationTable.vue';
 import StockOperationListItem from '@/components/out/StockOperationListItem.vue';
-// import MenuButton from '@/components/MenuButton.vue';
+import MenuButton from '@/components/MenuButton.vue';
 import SearchInput from '@/lib/SearchInput.vue';
 import Resize from '@/lib/StmResize.vue';
 import ToolButton from '@/lib/ToolButton.vue';
@@ -217,7 +219,7 @@ const storageId = computed({
   },
 });
 
-// const reports = [{ label: 'reports.stockMovement', to: 'stockMovementReport' }];
+const reports = [{ label: 'reports.stockMovement', to: 'stockMovementReport' }];
 
 function setHeight(height: number) {
   tableHeight.value = height;
@@ -404,7 +406,7 @@ function downloadSchema() {
   padding: 0;
 }
 
-.download-excel-button {
+.menu-button {
   float: right;
 }
 
