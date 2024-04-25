@@ -57,6 +57,12 @@
     "toDate": "по",
     "type": "Тип",
     "tare": "Тара",
+    "supplierCode": "Код поставщика",
+    "counterparty": {
+      "Storage": "Склад",
+      "LegalEntity": "Компания",
+      "undefined": "Не указано"
+    },
     "consigneeType": "Тип получателя",
     "consignee": "Получатель",
     "supplierType": "Тип поставщика",

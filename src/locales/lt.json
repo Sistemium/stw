@@ -57,6 +57,12 @@
     "toDate": "iki",
     "type": "Tipas",
     "tare": "Tara",
+    "supplierCode": "Tiekėjo kodas",
+    "counterparty": {
+      "Storage": "Sandėlis",
+      "LegalEntity": "Imonė",
+      "undefined": "Nėra"
+    },
     "consigneeType": "Gavėjo tipas",
     "consignee": "Gavėjas",
     "supplierType": "Tiekėjo tipas",

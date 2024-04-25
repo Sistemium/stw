@@ -52,6 +52,12 @@
     "email": "E-mail",
     "type": "Type",
     "tare": "Tare",
+    "supplierCode": "Supplier code",
+    "counterparty": {
+      "Storage": "Storage",
+      "LegalEntity": "Legal entity",
+      "undefined": "None"
+    },
     "consigneeType": "Consignee type",
     "consignee": "Consignee",
     "employee": "Employee",
