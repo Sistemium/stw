@@ -120,6 +120,7 @@ export async function withdrawingReportData(storageId: string | undefined, count
       $gte: dateB,
       $lte: dateE,
     },
+    counterpartyType: 'Storage',
   }
   if (counterpartyId) {
     filter.counterpartyId = counterpartyId;

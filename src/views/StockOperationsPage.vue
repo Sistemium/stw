@@ -118,7 +118,7 @@ const props = defineProps<{
 }>();
 
 const today = dayjs().endOf('day');
-const monthAgo = today.add(-1, 'month');
+const monthAgo = today.add(-12, 'month');
 const { updateRouteParams } = useRouteParams();
 const route = useRoute();
 const { showTable, tableSize, windowWidth } = useResponsiveTables();
