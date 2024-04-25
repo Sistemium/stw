@@ -28,7 +28,6 @@ import Model, { type BaseItem } from '@/init/Model'
 import type { VatConfig } from '@/services/vatConfiguring'
 import type { CounterpartyType, StockOperation, StockOperationName } from '@/models/StockOperations'
 import type { IArticle } from '@/models/Articles'
-import keyBy from 'lodash/keyBy'
 
 interface STI {
   stockTakingId: string
@@ -116,9 +115,9 @@ interface StockOperationViewData extends StockOperation {
 }
 
 export function stockOperationToViewData(item: StockOperation, positionsModel: Model, operationName: StockOperationName): StockOperationViewData {
-  const childFilter = { [`${operationName}Id`]: item.id };
+  // const childFilter = { [`${operationName}Id`]: item.id };
   const counterparty = getCounterparty(item);
-  const positions: BaseItem[] = positionsModel.reactiveFilter(childFilter);
+  const positions: BaseItem[] = positionsModel.reactiveManyByIndex(`${operationName}Id`, item.id as string);
   const priceField = configPriceField(operationName);
   const costFn = (p: BaseItem) => (p[priceField] || 0) * (p.units || 0);
   // const products = operationName === 'stockWithdrawing'
@@ -148,7 +147,9 @@ export function vatConfig(date: Date | string = new Date()) {
   return (config || { defaultRate: 0 }) as VatConfig;
 }
 
-export function searchOperations(search: string, itemsModel: Model, parentKey: string): (_: BaseItem) => boolean {
+type RecordPredicate = (_: BaseItem) => boolean
+
+export function searchOperations(search: string, itemsModel: Model, parentKey: string): RecordPredicate {
   if (!search) {
     return () => true;
   }
