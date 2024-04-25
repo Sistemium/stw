@@ -5,6 +5,7 @@ el-select.storage-select(
   :placeholder="$tAction('select', 'storage')"
   ref="select"
   :disabled="disabled"
+  :clearable="clearable"
 )
   el-option-group(
     v-for="group in groups"
@@ -29,6 +30,7 @@ import i18n from '@/i18n';
 const props = defineProps({
   modelValue: String,
   disabled: Boolean,
+  clearable: Boolean,
 });
 
 const emit = defineEmits(['update:modelValue']);
