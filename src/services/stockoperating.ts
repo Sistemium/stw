@@ -12,6 +12,7 @@ import { useInvStore } from '@/store/invStore';
 import StockWithdrawing from '@/models/StockWithdrawing.js';
 import StockWithdrawingItem from '@/models/StockWithdrawingItem.js';
 import round from 'lodash/round';
+import type { BaseItem } from '@/init/Model'
 
 interface StockOperationActItem extends MaterialFields {
   name: string
@@ -113,16 +114,20 @@ export interface StockOperationReportItem extends StockOperationItem {
   date?: string | Date;
 }
 
-export async function withdrawingReportData(storageId: string, counterpartyId: string, dateB: string, dateE: string): Promise<StockOperationReportItem[]> {
-
-  const headers = await StockWithdrawing.find({
-    storageId,
-    counterpartyId,
+export async function withdrawingReportData(storageId: string | undefined, counterpartyId: string | undefined, dateB: string, dateE: string): Promise<StockOperationReportItem[]> {
+  const filter: BaseItem = {
     date: {
       $gte: dateB,
       $lte: dateE,
     },
-  });
+  }
+  if (counterpartyId) {
+    filter.counterpartyId = counterpartyId;
+  }
+  if (storageId) {
+    filter.storageId = storageId;
+  }
+  const headers = await StockWithdrawing.find(filter);
 
   if (!headers) {
     return [];
