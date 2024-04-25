@@ -96,16 +96,19 @@ import useResponsiveTables from '@/components/useResponsiveTables';
 import StorageSelect from '@/components/select/StorageSelect.vue';
 import PageTitle from '@/components/PageTitle.vue';
 import { useScrollToCreated } from '@/services/scrolling';
-import type { StockOperation } from '@/models/StockOperations';
+import type { StockOperation, StockOperationName } from '@/models/StockOperations'
 import type { BaseItem } from '@/init/Model'
 import { t } from '@/lib/validations'
 import DownloadExcelButton from '@/lib/DownloadExcelButton.vue'
 import Article from '@/models/Article'
+import Storage from '@/models/Storage'
+
+const { VITE_SUPPLIER_CODE_PROP_ID } = import.meta.env
 
 const props = defineProps<{
   model: ReactiveModel;
   positionsModel: ReactiveModel;
-  operationName: string;
+  operationName: StockOperationName;
   counterpartyRole: string;
   rootState: string;
   editRoute: string;
@@ -168,7 +171,7 @@ const stockOperations = computed(() => {
   const data = props.model.reactiveManyByIndex('storageId', storageId.value)
     .filter(({ date  }) => date >= dateB && date <= dateE);
   const filtered = search.value
-    ? data.filter<BaseItem>(searchOperations(search.value, props.positionsModel, `${props.operationName}Id`))
+    ? data.filter(searchOperations(search.value as string, props.positionsModel, `${props.operationName}Id`))
     : data;
   return orderBy(filtered, ['date', 'cts'], ['desc', 'desc']);
 });
@@ -182,8 +185,8 @@ const dateRange = computed({
   get() {
     const { dateB, dateE } = route.query
     return [
-      dayjs(dateB || monthAgo).toDate(),
-      dayjs(dateE || today).toDate(),
+      dayjs(dateB as string || monthAgo).toDate(),
+      dayjs(dateE as string || today).toDate(),
     ];
   },
   set([dateB, dateE]) {
@@ -194,7 +197,7 @@ const dateRange = computed({
   }
 })
 
-function matchDetails({ name }) {
+function matchDetails({ name }: { name: string }) {
   return name.match(`^${props.editRoute}(ItemEdit)?`);
 }
 
@@ -216,7 +219,7 @@ const storageId = computed({
 
 // const reports = [{ label: 'reports.stockMovement', to: 'stockMovementReport' }];
 
-function setHeight(height) {
+function setHeight(height: number) {
   tableHeight.value = height;
 }
 
@@ -226,7 +229,7 @@ function onAdd() {
   }, { storageId: storageId.value }, props.createRoute);
 }
 
-function onItemClick(item) {
+function onItemClick(item: any) {
   updateRouteParams({
     stockOperationId: item.id,
   }, {}, props.editRoute);
@@ -246,6 +249,7 @@ const downloadExcelName = computed(() => {
   const [dateB, dateE] = dateRange.value.map(d => dayjs(d).format('YYYY-MM-DD'))
   return [
     t(`menu.${props.operationName}`),
+    Storage.getByID(storageId.value)?.name,
     dateB,
     dateE,
   ].join('-');
@@ -266,6 +270,7 @@ function downloadExcelData() {
         articleCode: article?.code,
         counterpartyType,
         date,
+        supplierCode: article?.props.find(({ propId }) => propId === VITE_SUPPLIER_CODE_PROP_ID)?.stringValue
       }
     })
   })
@@ -314,12 +319,16 @@ function downloadSchema() {
         title: t('fields.code'),
         width: 30,
       }, {
+        key: 'supplierCode',
+        title: t('fields.supplierCode'),
+        width: 30,
+      }, {
         key: 'units',
         title: t('fields.units'),
         width: 15,
       }, {
         key: 'price',
-        title: t('fields.price'),
+        title: t('fields.withoutVatPrice'),
         width: 15,
       },
       // ...tableData.propColumns
