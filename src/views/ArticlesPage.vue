@@ -121,7 +121,7 @@ const viewComponentName = computed(() => showTable.value ? 'table' : 'list');
 
 const articles = computed(() => {
   const rowFilter = !barcode.value
-    ? searchArticle(search.value)
+    ? searchArticle(search.value as string)
     : ({ barcodes }: { barcodes: string[] }) => barcodes && barcodes.includes(barcode.value);
   return filter(tableData.value.rows, rowFilter);
 });
