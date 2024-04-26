@@ -105,7 +105,7 @@ import DownloadExcelButton from '@/lib/DownloadExcelButton.vue'
 import Article from '@/models/Article'
 import Storage from '@/models/Storage'
 
-const { VITE_SUPPLIER_CODE_PROP_ID } = import.meta.env
+const { VITE_SUPPLIER_CODE_PROP_ID, VITE_PRODUCER_CODE_PROP_ID } = import.meta.env
 
 const props = defineProps<{
   model: ReactiveModel;
@@ -272,7 +272,8 @@ function downloadExcelData() {
         articleCode: article?.code,
         counterpartyType,
         date,
-        supplierCode: article?.props.find(({ propId }) => propId === VITE_SUPPLIER_CODE_PROP_ID)?.stringValue
+        supplierCode: article?.props.find(({ propId }) => propId === VITE_SUPPLIER_CODE_PROP_ID)?.stringValue,
+        producerCode: article?.props.find(({ propId }) => propId === VITE_PRODUCER_CODE_PROP_ID)?.stringValue,
       }
     })
   })
@@ -323,6 +324,10 @@ function downloadSchema() {
       }, {
         key: 'supplierCode',
         title: t('fields.supplierCode'),
+        width: 30,
+      }, {
+        key: 'producerCode',
+        title: t('fields.producerCode'),
         width: 30,
       }, {
         key: 'units',

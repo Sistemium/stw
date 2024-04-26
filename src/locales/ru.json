@@ -58,6 +58,7 @@
     "type": "Тип",
     "tare": "Тара",
     "supplierCode": "Код поставщика",
+    "producerCode": "Код производителя",
     "counterparty": {
       "Storage": "Склад",
       "LegalEntity": "Компания",

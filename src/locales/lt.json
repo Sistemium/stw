@@ -58,6 +58,7 @@
     "type": "Tipas",
     "tare": "Tara",
     "supplierCode": "Tiekėjo kodas",
+    "producerCode": "Gamintojo kodas",
     "counterparty": {
       "Storage": "Sandėlis",
       "LegalEntity": "Imonė",

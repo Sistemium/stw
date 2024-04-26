@@ -53,6 +53,7 @@
     "type": "Type",
     "tare": "Tare",
     "supplierCode": "Supplier code",
+    "producerCode": "Manufacturer code",
     "counterparty": {
       "Storage": "Storage",
       "LegalEntity": "Legal entity",
