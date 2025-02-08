@@ -32,7 +32,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: string);
+  (e: 'update:modelValue', value: string): void
 }>();
 
 const { step, options, onCommand } = useWorkflow(props, emit);

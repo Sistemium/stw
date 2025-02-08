@@ -11,7 +11,7 @@ import * as PackageType from '@/models/PackageType';
 import { likeLt } from '@/services/lt';
 import type { BaseItem } from '@/init/Model'
 import type { IArticleProp } from '@/models/ArticleProps'
-import type { IArticle } from '@/models/Articles'
+import type { ArticleProperty, IArticle } from '@/models/Articles'
 
 export function compoundName(filters: BaseItem) {
   const res = map(filters, filter => {
@@ -70,7 +70,7 @@ export function articleInstance() {
     packageTypeId: null,
     unitsInPackage: null,
     // }],
-  };
+  } as unknown as Partial<IArticle>;
 }
 
 export async function addBarcodeToArticle(barcode: string, article: IArticle) {

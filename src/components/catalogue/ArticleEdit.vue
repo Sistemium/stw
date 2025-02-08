@@ -106,9 +106,9 @@ const props = defineProps<{
 }>();
 
 const invStore = useInvStore();
-const form = ref(null);
-const measurementForm = ref(null);
-const recipeFormRef = ref(null);
+const form = ref();
+const measurementForm = ref();
+const recipeFormRef = ref();
 const currentTab = ref('0');
 const route = useRoute();
 const { width } = useWindowSize();
@@ -118,7 +118,7 @@ const drawerWidth = computed(() => {
   }
   return width.value > 450 ? '450px' : '370px'
 });
-const copyArticle = computed(() => {
+const copyArticle = computed<Partial<IArticle>>(() => {
   const { copyId } = route.query;
   return cloneInstance(Article.reactiveGet(copyId as string));
 });

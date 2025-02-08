@@ -64,7 +64,7 @@ const menu = computed(() => routes
   .filter(({ meta }) => !meta || !meta.menuHidden)
   .map(({ name }) => ({
     name,
-    t: `menu.${name}`,
+    t: `menu.${name as string}`,
   })));
 
 const tabBarIcon = computed(() => tabBarShown.value ? 'el-icon-user' : 'el-icon-user-solid');
@@ -75,11 +75,12 @@ const title = computed(() => {
     return null;
   }
   const key = `menu.${name.toString()}`;
+  // @ts-ignore
   const hasTitle = i18n.global.te(key);
   return hasTitle && i18n.global.t(key);
 });
 
-function onCommand(name) {
+function onCommand(name: string) {
   if (name === 'toggleTabBar') {
     tabBarShown.value = toggleTabBar();
     return;
