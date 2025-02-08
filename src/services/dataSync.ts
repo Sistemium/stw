@@ -205,6 +205,7 @@ const LOADERS: Map<RegExp, LoaderFn> = new Map([
   })],
   [/serviceTask/, async () => {
     await ServiceTask.cachedFetch()
+    await Employee.cachedFetch()
   }],
 ]);
 

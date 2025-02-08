@@ -35,6 +35,10 @@ export interface ColumnInfo {
   dataKey?: string
 }
 
+export function todayStringDate() {
+  return dayjs().toJSON()
+}
+
 export function useDateRange() {
   const { updateRouteParams, route } = useRouteParams()
   const today = dayjs().endOf('day');

@@ -23,6 +23,7 @@ import AlertEmpty from '@/lib/AlertEmpty.vue'
 import ToolButton from '@/lib/ToolButton.vue'
 import { renderDate } from '@/services/rendering'
 import type { IServiceTask } from '@/models/ServiceTask'
+import Employee from '@/models/Employee'
 
 const props = withDefaults(defineProps<{
   serviceTasks: IServiceTask[]
@@ -30,7 +31,7 @@ const props = withDefaults(defineProps<{
   width?: number
   columnWidth?: number
 }>(), {
-  columnWidth: 150,
+  columnWidth: 60,
   width: 0,
 })
 
@@ -42,10 +43,11 @@ const emit = defineEmits<{
 
 
 const columns = computed<ColumnInfo[]>(() => {
-  const count = 1
+  const count = 2
   const { columnWidth } = props
   const nameWidth = max([props.width - columnWidth * count - 6 - 60 - 190, 250]) || 0
   const width = max([Math.floor((props.width - nameWidth - 6 - 60) / count), columnWidth]) || 0
+  // console.log(props.width, { columnWidth, nameWidth, width }, props.width - (nameWidth + width))
   return [
     {
       width,
@@ -64,6 +66,15 @@ const columns = computed<ColumnInfo[]>(() => {
       // minWidth: 100,
     },
     {
+      width,
+      align: 'left',
+      title: t('fields.assignee'),
+      dataKey: 'date',
+      // minWidth: 60,
+      cellRenderer: ({ rowData }: { rowData: IServiceTask }) =>
+        <span>{ Employee.reactiveGet(rowData.assigneeId)?.name }</span>,
+    },
+    {
       key: 'buttons',
       width: 66,
       // minWidth: 100,
@@ -75,20 +86,9 @@ const columns = computed<ColumnInfo[]>(() => {
           onClick={() => emit('editClick', rowData)}>
         </ToolButton>,
     },
-    // {
-    //   width,
-    //   align: 'center',
-    //   title: t(`fields.${props.vatPrices ? 'vatPrice' : 'withoutVatPrice'}`),
-    //   dataKey: 'price',
-    //   minWidth: 60,
-    //   cellRenderer: props.editing ? renderInput : renderSpan,
-    // },
   ]
 })
 
-// function handleCLick({ rowData }: { rowData: IArticlePricing }) {
-//   emit('rowClick', rowData)
-// }
 
 </script>
 

@@ -43,6 +43,7 @@
   },
   "fields": {
     "address": "Adresas",
+    "assignee": "Atsakingas",
     "commentText": "Pastaba",
     "description": "Aprašymas",
     "regCode": "Įmonės kodas",

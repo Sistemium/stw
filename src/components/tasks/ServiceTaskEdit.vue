@@ -17,6 +17,7 @@ drawer-edit.service-task-edit(
 
 <script setup lang="ts">
 
+import { todayStringDate } from '@/services/util'
 import { computed } from 'vue'
 import DrawerEdit from '@/lib/DrawerEdit.vue'
 import ServiceTaskForm from '@/components/tasks/ServiceTaskForm.vue'
@@ -36,7 +37,7 @@ const { saveFn, destroyFn } = useDrawerEditing(ServiceTask)
 const { route } = useRouteParams()
 const modelOrigin = computed<Partial<IServiceTask>>(() => props.serviceTaskId ? ServiceTask.reactiveGet(props.serviceTaskId) : {
   description: '',
-  date: new Date(),
+  date: todayStringDate(),
   siteId: route.query.siteId,
 })
 

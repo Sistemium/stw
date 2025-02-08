@@ -1,16 +1,27 @@
-import Model from '@/init/Model';
 import Workflow from '@/lib/Workflow'
 import type ApiModel from '@/models/ApiModels'
+import Model from '@/init/Model'
+// import HydratedModel from '@/lib/HydratedModel'
+// import type { IEmployee } from '@/models/Employee'
 
 export interface IServiceTask extends ApiModel {
-  date: Date
+  date: string
   description: string
+  siteId: string
+  assigneeId?: string
 }
+
+// export interface HydratedServiceTask extends IServiceTask {
+//   assignee?: IEmployee
+// }
 
 export default new Model<IServiceTask>({
   collection: 'ServiceTask',
   schema: {},
-  methods: {},
+  // methods: {},
+  relations: {
+    // assignee: 'Employee',
+  }
 });
 
 
