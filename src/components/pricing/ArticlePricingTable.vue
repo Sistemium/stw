@@ -31,6 +31,7 @@ import AlertEmpty from '@/lib/AlertEmpty.vue'
 import ArticleStockInfo from '@/components/catalogue/ArticleStockInfo.vue'
 import { useInvStore } from '@/store/invStore'
 import { fetchStocks } from '@/services/dataSync'
+import type { ColumnInfo } from '@/services/util'
 
 const props = withDefaults(defineProps<{
   articlePricing: IArticlePricing[]
@@ -46,11 +47,6 @@ const props = withDefaults(defineProps<{
   editing: false,
 })
 
-interface ColumnInfo {
-  width: number
-  key?: string
-  dataKey?: string
-}
 
 const emit = defineEmits<{
   (e: 'avatarClick', row: IArticlePricing): void

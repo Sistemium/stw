@@ -8,3 +8,8 @@ export function orderByName<T = BaseItem>(items: T[]) {
 export function orderByDateDesc<T = BaseItem>(items: T[]) {
   return orderBy(items, ['date'], ['desc'])
 }
+export interface ColumnInfo {
+  width: number
+  key?: string
+  dataKey?: string
+}
