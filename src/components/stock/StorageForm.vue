@@ -39,6 +39,8 @@ el-form.storage-form(
     employee-select(
       v-if="hasSiteAccess"
       v-model="model.employeeId"
+      :disabled="!model.siteId"
+      :site-id="model.siteId"
     )
     .blink.px-1(v-else) {{ $t('validation.otherSite') }}
 
