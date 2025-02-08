@@ -151,6 +151,10 @@ function downloadSchema() {
     wrapText: true,
     columns: [
       {
+        key: 'id',
+        title: 'ID',
+        width: 0,
+      }, {
         key: 'name',
         title: t('fields.name'),
         width: 50,
