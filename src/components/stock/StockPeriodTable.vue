@@ -14,36 +14,36 @@ el-table-v2.stock-period-table(
 
 </template>
 <script setup lang="tsx">
-import max from 'lodash/max';
-import { computed } from 'vue';
-import ArticleView from '@/components/catalogue/ArticleView.vue';
-import ArticleAvatar from '@/components/catalogue/ArticleAvatar.vue';
-import { t, tn } from '@/lib/validations';
-import type { Column } from 'element-plus'
+import max from 'lodash/max'
+import { computed } from 'vue'
+import ArticleView from '@/components/catalogue/ArticleView.vue'
+import ArticleAvatar from '@/components/catalogue/ArticleAvatar.vue'
+import { t, tn } from '@/lib/validations'
 import type { IStockArticleDate } from '@/models/StockArticleDate'
+import type { ColumnInfo } from '@/services/util'
 
 const props = withDefaults(defineProps<{
   data: IStockArticleDate[];
   height?: number;
-  width?: number;
+  width: number;
   columnWidth?: number;
-}>(), { columnWidth: 120 });
+}>(), { columnWidth: 120 })
 
 const emit = defineEmits<{
   (e: 'avatarClick', row: object): void;
   (e: 'rowClick', row: IStockArticleDate): void;
-}>();
+}>()
 
-const columns = computed<Column[]>(() => {
-  const { columnWidth } = props;
-  const nameWidth = max([props.width - columnWidth * 6 - 6, 250]);
-  const width = max([Math.floor((props.width - nameWidth - 6 - 60) / 6), 50]);
+const columns = computed<ColumnInfo[]>(() => {
+  const { columnWidth } = props
+  const nameWidth = max([props.width - columnWidth * 6 - 6, 250]) as number
+  const width = max([Math.floor((props.width - nameWidth - 6 - 60) / 6), 50]) as number
   return [
     {
       key: 'avatar',
       title: '',
       width: 60,
-      cellRenderer: ({ rowData }) =>
+      cellRenderer: ({ rowData }: { rowData: IStockArticleDate }) =>
         <ArticleAvatar
           article-id={rowData.articleId}
           onClick={(e: Event) => {
@@ -57,7 +57,8 @@ const columns = computed<Column[]>(() => {
       key: 'article',
       title: t('concepts.article'),
       width: nameWidth,
-      cellRenderer: ({ rowData }) => <ArticleView article-id={rowData.articleId}/>,
+      cellRenderer: ({ rowData }: { rowData: IStockArticleDate }) =>
+        <ArticleView article-id={rowData.articleId} />,
     },
     {
       width,
@@ -90,14 +91,14 @@ const columns = computed<Column[]>(() => {
       minWidth: 60,
       title: t('fields.cost'),
       dataKey: 'resultCost',
-      cellRenderer: ({ cellData }) => <span>{tn(cellData, 'decimal')}</span>,
+      cellRenderer: ({ cellData }: { cellData: number }) => <span>{tn(cellData, 'decimal')}</span>,
     },
   ]
-});
+})
 
 
-function handleCLick({ rowData }) {
-  emit('rowClick', rowData as IStockArticleDate);
+function handleCLick({ rowData }: { rowData: IStockArticleDate }) {
+  emit('rowClick', rowData)
 }
 
 </script>
