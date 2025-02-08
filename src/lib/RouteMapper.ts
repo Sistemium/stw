@@ -1,8 +1,7 @@
 import lowerFirst from 'lodash/lowerFirst';
 import isFunction from 'lodash/isFunction';
 import get from 'lodash/get';
-import type { NavigationGuardNext, RouteLocationNormalized as RouteRecord } from 'vue-router'
-
+import type { NavigationGuardNext, RouteLocationNormalized as RouteRecord, RouteRecordRaw } from 'vue-router'
 
 interface RouteConfig {
   root?: boolean
@@ -30,7 +29,7 @@ export default class RouteMapper {
     return Object.keys(this.config).map(name => configToRoute(name, {
       ...this.config[name],
       root: true,
-    }));
+    })) as RouteRecordRaw[];
   }
 
 }

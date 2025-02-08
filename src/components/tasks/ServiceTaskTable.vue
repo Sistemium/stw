@@ -1,0 +1,97 @@
+<template lang="pug">
+.service-task-table
+  el-table-v2(
+    :key="width"
+    v-if="width"
+    :columns="columns"
+    :data="serviceTasks"
+    :width="width"
+    :height="height"
+    :fixed="true"
+  )
+    template(#empty)
+      alert-empty
+</template>
+
+<script setup lang="tsx">
+
+import max from 'lodash/max'
+import { computed } from 'vue'
+import { t } from '@/lib/validations'
+import type { ColumnInfo } from '@/services/util'
+import AlertEmpty from '@/lib/AlertEmpty.vue'
+import ToolButton from '@/lib/ToolButton.vue'
+import { renderDate } from '@/services/rendering'
+import type { IServiceTask } from '@/models/ServiceTask'
+
+const props = withDefaults(defineProps<{
+  serviceTasks: IServiceTask[]
+  height?: number
+  width?: number
+  columnWidth?: number
+}>(), {
+  columnWidth: 150,
+  width: 0,
+})
+
+
+const emit = defineEmits<{
+  (e: 'editClick', row: IServiceTask): void
+  (e: 'resize', columns: ColumnInfo[]): void
+}>()
+
+
+const columns = computed<ColumnInfo[]>(() => {
+  const count = 1
+  const { columnWidth } = props
+  const nameWidth = max([props.width - columnWidth * count - 6 - 60 - 190, 250]) || 0
+  const width = max([Math.floor((props.width - nameWidth - 6 - 60) / count), columnWidth]) || 0
+  return [
+    {
+      width,
+      align: 'left',
+      title: t('fields.date'),
+      dataKey: 'date',
+      // minWidth: 60,
+      cellRenderer: renderDate,
+    },
+    {
+      width: nameWidth,
+      minWidth: nameWidth,
+      align: 'left',
+      title: t('fields.description'),
+      dataKey: 'description',
+      // minWidth: 100,
+    },
+    {
+      key: 'buttons',
+      width: 66,
+      // minWidth: 100,
+      align: 'right',
+      cellRenderer: ({ rowData }: { rowData: IServiceTask }) =>
+        <ToolButton
+          tool="edit"
+          circle={false}
+          onClick={() => emit('editClick', rowData)}>
+        </ToolButton>,
+    },
+    // {
+    //   width,
+    //   align: 'center',
+    //   title: t(`fields.${props.vatPrices ? 'vatPrice' : 'withoutVatPrice'}`),
+    //   dataKey: 'price',
+    //   minWidth: 60,
+    //   cellRenderer: props.editing ? renderInput : renderSpan,
+    // },
+  ]
+})
+
+// function handleCLick({ rowData }: { rowData: IArticlePricing }) {
+//   emit('rowClick', rowData)
+// }
+
+</script>
+
+<style scoped lang="scss">
+@import "@/styles/variables.scss";
+</style>

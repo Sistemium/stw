@@ -14,6 +14,8 @@ import stockOperationsRoute from '@/router/stockOperationsRoute';
 import { initGuard } from '@/services/dataSync';
 import Pricing from '@/models/Pricing'
 import type { BaseItem } from '@/init/Model'
+import ServiceTask from '@/models/ServiceTask'
+
 // import Recipe from '@/models/Recipe';
 
 export default new RouteMapper({
@@ -21,6 +23,11 @@ export default new RouteMapper({
     model: Storage,
     component: () => import(/* webpackChunkName: "stock" */ '../views/StoragesPage.vue'),
     editing: () => import(/* webpackChunkName: "stock" */ '../components/stock/StorageEdit.vue'),
+  },
+  serviceTasks: {
+    model: ServiceTask,
+    component: () => import(/* webpackChunkName: "tasks" */ '../views/ServiceTasksPage.vue'),
+    editing: () => import(/* webpackChunkName: "tasks" */ '../components/tasks/ServiceTaskEdit.vue'),
   },
   stockTakings: {
     model: StockTaking,

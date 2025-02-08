@@ -29,6 +29,7 @@ import type { CounterpartyType } from '@/models/StockOperations'
 import Employee from '@/models/Employee'
 import Site from '@/models/Site'
 import { eachSeries } from 'async';
+import ServiceTask from '@/models/ServiceTask'
 
 const { error, debug } = log('dataSync');
 
@@ -202,6 +203,9 @@ const LOADERS: Map<RegExp, LoaderFn> = new Map([
     positionsModel: StockReceivingItem,
     field: 'stockReceivingId',
   })],
+  [/serviceTask/, async () => {
+    await ServiceTask.cachedFetch()
+  }],
 ]);
 
 const LOADER_KEYS = Array.from(LOADERS.keys());
