@@ -91,7 +91,7 @@ const pricingId = computed({
   },
 })
 const tableColumns = ref<ColumnInfo[]>([])
-const editing = ref<boolan>(false)
+const editing = ref<boolean>(false)
 const search = ref<string>('')
 const date = ref(dayjs().format('YYYY-MM-DD'))
 const loading = ref<boolean>(false)
