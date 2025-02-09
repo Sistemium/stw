@@ -24,7 +24,7 @@ import ToolButton from '@/lib/ToolButton.vue'
 import { renderDate } from '@/services/rendering'
 import { type IServiceTask, serviceTaskWorkflow } from '@/models/ServiceTask'
 import Employee from '@/models/Employee'
-import WorkflowButton from '@/lib/WorkflowButton.vue'
+import WorkflowProcessing from '@/lib/WorkflowProcessing.vue'
 
 const props = withDefaults(defineProps<{
   serviceTasks: IServiceTask[]
@@ -66,12 +66,12 @@ const columns = computed<ColumnInfo[]>(() => {
       // minWidth: 60,
       cellRenderer: ({ rowData }: { rowData: IServiceTask }) =>
         // <span>{ t(`workflow.${rowData.processing || 'draft'}`) }</span>,
-        <WorkflowButton
+        <WorkflowProcessing
           workflow={serviceTaskWorkflow}
-          model-value={rowData.processing}
+          processing={rowData.processing}
           size="small"
           disabled
-        ></WorkflowButton>
+        ></WorkflowProcessing>
     },
     {
       width: nameWidth,

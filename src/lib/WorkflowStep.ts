@@ -1,3 +1,5 @@
+import type { ElementType } from '@/types/elements.ts'
+
 export default class WorkflowStep implements WorkflowOption {
 
   config: Record<string, any>
@@ -5,7 +7,7 @@ export default class WorkflowStep implements WorkflowOption {
   editable: boolean = false
   label: string
   processing: string
-  type?: string
+  type?: ElementType
 
   constructor(config: WorkflowOption) {
     this.config = config;
