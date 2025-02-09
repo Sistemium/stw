@@ -2,6 +2,8 @@ import vue from '@vitejs/plugin-vue';
 // import eslint from 'vite-plugin-eslint';
 import { fileURLToPath, URL } from 'node:url';
 import { defineConfig, loadEnv } from 'vite';
+import { createHtmlPlugin } from 'vite-plugin-html'
+import vueDevTools from 'vite-plugin-vue-devtools'
 import legacy from '@vitejs/plugin-legacy';
 import { sentryVitePlugin } from '@sentry/vite-plugin';
 import vueJsx from '@vitejs/plugin-vue-jsx'
@@ -35,6 +37,10 @@ export default defineConfig(({ mode }) => {
           assets: './dist/**',
         },
       }),
+      vueDevTools({
+        launchEditor: 'webstorm',
+      }),
+      createHtmlPlugin({}),
     ],
     define: {
       'process.env': {},
@@ -64,8 +70,8 @@ export default defineConfig(({ mode }) => {
       port: 8890,
       proxy: {
         '^/api': {
-          target: 'https://vfsd.sistemium.com',
-          // target: 'http://localhost:9390',
+          // target: 'https://vfsd.sistemium.com',
+          target: 'http://localhost:9390',
           changeOrigin: true,
         },
         '/pha': {
