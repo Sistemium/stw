@@ -249,13 +249,17 @@
     "selfCost": "sav."
   },
   "workflow": {
+    "assign": "Paskirti",
+    "unassign": "Atšaukti",
     "start": "Pradėti",
     "finish": "Užbaigti",
     "progress": "Vykdoma",
     "continue": "Atšaukti įvykdymą",
     "finished": "Įvykdyta",
     "planned": "Suplanuota",
-    "cancel": "Grįžti į planavimą"
+    "cancel": "Grįžti į planavimą",
+    "draft": "Ruošiama",
+    "assigned": "Paskirta"
   },
   "after": {
     "stockReceiving": "po priemimo",

@@ -9,6 +9,7 @@ export interface IServiceTask extends ApiModel {
   description: string
   siteId: string
   assigneeId?: string
+  processing: string
 }
 
 // export interface HydratedServiceTask extends IServiceTask {
@@ -21,8 +22,8 @@ export default new Model<IServiceTask>({
   // methods: {},
   relations: {
     // assignee: 'Employee',
-  }
-});
+  },
+})
 
 
 export const serviceTaskWorkflow = new Workflow({
@@ -46,6 +47,21 @@ export const serviceTaskWorkflow = new Workflow({
         to: 'draft',
         label: 'workflow.unassign',
         // type: 'primary',
+      }, {
+        to: 'finished',
+        label: 'workflow.finish',
+        type: 'primary',
+      }],
+      primaryOption: 'finished',
+      editable: false,
+    },
+    {
+      processing: 'finished',
+      label: 'workflow.finished',
+      options: [{
+        to: 'assigned',
+        label: 'workflow.unassign',
+        // type: 'success',
       }],
       // primaryOption: 'assigned',
       editable: false,
