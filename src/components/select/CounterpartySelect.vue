@@ -27,7 +27,7 @@ import orderBy from 'lodash/orderBy';
 import find from 'lodash/find';
 import debounce from 'lodash/debounce';
 import { CONSIGNEE_TYPES } from '@/services/warehousing.js';
-import type { CounterpartyType } from '@/models/StockOperations';
+import type { CounterpartyType } from '@/models/StockOperations.ts';
 
 const props = defineProps<{
   type: CounterpartyType;
