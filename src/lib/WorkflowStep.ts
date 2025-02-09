@@ -5,6 +5,7 @@ export default class WorkflowStep implements WorkflowOption {
   editable: boolean = false
   label: string
   processing: string
+  type?: string
 
   constructor(config: WorkflowOption) {
     this.config = config;
@@ -19,6 +20,7 @@ export default class WorkflowStep implements WorkflowOption {
 export interface WorkflowOption {
   processing: string
   label: string
+  type?: string
   primaryOption?: string
   editable?: boolean
   options: WorkflowStepOption[]

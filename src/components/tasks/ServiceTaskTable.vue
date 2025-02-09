@@ -22,8 +22,9 @@ import type { ColumnInfo } from '@/services/util'
 import AlertEmpty from '@/lib/AlertEmpty.vue'
 import ToolButton from '@/lib/ToolButton.vue'
 import { renderDate } from '@/services/rendering'
-import type { IServiceTask } from '@/models/ServiceTask'
+import { type IServiceTask, serviceTaskWorkflow } from '@/models/ServiceTask'
 import Employee from '@/models/Employee'
+import WorkflowButton from '@/lib/WorkflowButton.vue'
 
 const props = withDefaults(defineProps<{
   serviceTasks: IServiceTask[]
@@ -64,11 +65,17 @@ const columns = computed<ColumnInfo[]>(() => {
       dataKey: 'processing',
       // minWidth: 60,
       cellRenderer: ({ rowData }: { rowData: IServiceTask }) =>
-        <span>{ t(`workflow.${rowData.processing || 'draft'}`) }</span>,
+        // <span>{ t(`workflow.${rowData.processing || 'draft'}`) }</span>,
+        <WorkflowButton
+          workflow={serviceTaskWorkflow}
+          model-value={rowData.processing}
+          size="small"
+          disabled
+        ></WorkflowButton>
     },
     {
       width: nameWidth,
-      minWidth: nameWidth,
+      // minWidth: nameWidth,
       align: 'left',
       title: t('fields.description'),
       dataKey: 'description',
@@ -85,7 +92,7 @@ const columns = computed<ColumnInfo[]>(() => {
     },
     {
       key: 'buttons',
-      width: 66,
+      width: 60,
       // minWidth: 100,
       align: 'right',
       cellRenderer: ({ rowData }: { rowData: IServiceTask }) =>

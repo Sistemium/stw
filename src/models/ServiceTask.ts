@@ -39,6 +39,7 @@ export const serviceTaskWorkflow = new Workflow({
       }],
       primaryOption: 'assigned',
       editable: true,
+      // type: 'success',
     },
     {
       processing: 'assigned',
@@ -54,6 +55,7 @@ export const serviceTaskWorkflow = new Workflow({
       }],
       primaryOption: 'finished',
       editable: false,
+      type: 'primary',
     },
     {
       processing: 'finished',
@@ -64,6 +66,7 @@ export const serviceTaskWorkflow = new Workflow({
         // type: 'success',
       }],
       // primaryOption: 'assigned',
+      type: 'success',
       editable: false,
     },
   ],
