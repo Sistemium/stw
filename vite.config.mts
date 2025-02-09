@@ -23,7 +23,7 @@ export default defineConfig(({ mode }) => {
       // }),
       vueJsx(),
       legacy({
-        ignoreBrowserslistConfig: true,
+        // ignoreBrowserslistConfig: true,
         targets: ['defaults', 'not IE 11'],
         modernPolyfills: false,
       }),
