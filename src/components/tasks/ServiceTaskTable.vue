@@ -31,7 +31,7 @@ const props = withDefaults(defineProps<{
   width?: number
   columnWidth?: number
 }>(), {
-  columnWidth: 60,
+  columnWidth: 80,
   width: 0,
 })
 
@@ -43,7 +43,7 @@ const emit = defineEmits<{
 
 
 const columns = computed<ColumnInfo[]>(() => {
-  const count = 2
+  const count = 3
   const { columnWidth } = props
   const nameWidth = max([props.width - columnWidth * count - 6 - 60 - 190, 250]) || 0
   const width = max([Math.floor((props.width - nameWidth - 6 - 60) / count), columnWidth]) || 0
@@ -56,6 +56,15 @@ const columns = computed<ColumnInfo[]>(() => {
       dataKey: 'date',
       // minWidth: 60,
       cellRenderer: renderDate,
+    },
+    {
+      width,
+      align: 'left',
+      title: t('fields.processing'),
+      dataKey: 'processing',
+      // minWidth: 60,
+      cellRenderer: ({ rowData }: { rowData: IServiceTask }) =>
+        <span>{ t(`workflow.${rowData.processing || 'draft'}`) }</span>,
     },
     {
       width: nameWidth,

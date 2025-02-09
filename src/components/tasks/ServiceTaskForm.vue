@@ -21,6 +21,14 @@
         :autosize="{ minRows: 2 }"
       )
     el-form-item(
+      :label="$t('fields.processing')"
+      prop="processing"
+    )
+      workflow-button(
+        v-model="model.processing"
+        :workflow="serviceTaskWorkflow"
+      )
+    el-form-item(
       :label="$t('fields.assignee')"
       prop="assigneeId"
     )
@@ -34,9 +42,10 @@
 import { useFormValidate } from '@/services/validating'
 import { $requiredRule } from '@/lib/validations'
 import { computed } from 'vue'
-import type { IServiceTask } from '@/models/ServiceTask'
+import { type IServiceTask, serviceTaskWorkflow } from '@/models/ServiceTask'
 import DateStringPicker from '@/lib/DateStringPicker.vue'
 import EmployeeSelect from '@/components/select/EmployeeSelect.vue'
+import WorkflowButton from '@/lib/WorkflowButton.vue'
 
 const { form, validate } = useFormValidate();
 
