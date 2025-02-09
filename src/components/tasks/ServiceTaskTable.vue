@@ -25,6 +25,7 @@ import { renderDate } from '@/services/rendering'
 import { type IServiceTask, serviceTaskWorkflow } from '@/models/ServiceTask'
 import Employee from '@/models/Employee'
 import WorkflowProcessing from '@/lib/WorkflowProcessing.vue'
+import ServicePointCustomer from '@/models/ServicePointCustomer'
 
 const props = withDefaults(defineProps<{
   serviceTasks: IServiceTask[]
@@ -32,7 +33,7 @@ const props = withDefaults(defineProps<{
   width?: number
   columnWidth?: number
 }>(), {
-  columnWidth: 80,
+  columnWidth: 70,
   width: 0,
 })
 
@@ -43,10 +44,10 @@ const emit = defineEmits<{
 }>()
 
 
-const columns = computed<ColumnInfo[]>(() => {
-  const count = 3
+const columns = computed(() => {
+  const count = 6
   const { columnWidth } = props
-  const nameWidth = max([props.width - columnWidth * count - 6 - 60 - 190, 250]) || 0
+  const nameWidth = max([props.width - columnWidth * count - 6 - 300, 300]) || 0
   const width = max([Math.floor((props.width - nameWidth - 6 - 60) / count), columnWidth]) || 0
   // console.log(props.width, { columnWidth, nameWidth, width }, props.width - (nameWidth + width))
   return [
@@ -65,13 +66,12 @@ const columns = computed<ColumnInfo[]>(() => {
       dataKey: 'processing',
       // minWidth: 60,
       cellRenderer: ({ rowData }: { rowData: IServiceTask }) =>
-        // <span>{ t(`workflow.${rowData.processing || 'draft'}`) }</span>,
         <WorkflowProcessing
           workflow={serviceTaskWorkflow}
           processing={rowData.processing}
           size="small"
           disabled
-        ></WorkflowProcessing>
+        ></WorkflowProcessing>,
     },
     {
       width: nameWidth,
@@ -82,13 +82,27 @@ const columns = computed<ColumnInfo[]>(() => {
       // minWidth: 100,
     },
     {
+      width: width * 3,
+      // minWidth: nameWidth,
+      align: 'left',
+      title: t('fields.customer'),
+      key: 'servicePointId',
+      cellRenderer({ rowData }: { rowData: IServiceTask }) {
+        const c = ServicePointCustomer.reactiveGet(rowData.servicePointId)
+        return <div class="text-left">
+          <div>{c?.name}</div>
+          <small>{c?.address}</small>
+        </div>
+      },
+    },
+    {
       width,
       align: 'left',
       title: t('fields.assignee'),
       dataKey: 'date',
       // minWidth: 60,
       cellRenderer: ({ rowData }: { rowData: IServiceTask }) =>
-        <span>{ Employee.reactiveGet(rowData.assigneeId)?.name }</span>,
+        <div class="text-left">{Employee.reactiveGet(rowData.assigneeId)?.name}</div>,
     },
     {
       key: 'buttons',
@@ -102,7 +116,7 @@ const columns = computed<ColumnInfo[]>(() => {
           onClick={() => emit('editClick', rowData)}>
         </ToolButton>,
     },
-  ]
+  ] as ColumnInfo[]
 })
 
 
@@ -110,4 +124,7 @@ const columns = computed<ColumnInfo[]>(() => {
 
 <style scoped lang="scss">
 @import "@/styles/variables.scss";
+small {
+  color: $gray;
+}
 </style>

@@ -1,10 +1,10 @@
 <template lang="pug">
-
-el-tag.processing(
-  :type
-  effect="plain"
-) {{ $t(`workflow.${ processing || 'progress' }`) }}
-
+.workflow-processing
+  el-tag.processing(
+    :type
+    effect="plain"
+  ) {{ $t(`workflow.${ processing || 'progress' }`) }}
+  slot
 </template>
 <script setup lang="ts">
 

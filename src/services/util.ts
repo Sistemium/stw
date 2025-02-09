@@ -1,8 +1,11 @@
-import dayjs from 'dayjs';
+import dayjs from 'dayjs'
 import { computed } from 'vue'
 import orderBy from 'lodash/orderBy'
-import type { BaseItem } from '@/init/Model'
+import Model, { type BaseItem } from '@/init/Model'
 import { useRouteParams } from '@/lib/updateRouteParams'
+import filter from 'lodash/filter'
+import uniq from 'lodash/uniq'
+import map from 'lodash/map'
 
 export function orderByName<T = BaseItem>(items: T[]) {
   return orderBy(items, 'name')
@@ -64,3 +67,12 @@ export function useDateRange() {
   return { dateRange }
 }
 
+export async function loadRelation(model: Model, records: BaseItem[], relation: string) {
+  const ids = filter<string>(uniq(map(records, relation)))
+  await loadNotCachedIds(model, ids)
+}
+
+export async function loadNotCachedIds(model: Model, ids: string[] = []) {
+  const toLoad = ids.filter(id => !model.getByID(id))
+  await model.findByMany(toLoad)
+}

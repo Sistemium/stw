@@ -10,6 +10,8 @@ export interface IServiceTask extends ApiModel {
   siteId: string
   assigneeId?: string
   processing: string
+  servicePointId: string
+  counterpartyType: string
 }
 
 // export interface HydratedServiceTask extends IServiceTask {
@@ -54,7 +56,7 @@ export const serviceTaskWorkflow = new Workflow({
         type: 'primary',
       }],
       primaryOption: 'finished',
-      editable: false,
+      editable: true,
       type: 'primary',
     },
     {

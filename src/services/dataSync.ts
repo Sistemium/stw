@@ -21,15 +21,17 @@ import groupBy from 'lodash/groupBy';
 import filter from 'lodash/filter';
 import { ElLoading } from 'element-plus';
 import Model from '@/init/Model';
-import type { NavigationGuardNext, RouteLocationNormalized as RouteRecord } from 'vue-router'
 import { useInvStore } from '@/store/invStore';
 import Pricing from '@/models/Pricing'
 import ArticlePricing from '@/models/ArticlePricing'
-import type { CounterpartyType } from '@/models/StockOperations'
 import Employee from '@/models/Employee'
+import ServicePointCustomer from '@/models/ServicePointCustomer'
 import Site from '@/models/Site'
 import { eachSeries } from 'async';
 import ServiceTask from '@/models/ServiceTask'
+import { loadRelation } from '@/services/util'
+import type { NavigationGuardNext, RouteLocationNormalized as RouteRecord } from 'vue-router'
+import type { CounterpartyType } from '@/models/StockOperations'
 
 const { error, debug } = log('dataSync');
 
@@ -204,7 +206,8 @@ const LOADERS: Map<RegExp, LoaderFn> = new Map([
     field: 'stockReceivingId',
   })],
   [/serviceTask/, async () => {
-    await ServiceTask.cachedFetch()
+    const tasks = await ServiceTask.cachedFetch()
+    await loadRelation(ServicePointCustomer, tasks, 'servicePointId')
     await Employee.cachedFetch()
   }],
 ]);
@@ -225,7 +228,7 @@ async function switchLoad(to: RouteRecord, from: RouteRecord) {
 
 export async function fetchStocks(storageId: string) {
   const date = dayjs().format('YYYY-MM-DD');
-  StockArticleDate.cachedFetch({
+  await StockArticleDate.cachedFetch({
     storageId,
     date: { $lte: date },
     nextDate: { $gt: date },
@@ -234,7 +237,7 @@ export async function fetchStocks(storageId: string) {
 
 export async function fetchArticlePricing(pricingId: string) {
   // const date = dayjs().format('YYYY-MM-DD');
-  ArticlePricing.cachedFetch({
+  await ArticlePricing.cachedFetch({
     pricingId,
     // date: { $lte: date },
     // nextDate: { $gt: date },

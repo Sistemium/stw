@@ -62,6 +62,7 @@
     "tare": "Tara",
     "supplierCode": "Tiekėjo kodas",
     "producerCode": "Gamintojo kodas",
+    "customer": "Klientas",
     "counterparty": {
       "Storage": "Sandėlis",
       "LegalEntity": "Imonė",

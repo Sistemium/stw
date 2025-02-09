@@ -24,11 +24,12 @@ import StockTakingItem from '@/models/StockTakingItem'
 import StockTaking from '@/models/StockTaking'
 import { testArticle } from '@/services/catalogue'
 import { likeLt } from '@/services/lt'
-import Model, { type BaseItem } from '@/init/Model'
+import { loadNotCachedIds, loadRelation } from '@/services/util'
+import Model from '@/init/Model'
+import HybridDataModel, { type BaseItem } from '@/init/Model'
 import type { VatConfig } from '@/services/vatConfiguring'
 import type { CounterpartyType, StockOperation, StockOperationName } from '@/models/StockOperations'
 import type { IArticle } from '@/models/Articles'
-import HybridDataModel from '@/init/Model'
 
 interface STI {
   stockTakingId: string
@@ -264,16 +265,6 @@ async function loadCounterparty(records: CounterPartyRef[] = []) {
   await loadRelation(Storage, withStorage, 'counterpartyId');
 }
 
-
-async function loadRelation(model: Model, records: BaseItem[], relation: string) {
-  const ids = filter<string>(uniq(map(records, relation)));
-  await loadNotCachedIds(model, ids);
-}
-
-async function loadNotCachedIds(model: Model, ids: string[] = []) {
-  const toLoad = ids.filter(id => !model.getByID(id));
-  await model.findByMany(toLoad);
-}
 
 export function stockArticleDateReactive(storageId: string, articleId: string, date: string) {
   const many = StockArticleDate.reactiveManyByIndex('articleId', articleId)
