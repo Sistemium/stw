@@ -11,7 +11,7 @@ import * as PackageType from '@/models/PackageType';
 import { likeLt } from '@/services/lt';
 import type { BaseItem } from '@/init/Model'
 import type { IArticleProp } from '@/models/ArticleProps'
-import type { ArticleProperty, IArticle } from '@/models/Articles'
+import type { IArticle } from '@/models/Articles'
 
 export function compoundName(filters: BaseItem) {
   const res = map(filters, filter => {
@@ -85,14 +85,14 @@ export async function addBarcodeToArticle(barcode: string, article: IArticle) {
   return Article.createOne(props);
 }
 
-export function searchArticle(search: string): (x: IArticle) => boolean {
+export function searchArticle(search: string): (x?: IArticle) => boolean {
   if (!search) {
-    return (x: IArticle) => !!x;
+    return (x?: IArticle) => !!x;
   }
-  return (article: IArticle) => testArticle(article, likeLt(search));
+  return (article?: IArticle) => testArticle(article, likeLt(search));
 }
 
-export function testArticle(article: IArticle, re: RegExp) {
+export function testArticle(article: IArticle | undefined, re: RegExp) {
   if (!article) {
     return false;
   }
@@ -136,12 +136,12 @@ export function catalogueData() {
   const propColumns = Array.from(allProps.keys())
     .map(id => {
       const prop = ArticleProp.reactiveGet(id);
-      if (prop.isNaming) {
+      if (prop?.isNaming) {
         return false;
       }
       return {
         ...prop,
-        align: prop.type === 'number' ? 'right' : 'left',
+        align: prop?.type === 'number' ? 'right' : 'left',
       };
     })
     .filter(x => !!x) as IArticleProp[]

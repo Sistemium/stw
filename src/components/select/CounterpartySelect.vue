@@ -79,7 +79,7 @@ watch(() => props.type, () => {
   remoteOptions.value = [];
 });
 
-function searcher(query) {
+function searcher(query: string) {
   if (!model.value) {
     return
   }

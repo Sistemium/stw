@@ -108,7 +108,7 @@ export function getCounterparty({ counterpartyType, counterpartyId }: CounterPar
 
 interface StockOperationViewData extends StockOperation {
   processingLabel: string
-  counterparty: BaseItem | null
+  counterparty?: BaseItem | null
   counterpartyName: string
   positionsCount: number | null
   units: number | null
