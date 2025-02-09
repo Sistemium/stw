@@ -28,6 +28,7 @@ import Model, { type BaseItem } from '@/init/Model'
 import type { VatConfig } from '@/services/vatConfiguring'
 import type { CounterpartyType, StockOperation, StockOperationName } from '@/models/StockOperations'
 import type { IArticle } from '@/models/Articles'
+import HybridDataModel from '@/init/Model'
 
 interface STI {
   stockTakingId: string
@@ -84,7 +85,7 @@ export function stockOperationItemInstance(operationName: StockOperationName, pr
   };
 }
 
-export const CONSIGNEE_TYPES = new Map<CounterpartyType, Model>([
+export const CONSIGNEE_TYPES = new Map<CounterpartyType, HybridDataModel<BaseItem>>([
   ['Person', Person],
   ['LegalEntity', LegalEntity],
   ['Storage', Storage],
