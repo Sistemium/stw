@@ -1,6 +1,5 @@
-import WorkflowStep from '@/lib/WorkflowStep'
+import WorkflowStep, { type WorkflowOption } from '@/lib/WorkflowStep'
 
-type WorkflowOption = Record<string, any> & { processing: string }
 
 export default class {
 
