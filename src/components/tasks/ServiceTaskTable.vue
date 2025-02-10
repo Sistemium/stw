@@ -61,7 +61,7 @@ const columns = computed(() => {
     },
     {
       width,
-      align: 'left',
+      align: 'center',
       title: t('fields.processing'),
       dataKey: 'processing',
       // minWidth: 60,

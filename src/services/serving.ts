@@ -1,6 +1,7 @@
 import { computed, type Ref } from 'vue'
-import ServiceTask from '@/models/ServiceTask'
 import day from 'dayjs'
+import ServiceTask from '@/models/ServiceTask'
+import ServicePointCustomer from '@/models/ServicePointCustomer'
 import { likeLt } from '@/services/lt'
 
 interface TaskingFilter {
@@ -27,7 +28,11 @@ export function useTasking({ dateRange, siteId, search }: TaskingFilter) {
         return tasks
       }
       const re = likeLt(search.value)
-      return tasks.filter(task => re.test(task.description))
+      return tasks.filter(task => {
+        const point = ServicePointCustomer.getByID(task.servicePointId)
+        return re.test(task.description)
+          || point && (re.test(point?.address) || re.test(point?.name))
+      })
     }),
   }
 }
