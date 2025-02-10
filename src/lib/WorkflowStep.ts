@@ -1,4 +1,4 @@
-import type { ElementType } from '@/types/elements.ts'
+import type { ElementType } from '@/types/elements'
 
 export default class WorkflowStep implements WorkflowOption {
 

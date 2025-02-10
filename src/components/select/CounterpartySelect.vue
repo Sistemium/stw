@@ -26,8 +26,8 @@ import { computed, ref, watch } from 'vue';
 import orderBy from 'lodash/orderBy';
 import find from 'lodash/find';
 import debounce from 'lodash/debounce';
-import { CONSIGNEE_TYPES } from '@/services/warehousing.js';
-import type { CounterpartyType } from '@/models/StockOperations.ts';
+import { CONSIGNEE_TYPES } from '@/services/warehousing';
+import type { CounterpartyType } from '@/models/StockOperations';
 
 const props = defineProps<{
   type: CounterpartyType;

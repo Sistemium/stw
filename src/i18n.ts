@@ -50,9 +50,10 @@ const numberFormats = {
   },
 }
 
+// @ts-ignore
 const i18n = createI18n({
-  locale: getSavedLocale() || process.env.VITE_I18N_LOCALE || 'en',
-  fallbackLocale: process.env.VITE_I18N_FALLBACK_LOCALE || 'en',
+  locale: getSavedLocale() || import.meta.env.VITE_I18N_LOCALE || 'en',
+  fallbackLocale: import.meta.env.VITE_I18N_FALLBACK_LOCALE || 'en',
   messages: {
     en: { ...en, ...uiEn },
     ru: { ...ru, ...uiRu },

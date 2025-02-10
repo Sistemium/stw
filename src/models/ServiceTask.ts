@@ -1,8 +1,6 @@
 import Workflow from '@/lib/Workflow'
 import type ApiModel from '@/models/ApiModels'
 import Model from '@/init/Model'
-// import HydratedModel from '@/lib/HydratedModel'
-// import type { IEmployee } from '@/models/Employee'
 
 export interface IServiceTask extends ApiModel {
   date: string
@@ -14,9 +12,6 @@ export interface IServiceTask extends ApiModel {
   counterpartyType: string
 }
 
-// export interface HydratedServiceTask extends IServiceTask {
-//   assignee?: IEmployee
-// }
 
 export default new Model<IServiceTask>({
   collection: 'ServiceTask',

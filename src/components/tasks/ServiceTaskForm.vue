@@ -65,7 +65,7 @@ import EmployeeSelect from '@/components/select/EmployeeSelect.vue'
 import ServicePointSelect from '@/components/select/ServicePointSelect.vue'
 import WorkflowTransitions from '@/lib/WorkflowTransitions.vue'
 import WorkflowProcessing from '@/lib/WorkflowProcessing.vue'
-import ServicePointCustomer from '@/models/ServicePointCustomer.ts'
+import ServicePointCustomer from '@/models/ServicePointCustomer'
 
 const { form, validate } = useFormValidate()
 

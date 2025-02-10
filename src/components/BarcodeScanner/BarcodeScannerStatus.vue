@@ -11,7 +11,7 @@
 </template>
 <script>
 import { createNamespacedHelpers } from 'vuex';
-import * as nativeScanner from '@/lib/nativeScanner.ts';
+import * as nativeScanner from '@/lib/nativeScanner';
 import * as g from '@/store/inv/getters';
 import * as m from '@/store/inv/mutations';
 

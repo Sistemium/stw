@@ -33,7 +33,7 @@ el-select-v2.service-point-select(
 import { computed, ref, watch } from 'vue'
 import orderBy from 'lodash/orderBy'
 import debounce from 'lodash/debounce'
-import ServicePointCustomer, { type IServicePointCustomer } from '@/models/ServicePointCustomer.ts'
+import ServicePointCustomer, { type IServicePointCustomer } from '@/models/ServicePointCustomer'
 import find from 'lodash/find'
 
 const props = defineProps<{

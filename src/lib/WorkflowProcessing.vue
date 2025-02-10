@@ -8,7 +8,7 @@
 </template>
 <script setup lang="ts">
 
-import type Workflow from '@/lib/Workflow.ts'
+import type Workflow from '@/lib/Workflow'
 import { computed } from 'vue'
 
 const props = defineProps<{
