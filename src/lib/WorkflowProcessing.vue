@@ -3,6 +3,7 @@
   el-tag.processing(
     :type
     effect="plain"
+    :size
   ) {{ $t(`workflow.${ processing || 'progress' }`) }}
   slot
 </template>
@@ -10,10 +11,12 @@
 
 import type Workflow from '@/lib/Workflow'
 import { computed } from 'vue'
+import type { ElementsSize } from '@/types/elements.ts'
 
 const props = defineProps<{
   workflow?: Workflow
-  processing?: string;
+  processing?: string
+  size?: ElementsSize
 }>();
 
 const type = computed(() => props.workflow?.step(props.processing)?.type || 'info')

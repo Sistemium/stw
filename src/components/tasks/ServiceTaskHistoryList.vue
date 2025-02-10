@@ -10,6 +10,7 @@ el-timeline.service-task-history-list
     workflow-processing(
       :processing="item.processing"
       :workflow="serviceTaskWorkflow"
+      size="small"
     )
     el-descriptions(
       direction="horizontal"
