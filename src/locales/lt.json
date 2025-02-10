@@ -44,6 +44,7 @@
   "fields": {
     "address": "Adresas",
     "assignee": "Atsakingas",
+    "assigned": "Paskirtas atsakingu",
     "commentText": "Pastaba",
     "description": "Aprašymas",
     "regCode": "Įmonės kodas",
@@ -169,6 +170,7 @@
     "articleProperty": "Ypatybė",
     "article": "Prekė",
     "facility": "Patalpos",
+    "history": "Istorija",
     "personal": "Asmeninis",
     "storage": "Sandėlis",
     "image": "Nuotrauka",
@@ -176,6 +178,7 @@
     "items": "Pozicijos",
     "production": "Gamyba",
     "person": "Asmuo",
+    "serviceTask": "Užduotis",
     "legalEntity": "Imonė",
     "unknown": "Nėra",
     "unitPackageType": "Vienetų tipas",
