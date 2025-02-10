@@ -18,23 +18,38 @@ drawer-edit.service-task-edit(
       el-tab-pane(
         v-if="model.id"
         :label="$t('concepts.history')"
+        v-loading="loading"
       )
-        resize
-          service-task-history-list(:service-task-id="model.id")
+        .full-height
+          resize(:padding="180")
+            service-task-history-list(:service-task-id="model.id")
+          el-form
+            el-form-item()
+              el-input(
+                v-model="comment"
+                type="textarea"
+              )
+            .float-right
+              el-button(
+                size="small"
+                @click="commentClick"
+                :disabled="!comment"
+              ) {{ $t('actions.comment') }}
 </template>
 
 <script setup lang="ts">
 
 import { todayStringDate } from '@/services/util'
 import { computed, ref } from 'vue'
-import DrawerEdit from '@/lib/DrawerEdit.vue'
-import ServiceTaskForm from '@/components/tasks/ServiceTaskForm.vue'
+import DrawerEdit from '@/lib/DrawerEdit'
+import ServiceTaskForm from '@/components/tasks/ServiceTaskForm'
 import { useDrawerEditing } from '@/services/drawerEditing'
 import { useFormValidate } from '@/services/validating'
 import ServiceTask, { type IServiceTask } from '@/models/ServiceTask'
 import { useRouteParams } from '@/lib/updateRouteParams'
-import ServiceTaskHistoryList from '@/components/tasks/ServiceTaskHistoryList.vue'
-import Resize from '@/lib/StmResize.vue';
+import ServiceTaskHistoryList from '@/components/tasks/ServiceTaskHistoryList'
+import Resize from '@/lib/StmResize';
+import ServiceTaskHistory from '@/models/ServiceTaskHistory'
 
 const props = defineProps<{
   serviceTaskId?: string
@@ -42,6 +57,9 @@ const props = defineProps<{
   drawerStyle?: Record<string, any>
 }>()
 
+const comment = ref('')
+
+const loading = ref()
 const currentTab = ref<string>('0')
 const { saveFn, destroyFn } = useDrawerEditing(ServiceTask)
 const { route } = useRouteParams()
@@ -58,11 +76,32 @@ const modelOrigin = computed<Partial<IServiceTask>>(() =>
 
 const { form: formRef } = useFormValidate()
 
+function commentClick() {
+  loading.value = true
+  ServiceTaskHistory.create({
+    serviceTaskId: props.serviceTaskId,
+    comment: comment.value,
+    timestamp: todayStringDate(),
+  })
+    .then(() => {
+      comment.value = ''
+    })
+    .finally(() => {
+      loading.value = false
+    })
+}
 </script>
 
 <style scoped lang="scss">
 @import "@/styles/variables.scss";
-.service-task-history-list {
-  //margin-top: 1em;
+.el-form {
+  margin-top: 20px;
+}
+.float-right {
+  float: right;
+}
+.full-height {
+  display: flex;
+  flex-direction: column;
 }
 </style>

@@ -46,6 +46,7 @@
     "assignee": "Atsakingas",
     "assigned": "Paskirtas atsakingu",
     "commentText": "Pastaba",
+    "comment": "Pranešimas",
     "description": "Aprašymas",
     "regCode": "Įmonės kodas",
     "vatCode": "PVM kodas",
@@ -200,6 +201,7 @@
     "noData": "Nėra duomenų"
   },
   "actions": {
+    "comment": "Atsiųsti pranešimą",
     "act": "{0} aktas",
     "add": "Pridėti {0}",
     "show": "Parodyti {0}",

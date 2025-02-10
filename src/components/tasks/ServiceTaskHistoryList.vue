@@ -1,29 +1,37 @@
 <template lang="pug">
+.service-task-history-list
+  el-timeline
+    el-timeline-item(
+      v-for="item in history"
+      :key="item.id"
+      :timestamp="`${$ts(item.timestamp, 'minutes')}, ${item.author}`"
+      placement="top"
+    )
+      workflow-processing(
+        v-if="item.processing"
+        :processing="item.processing"
+        :workflow="serviceTaskWorkflow"
+        size="small"
+      )
+      el-descriptions(
+        direction="horizontal"
+        :column="1"
+        size="small"
+        :border="true"
+      )
+        el-descriptions-item(
+          v-if="item.assignee"
+          :label="$t('fields.assigned')"
+          align="right"
+          label-align="left"
+        ) {{ item.assignee }}
+        el-descriptions-item(
+          v-if="item.comment"
+          :label="$t('fields.comment')"
+          align="right"
+          label-align="left"
+        ) {{ item.comment }}
 
-el-timeline.service-task-history-list
-  el-timeline-item(
-    v-for="item in history"
-    :key="item.id"
-    :timestamp="`${$ts(item.timestamp, 'minutes')}, ${item.author}`"
-    placement="top"
-  )
-    workflow-processing(
-      :processing="item.processing"
-      :workflow="serviceTaskWorkflow"
-      size="small"
-    )
-    el-descriptions(
-      direction="horizontal"
-      :column="1"
-      size="small"
-      :border="true"
-      v-if="item.assignee"
-    )
-      el-descriptions-item(
-        :label="$t('fields.assigned')"
-        align="right"
-        label-align="left"
-      ) {{ item.assignee }}
 </template>
 
 <script setup lang="ts">
@@ -64,8 +72,8 @@ watch(() => props.serviceTaskId, serviceTaskId => {
 <style scoped lang="scss">
 @import "@/styles/variables.scss";
 
-.service-task-history-list {
-  padding-inline-start: 0;
+.el-timeline {
+  padding-inline-start: 1px;
 }
 
 .el-descriptions {
