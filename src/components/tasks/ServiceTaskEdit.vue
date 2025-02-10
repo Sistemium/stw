@@ -35,11 +35,16 @@ const props = defineProps<{
 
 const { saveFn, destroyFn } = useDrawerEditing(ServiceTask)
 const { route } = useRouteParams()
-const modelOrigin = computed<Partial<IServiceTask>>(() => props.serviceTaskId ? ServiceTask.reactiveGet(props.serviceTaskId) : {
-  description: '',
-  date: todayStringDate(),
-  siteId: route.query.siteId,
-})
+const modelOrigin = computed<Partial<IServiceTask>>(() =>
+  props.serviceTaskId
+  && ServiceTask.reactiveGet(props.serviceTaskId as string)
+  || {
+    description: '',
+    date: todayStringDate(),
+    siteId: route.query.siteId as string,
+    processing: 'draft',
+    assigneeId: undefined,
+  })
 
 const { form: formRef } = useFormValidate()
 

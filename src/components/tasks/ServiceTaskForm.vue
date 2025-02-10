@@ -28,6 +28,14 @@
         v-model="model.servicePointId"
         :site-id="model.siteId"
       )
+    el-form-item(
+      :label="$t('fields.address')"
+    )
+      el-input(
+        disabled
+        type="textarea"
+        :model-value="address"
+      )
     el-form-item.description(
       :label="$t('fields.description')"
       prop="description"
@@ -54,32 +62,46 @@ import { computed } from 'vue'
 import { type IServiceTask, serviceTaskWorkflow } from '@/models/ServiceTask'
 import DateStringPicker from '@/lib/DateStringPicker.vue'
 import EmployeeSelect from '@/components/select/EmployeeSelect.vue'
-import WorkflowButton from '@/lib/WorkflowButton.vue'
 import ServicePointSelect from '@/components/select/ServicePointSelect.vue'
 import WorkflowTransitions from '@/lib/WorkflowTransitions.vue'
 import WorkflowProcessing from '@/lib/WorkflowProcessing.vue'
+import ServicePointCustomer from '@/models/ServicePointCustomer.ts'
 
-const { form, validate } = useFormValidate();
+const { form, validate } = useFormValidate()
 
-defineExpose({ validate });
+defineExpose({ validate })
 
 const props = defineProps<{
   model: IServiceTask
-}>();
+}>()
 
-const rules = computed(() => $requiredRule(['date', 'description']));
+const address = computed(() => ServicePointCustomer.reactiveGet(props.model.servicePointId)?.address)
+
+const rules = computed(() => {
+  const required = ['date', 'description']
+  if (props.model.processing !== 'draft') {
+    required.push('assigneeId')
+  }
+  return $requiredRule(required)
+})
 const disabled = computed(() => !serviceTaskWorkflow.step(props.model.processing)?.editable)
 
 </script>
 <style scoped>
 .description {
   flex-direction: column;
+
   &::v-deep(label) {
     align-self: start;
   }
 }
+
 .workflow-transitions {
   display: inline-block;
   margin-left: 1em;
+}
+
+.el-form::v-deep(.el-textarea.is-disabled .el-textarea__inner) {
+  color: var(--el-text-color-regular);
 }
 </style>

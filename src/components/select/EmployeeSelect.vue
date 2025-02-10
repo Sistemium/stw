@@ -3,7 +3,7 @@ el-select.employee-select(
   :model-value="modelId"
   :clearable="true"
   :placeholder="$t('actions.select', [$t('accusative.employee')])"
-  @update:model-value="id => { modelId = id }"
+  @update:model-value="id => { modelId = id || null }"
 )
   el-option(
     v-for="o in options"
