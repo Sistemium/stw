@@ -12,8 +12,7 @@ el-select-v2.service-point-select(
   value="id"
   :debounce="300"
   v-cancel-read-only
-
-  popper-class="article-select-popper"
+  popper-class="service-point-select-popper"
   :options="options"
   :clearable="true"
   :automatic-dropdown="true"
@@ -81,9 +80,21 @@ function searcher(search: string) {
 }
 
 </script>
-<style scoped>
-.color-gray-500 {
-  line-height: 0;
-  color: gray;
+<style>
+
+.service-point-select-popper {
+  min-width: 400px;
+
+  .color-gray-500 {
+    line-height: 0;
+    color: gray;
+  }
+  .el-select-dropdown__list, .el-select-dropdown {
+    width: auto !important;
+  }
+
+  .el-select-dropdown__option-item.is-selected::after {
+    display: none;
+  }
 }
 </style>
