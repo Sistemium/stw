@@ -19,6 +19,7 @@
           tool-button(
             tool="add"
             @click="onAdd()"
+            :disabled="!siteId"
           )
       resize#stock-operation-scroll(
         :padding="40"
@@ -39,7 +40,7 @@
 
 <script setup lang="ts">
 
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import PageTitle from '@/components/PageTitle.vue'
 import SearchInput from '@/lib/SearchInput.vue'
 import Resize from '@/lib/StmResize.vue'
@@ -49,6 +50,7 @@ import ToolButton from '@/lib/ToolButton.vue'
 import SiteSelect from '@/components/select/SiteSelect.vue'
 import ServiceTaskTable from '@/components/tasks/ServiceTaskTable.vue'
 import { useTasking } from '@/services/serving'
+import { useInvStore } from '@/store/invStore'
 
 const props = defineProps<{
   rootState: string
@@ -57,12 +59,18 @@ const props = defineProps<{
   model: any
 }>()
 
-const siteId = ref('')
-
+const store = useInvStore()
+const siteId = ref(store.currentSiteId)
 const { dateRange } = useDateRange()
 const { search } = useSearch()
 const { router } = useRouteParams()
 const { serviceTasks } = useTasking({ dateRange, siteId, search })
+
+watch(siteId, id => {
+  if (id) {
+    store.currentSiteId = id
+  }
+})
 
 function onAdd() {
   const { value } = siteId

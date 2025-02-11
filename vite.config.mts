@@ -70,8 +70,8 @@ export default defineConfig(({ mode }) => {
       port: 8890,
       proxy: {
         '^/api': {
-          // target: 'https://vfsd.sistemium.com',
-          target: 'http://localhost:9390',
+          target: 'https://vfsd.sistemium.com',
+          // target: 'http://localhost:9390',
           changeOrigin: true,
         },
         '/pha': {
