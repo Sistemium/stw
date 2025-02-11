@@ -65,7 +65,7 @@ const columns = computed(() => {
       title: t('fields.processing'),
       dataKey: 'processing',
       // minWidth: 60,
-      cellRenderer: ({ rowData }: { rowData: IServiceTask }) =>
+      cellRenderer: ({ rowData }) =>
         <WorkflowProcessing
           workflow={serviceTaskWorkflow}
           processing={rowData.processing}
@@ -79,7 +79,7 @@ const columns = computed(() => {
       align: 'left',
       title: t('fields.description'),
       dataKey: 'description',
-      // minWidth: 100,
+      class: 'description',
     },
     {
       width: width * 3,
@@ -87,7 +87,7 @@ const columns = computed(() => {
       align: 'left',
       title: t('fields.customer'),
       key: 'servicePointId',
-      cellRenderer({ rowData }: { rowData: IServiceTask }) {
+      cellRenderer({ rowData }) {
         const c = ServicePointCustomer.reactiveGet(rowData.servicePointId)
         return <div class="text-left">
           <div>{c?.name}</div>
@@ -101,7 +101,7 @@ const columns = computed(() => {
       title: t('fields.assignee'),
       dataKey: 'date',
       // minWidth: 60,
-      cellRenderer: ({ rowData }: { rowData: IServiceTask }) =>
+      cellRenderer: ({ rowData }) =>
         <div class="text-left">{Employee.reactiveGet(rowData.assigneeId)?.name}</div>,
     },
     {
@@ -109,14 +109,14 @@ const columns = computed(() => {
       width: 60,
       // minWidth: 100,
       align: 'right',
-      cellRenderer: ({ rowData }: { rowData: IServiceTask }) =>
+      cellRenderer: ({ rowData }) =>
         <ToolButton
           tool="edit"
           circle={false}
           onClick={() => emit('editClick', rowData)}>
         </ToolButton>,
     },
-  ] as ColumnInfo[]
+  ] as ColumnInfo<IServiceTask>[]
 })
 
 
@@ -126,5 +126,10 @@ const columns = computed(() => {
 @import "@/styles/variables.scss";
 small {
   color: $gray;
+}
+.service-task-table::v-deep(.description > div) {
+  white-space: normal;
+  text-align: left;
+  //font-size: small;
 }
 </style>

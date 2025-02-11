@@ -32,10 +32,19 @@ export function useSearch() {
   }
 }
 
-export interface ColumnInfo {
+export interface ColumnInfo<T = any> {
   width: number
   key?: string
+  title: string
   dataKey?: string
+  align: 'center' | 'right' | 'left'
+  class?: string
+  headerClass?: string // can be fn actually
+
+  cellRenderer(data: {
+    rowData: T
+    cellData: any
+  }): any
 }
 
 export function todayStringDate() {
@@ -44,8 +53,8 @@ export function todayStringDate() {
 
 export function useDateRange() {
   const { updateRouteParams, route } = useRouteParams()
-  const today = dayjs().endOf('day');
-  const monthAgo = today.add(-12, 'month');
+  const today = dayjs().endOf('day')
+  const monthAgo = today.add(-12, 'month')
   const dateRange = computed({
     get() {
       const { dateB, dateE } = route.query
