@@ -85,9 +85,10 @@ const columns = computed(() => {
       align: 'left',
       title: t('fields.customer'),
       key: 'servicePointId',
+      class: 'text-left',
       cellRenderer({ rowData }) {
         const c = ServicePointCustomer.reactiveGet(rowData.servicePointId)
-        return <div class="text-left">
+        return <div className="text-left">
           <div>{c?.name}</div>
           <small>{c?.address}</small>
         </div>
@@ -99,7 +100,7 @@ const columns = computed(() => {
       title: t('fields.assignee'),
       dataKey: 'date',
       cellRenderer: ({ rowData }) =>
-        <div class="text-left">{Employee.reactiveGet(rowData.assigneeId)?.name}</div>,
+        <div className="text-left">{Employee.reactiveGet(rowData.assigneeId)?.name}</div>,
     },
     {
       width: width * 1.5,
@@ -139,4 +140,13 @@ small {
   text-align: left;
   //font-size: small;
 }
+.service-task-table::v-deep(.text-left) {
+  max-width: 100%;
+  overflow: hidden;
+  * {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}
+
 </style>
