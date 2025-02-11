@@ -8,3 +8,5 @@ export type ElementType =
   | 'danger'
   | 'primary'
   | 'info'
+
+export type ElementEffect = 'plain' | 'light' | 'dark'

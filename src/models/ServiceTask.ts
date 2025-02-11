@@ -39,12 +39,41 @@ export const serviceTaskWorkflow = new Workflow({
       // type: 'success',
     },
     {
+      processing: 'rejected',
+      label: 'workflow.rejected',
+      options: [{
+        to: 'assigned',
+        label: 'workflow.assign',
+        type: 'primary',
+      }],
+      primaryOption: 'assigned',
+      editable: true,
+      type: 'danger',
+      effect: 'dark'
+    },
+    {
       processing: 'assigned',
       label: 'workflow.assigned',
       options: [{
-        to: 'draft',
-        label: 'workflow.unassign',
-        // type: 'primary',
+        to: 'rejected',
+        label: 'workflow.reject',
+        type: 'warning',
+      }, {
+        to: 'accepted',
+        label: 'workflow.accept',
+        type: 'primary',
+      }],
+      primaryOption: 'finished',
+      editable: true,
+      type: 'primary',
+    },
+    {
+      processing: 'accepted',
+      label: 'workflow.accepted',
+      options: [{
+        to: 'rejected',
+        label: 'workflow.reject',
+        type: 'danger',
       }, {
         to: 'finished',
         label: 'workflow.finish',

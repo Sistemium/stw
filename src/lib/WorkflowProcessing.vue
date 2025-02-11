@@ -2,7 +2,7 @@
 .workflow-processing
   el-tag.processing(
     :type
-    effect="plain"
+    :effect
     :size
   ) {{ $t(`workflow.${ processing || 'progress' }`) }}
   slot
@@ -19,7 +19,9 @@ const props = defineProps<{
   size?: ElementsSize
 }>();
 
-const type = computed(() => props.workflow?.step(props.processing)?.type || 'info')
+const step = computed(() => props.workflow?.step(props.processing))
+const effect = computed(() => step.value?.effect || 'plain')
+const type = computed(() => step.value?.type || 'info')
 
 </script>
 <style scoped lang="scss">

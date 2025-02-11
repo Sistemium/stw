@@ -31,7 +31,7 @@ const typeLabel = computed(() => {
   if (!value) {
     return ''
   }
-  const { type, assigneeId } = value
+  const { type, assigneeId, processing } = value
   if (type === 'create') {
     return 'fields.created'
   }
@@ -44,7 +44,7 @@ const typeLabel = computed(() => {
   if (assigneeId) {
     return  'workflow.assigned'
   }
-  return ''
+  return `workflow.${processing}`
 })
 </script>
 

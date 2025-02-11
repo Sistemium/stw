@@ -1,4 +1,4 @@
-import type { ElementType } from '@/types/elements'
+import type { ElementEffect, ElementType } from '@/types/elements'
 
 export default class WorkflowStep implements WorkflowOption {
 
@@ -8,6 +8,7 @@ export default class WorkflowStep implements WorkflowOption {
   label: string
   processing: string
   type?: ElementType
+  effect?: ElementEffect
 
   constructor(config: WorkflowOption) {
     this.config = config;
@@ -22,7 +23,8 @@ export default class WorkflowStep implements WorkflowOption {
 export interface WorkflowOption {
   processing: string
   label: string
-  type?: string
+  type?: ElementType
+  effect?: ElementEffect
   primaryOption?: string
   editable?: boolean
   options: WorkflowStepOption[]

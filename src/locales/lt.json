@@ -259,8 +259,12 @@
     "selfCost": "sav."
   },
   "workflow": {
+    "accept": "Priimti",
+    "accepted": "Priimta",
     "assign": "Paskirti",
     "unassign": "Atšaukti",
+    "rejected": "Atšaukta",
+    "reject": "Atšaukti",
     "start": "Pradėti",
     "finish": "Užbaigti",
     "progress": "Vykdoma",
