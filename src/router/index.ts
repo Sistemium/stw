@@ -1,7 +1,6 @@
 import * as VueRouter from 'vue-router';
 import Home from '@/views/HomePage.vue';
 import AuthPage from '@/views/AuthPage.vue';
-
 import routeMap from '@/router/routeMap';
 
 export const routes = [

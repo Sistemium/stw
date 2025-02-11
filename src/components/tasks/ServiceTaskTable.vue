@@ -19,12 +19,13 @@ import max from 'lodash/max'
 import { computed } from 'vue'
 import { t } from '@/lib/validations'
 import type { ColumnInfo } from '@/services/util'
+import { renderDate } from '@/services/rendering'
 import AlertEmpty from '@/lib/AlertEmpty.vue'
 import ToolButton from '@/lib/ToolButton.vue'
-import { renderDate } from '@/services/rendering'
+import WorkflowProcessing from '@/lib/WorkflowProcessing.vue'
+import ServiceTaskEventsInfo from '@/components/tasks/ServiceTaskEventsInfo.vue'
 import { type IServiceTask, serviceTaskWorkflow } from '@/models/ServiceTask'
 import Employee from '@/models/Employee'
-import WorkflowProcessing from '@/lib/WorkflowProcessing.vue'
 import ServicePointCustomer from '@/models/ServicePointCustomer'
 
 const props = withDefaults(defineProps<{
@@ -45,7 +46,7 @@ const emit = defineEmits<{
 
 
 const columns = computed(() => {
-  const count = 6
+  const count = 7.5
   const { columnWidth } = props
   const nameWidth = max([props.width - columnWidth * count - 6 - 300, 300]) || 0
   const width = max([Math.floor((props.width - nameWidth - 6 - 60) / count), columnWidth]) || 0
@@ -56,7 +57,6 @@ const columns = computed(() => {
       align: 'left',
       title: t('fields.date'),
       dataKey: 'date',
-      // minWidth: 60,
       cellRenderer: renderDate,
     },
     {
@@ -64,7 +64,6 @@ const columns = computed(() => {
       align: 'center',
       title: t('fields.processing'),
       dataKey: 'processing',
-      // minWidth: 60,
       cellRenderer: ({ rowData }) =>
         <WorkflowProcessing
           workflow={serviceTaskWorkflow}
@@ -75,7 +74,6 @@ const columns = computed(() => {
     },
     {
       width: nameWidth,
-      // minWidth: nameWidth,
       align: 'left',
       title: t('fields.description'),
       dataKey: 'description',
@@ -83,7 +81,6 @@ const columns = computed(() => {
     },
     {
       width: width * 3,
-      // minWidth: nameWidth,
       align: 'left',
       title: t('fields.customer'),
       key: 'servicePointId',
@@ -100,14 +97,20 @@ const columns = computed(() => {
       align: 'left',
       title: t('fields.assignee'),
       dataKey: 'date',
-      // minWidth: 60,
       cellRenderer: ({ rowData }) =>
         <div class="text-left">{Employee.reactiveGet(rowData.assigneeId)?.name}</div>,
     },
     {
+      width: width * 1.5,
+      align: 'center',
+      title: t('fields.events'),
+      key: 'events',
+      cellRenderer: ({ rowData }) =>
+        <ServiceTaskEventsInfo service-task-id={rowData.id}></ServiceTaskEventsInfo>,
+    },
+    {
       key: 'buttons',
       width: 60,
-      // minWidth: 100,
       align: 'right',
       cellRenderer: ({ rowData }) =>
         <ToolButton

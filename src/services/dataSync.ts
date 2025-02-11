@@ -32,6 +32,8 @@ import ServiceTask from '@/models/ServiceTask'
 import { loadRelation } from '@/services/util'
 import type { NavigationGuardNext, RouteLocationNormalized as RouteRecord } from 'vue-router'
 import type { CounterpartyType } from '@/models/StockOperations'
+import ServiceTaskHistory from '@/models/ServiceTaskHistory'
+import User from '@/models/User'
 
 const { error, debug } = log('dataSync');
 
@@ -208,6 +210,8 @@ const LOADERS: Map<RegExp, LoaderFn> = new Map([
   [/serviceTask/, async () => {
     const tasks = await ServiceTask.cachedFetch()
     await loadRelation(ServicePointCustomer, tasks, 'servicePointId')
+    const history = await ServiceTaskHistory.cachedFetch()
+    await loadRelation(User, history, 'authId')
     await Employee.cachedFetch()
   }],
 ]);

@@ -22,7 +22,10 @@ drawer-edit.service-task-edit(
       )
         .full-height
           resize(:padding="180")
-            service-task-history-list(:service-task-id="model.id")
+            service-task-history-list(
+              :service-task-id="model.id"
+              @delete-comment="deleteComment"
+            )
           el-form
             el-form-item()
               el-input(
@@ -86,6 +89,14 @@ function commentClick() {
     .then(() => {
       comment.value = ''
     })
+    .finally(() => {
+      loading.value = false
+    })
+}
+
+function deleteComment(id: string) {
+  loading.value = true
+  ServiceTaskHistory.destroy(id)
     .finally(() => {
       loading.value = false
     })

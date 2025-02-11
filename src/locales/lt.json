@@ -47,7 +47,9 @@
     "assigned": "Paskirtas atsakingu",
     "commentText": "Pastaba",
     "comment": "Pranešimas",
+    "created": "Sukurta",
     "description": "Aprašymas",
+    "events": "Įvykiai",
     "regCode": "Įmonės kodas",
     "vatCode": "PVM kodas",
     "name": "Pavadinimas",
@@ -202,6 +204,7 @@
   },
   "actions": {
     "comment": "Atsiųsti pranešimą",
+    "delete": "Ištrinti",
     "act": "{0} aktas",
     "add": "Pridėti {0}",
     "show": "Parodyti {0}",

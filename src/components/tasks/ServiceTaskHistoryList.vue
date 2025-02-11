@@ -25,47 +25,51 @@
           align="right"
           label-align="left"
         ) {{ item.assignee }}
-        el-descriptions-item(
-          v-if="item.comment"
-          :label="$t('fields.comment')"
-          align="right"
-          label-align="left"
-        ) {{ item.comment }}
+        .actions(v-if="item.comment")
+          el-descriptions-item(
+            :label="$t('fields.comment')"
+            align="right"
+            label-align="left"
+          )
+            .text {{ item.comment }}
+            .actions
+              confirm-button(
+                size="small"
+                type="warning"
+                link
+                @confirm="deleteClick(item.id)"
+                :text="$t('delete')"
+              ) // need authorize deletion
 
 </template>
 
 <script setup lang="ts">
-import { computed, watch } from 'vue'
-import ServiceTaskHistory, { type IServiceTaskHistory } from '@/models/ServiceTaskHistory.ts'
-import orderBy from 'lodash/orderBy'
+import { watch } from 'vue'
+import ServiceTaskHistory from '@/models/ServiceTaskHistory'
 import WorkflowProcessing from '@/lib/WorkflowProcessing.vue'
-import { serviceTaskWorkflow } from '@/models/ServiceTask.ts'
-import { loadRelation } from '@/services/util.ts'
+import { serviceTaskWorkflow } from '@/models/ServiceTask'
+import { loadRelation } from '@/services/util'
+import { useTaskHistory } from '@/services/serving.ts'
+import ConfirmButton from 'sistemium-vue/components/ConfirmButton.vue'
 import User from '@/models/User.ts'
-import Employee from '@/models/Employee.ts'
 
 const props = defineProps<{
   serviceTaskId?: string
 }>()
 
-type RichHistory = IServiceTaskHistory & {
-  author?: string
-  assignee?: string
-}
-
-const history = computed<RichHistory[]>(() =>
-  orderBy(ServiceTaskHistory.reactiveFilter({ serviceTaskId: props.serviceTaskId })
-    .map(item => ({
-      ...item,
-      author: User.reactiveGet(item.authId)?.name,
-      assignee: Employee.reactiveGet(item.assigneeId)?.name,
-    })), 'timestamp', 'desc'),
-)
+const { history } = useTaskHistory(props)
+const emit = defineEmits<{
+  deleteComment(id: string): void
+}>()
 
 watch(() => props.serviceTaskId, serviceTaskId => {
   ServiceTaskHistory.cachedFetch({ serviceTaskId })
     .then(fetched => loadRelation(User, fetched, 'authId'))
 }, { immediate: true })
+
+function deleteClick(id: string) {
+  emit('deleteComment', id)
+}
 
 </script>
 
@@ -78,5 +82,8 @@ watch(() => props.serviceTaskId, serviceTaskId => {
 
 .el-descriptions {
   margin-top: 1em;
+}
+.actions {
+  text-align: left;
 }
 </style>
