@@ -1,7 +1,7 @@
 <template lang="pug">
 drawer-edit.service-task-edit(
   :title="$tGen('editing', 'serviceTask')"
-  :save-fn="saveFn"
+  :save-fn="save"
   :destroy-fn="destroyFn"
   :model-origin="modelOrigin"
   :from="from"
@@ -10,13 +10,17 @@ drawer-edit.service-task-edit(
 )
   template(#default="{ model }")
     el-tabs(v-model="currentTab")
-      el-tab-pane(:label="$t('concepts.serviceTask')")
+      el-tab-pane(
+        :label="$t('concepts.serviceTask')"
+        name="form"
+      )
         service-task-form(
           ref="formRef"
           :model="model"
         )
       el-tab-pane(
         v-if="model.id"
+        name="history"
         :label="$t('concepts.history')"
         v-loading="loading"
       )
@@ -51,7 +55,7 @@ import { useFormValidate } from '@/services/validating'
 import ServiceTask, { type IServiceTask } from '@/models/ServiceTask'
 import { useRouteParams } from '@/lib/updateRouteParams'
 import ServiceTaskHistoryList from '@/components/tasks/ServiceTaskHistoryList'
-import Resize from '@/lib/StmResize';
+import Resize from '@/lib/StmResize'
 import ServiceTaskHistory from '@/models/ServiceTaskHistory'
 
 const props = defineProps<{
@@ -63,9 +67,9 @@ const props = defineProps<{
 const comment = ref('')
 
 const loading = ref()
-const currentTab = ref<string>('0')
-const { saveFn, destroyFn } = useDrawerEditing(ServiceTask)
 const { route } = useRouteParams()
+const currentTab = ref<string>(route.query.tab as string || 'form')
+const { saveFn, destroyFn } = useDrawerEditing<IServiceTask>(ServiceTask)
 const modelOrigin = computed<Partial<IServiceTask>>(() =>
   props.serviceTaskId
   && ServiceTask.reactiveGet(props.serviceTaskId as string)
@@ -78,6 +82,11 @@ const modelOrigin = computed<Partial<IServiceTask>>(() =>
   })
 
 const { form: formRef } = useFormValidate()
+
+async function save(task: Partial<IServiceTask>) {
+  await saveFn(task)
+  await ServiceTaskHistory.fetchAll({ serviceTaskId: task.id })
+}
 
 function commentClick() {
   loading.value = true
@@ -105,12 +114,15 @@ function deleteComment(id: string) {
 
 <style scoped lang="scss">
 @import "@/styles/variables.scss";
+
 .el-form {
   margin-top: 20px;
 }
+
 .float-right {
   float: right;
 }
+
 .full-height {
   display: flex;
   flex-direction: column;

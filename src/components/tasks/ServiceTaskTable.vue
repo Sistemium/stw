@@ -42,6 +42,7 @@ const props = withDefaults(defineProps<{
 const emit = defineEmits<{
   (e: 'editClick', row: IServiceTask): void
   (e: 'resize', columns: ColumnInfo[]): void
+  (e: 'showHistoryClick', row: IServiceTask): void
 }>()
 
 
@@ -106,7 +107,10 @@ const columns = computed(() => {
       title: t('fields.events'),
       key: 'events',
       cellRenderer: ({ rowData }) =>
-        <ServiceTaskEventsInfo service-task-id={rowData.id}></ServiceTaskEventsInfo>,
+        <ServiceTaskEventsInfo
+          service-task-id={rowData.id}
+          onClick={() => emit('showHistoryClick', rowData)}
+        ></ServiceTaskEventsInfo>
     },
     {
       key: 'buttons',

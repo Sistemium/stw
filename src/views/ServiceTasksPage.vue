@@ -31,6 +31,7 @@
                 :service-tasks="serviceTasks"
                 :width="width"
                 @edit-click="onEdit"
+                @show-history-click="t => onEdit(t, 'history')"
               )
   router-view
 
@@ -63,7 +64,6 @@ const { search } = useSearch()
 const { router } = useRouteParams()
 const { serviceTasks } = useTasking({ dateRange, siteId, search })
 
-
 function onAdd() {
   const { value } = siteId
   if (!value) {
@@ -75,9 +75,18 @@ function onAdd() {
   })
 }
 
-function onEdit(serviceTask: { id: string }) {
-  router.push({ name: props.editRoute, params: { serviceTaskId: serviceTask.id } })
+function onEdit(serviceTask: { id: string }, tab?: string) {
+  const query = { tab }
+  if (!tab) {
+    delete query.tab
+  }
+  router.push({
+    name: props.editRoute,
+    params: { serviceTaskId: serviceTask.id },
+    query,
+  })
 }
+
 </script>
 
 <style scoped lang="scss">

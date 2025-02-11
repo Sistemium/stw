@@ -42,11 +42,11 @@ export function useTasking({ dateRange, siteId, search }: TaskingFilter) {
         $gte: day(value[0]).startOf('day').toJSON(),
         $lte: day(value[1]).endOf('day').toJSON(),
       }
-      const tasks = ServiceTask.reactiveFilter({
+      const tasks = orderBy(ServiceTask.reactiveFilter({
         siteId: siteId.value,
         // @ts-ignore
         date,
-      })
+      }), ['date', 'cts'], ['desc', 'desc'])
 
       if (!search.value || !tasks.length) {
         return tasks

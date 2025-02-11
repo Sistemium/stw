@@ -59,7 +59,7 @@ const props = defineProps<{
 
 const { history } = useTaskHistory(props)
 const emit = defineEmits<{
-  deleteComment(id: string): void
+  (e: 'deleteComment', id: string): void
 }>()
 
 watch(() => props.serviceTaskId, serviceTaskId => {
@@ -83,6 +83,7 @@ function deleteClick(id: string) {
 .el-descriptions {
   margin-top: 1em;
 }
+
 .actions {
   text-align: left;
 }

@@ -29,6 +29,7 @@
         :site-id="model.siteId"
       )
     el-form-item(
+      v-if="address"
       :label="$t('fields.address')"
     )
       el-input(
