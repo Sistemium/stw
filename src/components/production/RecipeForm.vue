@@ -14,6 +14,7 @@ el-form.recipe-form(
     :materials="model.materials || null"
     ref="materialsFormRef"
     @create="onCreate"
+    :prices="vatRate !== undefined"
   )
     template(
       #material="{ material: material }"
@@ -36,27 +37,29 @@ import { ref } from 'vue';
 import type { IArticle } from '@/models/Articles';
 import MaterialsForm from '@/components/production/MaterialsForm.vue';
 import ArticleCostInfo from '@/components/production/ArticleCostInfo.vue';
-import type { CostType } from '@/models/Recipes';
+import type { CostType, MaterialFields } from '@/models/Recipes'
+import ArticleSelect from '@/components/catalogue/ArticleSelect.vue'
+import type { FormValidateCallback } from '@/services/validating'
 // import { useFormValidate } from '@/services/validating';
 
 const props = defineProps<{
   model: IArticle;
   storageId?: string;
   date: string;
-  vatRate: number;
+  vatRate?: number;
   vatPrices: boolean;
   costType: CostType;
 }>();
 
-const materialsFormRef = ref(null);
+const materialsFormRef = ref();
 
 defineExpose({
-  validate(callback) {
+  validate(callback: FormValidateCallback) {
     materialsFormRef.value.validate(callback);
   },
 });
 
-function onCreate(materials) {
+function onCreate(materials: MaterialFields[]) {
   // eslint-disable-next-line vue/no-mutating-props
   props.model.materials = materials;
 }

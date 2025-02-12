@@ -9,7 +9,7 @@ el-form.prop-option-form(
     el-input(v-model="model.name")
 
 </template>
-<script setup>
+<script setup lang="ts">
 /* eslint-disable vue/no-mutating-props */
 import { computed } from 'vue';
 import ArticleProp from '@/models/ArticleProp';

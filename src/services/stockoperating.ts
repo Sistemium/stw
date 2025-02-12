@@ -7,42 +7,56 @@ import Article from '@/models/Article.js';
 import Storage from '@/models/Storage.js';
 import type { MaterialFields } from '@/models/Recipes';
 import { t, tGen } from '@/lib/validations';
-import { type CounterPartyRef, getCounterparty } from '@/services/warehousing.js'
+import { type CounterPartyRef, getCounterparty, stockArticleDateReactive } from '@/services/warehousing.js'
 import { useInvStore } from '@/store/invStore';
 import StockWithdrawing from '@/models/StockWithdrawing.js';
 import StockWithdrawingItem from '@/models/StockWithdrawingItem.js';
+import round from 'lodash/round';
+import type { BaseItem } from '@/init/Model'
 
 interface StockOperationActItem extends MaterialFields {
-  name: string;
-  code: string;
+  name: string
+  code: string
+  cost: number
+  vatCost: number
 }
 
-type PricedMaterials = MaterialFields & { price?: number, vatPrice?: number }
+type PricedMaterials = MaterialFields & { price?: number, vatPrice?: number, vatRate?: number }
 
-export function stockOperationAct(items: StockOperationItem[]): StockOperationActItem[] {
+export function stockOperationAct(items: StockOperationItem[], storageId: string, date: string): StockOperationActItem[] {
 
   const materializedItems: PricedMaterials[] = flatten(items.map(item => {
     const { materials, units } = item;
-    if (!materials) {
+    if (!materials?.length) {
       return item;
     }
-    return materials
+    const res = materials
       .map<PricedMaterials>(material => ({
         ...material,
         units: units * material.units,
         price: undefined,
         vatPrice: undefined,
+        vatRate: item.vatRate,
       }));
+    if (Article.reactiveGet(item.articleId)?.isSKU) {
+      res.push({
+        ...item,
+      })
+    }
+    return res
   }));
 
   return materializedItems.map(item => {
     const article = Article.reactiveGet(item.articleId);
+    const cost = stockArticleDateReactive(storageId, article?.id, date)?.resultCost || 0
     return {
       ...item,
       total: item.price ? item.price * item.units : undefined,
       totalWithVat: item.vatPrice ? item.vatPrice * item.units : undefined,
       name: article?.name || '',
       code: article?.code || '',
+      cost: round(cost, 2),
+      vatCost: round(cost * ((item.vatRate || 0) + 1), 2),
     };
   });
 }
@@ -100,16 +114,21 @@ export interface StockOperationReportItem extends StockOperationItem {
   date?: string | Date;
 }
 
-export async function withdrawingReportData(storageId: string, counterpartyId: string, dateB: string, dateE: string): Promise<StockOperationReportItem[]> {
-
-  const headers = await StockWithdrawing.find({
-    storageId,
-    counterpartyId,
+export async function withdrawingReportData(storageId: string | undefined, counterpartyId: string | undefined, dateB: string, dateE: string): Promise<StockOperationReportItem[]> {
+  const filter: BaseItem = {
     date: {
       $gte: dateB,
       $lte: dateE,
     },
-  });
+    counterpartyType: 'Storage',
+  }
+  if (counterpartyId) {
+    filter.counterpartyId = counterpartyId;
+  }
+  if (storageId) {
+    filter.storageId = storageId;
+  }
+  const headers = await StockWithdrawing.find(filter);
 
   if (!headers) {
     return [];

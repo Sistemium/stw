@@ -10,7 +10,7 @@ import { computed } from 'vue';
 import Article from '@/models/Article.js';
 
 const props = defineProps<{
-  articleId: string;
+  articleId?: string;
 }>();
 
 const article = computed(() => Article.reactiveGet(props.articleId));

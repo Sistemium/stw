@@ -1,12 +1,14 @@
 import { computed } from 'vue'
-import type { ComputedRef } from 'vue'
+import type { ComputedRef, Ref} from 'vue'
 import Workflow from '@/lib/Workflow'
+import type { ElementsSize } from '@/types/elements'
+import WorkflowStep, { type WorkflowStepOption } from '@/lib/WorkflowStep'
 // import type WorkflowStep from '@/lib/WorkflowStep'
 
-export function useWorkflow(props: WorkflowProps, emit: (e: string, to: any) => void) {
+export function useWorkflow(props: WorkflowProps, emit: (e: 'update:modelValue', to: any) => void) {
 
-  const step = computed(() => props.workflow.step(props.modelValue))
-  const options = computed(() => step.value?.options || [])
+  const step: Ref<WorkflowStep | undefined> = computed(() => props.workflow.step(props.modelValue))
+  const options: Ref<WorkflowStepOption[]> = computed(() => step.value?.options || [])
 
   return {
     step,
@@ -21,7 +23,7 @@ export interface WorkflowProps {
   workflow: Workflow
   disabled?: boolean
   modelValue: string
-  size?: string
+  size?: ElementsSize
 }
 
 export const workflowProps = {

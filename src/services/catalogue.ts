@@ -61,6 +61,7 @@ export function articleInstance() {
     props,
     boxes: [],
     isCustomName: false,
+    isSKU: true,
     measureId: null,
     measureUnitId: null,
     unitPackageTypeId: null, // optional
@@ -69,7 +70,7 @@ export function articleInstance() {
     packageTypeId: null,
     unitsInPackage: null,
     // }],
-  };
+  } as unknown as Partial<IArticle>;
 }
 
 export async function addBarcodeToArticle(barcode: string, article: IArticle) {
@@ -84,14 +85,14 @@ export async function addBarcodeToArticle(barcode: string, article: IArticle) {
   return Article.createOne(props);
 }
 
-export function searchArticle(search: string): (x: IArticle) => boolean {
+export function searchArticle(search: string): (x?: IArticle) => boolean {
   if (!search) {
-    return (x: IArticle) => !!x;
+    return (x?: IArticle) => !!x;
   }
-  return (article: IArticle) => testArticle(article, likeLt(search));
+  return (article?: IArticle) => testArticle(article, likeLt(search));
 }
 
-export function testArticle(article: IArticle, re: RegExp) {
+export function testArticle(article: IArticle | undefined, re: RegExp) {
   if (!article) {
     return false;
   }
@@ -135,12 +136,12 @@ export function catalogueData() {
   const propColumns = Array.from(allProps.keys())
     .map(id => {
       const prop = ArticleProp.reactiveGet(id);
-      if (prop.isNaming) {
+      if (prop?.isNaming) {
         return false;
       }
       return {
         ...prop,
-        align: prop.type === 'number' ? 'right' : 'left',
+        align: prop?.type === 'number' ? 'right' : 'left',
       };
     })
     .filter(x => !!x) as IArticleProp[]

@@ -9,8 +9,8 @@
     el-radio-group(
       v-model="matcherMode"
     )
-      el-radio-button(label="add" :disabled="true") {{ $t('addArticle') }}
-      el-radio-button(label="find") {{ $t('findArticle') }}
+      el-radio-button(value="add" :disabled="true") {{ $t('addArticle') }}
+      el-radio-button(value="find") {{ $t('findArticle') }}
     article-matcher(@found="onArticle")
 
   template(v-if="canAddBarcode")
@@ -31,6 +31,7 @@ import ArticleMatcher from '@/components/catalogue/ArticleMatcher.vue';
 import * as g from '@/store/inv/getters';
 import * as m from '@/store/inv/mutations';
 import BarcodeView from '@/components/BarcodeScanner/BarcodeView.vue';
+import SimpleLabel from '@/lib/SimpleLabel.vue'
 
 const { mapGetters, mapMutations } = createNamespacedHelpers('inv');
 
@@ -118,6 +119,7 @@ export default {
     this.$watchImmediate('value', this.onArticle);
   },
   components: {
+    SimpleLabel,
     BarcodeView,
     ArticleMatcher,
   },

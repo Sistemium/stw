@@ -24,9 +24,11 @@ import StockTakingItem from '@/models/StockTakingItem'
 import StockTaking from '@/models/StockTaking'
 import { testArticle } from '@/services/catalogue'
 import { likeLt } from '@/services/lt'
-import Model, { type BaseItem } from '@/init/Model'
+import { loadNotCachedIds, loadRelation } from '@/services/util'
+import Model from '@/init/Model'
+import HybridDataModel, { type BaseItem } from '@/init/Model'
 import type { VatConfig } from '@/services/vatConfiguring'
-import type { CounterpartyType, StockOperationName } from '@/models/StockOperations'
+import type { CounterpartyType, StockOperation, StockOperationName } from '@/models/StockOperations'
 import type { IArticle } from '@/models/Articles'
 
 interface STI {
@@ -84,7 +86,7 @@ export function stockOperationItemInstance(operationName: StockOperationName, pr
   };
 }
 
-export const CONSIGNEE_TYPES = new Map<CounterpartyType, Model>([
+export const CONSIGNEE_TYPES = new Map<CounterpartyType, HybridDataModel<BaseItem>>([
   ['Person', Person],
   ['LegalEntity', LegalEntity],
   ['Storage', Storage],
@@ -105,19 +107,19 @@ export function getCounterparty({ counterpartyType, counterpartyId }: CounterPar
   return model.reactiveGet(counterpartyId);
 }
 
-interface StockOperationViewData extends CounterPartyRef {
-  processing: string
-  counterparty: BaseItem | null
+interface StockOperationViewData extends StockOperation {
+  processingLabel: string
+  counterparty?: BaseItem | null
   counterpartyName: string
   positionsCount: number | null
   units: number | null
-  totalCost: string | null
+  totalCost: number
 }
 
-export function stockOperationToViewData(item: BaseItem<CounterPartyRef>, positionsModel: Model, operationName: StockOperationName): StockOperationViewData {
-  const childFilter = { [`${operationName}Id`]: item.id };
+export function stockOperationToViewData(item: StockOperation, positionsModel: Model, operationName: StockOperationName): StockOperationViewData {
+  // const childFilter = { [`${operationName}Id`]: item.id };
   const counterparty = getCounterparty(item);
-  const positions: BaseItem[] = positionsModel.reactiveFilter(childFilter);
+  const positions: BaseItem[] = positionsModel.reactiveManyByIndex(`${operationName}Id`, item.id as string);
   const priceField = configPriceField(operationName);
   const costFn = (p: BaseItem) => (p[priceField] || 0) * (p.units || 0);
   // const products = operationName === 'stockWithdrawing'
@@ -126,14 +128,14 @@ export function stockOperationToViewData(item: BaseItem<CounterPartyRef>, positi
   return {
     ...item,
     // @ts-ignore
-    processing: i18n.global.t(`workflow.${item.processing || 'progress'}`),
+    processingLabel: i18n.global.t(`workflow.${item.processing || 'progress'}`),
     // date: this.$ts(item.date, 'short'),
     counterparty,
     counterpartyName: get(counterparty, 'name'),
     positionsCount: positions.length,
     // productsCount: products.length,
     units: sumBy(positions, 'units'),
-    totalCost: totalCost ? i18n.global.n(totalCost) : null,
+    totalCost,
   };
 }
 
@@ -144,10 +146,12 @@ export function vatConfig(date: Date | string = new Date()) {
     dateB: { $lte: stringDate },
     dateE: { $gte: stringDate },
   });
-  return (config || {}) as VatConfig;
+  return (config || { defaultRate: 0 }) as VatConfig;
 }
 
-export function searchOperations(search: string, itemsModel: Model, parentKey: string): (_: BaseItem) => boolean {
+type RecordPredicate = (_: BaseItem) => boolean
+
+export function searchOperations(search: string, itemsModel: Model, parentKey: string): RecordPredicate {
   if (!search) {
     return () => true;
   }
@@ -155,6 +159,7 @@ export function searchOperations(search: string, itemsModel: Model, parentKey: s
   return (operation: BaseItem) => {
     const { commentText, counterpartyId, counterpartyType } = operation;
     return re.test(commentText)
+      || re.test(operation.ndoc)
       || (counterpartyType === 'LegalEntity' && counterPartyTest(LegalEntity, counterpartyId, re))
       || (counterpartyType === 'Storage' && counterPartyTest(Storage, counterpartyId, re))
       || !!positionsTest(itemsModel.reactiveManyByIndex(parentKey, operation.id), re);
@@ -261,12 +266,11 @@ async function loadCounterparty(records: CounterPartyRef[] = []) {
 }
 
 
-async function loadRelation(model: Model, records: BaseItem[], relation: string) {
-  const ids = filter<string>(uniq(map(records, relation)));
-  await loadNotCachedIds(model, ids);
-}
-
-async function loadNotCachedIds(model: Model, ids: string[] = []) {
-  const toLoad = ids.filter(id => !model.getByID(id));
-  await model.findByMany(toLoad);
+export function stockArticleDateReactive(storageId: string, articleId: string, date: string) {
+  const many = StockArticleDate.reactiveManyByIndex('articleId', articleId)
+  return many.filter(stock => {
+    return stock.storageId === storageId
+      && stock.date <= date
+      && stock.nextDate >= date;
+  })[0];
 }

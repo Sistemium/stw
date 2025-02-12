@@ -37,4 +37,7 @@ const storage = computed(() => {
 </script>
 <style scoped lang="scss">
 @import "../../styles/pageLists";
+.positions {
+  min-width: 65px;
+}
 </style>

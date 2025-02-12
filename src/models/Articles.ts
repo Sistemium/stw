@@ -36,5 +36,6 @@ export interface IArticle extends ApiModel {
 
   avatarPictureId?: string;
   // measures?: ArticleMeasure[];
+  tareArticleId: string;
 
 }

@@ -2,11 +2,12 @@
 
 el-dropdown.workflow-button(
   @command="onCommand"
-  :trigger="trigger"
+  :trigger="disabled ? undefined : trigger"
   v-if="step"
+  :disabled="disabled"
 )
   el-button(
-    :type="step.style"
+    :type="step.type"
     :size="size"
     :disabled="disabled"
   ) {{ $t(step.label) }}
@@ -21,20 +22,24 @@ el-dropdown.workflow-button(
 </template>
 <script setup lang="ts">
 
-import { useWorkflow, workflowProps } from '@/services/workflowing';
+import { watch } from 'vue'
+import { useWorkflow, type WorkflowProps } from '@/services/workflowing';
+import type { ElementTrigger } from '@/types/elements'
 
-const props = defineProps({
-  ...workflowProps,
-  trigger: {
-    type: String,
-    default: 'click',
-  },
+const props = withDefaults(defineProps<WorkflowProps & {
+  trigger?: ElementTrigger
+}>(), {
+  trigger: 'click',
 });
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: string);
+  (e: 'update:modelValue', value: string): void
 }>();
 
 const { step, options, onCommand } = useWorkflow(props, emit);
+
+watch(step, s => {
+  console.log(s)
+})
 
 </script>

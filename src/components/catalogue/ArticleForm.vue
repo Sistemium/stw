@@ -118,7 +118,7 @@ const INPUTS = new Map<string, ArticleFormComponent>([
 const editingPropId = ref('');
 
 const tags = computed(() => {
-  const filter = ({ id }) => !find(articleProps.value, ({ propId: id }));
+  const filter = (p: { id: string }) => !find(articleProps.value, ({ propId: p.id }));
   const items = filterArticleProps(filter);
   return catalogue.articlePropertySort(items);
 });
@@ -131,7 +131,7 @@ const rules = computed(() => {
     if (prop.isRequired) {
       res[prop.name] = [{
         message: t('validation.required', [prop.name]),
-        validator: (rule, value, callback) => {
+        validator: (rule: any, value: any, callback: any) => {
           const propValues = props.model.props[idx];
           if (propValues.optionId || propValues.stringValue || propValues.numberValue) {
             callback();
@@ -172,7 +172,7 @@ const articleProps = computed<FormArticleProperty[]>(() => {
   });
 });
 
-function optionSaved(option) {
+function optionSaved(option: { id: string }) {
   if (option) {
     const { value: propId } = editingPropId;
     // debug('optionSaved', propId, option);
@@ -181,12 +181,12 @@ function optionSaved(option) {
   }
 }
 
-function addOptionClick(prop) {
+function addOptionClick(prop: { propId: string }) {
   // debug('addOptionClick:', prop);
   editingPropId.value = prop.propId;
 }
 
-function addProp(prop) {
+function addProp(prop: ArticleProperty) {
   const modelProp = catalogue.propToArticlePropMap(prop);
   const { ord } = prop;
   const idx = findLastIndex(articleProps.value, p => p.prop.ord <= ord);

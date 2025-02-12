@@ -4,11 +4,15 @@
   el-form-item(prop="price" :label="$t('fields.price')")
     el-input-number(
       v-model="model.price"
-      :disabled="vatPrices"
+      :disabled="vatPrices && !!model.vatRate"
     )
-  el-form-item(prop="vatRate" :label="$t('fields.vatRate')")
+  //el-form-item(prop="vatRate" :label="$t('fields.vatRate')")
     span {{ $percent(model.vatRate) }}
-  el-form-item(prop="vatPrice" :label="$t('fields.vatPrice')")
+  el-form-item(
+    prop="vatPrice"
+    :label="$t('fields.withVatPrice', [$percent(model.vatRate)])"
+    v-if="model.vatRate"
+  )
     el-input-number(
       v-model="model.vatPrice"
       :disabled="!vatPrices"
@@ -17,7 +21,6 @@
 </template>
 <script setup lang="ts">
 
-import round from 'lodash/round';
 import { computed, watch } from 'vue';
 import { $percent } from '@/lib/validations';
 import { useSetPrices } from '@/services/pricing'
@@ -46,5 +49,9 @@ watch(editablePrice, (price?: number | null) => {
 <style scoped lang="scss">
 .el-form-item {
   text-align: right;
+  justify-content: space-between;
+  > :deep(.el-form-item__content) {
+    flex: none;
+  }
 }
 </style>

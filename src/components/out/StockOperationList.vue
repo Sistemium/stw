@@ -5,7 +5,7 @@ virtual-scroll-list.stock-operation-list.list-group(
   :data-sources="viewData"
   :data-component="StockOperationListItem"
   ref="scrollRef"
-  :extra-props="{ activeId: activeId, onClick: onClick }"
+  :extra-props="{ activeId, onClick }"
 )
 
 </template>
@@ -16,7 +16,7 @@ import VirtualScrollList from 'vue3-virtual-scroll-list';
 import StockOperationListItem from '@/components/out/StockOperationListItem.vue';
 import type { StockOperationViewData } from '@/models/StockOperations';
 
-const scrollRef = ref(null);
+const scrollRef = ref();
 
 const props = defineProps<{
   viewData: StockOperationViewData[];
@@ -30,7 +30,7 @@ defineExpose({
       return false;
     }
     setTimeout(() => {
-      scrollRef.value.scrollToIndex(idx ? idx - 1 : 0);
+      scrollRef.value?.scrollToIndex(idx ? idx - 1 : 0);
     }, 100);
     return true;
   },
@@ -40,7 +40,7 @@ const emit = defineEmits<{
   (e: 'click', item: StockOperationViewData): void;
 }>();
 
-function onClick(item) {
+function onClick(item: StockOperationViewData) {
   emit('click', item);
 }
 

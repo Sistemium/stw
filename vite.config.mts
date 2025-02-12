@@ -2,6 +2,8 @@ import vue from '@vitejs/plugin-vue';
 // import eslint from 'vite-plugin-eslint';
 import { fileURLToPath, URL } from 'node:url';
 import { defineConfig, loadEnv } from 'vite';
+import { createHtmlPlugin } from 'vite-plugin-html'
+import vueDevTools from 'vite-plugin-vue-devtools'
 import legacy from '@vitejs/plugin-legacy';
 import { sentryVitePlugin } from '@sentry/vite-plugin';
 import vueJsx from '@vitejs/plugin-vue-jsx'
@@ -21,7 +23,7 @@ export default defineConfig(({ mode }) => {
       // }),
       vueJsx(),
       legacy({
-        ignoreBrowserslistConfig: true,
+        // ignoreBrowserslistConfig: true,
         targets: ['defaults', 'not IE 11'],
         modernPolyfills: false,
       }),
@@ -35,6 +37,10 @@ export default defineConfig(({ mode }) => {
           assets: './dist/**',
         },
       }),
+      vueDevTools({
+        launchEditor: 'webstorm',
+      }),
+      createHtmlPlugin({}),
     ],
     define: {
       'process.env': {},

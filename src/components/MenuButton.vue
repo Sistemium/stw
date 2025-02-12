@@ -15,6 +15,7 @@ el-dropdown.menu-button(
         :key="option.to"
         :command="option.to"
       ) {{ $t(option.label) }}
+    slot(name="items")
 
 </template>
 
@@ -32,6 +33,10 @@ withDefaults(defineProps<{
   trigger: 'click',
   type: 'primary',
 });
+
+defineSlots<{
+  items(): any
+}>()
 
 const router = useRouter();
 

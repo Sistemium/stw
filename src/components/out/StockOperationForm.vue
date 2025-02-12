@@ -14,14 +14,6 @@ el-form.stock-operation-form(
     date-string-picker(v-model="model.date")
 
   el-form-item(
-    :label="$t('fields.ndoc')"
-    prop="ndoc"
-  )
-    el-input(
-      v-model="model.ndoc"
-    )
-
-  el-form-item(
     :label="$t('fields.storage')"
     prop="storageId"
   )
@@ -32,6 +24,12 @@ el-form.stock-operation-form(
         :label="name"
         :value="id"
       )
+
+  el-form-item(
+    :label="$t('fields.ndoc')"
+    prop="ndoc"
+  )
+    invoice-number-edit(v-model="model.ndoc")
 
   el-form-item(
     :label="$t('fields.pricing')"
@@ -106,13 +104,14 @@ import { workflow } from '@/models/StockWithdrawing'
 import DateStringPicker from '@/lib/DateStringPicker.vue'
 import ButtonPrepend from '@/lib/ButtonPrepend.vue'
 import CounterpartyTypeSwitch from '@/components/CounterpartyTypeSwitch.vue'
-import CounterpartySelect from '@/components/CounterpartySelect.vue'
+import CounterpartySelect from '@/components/select/CounterpartySelect.vue'
 import LegalEntityEdit from '@/components/contacts/LegalEntityEdit.vue'
 import StorageEdit from '@/components/stock/StorageEdit.vue'
 import { $requiredRule } from '@/lib/validations'
 import type { StockOperation } from '@/models/StockOperations'
 import { useFormValidate } from '@/services/validating'
 import PricingSelect from '@/components/select/PricingSelect.vue'
+import InvoiceNumberEdit from '@/components/InvoiceNumberEdit.vue'
 
 const props = defineProps<{
   model: StockOperation

@@ -3,7 +3,8 @@
 el-link.download-excel-button(
   @click="onClick()"
 )
-  i.el-icon-download
+  el-icon
+    Download
   span .xlsx
 
 </template>
@@ -12,6 +13,7 @@ el-link.download-excel-button(
 import axios from 'axios';
 import download from 'downloadjs';
 import { ElNotification } from 'element-plus'
+import { Download } from '@element-plus/icons-vue'
 
 interface XLSRequest {
   data: object[];

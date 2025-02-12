@@ -31,7 +31,7 @@ import ReactiveModel from 'sistemium-data-vue';
 import { workflow } from '@/models/StockWithdrawing.js';
 import { stockOperationItemInstance } from '@/services/warehousing.js';
 import StockOperationItemForm from '@/components/out/StockOperationItemForm.vue';
-import { useVatConfig } from '@/services/vatConfiguring';
+import { useVatOperationConfig } from '@/services/vatConfiguring';
 import { drawerEditingProps, useDrawerEditing } from '@/services/drawerEditing';
 import type { StockOperation, StockOperationName } from '@/models/StockOperations'
 import DrawerEdit from '@/lib/DrawerEdit.vue';
@@ -50,7 +50,7 @@ const props = defineProps({
 
 const form = ref(null);
 const { destroyFn, saveFn } = useDrawerEditing(props.positionsModel);
-const { vatOperationConfig } = useVatConfig(props.operationName as StockOperationName);
+const { vatOperationConfig } = useVatOperationConfig(props.operationName as StockOperationName);
 const stockOperation = computed(() => props.model.reactiveGet(props.stockOperationId) as StockOperation);
 const pricing = computed(() => Pricing.reactiveGet(stockOperation.value?.pricingId))
 

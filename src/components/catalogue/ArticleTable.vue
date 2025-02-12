@@ -22,36 +22,39 @@
 </template>
 <script setup lang="tsx">
 
-import { computed, ref } from 'vue';
-import max from 'lodash/max';
+import { computed, ref } from 'vue'
+import max from 'lodash/max'
 import type { TableV2Instance, Column } from 'element-plus'
-import ToolButton from '@/lib/ToolButton.vue';
-import ArticleAvatar from '@/components/catalogue/ArticleAvatar.vue';
-import { t } from '@/lib/validations';
-import WatchEmitter from '@/lib/WatchEmitter.vue';
+import ToolButton from '@/lib/ToolButton.vue'
+import ArticleAvatar from '@/components/catalogue/ArticleAvatar.vue'
+import { t } from '@/lib/validations'
+import WatchEmitter from '@/lib/WatchEmitter.vue'
+import type { BaseItem } from '@/init/Model'
+import type { IArticle } from '@/models/Articles'
+import type { IArticleProp } from '@/models/ArticleProps'
 
 const props = defineProps<{
-  articles: object[],
-  propColumns: object[],
+  articles: IArticle[],
+  propColumns: IArticleProp[],
   size?: string;
   height?: number;
   selectedId?: string;
-}>();
+}>()
 
 const emit = defineEmits<{
-  (e: 'avatarClick', row: object): void;
-  (e: 'click', row: object): void;
-  (e: 'currentChange', current: object): void;
-}>();
+  (e: 'avatarClick', row: BaseItem): void;
+  (e: 'click', row: BaseItem): void;
+  (e: 'currentChange', current: BaseItem): void;
+}>()
 
-const tableWidth = ref(0);
-const tableInstance = ref<TableV2Instance>();
+const tableWidth = ref(0)
+const tableInstance = ref<TableV2Instance>()
 
 const columns = computed<Column[]>(() => {
-  const fullWidth = max([tableWidth.value, 900]) - 60 - 50 - 6;
-  const colNumber = props.propColumns.length + 2;
-  const colWidth = Math.floor(fullWidth / colNumber);
-  const nameWidth = fullWidth - colWidth * (colNumber - 1);
+  const fullWidth = max([tableWidth.value, 900]) as number - 60 - 50 - 6
+  const colNumber = props.propColumns.length + 2
+  const colWidth = Math.floor(fullWidth / colNumber)
+  const nameWidth = fullWidth - colWidth * (colNumber - 1)
   return [
     {
       key: 'avatar',
@@ -95,27 +98,27 @@ const columns = computed<Column[]>(() => {
         </ToolButton>,
     },
   ]
-});
+})
 
 defineExpose({
-  isReady() : boolean {
-    return !!tableInstance.value;
+  isReady(): boolean {
+    return !!tableInstance.value
   },
   scrollToId(id: string): boolean {
-    const idx = props.articles.findIndex(item => item.id === id);
-    const { value: table } = tableInstance;
+    const idx = props.articles.findIndex(item => item.id === id)
+    const { value: table } = tableInstance
     if (idx < 0 || !table) {
-      return false;
+      return false
     }
     setTimeout(() => {
-      table.scrollToRow(idx ? idx - 1 : 0, 'start');
-    }, 100);
-    return true;
+      table.scrollToRow(idx ? idx - 1 : 0, 'start')
+    }, 100)
+    return true
   },
-});
+})
 
-function handleCLick({ rowData }) {
-  emit('currentChange', rowData);
+function handleCLick({ rowData }: { rowData: IArticle }) {
+  emit('currentChange', rowData)
 }
 
 </script>
@@ -132,6 +135,7 @@ function handleCLick({ rowData }) {
 
 .article-table :deep(.el-table-v2__row.active) {
   background: $gray-background;
+
   .el-table-v2__cell-text {
     color: $primary-color;
   }

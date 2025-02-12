@@ -76,7 +76,7 @@ const route = useRoute();
 
 const search = computed({
   get() {
-    return route.query.search || '';
+    return route.query.search as string || '';
   },
   set(search) {
     updateRouteParams({}, { search: search || undefined });

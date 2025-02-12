@@ -4,6 +4,9 @@ export interface MaterialFields {
   measureId: string;
   measureUnitId: string;
   units: number;
+  price?: number;
+  vatRate?: number;
+  vatPrice?: number;
 }
 
 export interface RecipeMaterial extends MaterialFields {

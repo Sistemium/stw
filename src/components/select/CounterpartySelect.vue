@@ -26,7 +26,7 @@ import { computed, ref, watch } from 'vue';
 import orderBy from 'lodash/orderBy';
 import find from 'lodash/find';
 import debounce from 'lodash/debounce';
-import { CONSIGNEE_TYPES } from '@/services/warehousing.js';
+import { CONSIGNEE_TYPES } from '@/services/warehousing';
 import type { CounterpartyType } from '@/models/StockOperations';
 
 const props = defineProps<{
@@ -67,6 +67,9 @@ const counterpartyId = computed({
 });
 
 watch(() => counterparty.value?.id, id => {
+  if (!model.value) {
+    return
+  }
   if (id && !find(options.value, { id })) {
     remoteOptions.value = model.value.reactiveFilter();
   }
@@ -76,7 +79,10 @@ watch(() => props.type, () => {
   remoteOptions.value = [];
 });
 
-function searcher(query) {
+function searcher(query: string) {
+  if (!model.value) {
+    return
+  }
   if (!query) {
     remoteOptions.value = model.value.reactiveFilter();
     return;

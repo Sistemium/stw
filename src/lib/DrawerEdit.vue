@@ -37,10 +37,8 @@ import merge from 'lodash/merge';
 import FormButtons from 'sistemium-vue/components/FormButtons.vue';
 import matchesDeep from 'sistemium-data/lib/util/matchesDeep.js';
 import { localizedDeleteError } from '@/services/erroring.js';
-import i18n from '@/i18n';
-// import { useLog } from '@/services/debugging';
-//
-// const { debug } = useLog();
+import type { BaseItem } from '@/init/Model'
+import { t } from '@/lib/validations';
 
 const props = defineProps({
   title: String,
@@ -61,13 +59,13 @@ const props = defineProps({
   },
   saveFn: {
     type: Function,
-    async default(props) {
+    async default(props: any) {
       console.error('saveFn not implemented', props);
     },
   },
   destroyFn: {
     type: Function,
-    async default(id) {
+    async default(id: string) {
       console.error('destroyFn not implemented', id);
     },
   },
@@ -79,24 +77,23 @@ const props = defineProps({
 });
 
 const emit = defineEmits<{
-  (e: 'deleted', id: string);
-  (e: 'error', error: Error);
+  (e: 'deleted', id: string | null): void
+  (e: 'error', error: Error): void
 }>();
 
 const drawer = ref(null);
-const loadingMessage = ref(null);
+const loadingMessage = ref();
 const drawerOpen = ref(false);
-const model = ref(null);
+const model = ref();
 const router = useRouter();
 const route = useRoute();
-const $parent = ref(null);
+const $parent = ref();
 
 nextTick(() => {
   drawerOpen.value = true;
 });
 
 const drawerComponent = computed(() => props.isDrawer ? 'el-drawer' : 'el-card');
-
 // const loading = computed(() => !!loadingMessage.value);
 const isDeletable = computed(() => props.deletable && !!props.modelOrigin?.id);
 const changed = computed(() => props.forceModified || hasChanges.value);
@@ -107,7 +104,7 @@ const hasChanges = computed(() => {
 });
 
 onMounted(() => {
-  $parent.value = getCurrentInstance().parent;
+  $parent.value = getCurrentInstance()?.parent;
 });
 
 watch(() => props.modelOrigin, modelOrigin => {
@@ -123,38 +120,38 @@ function onDeleteClick() {
   performOperation(() => props.destroyFn(id)
     .then(() => {
       emit('deleted', id);
-    }).catch(e => {
+    }).catch((e: any) => {
       throw localizedDeleteError(e);
     }));
 }
 
 function getValidateForm() {
   const fn = props.validateFn || $parent.value?.refs?.form?.validate;
-  return fn || (cb => typeof cb === 'function' && cb(true));
+  return fn || ((cb: any) => typeof cb === 'function' && cb(true));
 }
 
 function onSaveClick() {
-  getValidateForm()(valid => {
+  getValidateForm()((valid: any) => {
     if (valid) {
       performOperation(save);
     } else {
-      ElMessage.warning(i18n.global.t('validation.formInvalid').toString());
+      ElMessage.warning(t('validation.formInvalid').toString());
     }
   });
 }
 
 function save() {
   return props.saveFn(model.value)
-    .then(record => {
-      $parent.value.emit('saved', record);
+    .then((record: BaseItem) => {
+      $parent.value?.emit('saved', record);
       return record;
     });
 }
 
-function handleClose(record) {
+function handleClose(record: any) {
   if (!props.from) {
     drawerOpen.value = false;
-    $parent.value.emit('closed', record);
+    $parent.value?.emit('closed', record);
     return;
   }
   const query = pick(route.query, 'search') as { [key: string]: string };
@@ -162,10 +159,10 @@ function handleClose(record) {
     query.createdId = record.id;
   }
   router.replace(merge({ ...(props.afterCloseTo || props.from) }, { query }))
-    .catch(e => console.error('handleClose', e));
+    .catch((e: any) => console.error('handleClose', e));
 }
 
-function cancelClick(record) {
+function cancelClick(record: any) {
   if (!drawer.value) {
     console.error('cancelClick', 'drawer ref is empty');
     return;
@@ -173,7 +170,7 @@ function cancelClick(record) {
   handleClose(record);
 }
 
-async function performOperation(op) {
+async function performOperation(op: () => Partial<any>) {
 
   showLoading();
 
@@ -181,7 +178,7 @@ async function performOperation(op) {
     const res = await op();
     hideLoading();
     cancelClick(res);
-  } catch (e) {
+  } catch (e: any) {
     hideLoading();
     emit('error', e);
     showError(e);
@@ -189,7 +186,7 @@ async function performOperation(op) {
 
 }
 
-function showError(e) {
+function showError(e: Error) {
   return ElMessage.error({
     message: e.message,
     // offset: 20,
@@ -201,7 +198,7 @@ function showError(e) {
 
 function showLoading(message = '') {
   loadingMessage.value = ElMessage({
-    message: message || `${i18n.global.t('saving')} ...`,
+    message: message || `${t('saving')} ...`,
     duration: 0,
   });
 }

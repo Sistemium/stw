@@ -51,7 +51,6 @@ drawer-edit.article-edit(
           :storage-id="storageId"
           :date="date"
           :vat-prices="false"
-          :vat-rate="0"
           cost-type="resultCost"
         )
       //el-tab-pane(:label="$t('menu.barcodes')")
@@ -97,6 +96,8 @@ import ArticleCostInfo from '@/components/production/ArticleCostInfo.vue';
 import { useInvStore } from '@/store/invStore';
 import StorageSelect from '@/components/select/StorageSelect.vue';
 import { tGen } from '@/lib/validations';
+import type { IArticle } from '@/models/Articles'
+import type { PictureInfo } from '@/models/Pictures'
 
 const props = defineProps<{
   articleId?: string,
@@ -105,16 +106,21 @@ const props = defineProps<{
 }>();
 
 const invStore = useInvStore();
-const form = ref(null);
-const measurementForm = ref(null);
-const recipeFormRef = ref(null);
+const form = ref();
+const measurementForm = ref();
+const recipeFormRef = ref();
 const currentTab = ref('0');
 const route = useRoute();
 const { width } = useWindowSize();
-const drawerWidth = computed(() => width.value > 450 ? '450px' : '370px');
-const copyArticle = computed(() => {
+const drawerWidth = computed(() => {
+  if (width.value > 1100) {
+    return '550px'
+  }
+  return width.value > 450 ? '450px' : '370px'
+});
+const copyArticle = computed<Partial<IArticle>>(() => {
   const { copyId } = route.query;
-  return cloneInstance(Article.reactiveGet(copyId));
+  return cloneInstance(Article.reactiveGet(copyId as string));
 });
 const modelOrigin = computed(() => {
   const { articleId } = props;
@@ -137,12 +143,12 @@ const title = computed(() => [
 
 function validate(callback: (e: boolean) => void) {
   const validators = [
-    form.value.validate,
-    measurementForm.value.validate,
-    recipeFormRef.value.validate,
+    form.value?.validate,
+    measurementForm.value?.validate,
+    recipeFormRef.value?.validate,
   ];
   eachSeries(validators, (fn, cb) => {
-    fn(valid => {
+    fn((valid: any) => {
       cb(valid ? null : Error('invalid'));
     });
   }, err => {
@@ -155,11 +161,11 @@ function destroyFn() {
   return articleId && Article.destroy(articleId);
 }
 
-function saveFn(obj) {
+function saveFn(obj: Partial<IArticle>) {
   return Article.createOne(obj);
 }
 
-async function onPictureDone(article, picturesInfo, fileName) {
+async function onPictureDone(article: IArticle, picturesInfo: PictureInfo[], fileName: string) {
   const properties = {
     name: fileName,
     target: 'Article',
@@ -181,10 +187,6 @@ async function onPictureDone(article, picturesInfo, fileName) {
 
 .el-tab-pane {
   padding-bottom: 40px;
-}
-
-.el-tab-pane.pictures {
-  //margin-bottom: 60px;
 }
 
 .take-photo-button {

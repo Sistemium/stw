@@ -30,6 +30,10 @@ el-select-v2.article-select(
           small.supplier(v-if="article.supplier") {{ article.supplier.stringValue }}
         .info
           span.code(v-if="article.code") {{ article.code }}
+          el-icon(
+            v-if="article.materials"
+          )
+            document
           small.commentary(v-if="article.commentary") {{ article.commentary.stringValue }}
           article-stock-info(
             v-if="storageId"
@@ -50,6 +54,8 @@ import { searchArticle } from '@/services/catalogue.js';
 import upperFirst from 'lodash/upperFirst';
 import { computed, ref, watch } from 'vue';
 import orderBy from 'lodash/orderBy';
+import trim from 'lodash/trim';
+import { Document } from '@element-plus/icons-vue'
 import ArticleAvatar from '@/components/catalogue/ArticleAvatar.vue';
 import ArticleStockInfo from '@/components/catalogue/ArticleStockInfo.vue';
 import type { IArticle as ArticleType } from '@/models/Articles'
@@ -68,12 +74,13 @@ const props = withDefaults(defineProps<{
   filters?: Record<string, any> | ((a: ArticleType) => boolean)
   placeholder?: string
   storageId?: string
+  showCode?: boolean
 }>(), {
   filters: () => ({}),
 });
 
 const selectProps = {
-  label: 'name',
+  label: props.showCode ? 'displayName' : 'name',
   value: 'id',
 };
 
@@ -96,6 +103,7 @@ const options = computed(() => {
       ...a,
       supplier: a.props.find(prop => prop.propId === VITE_SUPPLIER_PROP),
       commentary: a.props.find(prop => prop.propId === VITE_COMMENTARY_PROP),
+      displayName: trim(`${a.code} ${a.name}`),
     }));
 });
 
@@ -194,7 +202,7 @@ function onVisibleChange(visible: boolean) {
 .article-select-popper {
   min-width: 600px;
 
-  .el-select-dropdown__list {
+  .el-select-dropdown__list, .el-select-dropdown {
     width: auto !important;
   }
 

@@ -9,12 +9,12 @@ export const drawerEditingProps = {
   },
 };
 
-export function useDrawerEditing(model: ReactiveModel) {
+export function useDrawerEditing<T extends BaseItem = BaseItem>(model: ReactiveModel<T>) {
   return {
     saveFn,
     destroyFn,
   };
-  async function saveFn(obj: BaseItem) {
+  async function saveFn(obj: Partial<T>) {
     return model.createOne(obj);
   }
 

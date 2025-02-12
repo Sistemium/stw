@@ -1,19 +1,19 @@
 <template lang="pug">
 
-  .article-pricing-table
-    el-table-v2(
-      :key="width"
-      v-if="width"
-      :columns="columns"
-      :data="articlePricing"
-      :width="width"
-      :height="height"
-      fixed
-      :estimated-row-height="50"
-      :row-event-handlers="{ onClick: handleCLick }"
-    )
-      template(#empty)
-        alert-empty
+.article-pricing-table
+  el-table-v2(
+    :key="width"
+    v-if="width"
+    :columns="columns"
+    :data="articlePricing"
+    :width="width"
+    :height="height"
+    fixed
+    :estimated-row-height="50"
+    :row-event-handlers="{ onClick: handleCLick }"
+  )
+    template(#empty)
+      alert-empty
 
 </template>
 
@@ -28,6 +28,10 @@ import max from 'lodash/max'
 import ArticleView from '@/components/catalogue/ArticleView.vue'
 import { useEnter } from '@/services/validating'
 import AlertEmpty from '@/lib/AlertEmpty.vue'
+import ArticleStockInfo from '@/components/catalogue/ArticleStockInfo.vue'
+import { useInvStore } from '@/store/invStore'
+import { fetchStocks } from '@/services/dataSync'
+import type { ColumnInfo } from '@/services/util'
 
 const props = withDefaults(defineProps<{
   articlePricing: IArticlePricing[]
@@ -43,11 +47,6 @@ const props = withDefaults(defineProps<{
   editing: false,
 })
 
-interface ColumnInfo {
-  width: number
-  key?: string
-  dataKey?: string
-}
 
 const emit = defineEmits<{
   (e: 'avatarClick', row: IArticlePricing): void
@@ -56,8 +55,11 @@ const emit = defineEmits<{
   (e: 'priceChange', articleId: string, price?: number): void
 }>()
 
+const invStore = useInvStore();
+const currentStorageId = computed(() => invStore.currentStorageId);
+
 const columns = computed<Column[]>(() => {
-  const count = 3
+  const count = 4
   const { columnWidth } = props
   const nameWidth = max([props.width - columnWidth * count - 6 - 60, 250]) || 0
   const width = max([Math.floor((props.width - nameWidth - 6 - 60) / count), 150]) || 0
@@ -82,6 +84,15 @@ const columns = computed<Column[]>(() => {
       title: t('concepts.article'),
       width: nameWidth,
       cellRenderer: ({ rowData }) => <ArticleView article-id={rowData.articleId} />,
+    },
+    {
+      width,
+      align: 'right',
+      key: 'stock',
+      title: t('fields.remains'),
+      minWidth: 60,
+      cellRenderer: ({ rowData }) => <ArticleStockInfo article-id={rowData.articleId}
+                                                       storage-id={currentStorageId.value}/>,
     },
     {
       width,
@@ -127,7 +138,7 @@ const { t: localT } = useI18n({
       siteSpecial: 'Цена в филиале',
     },
   },
-});
+})
 
 watch(() => props.articlePricing, articlePricing => {
   articlePricing.forEach(ap => {
@@ -140,6 +151,13 @@ useEnter((e: EventTarget | null) => {
     e.blur()
   }
 })
+
+watch(currentStorageId, storageId => {
+  if (storageId) {
+    fetchStocks(storageId)
+      .catch(e => console.error(e))
+  }
+}, { immediate: true })
 
 function renderSpan({ cellData }: { cellData: any }) {
   return <span>{tn(cellData, 'decimal')}</span>

@@ -15,6 +15,8 @@
   "typeToSearch": "Įveskite kelias paieškos raides",
   "menu": {
     "about": "Apie",
+    "active": "Aktyvūs",
+    "inactive": "Neaktyvūs",
     "articlePricing": "Kainynas",
     "pricing": "Kainynai",
     "auth": "Prisijungimas",
@@ -35,6 +37,7 @@
     "stockWithdrawing": "Iškrovimas iš sandėlio",
     "stockPeriod": "Likučiai",
     "reports": "Ataskaitos",
+    "serviceTasks": "Užduotys",
     "measurements": "Išmatavimai"
   },
   "reports": {
@@ -42,18 +45,35 @@
   },
   "fields": {
     "address": "Adresas",
+    "assignee": "Atsakingas",
+    "assigned": "Paskirtas atsakingu",
     "commentText": "Pastaba",
+    "comment": "Pranešimas",
+    "created": "Sukurta",
+    "description": "Aprašymas",
+    "events": "Įvykiai",
     "regCode": "Įmonės kodas",
     "vatCode": "PVM kodas",
     "name": "Pavadinimas",
     "email": "El. paštas",
     "date": "Data",
-    "ndoc": "Dokumento nr.",
+    "ndoc": "Dok. nr.",
+    "series": "Serija",
+    "number": "Numeris",
     "startsFrom": "Nuo",
     "dateB": "Data nuo",
     "site": "Padalinys",
     "toDate": "iki",
     "type": "Tipas",
+    "tare": "Tara",
+    "supplierCode": "Tiekėjo kodas",
+    "producerCode": "Gamintojo kodas",
+    "customer": "Klientas",
+    "counterparty": {
+      "Storage": "Sandėlis",
+      "LegalEntity": "Imonė",
+      "undefined": "Nėra"
+    },
     "consigneeType": "Gavėjo tipas",
     "consignee": "Gavėjas",
     "supplierType": "Tiekėjo tipas",
@@ -72,6 +92,7 @@
     "markup": "Antkainis %",
     "requireSite": "Reikia nurodyti padalinį",
     "vatPrice": "Kaina su PVM",
+    "withVatPrice": "Kaina su {0} PVM",
     "withoutVatPrice": "Kaina be PVM",
     "withVat": "Su PVM",
     "withoutVat": "Be PVM",
@@ -100,6 +121,7 @@
     "unitsInPackage": "{0} pakuotėje",
     "ord": "Eilės numeris",
     "total": "Iš viso",
+    "totalSelfCost": "Savikaina iš viso",
     "from": "Iš",
     "to": "Į",
     "id": "Identifikatorius"
@@ -149,9 +171,11 @@
     "units": "Vienetai"
   },
   "concepts": {
+    "assignee": "Atsakingas",
     "articleProperty": "Ypatybė",
     "article": "Prekė",
     "facility": "Patalpos",
+    "history": "Istorija",
     "personal": "Asmeninis",
     "storage": "Sandėlis",
     "image": "Nuotrauka",
@@ -159,6 +183,7 @@
     "items": "Pozicijos",
     "production": "Gamyba",
     "person": "Asmuo",
+    "serviceTask": "Užduotis",
     "legalEntity": "Imonė",
     "unknown": "Nėra",
     "unitPackageType": "Vienetų tipas",
@@ -180,6 +205,8 @@
     "noData": "Nėra duomenų"
   },
   "actions": {
+    "comment": "Atsiųsti pranešimą",
+    "delete": "Ištrinti",
     "act": "{0} aktas",
     "add": "Pridėti {0}",
     "show": "Parodyti {0}",
@@ -207,7 +234,8 @@
     "article": "prekę",
     "pricing": "kainyną",
     "employee": "darbuotoją",
-    "site": "padalinį"
+    "site": "padalinį",
+    "statuses": "būseną"
   },
   "genitive": {
     "pricing": "Kainyno",
@@ -223,6 +251,7 @@
     "stockReceivingItem": "Į sandėlį priemimo pozicijos",
     "legalEntity": "Įmonės",
     "recipe": "Recepto",
+    "serviceTask": "Užduoties",
     "productionItem": "Gamybos pozicijos"
   },
   "shortened": {
@@ -233,13 +262,21 @@
     "selfCost": "sav."
   },
   "workflow": {
+    "accept": "Priimti",
+    "accepted": "Priimta",
+    "assign": "Paskirti",
+    "unassign": "Atšaukti",
+    "rejected": "Atšaukta",
+    "reject": "Atšaukti",
     "start": "Pradėti",
     "finish": "Užbaigti",
     "progress": "Vykdoma",
     "continue": "Atšaukti įvykdymą",
     "finished": "Įvykdyta",
     "planned": "Suplanuota",
-    "cancel": "Grįžti į planavimą"
+    "cancel": "Grįžti į planavimą",
+    "draft": "Ruošiama",
+    "assigned": "Paskirta"
   },
   "after": {
     "stockReceiving": "po priemimo",

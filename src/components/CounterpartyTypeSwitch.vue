@@ -4,10 +4,10 @@ el-radio-group.counterparty-type-switch(
   v-model="type"
   @change="x => emit('change', x || null)"
 )
-  el-radio-button(label="LegalEntity") {{ $t('concepts.legalEntity') }}
-  //el-radio-button(label="Person") {{ $t('concepts.person') }}
-  el-radio-button(label="Storage") {{ $t('concepts.storage') }}
-  el-radio-button(:label="false") {{ $t('concepts.unknown') }}
+  el-radio-button(value="LegalEntity") {{ $t('concepts.legalEntity') }}
+  //el-radio-button(value="Person") {{ $t('concepts.person') }}
+  el-radio-button(value="Storage") {{ $t('concepts.storage') }}
+  el-radio-button(:value="false") {{ $t('concepts.unknown') }}
 
 </template>
 <script setup lang="ts">

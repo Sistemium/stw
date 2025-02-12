@@ -2,11 +2,13 @@ import { ref } from 'vue';
 import { onKeyStroke } from '@vueuse/core'
 import Site from '@/models/Site'
 
+export type FormValidateCallback = (is: any) => any
+
 export function useFormValidate() {
-  const form = ref<{ validate(cb: (e: any) => any): any }>();
+  const form = ref<{ validate(cb: FormValidateCallback): any }>();
   return {
     form,
-    validate(cb: (is: any) => any) {
+    validate(cb: FormValidateCallback) {
       return form.value?.validate(cb);
     },
   }

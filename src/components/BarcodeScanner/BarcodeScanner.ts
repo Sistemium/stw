@@ -4,7 +4,7 @@ import type { BarcodeScan } from '@/store/invStore';
 
 
 export interface BarcodeScannerEvents {
-  (e: 'update:modelValue', scanData: BarcodeScan): void;
+  (e: 'update:modelValue', scanData?: BarcodeScan): void;
   (e: 'scan', scanData: BarcodeScan): void;
   (e: 'clear'): void;
 }
@@ -12,10 +12,10 @@ export interface BarcodeScannerEvents {
 export function useBarcodeScanner(emit: BarcodeScannerEvents) {
 
   const store = useInvStore();
-  const scannedBarCode = computed(() => store.scannedBarcode);
+  const scannedBarCode = computed<BarcodeScan | undefined>(() => store.scannedBarcode);
 
 
-  watch(scannedBarCode, (barCode: BarcodeScan) => {
+  watch(scannedBarCode, (barCode?: BarcodeScan) => {
     emit('update:modelValue', barCode);
     if (barCode) {
       emit('scan', barCode);

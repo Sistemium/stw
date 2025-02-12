@@ -24,6 +24,7 @@ export interface StockOperationItem extends ArticleQuantityFields {
   vatRate?: number;
   vatPrice?: number;
   materials: MaterialFields[] | null;
+  tare:  MaterialFields | null;
 }
 
 export interface CounterParty extends ApiModel {

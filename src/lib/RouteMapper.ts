@@ -1,10 +1,27 @@
 import lowerFirst from 'lodash/lowerFirst';
 import isFunction from 'lodash/isFunction';
 import get from 'lodash/get';
+import type { NavigationGuardNext, RouteLocationNormalized as RouteRecord, RouteRecordRaw } from 'vue-router'
+
+interface RouteConfig {
+  root?: boolean
+  model?: any
+  component?: any
+  config?: Record<string, any>
+  editing?: any
+  children?: Record<string, any>
+  meta?: Record<string, any>
+  beforeEnter?(_to: RouteRecord, _from: RouteRecord, next: NavigationGuardNext): void
+  edit?: Record<string, any>
+  props?: Record<string, any>
+  public?: boolean
+}
 
 export default class RouteMapper {
 
-  constructor(config) {
+  config: Record<string, RouteConfig>
+
+  constructor(config: Record<string, RouteConfig>) {
     this.config = config;
   }
 
@@ -12,12 +29,12 @@ export default class RouteMapper {
     return Object.keys(this.config).map(name => configToRoute(name, {
       ...this.config[name],
       root: true,
-    }));
+    })) as RouteRecordRaw[];
   }
 
 }
 
-function configToRoute(name, options) {
+function configToRoute(name: string, options: RouteConfig) {
   const {
     root,
     model,
@@ -37,7 +54,7 @@ function configToRoute(name, options) {
 
   const { collection } = model || {};
 
-  const props = collection ? {
+  const props: Record<string, any> = collection ? {
     editRoute: nameEdit(collection, options.edit),
     createRoute: nameCreate(collection),
     rootState: name,
@@ -46,13 +63,16 @@ function configToRoute(name, options) {
   } : {};
 
   const children = routeChildren(name, options, collection);
+  const { children: oChildren} = options
 
-  Object.keys(options.children || [])
-    .forEach(childKey => {
-      const child = options.children[childKey];
-      props[`${childKey}Route`] = child.name;
-      children.push(child);
-    });
+  if (oChildren) {
+    Object.keys(oChildren)
+      .forEach(childKey => {
+        const child = oChildren[childKey];
+        props[`${childKey}Route`] = child.name;
+        children.push(child);
+      })
+  }
 
   const { meta = {} } = options;
 
@@ -71,7 +91,7 @@ function configToRoute(name, options) {
   };
 }
 
-function childConfig(type, options) {
+function childConfig(type: string, options: Record<string, any>) {
   const { [type]: typed, editing } = options;
   if (isFunction(typed)) {
     return {
@@ -84,7 +104,7 @@ function childConfig(type, options) {
     name,
     beforeEnter,
   } = typed || {};
-  const res = {
+  const res: Record<string, any> = {
     component: component || typed || editing,
     children,
   };
@@ -97,7 +117,7 @@ function childConfig(type, options) {
   return res;
 }
 
-function childProps(type, options, params) {
+function childProps(type: string, options: Record<string, any>, params?: Record<string, any>) {
   const { [type]: typed } = options;
   const { model } = typed || {};
   const { collection } = model || {};
@@ -116,7 +136,7 @@ function childProps(type, options, params) {
   return props;
 }
 
-function routeChildren(name, options, collection) {
+function routeChildren(name: string, options: Record<string, any>, collection: string) {
 
   if (!collection) {
     return [];
@@ -140,7 +160,7 @@ function routeChildren(name, options, collection) {
     {
       path: `edit/:${parentKeyId}`,
       name: nameEdit(collection),
-      props: ({ params }) => ({
+      props: ({ params }: { params: Record<string, any> }) => ({
         [parentKeyId]: params[parentKeyId],
         from: { name },
         model: options.model,
@@ -152,14 +172,14 @@ function routeChildren(name, options, collection) {
   ];
 }
 
-function nameEdit(name, options) {
+function nameEdit(name: string, options?: Record<string, any>) {
   return get(options, 'name') || `${lowerFirst(name)}Edit`;
 }
 
-function nameCreate(name) {
+function nameCreate(name: string) {
   return `${lowerFirst(name)}Create`;
 }
 
-function nameId(name) {
+function nameId(name: string) {
   return `${lowerFirst(name)}Id`;
 }

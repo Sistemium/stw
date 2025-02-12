@@ -7,7 +7,7 @@ el-table.stock-operation-table(
   :height="height"
 )
   el-table-column(
-    prop="processing"
+    prop="processingLabel"
     :label="$t('fields.processing')"
     :width="columnSize"
   )
@@ -16,6 +16,11 @@ el-table.stock-operation-table(
     :label="$t('fields.date')"
     :width="columnSize"
     :formatter="(r,c,date) => $ts(date, 'short')"
+  )
+  el-table-column(
+    prop="ndoc"
+    :label="$t('fields.ndoc')"
+    :width="columnSize"
   )
   el-table-column(
     prop="counterpartyName"
@@ -44,6 +49,7 @@ el-table.stock-operation-table(
     prop="totalCost"
     :label="$t('fields.totalCost')"
     width="120"
+    :formatter="(r, c, val) => $n(val)"
   )
 
 </template>

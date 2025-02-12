@@ -7,10 +7,12 @@
       label {{ $t('fields.from') }}
       storage-select(
         v-model="storageId"
+        clearable
       )
       label {{ $t('fields.to') }}
       storage-select(
         v-model="counterPartyId"
+        clearable
       )
     el-date-picker(
       v-model="dateRange"
@@ -44,7 +46,7 @@ import PageTitle from '@/components/PageTitle.vue';
 import StorageSelect from '@/components/select/StorageSelect.vue';
 // import SearchInput from '@/lib/SearchInput.vue';
 import Resize from '@/lib/StmResize.vue';
-import { useStorage, withdrawingReportData } from '@/services/stockoperating';
+import { type StockOperationReportItem, useStorage, withdrawingReportData } from '@/services/stockoperating'
 import StockItemsTable from '@/components/stock/StockItemsTable.vue';
 import DownloadExcelButton from '@/lib/DownloadExcelButton.vue';
 import { t } from '@/lib/validations';
@@ -53,19 +55,19 @@ import Article from '@/models/Article.js';
 
 const today = dayjs().endOf('day');
 const monthAgo = today.add(-3, 'month');
-const dateRange = ref([monthAgo, today]);
+// const dateRange = ref([monthAgo, today]);
 const { storageId } = useStorage();
-const data = ref([]);
+const data = ref<StockOperationReportItem[]>([]);
 const { route, updateRouteParams } = useRouteParams();
-const counterPartyId = computed<string>({
+const counterPartyId = computed<string | undefined>({
   get() {
-    return route.query.counterPartyId as string || null;
+    return route.query.counterPartyId as string || undefined;
   },
   set(id) {
     updateRouteParams({}, { counterPartyId: id });
   },
 });
-const tableHeight = ref<number>(undefined);
+const tableHeight = ref<number>();
 
 const queryParams = computed(() => {
   const [dateB, dateE] = dateRange.value;
@@ -77,8 +79,25 @@ const queryParams = computed(() => {
   };
 });
 
+const dateRange = computed({
+  get() {
+    const { dateB, dateE } = route.query
+    return [
+      dayjs(dateB as string || monthAgo).toDate(),
+      dayjs(dateE as string || today).toDate(),
+    ];
+  },
+  set([dateB, dateE]) {
+    updateRouteParams({}, {
+      dateB: dayjs(dateB).toJSON(),
+      dateE: dayjs(dateE).toJSON(),
+    })
+  }
+})
+
 watch(queryParams, p => {
-  if (!p.storageId || !p.dateB || !p.dateE || !p.counterPartyId) {
+  if (!(p.storageId || p.counterPartyId) || !p.dateB || !p.dateE) {
+    data.value = []
     return;
   }
   withdrawingReportData(p.storageId, p.counterPartyId, p.dateB, p.dateE)
@@ -120,11 +139,15 @@ const downloadExcelName = computed(() => {
   const fmt = 'YYYY-MM-DD';
   return [
     t('reports.stockMovement'),
+    storageId.value && t('fields.from'),
     Storage.reactiveGet(storageId.value)?.name,
+    counterPartyId.value && t('fields.to'),
     Storage.reactiveGet(counterPartyId.value)?.name,
     dayjs(dateB).format(fmt),
     dayjs(dateE).format(fmt),
-  ].join('-');
+  ]
+    .filter(x => x)
+    .join('-');
 });
 
 function downloadExcelData() {
