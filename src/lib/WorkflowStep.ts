@@ -28,6 +28,7 @@ export interface WorkflowOption {
   primaryOption?: string
   editable?: boolean
   options: WorkflowStepOption[]
+  inactive?: boolean
 }
 
 

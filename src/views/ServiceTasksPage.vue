@@ -5,6 +5,8 @@
     el-main
       .filters
         search-input(v-model="search")
+          //template(#append)
+        workflow-filter(v-model="statuses" :workflow="serviceTaskWorkflow")
         .date-picker
           el-date-picker(
             v-model="dateRange"
@@ -51,6 +53,8 @@ import SiteSelect from '@/components/select/SiteSelect.vue'
 import ServiceTaskTable from '@/components/tasks/ServiceTaskTable.vue'
 import { useTasking } from '@/services/serving'
 import { useInvStore } from '@/store/invStore'
+import { serviceTaskWorkflow } from '@/models/ServiceTask'
+import WorkflowFilter from '@/lib/WorkflowFilter.vue'
 
 const props = defineProps<{
   rootState: string
@@ -59,12 +63,13 @@ const props = defineProps<{
   model: any
 }>()
 
+const statuses = ref(serviceTaskWorkflow.allActive())
 const store = useInvStore()
 const siteId = ref(store.currentSiteId)
 const { dateRange } = useDateRange()
 const { search } = useSearch()
 const { router } = useRouteParams()
-const { serviceTasks } = useTasking({ dateRange, siteId, search })
+const { serviceTasks } = useTasking({ dateRange, siteId, search, statuses })
 
 watch(siteId, id => {
   if (id) {
@@ -105,5 +110,10 @@ function onEdit(serviceTask: { id: string }, tab?: string) {
   flex-direction: row;
   justify-content: space-between;
   margin-bottom: $padding;
+}
+
+.workflow-filter {
+  min-width: 170px;
+  max-width: 190px;
 }
 </style>

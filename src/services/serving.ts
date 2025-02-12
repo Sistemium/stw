@@ -12,6 +12,7 @@ interface TaskingFilter {
   dateRange: Ref<Date[]>
   siteId: Ref<string>
   search: Ref<string>
+  statuses: Ref<string[]>
 }
 
 export type RichServiceTaskHistory = IServiceTaskHistory & {
@@ -34,7 +35,7 @@ export function useTaskHistory(props: { serviceTaskId: string }) {
   }
 }
 
-export function useTasking({ dateRange, siteId, search }: TaskingFilter) {
+export function useTasking({ dateRange, siteId, search, statuses }: TaskingFilter) {
   return {
     serviceTasks: computed(() => {
       const { value } = dateRange
@@ -46,6 +47,8 @@ export function useTasking({ dateRange, siteId, search }: TaskingFilter) {
         siteId: siteId.value,
         // @ts-ignore
         date,
+        // @ts-ignore
+        processing: { $in: statuses.value },
       }), ['date', 'cts'], ['desc', 'desc'])
 
       if (!search.value || !tasks.length) {

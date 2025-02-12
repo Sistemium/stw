@@ -94,6 +94,7 @@ export const serviceTaskWorkflow = new Workflow({
       // primaryOption: 'assigned',
       type: 'success',
       editable: false,
+      inactive: true,
     },
   ],
 })
