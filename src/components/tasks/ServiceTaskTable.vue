@@ -149,4 +149,8 @@ small {
   }
 }
 
+.alert-empty {
+  margin-top: 20px;
+}
+
 </style>

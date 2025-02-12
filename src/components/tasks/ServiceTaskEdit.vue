@@ -23,6 +23,7 @@ drawer-edit.service-task-edit(
         name="history"
         :label="$t('concepts.history')"
         v-loading="loading"
+        lazy
       )
         .full-height
           resize(:padding="180")
