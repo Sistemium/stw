@@ -1,13 +1,13 @@
 <template lang="pug">
 // eslint-disable vue/no-mutating-props
 .service-task-form
-  el-form-item(
-    :label="$t('fields.processing')"
-  )
-    workflow-processing(
-      :processing="model.processing"
-      :workflow="serviceTaskWorkflow"
-    )
+  el-form-item
+    template(#label)
+      workflow-processing(
+        :processing="model.processing"
+        :workflow="serviceTaskWorkflow"
+      )
+    .processing
       workflow-transitions(:workflow="serviceTaskWorkflow" v-model="model.processing")
   el-form(
     ref="form"
@@ -100,6 +100,11 @@ const disabled = computed(() => !serviceTaskWorkflow.step(props.model.processing
 .workflow-transitions {
   display: inline-block;
   margin-left: 1em;
+}
+
+.processing {
+  width: 100%;
+  text-align: right;
 }
 
 .el-form::v-deep(.el-textarea.is-disabled .el-textarea__inner) {
