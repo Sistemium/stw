@@ -1,4 +1,4 @@
-import ReactiveModel from 'sistemium-data-vue';
+import { HydratedModel} from 'sistemium-data-vue';
 import { ModelConfig } from 'sistemium-data/lib/Model';
 import qs from 'qs';
 import { axios } from 'sistemium-data/lib/util/axios';
@@ -10,7 +10,7 @@ import type { BaseItem } from '@/init/Model'
 
 const { VITE_API_URL: API_URL } = import.meta.env;
 
-export default class HybridDataModel<T extends BaseItem = BaseItem> extends ReactiveModel<T> {
+export default class HybridDataModel<T extends BaseItem = BaseItem, HT extends T = T> extends HydratedModel<T, HT> {
 
   constructor(config: ModelConfig) {
     super(config);
