@@ -37,6 +37,10 @@ export function useTaskHistory(props: { serviceTaskId: string }) {
 
 export function useTasking({ dateRange, siteId, search, statuses }: TaskingFilter) {
   return {
+    refresh() {
+      ServiceTask.cachedFetch()
+        .then()
+    },
     serviceTasks: computed(() => {
       const { value } = dateRange
       const date = {

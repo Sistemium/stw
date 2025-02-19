@@ -18,6 +18,10 @@ drawer-edit.service-task-edit(
           ref="formRef"
           :model="model"
         )
+          user-collapse(
+            :model-value="modelOrigin?.creator"
+            :label="$t('fields.creator')"
+          )
       el-tab-pane(
         v-if="model.id"
         name="history"
@@ -53,11 +57,12 @@ import DrawerEdit from '@/lib/DrawerEdit'
 import ServiceTaskForm from '@/components/tasks/ServiceTaskForm'
 import { useDrawerEditing } from '@/services/drawerEditing'
 import { useFormValidate } from '@/services/validating'
-import ServiceTask, { type IServiceTask } from '@/models/ServiceTask'
+import ServiceTask, { type HydratedServiceTask } from '@/models/ServiceTask'
 import { useRouteParams } from '@/lib/updateRouteParams'
 import ServiceTaskHistoryList from '@/components/tasks/ServiceTaskHistoryList'
 import Resize from '@/lib/StmResize'
 import ServiceTaskHistory from '@/models/ServiceTaskHistory'
+import UserCollapse from '@/components/contacts/UserCollapse.vue'
 
 const props = defineProps<{
   serviceTaskId?: string
@@ -66,14 +71,13 @@ const props = defineProps<{
 }>()
 
 const comment = ref('')
-
 const loading = ref()
 const { route } = useRouteParams()
 const currentTab = ref<string>(route.query.tab as string || 'form')
-const { saveFn, destroyFn } = useDrawerEditing<IServiceTask>(ServiceTask)
-const modelOrigin = computed<Partial<IServiceTask>>(() =>
+const { saveFn, destroyFn } = useDrawerEditing<HydratedServiceTask>(ServiceTask)
+const modelOrigin = computed<Partial<HydratedServiceTask>>(() =>
   props.serviceTaskId
-  && ServiceTask.reactiveGet(props.serviceTaskId as string)
+  && ServiceTask.hydratedGet(props.serviceTaskId as string)
   || {
     description: '',
     date: todayStringDate(),
@@ -84,7 +88,7 @@ const modelOrigin = computed<Partial<IServiceTask>>(() =>
 
 const { form: formRef } = useFormValidate()
 
-async function save(task: Partial<IServiceTask>) {
+async function save(task: Partial<HydratedServiceTask>) {
   await saveFn(task)
   await ServiceTaskHistory.fetchAll({ serviceTaskId: task.id })
 }

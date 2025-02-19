@@ -1,6 +1,8 @@
 import Workflow from '@/lib/Workflow'
 import type ApiModel from '@/models/ApiModels'
+import { IUser } from '@/models/User'
 import Model from '@/init/Model'
+// import { HydratedModel } from 'sistemium-data-vue'
 
 export interface IServiceTask extends ApiModel {
   date: string
@@ -10,15 +12,19 @@ export interface IServiceTask extends ApiModel {
   processing: string
   servicePointId: string
   counterpartyType: string
+  creatorId?: string
 }
 
+export interface HydratedServiceTask extends IServiceTask {
+  creator?: IUser
+}
 
-export default new Model<IServiceTask>({
+export default new Model<IServiceTask, HydratedServiceTask>({
   collection: 'ServiceTask',
   schema: {},
   // methods: {},
   relations: {
-    // assignee: 'Employee',
+    creator: 'User',
   },
 })
 

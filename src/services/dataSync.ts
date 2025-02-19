@@ -212,6 +212,7 @@ const LOADERS: Map<RegExp, LoaderFn> = new Map([
     await loadRelation(ServicePointCustomer, tasks, 'servicePointId')
     const history = await ServiceTaskHistory.cachedFetch()
     await loadRelation(User, history, 'authId')
+    await loadRelation(User, tasks, 'creatorId')
     await Employee.cachedFetch()
   }],
 ]);

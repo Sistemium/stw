@@ -1,6 +1,7 @@
 <template lang="pug">
 // eslint-disable vue/no-mutating-props
 .service-task-form
+
   el-form-item
     template(#label)
       workflow-processing(
@@ -15,6 +16,12 @@
     :rules="rules"
     :disabled
   )
+    slot
+    el-form-item(
+      :label="$t('fields.site')"
+      prop="date"
+    )
+      site-select(v-model="model.siteId" )
     el-form-item(
       :label="$t('fields.date')"
       prop="date"
@@ -67,6 +74,7 @@ import ServicePointSelect from '@/components/select/ServicePointSelect.vue'
 import WorkflowTransitions from '@/lib/WorkflowTransitions.vue'
 import WorkflowProcessing from '@/lib/WorkflowProcessing.vue'
 import ServicePointCustomer from '@/models/ServicePointCustomer'
+import SiteSelect from '@/components/select/SiteSelect.vue'
 
 const { form, validate } = useFormValidate()
 
