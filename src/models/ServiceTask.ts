@@ -102,5 +102,15 @@ export const serviceTaskWorkflow = new Workflow({
       editable: false,
       inactive: true,
     },
+    {
+      processing: 'cancelled',
+      label: 'workflow.cancelled',
+      options: [],
+      // primaryOption: 'assigned',
+      editable: false,
+      // type: 'danger',
+      effect: 'dark',
+      inactive: true,
+    },
   ],
 })

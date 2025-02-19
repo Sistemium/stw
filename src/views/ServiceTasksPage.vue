@@ -1,6 +1,10 @@
 <template lang="pug">
 .service-tasks-page
   page-title(:title="`menu.${rootState}`")
+    tool-button(
+      tool="refresh"
+      @click="refresh"
+    )
   el-container
     el-main
       .filters
@@ -69,7 +73,7 @@ const siteId = ref(store.currentSiteId)
 const { dateRange } = useDateRange()
 const { search } = useSearch()
 const { router } = useRouteParams()
-const { serviceTasks } = useTasking({ dateRange, siteId, search, statuses })
+const { serviceTasks, refresh } = useTasking({ dateRange, siteId, search, statuses })
 
 watch(siteId, id => {
   if (id) {
@@ -115,5 +119,9 @@ function onEdit(serviceTask: { id: string }, tab?: string) {
 .workflow-filter {
   min-width: 170px;
   max-width: 190px;
+}
+
+.tool-button {
+  margin-left: $margin-right;
 }
 </style>
