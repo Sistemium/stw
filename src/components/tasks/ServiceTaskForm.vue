@@ -19,7 +19,7 @@
     slot
     el-form-item(
       :label="$t('fields.site')"
-      prop="date"
+      prop="siteId"
     )
       site-select(v-model="model.siteId" )
     el-form-item(
@@ -87,7 +87,7 @@ const props = defineProps<{
 const address = computed(() => ServicePointCustomer.reactiveGet(props.model.servicePointId)?.address)
 
 const rules = computed(() => {
-  const required = ['date', 'description']
+  const required = ['date', 'description', 'siteId']
   if (props.model.processing !== 'draft') {
     required.push('assigneeId')
   }
