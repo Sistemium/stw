@@ -66,7 +66,7 @@
 <script setup lang="ts">
 import { useFormValidate } from '@/services/validating'
 import { $requiredRule } from '@/lib/validations'
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
 import { type IServiceTask, serviceTaskWorkflow } from '@/models/ServiceTask'
 import DateStringPicker from '@/lib/DateStringPicker.vue'
 import EmployeeSelect from '@/components/select/EmployeeSelect.vue'
@@ -75,6 +75,7 @@ import WorkflowTransitions from '@/lib/WorkflowTransitions.vue'
 import WorkflowProcessing from '@/lib/WorkflowProcessing.vue'
 import ServicePointCustomer from '@/models/ServicePointCustomer'
 import SiteSelect from '@/components/select/SiteSelect.vue'
+import { fetchServiceTask } from '@/services/dataSync'
 
 const { form, validate } = useFormValidate()
 
@@ -87,13 +88,18 @@ const props = defineProps<{
 const address = computed(() => ServicePointCustomer.reactiveGet(props.model.servicePointId)?.address)
 
 const rules = computed(() => {
-  const required = ['date', 'description', 'siteId']
-  if (props.model.processing !== 'draft') {
+  const required = ['date', 'description', 'siteId',]
+  if (!['draft',  'rejected', 'cancelled'].includes(props.model.processing)) {
     required.push('assigneeId')
   }
   return $requiredRule(required)
 })
 const disabled = computed(() => !serviceTaskWorkflow.step(props.model.processing)?.editable)
+
+watch(() => props.model?.id, serviceTaskId => {
+  serviceTaskId && fetchServiceTask(serviceTaskId)
+    .then()
+}, { immediate: true })
 
 </script>
 <style scoped>

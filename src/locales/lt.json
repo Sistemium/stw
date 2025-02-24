@@ -270,15 +270,16 @@
     "cancelled": "Atšaukta",
     "unassign": "Atmesti",
     "rejected": "Atmesta",
-    "reject": "Atšaukti",
+    "reject": "Atmesti",
     "start": "Pradėti",
     "finish": "Užbaigti",
     "progress": "Vykdoma",
     "continue": "Atšaukti įvykdymą",
     "finished": "Įvykdyta",
     "planned": "Suplanuota",
-    "cancel": "Grįžti į planavimą",
+    "cancel": "Atšaukti",
     "draft": "Ruošiama",
+    "makeDraft": "Ruošti",
     "assigned": "Paskirta"
   },
   "after": {

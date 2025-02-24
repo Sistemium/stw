@@ -44,14 +44,10 @@
 </template>
 
 <script setup lang="ts">
-import { watch } from 'vue'
-import ServiceTaskHistory from '@/models/ServiceTaskHistory'
 import WorkflowProcessing from '@/lib/WorkflowProcessing.vue'
 import { serviceTaskWorkflow } from '@/models/ServiceTask'
-import { loadRelation } from '@/services/util'
 import { useTaskHistory } from '@/services/serving.ts'
 import ConfirmButton from 'sistemium-vue/components/ConfirmButton.vue'
-import User from '@/models/User.ts'
 
 const props = defineProps<{
   serviceTaskId?: string
@@ -61,11 +57,6 @@ const { history } = useTaskHistory(props)
 const emit = defineEmits<{
   (e: 'deleteComment', id: string): void
 }>()
-
-watch(() => props.serviceTaskId, serviceTaskId => {
-  ServiceTaskHistory.cachedFetch({ serviceTaskId })
-    .then(fetched => loadRelation(User, fetched, 'authId'))
-}, { immediate: true })
 
 function deleteClick(id: string) {
   emit('deleteComment', id)

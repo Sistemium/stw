@@ -217,6 +217,18 @@ const LOADERS: Map<RegExp, LoaderFn> = new Map([
   }],
 ]);
 
+export async function fetchServiceTask(serviceTaskId: string) {
+  const task = await ServiceTask.findOne({ serviceTaskId })
+  if (!task) {
+    return
+  }
+  await loadRelation(ServicePointCustomer, [task], 'servicePointId')
+  const history = await ServiceTaskHistory.find({ serviceTaskId })
+  await loadRelation(User, history, 'authId')
+  await loadRelation(User, [task], 'creatorId')
+  await Employee.cachedFetch()
+}
+
 const LOADER_KEYS = Array.from(LOADERS.keys());
 
 async function switchLoad(to: RouteRecord, from: RouteRecord) {
