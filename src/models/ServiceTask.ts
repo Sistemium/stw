@@ -2,6 +2,7 @@ import Workflow from '@/lib/Workflow'
 import type ApiModel from '@/models/ApiModels'
 import { IUser } from '@/models/User'
 import Model from '@/init/Model'
+
 // import { HydratedModel } from 'sistemium-data-vue'
 
 export interface IServiceTask extends ApiModel {
@@ -39,6 +40,10 @@ export const serviceTaskWorkflow = new Workflow({
         to: 'assigned',
         label: 'workflow.assign',
         type: 'primary',
+      }, {
+        to: 'cancelled',
+        label: 'workflow.cancel',
+        type: 'danger',
       }],
       primaryOption: 'assigned',
       editable: true,
@@ -51,11 +56,15 @@ export const serviceTaskWorkflow = new Workflow({
         to: 'assigned',
         label: 'workflow.assign',
         type: 'primary',
+      }, {
+        to: 'cancelled',
+        label: 'workflow.cancel',
+        type: 'danger',
       }],
       primaryOption: 'assigned',
       editable: true,
       type: 'danger',
-      effect: 'dark'
+      effect: 'dark',
     },
     {
       processing: 'assigned',
@@ -105,7 +114,13 @@ export const serviceTaskWorkflow = new Workflow({
     {
       processing: 'cancelled',
       label: 'workflow.cancelled',
-      options: [],
+      options: [
+        {
+          to: 'draft',
+          label: 'workflow.makeDraft',
+          type: 'primary',
+        }
+      ],
       // primaryOption: 'assigned',
       editable: false,
       // type: 'danger',
