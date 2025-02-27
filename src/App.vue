@@ -2,10 +2,10 @@
 
 #app
   app-menu
-    template(#left)
-      barcode-scanner-status(v-if="showBarcodeStatus")
+    template(#left v-if="showBarcodeStatus")
+      barcode-scanner-status
   barcode-input(v-if="showBarcodeInput" :lock="false")
-  router-view
+  router-view(:key="showBarcodeStatus")
 
 </template>
 <script setup lang="ts">
@@ -52,6 +52,15 @@ watch(i18n.global.locale, saveLocale);
 
 .barcode-input {
   margin-bottom: $margin-top;
+}
+
+.app-menu {
+  margin-bottom: $margin-top;
+}
+
+.barcode-scanner-status {
+  position: relative;
+  top: -4px;
 }
 
 </style>

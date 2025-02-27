@@ -1,38 +1,14 @@
 <template lang="pug">
 
-.app-menu
+el-menu.app-menu(
+  :key="$i18n.locale"
+  mode="horizontal"
+  router
+  :default-active="route.path"
+)
 
-  el-dropdown.hamburger(@command="onCommand" trigger="click" size="normal")
-    el-button(circle icon="el-icon-menu")
-    template(#dropdown)
-      el-dropdown-menu()
-        el-dropdown-item(
-          v-for="{ t, name } in menu" :key="t" :command="name"
-          :disabled="name === $route.name"
-        ) {{ $t(t) }}
-        el-dropdown-item(
-          v-if="isNative"
-          command="toggleTabBar"
-          :icon="tabBarIcon"
-        ) {{ $tAction(tabBarShown ? 'hide' : 'show', 'profile') }}
-
-  slot(name="left")
-    el-button.tab-bar-toggle(
-      circle
-      :icon="tabBarIcon"
-      v-if="isNative"
-      @click="onCommand('toggleTabBar')"
-    )
-
-  .title
-    strong {{ title }}
-
-  #nav
-    router-link(
-      v-for="{ t, name } in menu"
-      :key="t"
-      :to="{ name }"
-    ) {{ $t(t) }}
+  el-menu-item-group(v-if="$slots.left")
+    slot(name="left")
 
   lang-menu(
     :languages="languages"
@@ -41,74 +17,72 @@
     v-model="$i18n.locale"
   )
 
+  el-menu-item(
+    v-for="{ t, path } in menu.rootItems"
+    :key="t"
+    :index="path"
+  ) {{ $t(t) }}
+
+  el-sub-menu(
+    v-for="grp in menu.groups"
+    :key="grp.name"
+    :index="grp.name"
+  )
+    template(#title)
+      .strong {{ $t('menu.other') }}
+    el-menu-item(
+      v-for="{ t, path } in grp.items"
+      :key="t"
+      :index="path"
+    ) {{ $t(t) }}
+
 </template>
 <script setup lang="ts">
 
-import { computed, ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import LangMenu from 'sistemium-vue/components/LangMenu.vue';
-import { toggleTabBar, isNative as isNativeFn } from 'sistemium-data/lib/util/native.js';
-import { routes } from '@/router';
-import i18n from '@/i18n';
-import type Language from '@/models/Languages';
-import { Languages } from '@/models/Languages';
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
+import LangMenu from '@/components/LangMenu.vue'
+import { routes } from '@/router'
+import type Language from '@/models/Languages'
+import { Languages } from '@/models/Languages'
+import groupBy from 'lodash/groupBy'
+import map from 'lodash/map'
 
-const router = useRouter();
-const route = useRoute();
+const route = useRoute()
+const languages: Language[] = [...Languages]
 
-const isNative = computed(isNativeFn);
-const tabBarShown = ref(isNative.value ? toggleTabBar() : false);
-const languages: Language[] = [...Languages];
+const menu = computed(() => {
+  const items = routes
+    .filter(({ meta }) => !meta || !meta.menuHidden)
+    .map(({ name, path, meta }) => ({
+      path,
+      name,
+      menuGroup: meta?.menuGroup || 'root',
+      t: `menu.${name as string}`,
+    }))
 
-const menu = computed(() => routes
-  .filter(({ meta }) => !meta || !meta.menuHidden)
-  .map(({ name }) => ({
-    name,
-    t: `menu.${name as string}`,
-  })));
+  const grouped = groupBy(items, 'menuGroup')
 
-const tabBarIcon = computed(() => tabBarShown.value ? 'el-icon-user' : 'el-icon-user-solid');
-
-const title = computed(() => {
-  const { name } = route;
-  if (!name) {
-    return null;
+  return {
+    rootItems: grouped.root,
+    groups: map(grouped, (items, name) => ({ name, items }))
+      .filter(({ name }) => name !== 'root') as Record<string, any>[]
   }
-  const key = `menu.${name.toString()}`;
-  // @ts-ignore
-  const hasTitle = i18n.global.te(key);
-  return hasTitle && i18n.global.t(key);
-});
 
-function onCommand(name: string) {
-  if (name === 'toggleTabBar') {
-    tabBarShown.value = toggleTabBar();
-    return;
-  }
-  if (route.name !== name) {
-    router.push({ name });
-  }
-}
+})
+
+defineSlots<{
+  left(): void
+}>()
 
 </script>
 <style scoped lang="scss">
 @import "../styles/responsive";
 
-.app-menu {
-  padding: $margin-top;
-  text-align: center;
-  position: relative;
-  @include xxs() {
-    padding: 0 0 $padding;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-}
-
-.title {
-  flex: 1;
-  font-size: 18px;
+.left {
+  position: absolute;
+  top: 0;
+  right: 70px;
 }
 
 .lang-menu {
@@ -123,80 +97,4 @@ function onCommand(name: string) {
     }
   }
 }
-
-#nav, .el-dropdown-menu {
-  a {
-    color: $black;
-
-    &.router-link-exact-active {
-      color: $green;
-    }
-  }
-}
-
-#nav {
-
-  margin: 0 $margin-top * 2;
-
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-
-  @include xxs {
-    display: none;
-  }
-
-  a {
-    font-weight: bold;
-    line-height: 25px;
-    font-size: 13px;
-  }
-
-  a + a:before {
-    content: "|";
-    padding: 0 $margin-right;
-  }
-}
-
-strong, .hamburger {
-  @include gt-xxs() {
-    display: none;
-  }
-}
-
-.hamburger {
-  strong {
-    text-align: left;
-    flex: 1;
-  }
-}
-
-.app-menu :deep(.barcode-scanner-status) {
-  @include gt-xxs() {
-    position: absolute;
-    top: 0;
-    left: 0;
-  }
-  @include xxs() {
-    margin-left: $margin-right;
-  }
-}
-
-#nav > a {
-  white-space: nowrap;
-}
-
-.tab-bar-toggle {
-  @include xxs() {
-    display: none;
-  }
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
-#nav > .router-link-active {
-  color: #42b983;
-}
-
 </style>

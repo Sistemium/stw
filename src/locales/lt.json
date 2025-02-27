@@ -31,14 +31,15 @@
     "stockTakings": "Inventorizavimas",
     "storages": "Sandėliai",
     "pictures": "Nuotraukos",
-    "stockReceivals": "Priemimas į sandėlį",
+    "stockReceivals": "Priemimai",
     "stockReceiving": "Priemimas į sandėlį",
-    "stockWithdrawals": "Iškrovimas iš sandėlio",
+    "stockWithdrawals": "Iškrovimai",
     "stockWithdrawing": "Iškrovimas iš sandėlio",
     "stockPeriod": "Likučiai",
     "reports": "Ataskaitos",
     "serviceTasks": "Užduotys",
-    "measurements": "Išmatavimai"
+    "measurements": "Išmatavimai",
+    "other": "Kita"
   },
   "reports": {
     "stockMovement": "Perkelimai"

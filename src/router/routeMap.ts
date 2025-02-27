@@ -23,11 +23,9 @@ export default new RouteMapper({
     model: Storage,
     component: () => import(/* webpackChunkName: "stock" */ '../views/StoragesPage.vue'),
     editing: () => import(/* webpackChunkName: "stock" */ '../components/stock/StorageEdit.vue'),
-  },
-  serviceTasks: {
-    model: ServiceTask,
-    component: () => import(/* webpackChunkName: "tasks" */ '../views/ServiceTasksPage.vue'),
-    editing: () => import(/* webpackChunkName: "tasks" */ '../components/tasks/ServiceTaskEdit.vue'),
+    meta: {
+      menuGroup: 'other',
+    },
   },
   stockTakings: {
     model: StockTaking,
@@ -38,6 +36,7 @@ export default new RouteMapper({
     },
     meta: {
       useScanner: true,
+      menuGroup: 'other',
     },
   },
   stockWithdrawals: {
@@ -93,6 +92,9 @@ export default new RouteMapper({
     model: ArticleProp,
     component: () => import(/* webpackChunkName: "articles" */ '../views/ArticlePropsPage.vue'),
     editing: () => import(/* webpackChunkName: "articles" */ '../components/ArticlePropertyEdit.vue'),
+    meta: {
+      menuGroup: 'other',
+    },
   },
   pricing: {
     model: Pricing,
@@ -111,9 +113,20 @@ export default new RouteMapper({
         component: () => import(/* webpackChunkName: "articles" */ '../views/ArticlePricingPage.vue'),
       },
     },
+    meta: {
+      menuGroup: 'other',
+    },
   },
   about: {
     public: true,
     component: () => import(/* webpackChunkName: "public" */ '../views/AboutPage.vue'),
+    meta: {
+      menuGroup: 'other',
+    },
+  },
+  serviceTasks: {
+    model: ServiceTask,
+    component: () => import(/* webpackChunkName: "tasks" */ '../views/ServiceTasksPage.vue'),
+    editing: () => import(/* webpackChunkName: "tasks" */ '../components/tasks/ServiceTaskEdit.vue'),
   },
 });
