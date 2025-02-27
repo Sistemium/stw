@@ -81,6 +81,7 @@ export const serviceTaskWorkflow = new Workflow({
       primaryOption: 'finished',
       editable: true,
       type: 'primary',
+      important: true,
     },
     {
       processing: 'accepted',
@@ -97,6 +98,7 @@ export const serviceTaskWorkflow = new Workflow({
       primaryOption: 'finished',
       editable: true,
       type: 'primary',
+      important: true,
     },
     {
       processing: 'finished',

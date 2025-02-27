@@ -29,6 +29,7 @@ export interface WorkflowOption {
   editable?: boolean
   options: WorkflowStepOption[]
   inactive?: boolean
+  important?: boolean
 }
 
 
