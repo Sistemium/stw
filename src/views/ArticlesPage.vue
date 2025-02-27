@@ -81,9 +81,10 @@ import { useScrollToCreated } from '@/services/scrolling';
 import { useRouteParams } from '@/lib/updateRouteParams'
 
 const props = defineProps<{
-  editRoute: string;
-  createRoute: string;
-  galleryRoute: string;
+  editRoute: string
+  createRoute: string
+  galleryRoute: string
+  model?: any
 }>();
 
 const barcode = ref<string>('');

@@ -7,7 +7,7 @@ el-menu.app-menu(
   :default-active="route.path"
 )
 
-  el-menu-item-group(v-if="$slots.left")
+  .left(v-if="$slots.left")
     slot(name="left")
 
   lang-menu(

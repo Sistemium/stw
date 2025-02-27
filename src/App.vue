@@ -2,10 +2,10 @@
 
 #app
   app-menu
-    template(#left v-if="showBarcodeStatus")
-      barcode-scanner-status
+    template(#left)
+      barcode-scanner-status(v-if="showBarcodeStatus")
   barcode-input(v-if="showBarcodeInput" :lock="false")
-  router-view(:key="showBarcodeStatus")
+  router-view
 
 </template>
 <script setup lang="ts">
@@ -21,10 +21,11 @@ import BarcodeScannerStatus, {
 import BarcodeInput from '@/components/BarcodeScanner/BarcodeInput.vue';
 import * as g from '@/store/inv/getters.js';
 import i18n, { saveLocale } from '@/i18n';
+import { useInvStore } from '@/store/invStore'
 
 const store = useStore();
 const route = useRoute();
-
+const invStore = useInvStore()
 const isConnected = computed(() => store.getters[`inv/${g.SCANNER_IS_CONNECTED}`]);
 const showBarcodeStatus = computed(() => {
   return route.meta.useScanner
@@ -35,6 +36,9 @@ const showBarcodeInput = computed(() => {
 });
 
 watch(i18n.global.locale, saveLocale);
+watch(showBarcodeInput, () => {
+  invStore.resetUUID()
+})
 
 </script>
 <style lang="scss">
@@ -60,7 +64,7 @@ watch(i18n.global.locale, saveLocale);
 
 .barcode-scanner-status {
   position: relative;
-  top: -4px;
+  top: 10px;
 }
 
 </style>
