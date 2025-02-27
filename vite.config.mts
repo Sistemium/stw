@@ -7,6 +7,9 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 import legacy from '@vitejs/plugin-legacy';
 import { sentryVitePlugin } from '@sentry/vite-plugin';
 import vueJsx from '@vitejs/plugin-vue-jsx'
+import dotEnv from 'dotenv-flow'
+
+dotEnv.config()
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
@@ -70,12 +73,11 @@ export default defineConfig(({ mode }) => {
       port: 8890,
       proxy: {
         '^/api': {
-          target: 'https://vfsd.sistemium.com',
-          // target: 'http://localhost:9390',
+          target: process.env.DEV_SERVER_PROXY_TARGET || 'http://localhost:9390',
           changeOrigin: true,
         },
         '/pha': {
-          target: 'http://localhost:3130',
+          target: process.env.DEV_SERVER_PHA_TARGET || 'https://oauth.it/pha',
           changeOrigin: true,
           rewrite: path => path.replace(/^\/pha/, ''),
         },
