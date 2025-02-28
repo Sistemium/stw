@@ -18,10 +18,11 @@ el-menu.app-menu(
   )
 
   el-menu-item(
-    v-for="{ t, path } in menu.rootItems"
+    v-for="{ t, path, href } in menu.rootItems"
     :key="t"
     :index="path"
-  ) {{ $t(t) }}
+  )
+    a(:href="href") {{ $t(t) }}
 
   el-sub-menu(
     v-for="grp in menu.groups"
@@ -31,10 +32,12 @@ el-menu.app-menu(
     template(#title)
       .strong {{ $t('menu.other') }}
     el-menu-item(
-      v-for="{ t, path } in grp.items"
+      v-for="{ t, path, href } in grp.items"
       :key="t"
       :index="path"
-    ) {{ $t(t) }}
+    )
+      template(#title)
+        a(:href="href") {{ $t(t) }}
 
 </template>
 <script setup lang="ts">
@@ -57,6 +60,7 @@ const menu = computed(() => {
     .map(({ name, path, meta }) => ({
       path,
       name,
+      href: `#${path}`,
       menuGroup: meta?.menuGroup || 'root',
       t: `menu.${name as string}`,
     }))
@@ -96,5 +100,10 @@ defineSlots<{
       display: none;
     }
   }
+}
+
+a {
+  text-decoration: none;
+  color: unset;
 }
 </style>
