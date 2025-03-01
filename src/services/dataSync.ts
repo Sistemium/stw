@@ -34,6 +34,7 @@ import type { NavigationGuardNext, RouteLocationNormalized as RouteRecord } from
 import type { CounterpartyType } from '@/models/StockOperations'
 import ServiceTaskHistory from '@/models/ServiceTaskHistory'
 import User from '@/models/User'
+import { subscribeChanges } from '@/services/socket'
 
 const { error, debug } = log('dataSync');
 
@@ -207,15 +208,20 @@ const LOADERS: Map<RegExp, LoaderFn> = new Map([
     positionsModel: StockReceivingItem,
     field: 'stockReceivingId',
   })],
-  [/serviceTask/, async () => {
-    const tasks = await ServiceTask.cachedFetch()
-    await loadRelation(ServicePointCustomer, tasks, 'servicePointId')
-    const history = await ServiceTaskHistory.cachedFetch()
-    await loadRelation(User, history, 'authId')
-    await loadRelation(User, tasks, 'creatorId')
-    await Employee.cachedFetch()
+  [/serviceTasks/, () => {
+    subscribeChanges(['ServiceTask', 'ServiceTaskHistory'], fetchServiceTasks)
+    return fetchServiceTasks()
   }],
-]);
+])
+
+export async function fetchServiceTasks() {
+  const tasks = await ServiceTask.cachedFetch()
+  await loadRelation(ServicePointCustomer, tasks, 'servicePointId')
+  const history = await ServiceTaskHistory.cachedFetch()
+  await loadRelation(User, history, 'authId')
+  await loadRelation(User, tasks, 'creatorId')
+  await Employee.cachedFetch()
+}
 
 export async function fetchServiceTask(serviceTaskId: string) {
   const task = await ServiceTask.findOne({ serviceTaskId })

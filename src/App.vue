@@ -4,7 +4,10 @@
   app-menu
     template(#left)
       barcode-scanner-status(v-if="showBarcodeStatus")
-  barcode-input(v-if="showBarcodeInput" :lock="false")
+  barcode-input(
+    v-if="showBarcodeInput"
+    :lock="false"
+  )
   router-view
 
 </template>
@@ -22,9 +25,10 @@ import BarcodeInput from '@/components/BarcodeScanner/BarcodeInput.vue';
 import * as g from '@/store/inv/getters.js';
 import i18n, { saveLocale } from '@/i18n';
 import { useInvStore } from '@/store/invStore'
+import { bindEvents, socket } from '@/services/socket'
 
-const store = useStore();
-const route = useRoute();
+const store = useStore()
+const route = useRoute()
 const invStore = useInvStore()
 const isConnected = computed(() => store.getters[`inv/${g.SCANNER_IS_CONNECTED}`]);
 const showBarcodeStatus = computed(() => {
@@ -34,6 +38,9 @@ const showBarcodeStatus = computed(() => {
 const showBarcodeInput = computed(() => {
   return showBarcodeStatus.value && !isNative() && isConnected.value;
 });
+
+socket.off()
+bindEvents()
 
 watch(i18n.global.locale, saveLocale);
 watch(showBarcodeInput, () => {

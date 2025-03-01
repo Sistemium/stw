@@ -34,6 +34,7 @@ import * as a from 'sistemium-vue/store/auth/actions.js';
 import PageTitle from '@/components/PageTitle.vue';
 import OauthButton from '@/lib/OauthButton.vue';
 import HelloWorld from '@/components/HelloWorld.vue';
+import { socket } from '@/services/socket'
 
 const store = useStore();
 const route = useRoute();
@@ -50,6 +51,7 @@ function login (token: string) {
 }
 
 function logout () {
+  socket.disconnect()
   return store.dispatch(`auth/${a.LOGOFF}`);
 }
 

@@ -76,6 +76,11 @@ export default defineConfig(({ mode }) => {
           target: process.env.DEV_SERVER_PROXY_TARGET || 'http://localhost:9390',
           changeOrigin: true,
         },
+        '/socket.io': {
+          target: process.env.DEV_SERVER_WS_TARGET,
+          changeOrigin: true,
+          ws: true,
+        },
         '/pha': {
           target: process.env.DEV_SERVER_PHA_TARGET || 'https://oauth.it/pha',
           changeOrigin: true,

@@ -11,6 +11,8 @@ import router from './router';
 import store from './store';
 import './index.scss';
 import i18n from './i18n';
+import { socket } from '@/services/socket'
+
 
 const { debug, error } = log('main');
 
@@ -39,7 +41,7 @@ app.use(router)
   .use(store)
   .use(createPinia());
 
-init(app);
+init(app)
 
 app.mount('#app');
 
@@ -49,6 +51,7 @@ router.isReady().then(() => {
   store.dispatch('auth/AUTH_INIT')
     .then((authorized: boolean) => {
       if (authorized) {
+        socket.connect()
         return store.dispatch('inv/SUBSCRIBE_SOCKET_STATUS');
       }
       return loading.close();
