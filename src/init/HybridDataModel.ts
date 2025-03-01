@@ -7,6 +7,7 @@ import axiosScriptMessaging, {
   SOCKET_SOURCE_HEADER,
 } from 'sistemium-data/lib/util/axiosScriptMessaging';
 import type { BaseItem } from '@/init/Model'
+import { subscribeChanges } from '@/services/socket'
 
 const { VITE_API_URL: API_URL } = import.meta.env;
 
@@ -15,6 +16,10 @@ export default class HybridDataModel<T extends BaseItem = BaseItem, HT extends T
   constructor(config: ModelConfig) {
     super(config);
     Object.assign(this, config.methods || {});
+  }
+
+  async fetchSubscribed() {
+    return subscribeChanges(this.collection, () => this.cachedFetch())
   }
 
 }

@@ -48,7 +48,7 @@
 </template>
 <script setup lang="ts">
 
-import { computed, ref, watch } from 'vue';
+import { computed, onUnmounted, ref, watch } from 'vue'
 import PageTitle from '@/components/PageTitle.vue';
 import dayjs from 'dayjs';
 import map from 'lodash/map';
@@ -73,6 +73,8 @@ import { useStorage } from '@/services/stockoperating';
 import type { IStockPeriod } from '@/models/StockPeriod'
 import type { IArticle } from '@/models/Articles'
 import type { IArticleProp } from '@/models/ArticleProps'
+import { subscribeChanges, unsubscribeChanges } from '@/services/socket'
+
 
 const today = dayjs().endOf('day');
 const monthAgo = today.add(-1, 'month');
@@ -109,6 +111,16 @@ const filteredData = computed(() => {
     ? data.value.filter(({ article }) => article && searcher(article))
     : data.value;
 });
+
+const subs = [
+  'StockArticleDate',
+]
+
+subscribeChanges(subs, () => refreshClick(false), false)
+
+onUnmounted(() => {
+  unsubscribeChanges(subs)
+})
 
 function downloadSchema(tableData: { rows: IArticle[], propColumns: IArticleProp[] }) {
   return {
@@ -188,19 +200,19 @@ function setHeight(height: number) {
   tableHeight.value = height;
 }
 
-async function refreshClick() {
+async function refreshClick(showLoading = true) {
   const { storageId, dateB, dateE } = queryParams.value;
-  await refresh(storageId, dateB, dateE);
+  await refresh(storageId, dateB, dateE, showLoading);
 }
 
-async function refresh(storageId: string, dateB: string, dateE: string) {
-  const loading = ElLoading.service({});
+async function refresh(storageId: string, dateB: string, dateE: string, showLoading = true) {
+  const loading = showLoading ? ElLoading.service({}) : undefined;
   try {
     data.value = await findStockPeriod(storageId, dateB, dateE);
   } catch (e) {
     console.error('refresh', e);
   }
-  loading.close();
+  loading?.close();
 }
 
 function rowClick(row: { articleId: string }) {

@@ -198,7 +198,7 @@ export async function findStockPeriod(storageId: string, dateB: string | Date, d
     };
   })
     .filter(({ article }) => article);
-  return orderBy(res, 'articleName') as (IStockPeriod & { article: IArticle })[];
+  return orderBy(res, ['articleName', 'article.code']) as (IStockPeriod & { article: IArticle })[];
 }
 
 export async function findStockPeriodOperations(articleId: string, storageId: string, dateB: Date, dateE: Date) {

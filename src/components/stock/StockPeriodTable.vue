@@ -93,7 +93,7 @@ const columns = computed<ColumnInfo[]>(() => {
       dataKey: 'resultCost',
       cellRenderer: ({ cellData }: { cellData: number }) => <span>{tn(cellData, 'decimal')}</span>,
     },
-  ]
+  ] as ColumnInfo[]
 })
 
 

@@ -49,12 +49,22 @@ export function bindEvents() {
 
 }
 
-export function subscribeChanges(keys: string | string[], callback: SubscriptionHandler) {
+export async function subscribeChanges(keys: string | string[], callback: SubscriptionHandler, auto = true) {
+  if (auto) {
+    await callback()
+  }
   const arr = typeof keys === 'string' ? [keys] : keys
   arr.forEach(key => {
     if (SUBS.get(key)) {
       return
     }
     SUBS.set(key, callback)
+  })
+}
+
+export function unsubscribeChanges(keys: string | string[]) {
+  const arr = typeof keys === 'string' ? [keys] : keys
+  arr.forEach(key => {
+    SUBS.delete(key)
   })
 }

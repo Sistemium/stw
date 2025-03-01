@@ -56,15 +56,15 @@ export function initGuard(_to: RouteRecord, _from: RouteRecord, next: NextCallba
 
 export async function initData() {
   debug('initData')
-  await Configuration.findAll()
-  await ArticleProp.findAll()
-  await PropOption.findAll()
-  await Article.findAll()
-  await Recipe.findAll()
-  await Storage.findAll()
-  await Picture.findAll()
-  await Pricing.findAll()
-  await Site.cachedFetch()
+  await Configuration.fetchSubscribed()
+  await ArticleProp.fetchSubscribed()
+  await PropOption.fetchSubscribed()
+  await Article.fetchSubscribed()
+  // await Recipe.findAll()
+  await Storage.fetchSubscribed()
+  await Picture.fetchSubscribed()
+  await Pricing.fetchSubscribed()
+  await Site.fetchSubscribed()
   initPromiseInfo.resolve?.call(initPromiseInfo)
 }
 
@@ -146,8 +146,8 @@ async function stockWithdrawingSync(to: RouteRecord, _from: RouteRecord, options
 }
 
 async function stockTakingSync() {
-  await StockTakingItem.findAll()
-  await StockTaking.findAll()
+  await StockTakingItem.fetchSubscribed()
+  await StockTaking.fetchSubscribed()
 }
 
 export async function authGuard(to: RouteRecord, from: RouteRecord, next: NextCallback) {
@@ -185,17 +185,17 @@ type LoaderFn = (to: RouteRecord, from: RouteRecord, next?: () => void) => Promi
 
 const LOADERS: Map<RegExp, LoaderFn> = new Map([
   [/Recipe/i, async () => {
-    await Recipe.findAll()
+    await Recipe.cachedFetch()
   }],
   [/articlePricing/i, async (to: RouteRecord) => {
     const { pricingId } = to.params
     if (pricingId) {
       await fetchArticlePricing(pricingId as string)
     }
-    await Employee.cachedFetch()
+    await subscribeChanges('Employee', fetchEmployees)
   }],
   [/storages/i, async () => {
-    await Employee.cachedFetch()
+    await subscribeChanges('Employee', fetchEmployees)
   }],
   [/StockTaking/i, stockTakingSync],
   [/StockWithdraw/i, (to: RouteRecord, from: RouteRecord) => stockWithdrawingSync(to, from, {
@@ -208,19 +208,23 @@ const LOADERS: Map<RegExp, LoaderFn> = new Map([
     positionsModel: StockReceivingItem,
     field: 'stockReceivingId',
   })],
-  [/serviceTasks/, () => {
-    subscribeChanges(['ServiceTask', 'ServiceTaskHistory'], fetchServiceTasks)
-    return fetchServiceTasks()
+  [/serviceTasks/, async () => {
+    await subscribeChanges(['ServiceTask', 'ServiceTaskHistory'], fetchServiceTasks)
+    await subscribeChanges('Employee', fetchEmployees)
   }],
 ])
+
+async function fetchEmployees() {
+  await Employee.cachedFetch()
+}
 
 export async function fetchServiceTasks() {
   const tasks = await ServiceTask.cachedFetch()
   await loadRelation(ServicePointCustomer, tasks, 'servicePointId')
+  // TODO: fetch only related history
   const history = await ServiceTaskHistory.cachedFetch()
   await loadRelation(User, history, 'authId')
   await loadRelation(User, tasks, 'creatorId')
-  await Employee.cachedFetch()
 }
 
 export async function fetchServiceTask(serviceTaskId: string) {
@@ -232,7 +236,6 @@ export async function fetchServiceTask(serviceTaskId: string) {
   const history = await ServiceTaskHistory.find({ serviceTaskId })
   await loadRelation(User, history, 'authId')
   await loadRelation(User, [task], 'creatorId')
-  await Employee.cachedFetch()
 }
 
 const LOADER_KEYS = Array.from(LOADERS.keys())
