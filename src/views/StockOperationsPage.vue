@@ -87,7 +87,7 @@ import SearchInput from '@/lib/SearchInput.vue';
 import Resize from '@/lib/StmResize.vue';
 import ToolButton from '@/lib/ToolButton.vue';
 import dayjs from 'dayjs';
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue'
 import { useRouteParams } from '@/lib/updateRouteParams';
 import { useRoute } from 'vue-router';
 import { useInvStore } from '@/store/invStore';
@@ -104,6 +104,7 @@ import { t } from '@/lib/validations'
 import DownloadExcelButton from '@/lib/DownloadExcelButton.vue'
 import Article from '@/models/Article'
 import Storage from '@/models/Storage'
+import { triggerSubscription } from '@/services/socket'
 
 const { VITE_SUPPLIER_CODE_PROP_ID, VITE_PRODUCER_CODE_PROP_ID } = import.meta.env
 
@@ -199,10 +200,6 @@ const dateRange = computed({
   }
 })
 
-function matchDetails({ name }: { name: string }) {
-  return name.match(`^${props.editRoute}(ItemEdit)?`);
-}
-
 const storageId = computed({
   get() {
     const { stockOperationId } = route.params;
@@ -220,6 +217,16 @@ const storageId = computed({
 });
 
 const reports = [{ label: 'reports.stockMovement', to: 'stockMovementReport' }];
+
+watch(storageId, () => {
+  triggerSubscription(props.model.collection)
+    .then()
+})
+
+function matchDetails({ name }: { name: string }) {
+  return name.match(`^${props.editRoute}(ItemEdit)?`);
+}
+
 
 function setHeight(height: number) {
   tableHeight.value = height;

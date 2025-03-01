@@ -2,7 +2,7 @@ import { io } from 'socket.io-client'
 import log from 'sistemium-debug'
 import store from '@/store'
 
-const { debug } = log('socket')
+const { debug, error } = log('socket')
 export type SubscriptionHandler = () => void | Promise<void>
 
 const SUBS = new Map<string, SubscriptionHandler>()
@@ -44,7 +44,10 @@ export function bindEvents() {
     })
     .on('changes', ({ collection }: ChangesPayload) => {
       debug('changes', collection)
-      SUBS.get(collection)?.call(null)
+      triggerSubscription(collection)
+        .catch(e => {
+          error(e)
+        })
     })
 
 }
@@ -67,4 +70,8 @@ export function unsubscribeChanges(keys: string | string[]) {
   arr.forEach(key => {
     SUBS.delete(key)
   })
+}
+
+export async function triggerSubscription(collection: string) {
+  SUBS.get(collection)?.call(null)
 }

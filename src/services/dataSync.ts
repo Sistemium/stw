@@ -111,8 +111,9 @@ async function stockWithdrawingSync(to: RouteRecord, _from: RouteRecord, options
   const loading = ElLoading.service({})
   const store = useInvStore()
 
-  try {
-    const data = await model.findAll({})
+  async function fetchModel() {
+    const { currentStorageId } = store
+    const data = await model.cachedFetch({ storageId: currentStorageId })
     const ids = map(data, 'id')
     await positionsModel.findByMany(ids, { field, chunkSize: 70 })
     // if (field === 'stockWithdrawingId') {
@@ -130,10 +131,13 @@ async function stockWithdrawingSync(to: RouteRecord, _from: RouteRecord, options
     })
 
     await Promise.all(filter(counterpartyPromises))
-    const { currentStorageId } = store
     if (currentStorageId) {
       await fetchStocks(currentStorageId)
     }
+  }
+
+  try {
+    await subscribeChanges(model.collection, fetchModel)
   } catch (e) {
     error('stockWithdrawingSync:', e)
   }
