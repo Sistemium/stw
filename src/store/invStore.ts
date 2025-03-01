@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { useStorage } from '@vueuse/core';
 import { v4 } from 'uuid'
+import store from '.'
 
 const { VITE_LS_PREFIX = 'stv' } = import.meta.env;
 
@@ -16,6 +17,11 @@ export const useInvStore = defineStore('inv', {
     scannedBarcode: undefined,
     uuid: v4(),
   }),
+  getters: {
+    authToken() {
+      return store.getters['auth/ACCESS_TOKEN'] as string
+    }
+  },
   actions: {
     clearBarcode() {
       this.scannedBarcode = undefined;
