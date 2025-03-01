@@ -35,6 +35,7 @@ import type { CounterpartyType } from '@/models/StockOperations'
 import ServiceTaskHistory from '@/models/ServiceTaskHistory'
 import User from '@/models/User'
 import { subscribeChanges } from '@/services/socket'
+import syncDeletions from '@/services/syncDeletions'
 
 const { error, debug } = log('dataSync')
 
@@ -66,6 +67,7 @@ export async function initData() {
   await Pricing.fetchSubscribed()
   await Site.fetchSubscribed()
   initPromiseInfo.resolve?.call(initPromiseInfo)
+  syncDeletions()
 }
 
 async function stockWithdrawingIdSync(to: RouteRecord, model: Model, positionsModel: Model, field: string) {
@@ -113,9 +115,26 @@ async function stockWithdrawingSync(to: RouteRecord, _from: RouteRecord, options
 
   async function fetchModel() {
     const { currentStorageId } = store
+    const loaded = !!model.reactiveManyByIndex('storageId', currentStorageId).length
     const data = await model.cachedFetch({ storageId: currentStorageId })
     const ids = map(data, 'id')
+
     await positionsModel.findByMany(ids, { field, chunkSize: 70 })
+      .then(positions => {
+        if (!loaded) {
+          return
+        }
+        const byId = groupBy(positions, 'id')
+        ids.forEach(id => {
+          positionsModel.reactiveManyByIndex(field, id)
+            .forEach(({ id }) => {
+              if (!byId[id]) {
+                positionsModel.eject(id)
+              }
+            })
+        })
+      })
+
     // if (field === 'stockWithdrawingId') {
     //   await StockWithdrawingProduct.findByMany(ids, { field });
     // }
@@ -138,6 +157,17 @@ async function stockWithdrawingSync(to: RouteRecord, _from: RouteRecord, options
 
   try {
     await subscribeChanges(model.collection, fetchModel)
+    await subscribeChanges(positionsModel.collection, async (fullDocument) => {
+      if (!fullDocument) {
+        return
+      }
+      const parentId = fullDocument[field]
+      const parent = model.getByID(parentId)
+      if (!parent) {
+        return
+      }
+      await positionsModel.findOne({ id: fullDocument.id })
+    })
   } catch (e) {
     error('stockWithdrawingSync:', e)
   }

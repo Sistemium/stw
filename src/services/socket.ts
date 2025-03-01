@@ -3,7 +3,7 @@ import log from 'sistemium-debug'
 import store from '@/store'
 
 const { debug, error } = log('socket')
-export type SubscriptionHandler = () => void | Promise<void>
+export type SubscriptionHandler = (fullDocument?: Record<string, any>) => void | Promise<void>
 
 const SUBS = new Map<string, SubscriptionHandler>()
 
@@ -22,6 +22,7 @@ export const socket = io({
 
 export interface ChangesPayload {
   collection: string
+  fullDocument: Record<string, any>
 }
 
 export function bindEvents() {
@@ -42,9 +43,9 @@ export function bindEvents() {
     .on('connect_error', (err) => {
       console.log(err.message) // prints the message associated with the error
     })
-    .on('changes', ({ collection }: ChangesPayload) => {
+    .on('changes', ({ collection, fullDocument }: ChangesPayload) => {
       debug('changes', collection)
-      triggerSubscription(collection)
+      triggerSubscription(collection, fullDocument)
         .catch(e => {
           error(e)
         })
@@ -72,6 +73,6 @@ export function unsubscribeChanges(keys: string | string[]) {
   })
 }
 
-export async function triggerSubscription(collection: string) {
-  SUBS.get(collection)?.call(null)
+export async function triggerSubscription(collection: string, fullDocument?: Record<string, any>) {
+  SUBS.get(collection)?.call(null, fullDocument)
 }
