@@ -242,7 +242,7 @@ const LOADERS: Map<RegExp, LoaderFn> = new Map([
     positionsModel: StockReceivingItem,
     field: 'stockReceivingId',
   })],
-  [/serviceTasks/, async () => {
+  [/serviceTask/, async () => {
     await subscribeChanges(['ServiceTask', 'ServiceTaskHistory'], fetchServiceTasks)
     await subscribeChanges('Employee', fetchEmployees)
   }],

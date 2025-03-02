@@ -16,6 +16,7 @@
             v-model="dateRange"
             type="daterange"
             :unlink-panels="true"
+            :value-on-clear="resetDates"
           )
         .buttons
           site-select(
@@ -70,7 +71,7 @@ const props = defineProps<{
 const statuses = ref(serviceTaskWorkflow.allActive())
 const store = useInvStore()
 const siteId = ref(store.currentSiteId)
-const { dateRange } = useDateRange()
+const { dateRange, resetDates } = useDateRange()
 const { search } = useSearch()
 const { router } = useRouteParams()
 const { serviceTasks, refresh } = useTasking({ dateRange, siteId, search, statuses })

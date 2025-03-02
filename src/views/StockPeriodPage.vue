@@ -74,12 +74,11 @@ import type { IStockPeriod } from '@/models/StockPeriod'
 import type { IArticle } from '@/models/Articles'
 import type { IArticleProp } from '@/models/ArticleProps'
 import { subscribeChanges, unsubscribeChanges } from '@/services/socket'
+import { useDateRange } from '@/services/util'
+import matchesDeep from 'sistemium-data/lib/util/matchesDeep.js'
 
 
-const today = dayjs().endOf('day');
-const monthAgo = today.add(-1, 'month');
-
-const dateRange = ref([monthAgo, today]);
+const { dateRange } = useDateRange()
 const data = ref<(IStockPeriod & { article: IArticle })[]>([]);
 const route = useRoute();
 const router = useRouter();
@@ -232,10 +231,20 @@ function avatarClick({ articleId }: { articleId: string }) {
   });
 }
 
+const lastParams = ref<Record<string, any>>({
+  storageId: undefined,
+  dateB: undefined,
+  dateE: undefined,
+})
+
 watch(queryParams, ({ storageId, dateB, dateE }) => {
   if (!storageId || !dateB || !dateE) {
     return;
   }
+  if (matchesDeep(lastParams.value, queryParams.value)) {
+    return
+  }
+  lastParams.value = queryParams.value
   refresh(storageId, dateB, dateE)
     .catch(e => console.error(e));
 }, { immediate: true });

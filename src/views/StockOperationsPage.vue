@@ -92,25 +92,25 @@ import { useRouteParams } from '@/lib/updateRouteParams';
 import { useRoute } from 'vue-router';
 import { useInvStore } from '@/store/invStore';
 import orderBy from 'lodash/orderBy';
-import ReactiveModel from 'sistemium-data-vue';
 import AlertEmpty from '@/lib/AlertEmpty.vue';
 import useResponsiveTables from '@/components/useResponsiveTables';
 import StorageSelect from '@/components/select/StorageSelect.vue';
 import PageTitle from '@/components/PageTitle.vue';
 import { useScrollToCreated } from '@/services/scrolling';
 import type { StockOperation, StockOperationName } from '@/models/StockOperations'
-import type { BaseItem } from '@/init/Model'
+import HybridDataModel, { type BaseItem } from '@/init/Model'
 import { t } from '@/lib/validations'
 import DownloadExcelButton from '@/lib/DownloadExcelButton.vue'
 import Article from '@/models/Article'
 import Storage from '@/models/Storage'
 import { triggerSubscription } from '@/services/socket'
+import { useDateRange } from '@/services/util'
 
 const { VITE_SUPPLIER_CODE_PROP_ID, VITE_PRODUCER_CODE_PROP_ID } = import.meta.env
 
 const props = defineProps<{
-  model: ReactiveModel;
-  positionsModel: ReactiveModel;
+  model: HybridDataModel;
+  positionsModel: HybridDataModel;
   operationName: StockOperationName;
   counterpartyRole: string;
   rootState: string;
@@ -118,8 +118,6 @@ const props = defineProps<{
   createRoute: string;
 }>();
 
-const today = dayjs().endOf('day');
-const monthAgo = today.add(-12, 'month');
 const { updateRouteParams } = useRouteParams();
 const route = useRoute();
 const { showTable, tableSize, windowWidth } = useResponsiveTables();
@@ -128,6 +126,7 @@ const tableHeight = ref<number>();
 // TODO: auto open if empty
 const storageSelectRef = ref();
 const operationListRef = ref<{ scrollToId(id: string): boolean }>();
+const { dateRange } = useDateRange()
 
 useScrollToCreated({
   blink: false,
@@ -183,22 +182,6 @@ const showDetails = computed(() => {
   return route.name === props.editRoute
     || !!find(route.matched, matchDetails);
 });
-
-const dateRange = computed({
-  get() {
-    const { dateB, dateE } = route.query
-    return [
-      dayjs(dateB as string || monthAgo).toDate(),
-      dayjs(dateE as string || today).toDate(),
-    ];
-  },
-  set([dateB, dateE]) {
-    updateRouteParams({}, {
-      dateB: dayjs(dateB).toJSON(),
-      dateE: dayjs(dateE).toJSON(),
-    })
-  }
-})
 
 const storageId = computed({
   get() {

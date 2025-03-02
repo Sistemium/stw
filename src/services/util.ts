@@ -58,10 +58,7 @@ export function useDateRange() {
   const dateRange = computed({
     get() {
       const { dateB, dateE } = route.query
-      return [
-        dayjs(dateB as string || monthAgo).toDate(),
-        dayjs(dateE as string || today).toDate(),
-      ]
+      return resetDates(dateB as string, dateE as string)
     },
     set(val) {
       const [dateB, dateE] = val || [monthAgo, today]
@@ -72,6 +69,13 @@ export function useDateRange() {
         .then()
     },
   })
+
+  function resetDates(dateB?: string, dateE?: string) {
+    return [
+      dayjs(dateB || monthAgo).startOf('day').toDate(),
+      dayjs(dateE || today).endOf('day').toDate(),
+    ]
+  }
 
   return { dateRange }
 }
