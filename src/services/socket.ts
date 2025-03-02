@@ -18,6 +18,7 @@ export const socket = io({
       console.error(e)
     }
   },
+  transports: ['websocket'],
 })
 
 export interface ChangesPayload {
@@ -42,6 +43,7 @@ export function bindEvents() {
     })
     .on('connect_error', (err) => {
       console.log(err.message) // prints the message associated with the error
+      setTimeout(() => socket.connect(), 5000)
     })
     .on('changes', ({ collection, fullDocument }: ChangesPayload) => {
       debug('changes', collection)
