@@ -7,7 +7,7 @@ export default function() {
     if (!name) {
       return
     }
-    const model = storeAdapter.getStoreModel(name)
+    const model = storeAdapter.getStoreModelIfExists(name)
     if (!model) {
       return
     }
