@@ -1,6 +1,7 @@
 import { io } from 'socket.io-client'
 import log from 'sistemium-debug'
 import store from '@/store'
+import { eachSeries } from 'async'
 
 const { debug, error } = log('socket')
 export type SubscriptionHandler = (fullDocument?: Record<string, any>) => void | Promise<void>
@@ -31,6 +32,7 @@ export function bindEvents() {
   socket
     .on('connect', () => {
       debug('connect')
+      triggerAllSubscriptions()
     })
     .on('disconnect', () => {
       debug('disconnect')
@@ -77,4 +79,12 @@ export function unsubscribeChanges(keys: string | string[]) {
 
 export async function triggerSubscription(collection: string, fullDocument?: Record<string, any>) {
   SUBS.get(collection)?.call(null, fullDocument)
+}
+
+export function triggerAllSubscriptions() {
+  eachSeries(Array.from(SUBS.keys()), async key => {
+    debug('triggerAll', key)
+    await SUBS.get(key)?.call(null)
+  })
+    .catch(error)
 }
