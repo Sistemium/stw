@@ -1,4 +1,3 @@
-import dayjs from 'dayjs'
 import { computed } from 'vue'
 import orderBy from 'lodash/orderBy'
 import Model, { type BaseItem } from '@/init/Model'
@@ -45,39 +44,6 @@ export interface ColumnInfo<T = any> {
     rowData: T
     cellData: any
   }): any
-}
-
-export function todayStringDate() {
-  return dayjs().toJSON()
-}
-
-export function useDateRange() {
-  const { updateRouteParams, route } = useRouteParams()
-  const today = dayjs().endOf('day')
-  const monthAgo = today.add(-12, 'month')
-  const dateRange = computed({
-    get() {
-      const { dateB, dateE } = route.query
-      return resetDates(dateB as string, dateE as string)
-    },
-    set(val) {
-      const [dateB, dateE] = val || [monthAgo, today]
-      updateRouteParams({}, {
-        dateB: dayjs(dateB).toJSON(),
-        dateE: dayjs(dateE).toJSON(),
-      })
-        .then()
-    },
-  })
-
-  function resetDates(dateB?: string, dateE?: string) {
-    return [
-      dayjs(dateB || monthAgo).startOf('day').toDate(),
-      dayjs(dateE || today).endOf('day').toDate(),
-    ]
-  }
-
-  return { dateRange }
 }
 
 export async function loadRelation(model: Model, records: BaseItem[], relation: string) {

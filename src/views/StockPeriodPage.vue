@@ -74,8 +74,8 @@ import type { IStockPeriod } from '@/models/StockPeriod'
 import type { IArticle } from '@/models/Articles'
 import type { IArticleProp } from '@/models/ArticleProps'
 import { subscribeChanges, unsubscribeChanges } from '@/services/socket'
-import { useDateRange } from '@/services/util'
 import matchesDeep from 'sistemium-data/lib/util/matchesDeep.js'
+import { useDateRange } from '@/services/timing'
 
 
 const { dateRange } = useDateRange()

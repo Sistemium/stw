@@ -52,7 +52,7 @@ import PageTitle from '@/components/PageTitle.vue'
 import SearchInput from '@/lib/SearchInput.vue'
 import Resize from '@/lib/StmResize.vue'
 import { useRouteParams } from '@/lib/updateRouteParams'
-import { useDateRange, useSearch } from '@/services/util'
+import { useSearch } from '@/services/util'
 import ToolButton from '@/lib/ToolButton.vue'
 import SiteSelect from '@/components/select/SiteSelect.vue'
 import ServiceTaskTable from '@/components/tasks/ServiceTaskTable.vue'
@@ -60,6 +60,7 @@ import { useTasking } from '@/services/serving'
 import { useInvStore } from '@/store/invStore'
 import { serviceTaskWorkflow } from '@/models/ServiceTask'
 import WorkflowFilter from '@/lib/WorkflowFilter.vue'
+import { useDateRange } from '@/services/timing'
 
 const props = defineProps<{
   rootState: string

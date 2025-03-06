@@ -104,7 +104,8 @@ import DownloadExcelButton from '@/lib/DownloadExcelButton.vue'
 import Article from '@/models/Article'
 import Storage from '@/models/Storage'
 import { triggerSubscription } from '@/services/socket'
-import { useDateRange } from '@/services/util'
+
+import { useDateRange } from '@/services/timing'
 
 const { VITE_SUPPLIER_CODE_PROP_ID, VITE_PRODUCER_CODE_PROP_ID } = import.meta.env
 
