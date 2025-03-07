@@ -1,6 +1,7 @@
 <template lang="pug">
 el-select.employee-select(
   :model-value="modelId"
+  filterable
   :clearable="true"
   :placeholder="$t('actions.select', [$t('accusative.employee')])"
   @update:model-value="id => { modelId = id || null }"
