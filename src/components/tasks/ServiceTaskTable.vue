@@ -1,16 +1,17 @@
 <template lang="pug">
-.service-task-table
-  el-table-v2(
-    :key="width"
-    v-if="width"
-    :columns="columns"
-    :data="serviceTasks"
-    :width="width"
-    :height="height"
-    :fixed="true"
-  )
-    template(#empty)
-      alert-empty
+
+el-table-v2.service-task-table(
+  :key="width"
+  v-if="width"
+  :columns="columns"
+  :data="serviceTasks"
+  :width="width"
+  :height="height"
+  :fixed="true"
+  :estimated-row-height="50"
+)
+  template(#empty)
+    alert-empty
 </template>
 
 <script setup lang="tsx">
@@ -147,6 +148,10 @@ small {
     white-space: nowrap;
     text-overflow: ellipsis;
   }
+}
+
+.service-task-table::v-deep(.el-table-v2__row) {
+  min-height: 50px;
 }
 
 .alert-empty {
