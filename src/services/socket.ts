@@ -4,7 +4,7 @@ import store from '@/store'
 import { eachSeries } from 'async'
 
 const { debug, error } = log('socket')
-export type SubscriptionHandler = (fullDocument?: Record<string, any>) => void | Promise<void>
+export type SubscriptionHandler = (fullDocument?: Record<string, any>) => any | Promise<any>
 
 const SUBS = new Map<string, SubscriptionHandler>()
 
