@@ -13,7 +13,6 @@ import './index.scss';
 import i18n from './i18n';
 import { socket } from '@/services/socket'
 
-
 const { debug, error } = log('main');
 
 router.beforeEach(authGuard);
@@ -27,12 +26,8 @@ Sentry.init({
   app,
   dsn: prodEnv ? dsn : null,
   environment,
-  integrations: [
-    new Sentry.BrowserTracing({
-      routingInstrumentation: Sentry.vueRouterInstrumentation(router),
-      tracePropagationTargets: ['localhost', 'stw.sistemium.com', /^\//],
-    }),
-  ],
+  integrations: [Sentry.browserTracingIntegration({ router })],
+  tracePropagationTargets: ['localhost', 'stw.sistemium.com', 'stwd.sistemium.com'],
   tracesSampleRate: prodEnv ? 0.1 : 1,
 });
 

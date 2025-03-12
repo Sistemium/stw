@@ -14,7 +14,7 @@
     "@bit/sistemium.vue.style.variables": "^0.0.2",
     "@element-plus/icons-vue": "^2.3.1",
     "@sentry/tracing": "^7.120.3",
-    "@sentry/vue": "^7.120.3",
+    "@sentry/vue": "^9.5.0",
     "@syncfusion/ej2-vue-barcode-generator": "^20.1.55",
     "@tato30/vue-pdf": "^1.11.3",
     "@vueuse/core": "^10.0.2",
@@ -23,6 +23,7 @@
     "dayjs": "^1.11.13",
     "downloadjs": "^1.4.7",
     "element-plus": "^2.9.4",
+    "firebase": "^11.4.0",
     "lodash": "^4.17.21",
     "pinia": "^2.3.1",
     "qs": "^6.11.0",
@@ -86,10 +87,12 @@
     "vite-plugin-eslint": "^1.8.1",
     "vite-plugin-html": "^3.2.2",
     "vite-plugin-mkcert": "^1.17.6",
+    "vite-plugin-pwa": "^0.21.1",
     "vite-plugin-vue-devtools": "^7.7.1",
     "vite-plugin-vuetify": "^2.1.0",
     "vue-router": "^4.4.0",
-    "vue-tsc": "^2.0.26"
+    "vue-tsc": "^2.0.26",
+    "workbox-precaching": "^7.3.0"
   },
   "browserslist": [
     "> 1%",
