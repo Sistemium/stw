@@ -40,8 +40,16 @@ const { updatePushToken, clientData } = useClientData()
 const isGranted = ref(permissionGranted)
 const version = computed(() => packageJson.version)
 
-onMessage(messaging, message => {
+isSupported && onMessage(messaging, message => {
   show(message.notification)
+    .then(notification => {
+      if (!notification) {
+        return
+      }
+      notification.onclick = () => {
+        notification.close()
+      }
+    })
 })
 
 function requestNotifications() {
