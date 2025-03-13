@@ -5,7 +5,7 @@
   h3 {{ $t('about') }}
   .version v{{ version }}
 
-  p(v-if="isSupported")
+  p(v-if="isSupported && clientData")
     el-button(
       @click="requestNotifications"
     )
