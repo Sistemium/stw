@@ -55,3 +55,7 @@ export async function loadNotCachedIds(model: Model, ids: string[] = []) {
   const toLoad = ids.filter(id => !model.getByID(id))
   await model.findByMany(toLoad)
 }
+
+export function filterJoin(input: (string | undefined)[], separator?: string): string {
+  return input.filter(x => x).join(separator)
+}

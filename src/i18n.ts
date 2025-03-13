@@ -83,3 +83,8 @@ export function saveLocale(locale: string) {
 function getSavedLocale() {
   return localStorage.getItem(LS_KEY_I18N_LOCALE);
 }
+
+export function getLocale(): string {
+  // @ts-ignore
+  return i18n.global.locale.value
+}

@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "ESNext",
     "jsx": "preserve",
-    "lib": ["DOM", "ESNext"],
+    "lib": ["DOM", "ESNext", "WebWorker"],
     "baseUrl": ".",
     "module": "ESNext",
     "moduleResolution": "bundler",
@@ -25,7 +25,7 @@
   "include": [
     "typed-router.d.ts",
     "src/**/*",
-    "src/**/*.vue",
+    "src/**/*.vue"
   ],
   "exclude": ["dist", "node_modules", "cypress"],
   "references": [{ "path": "./tsconfig.node.json" }],

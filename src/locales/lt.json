@@ -205,9 +205,11 @@
     "required": "{0} yra privalomas",
     "formInvalid": "Klaidingai užpildyta forma",
     "constrainedDelete": "Negalima ištrinti šio įrašo, nes yra \"{0}\"",
-    "noData": "Nėra duomenų"
+    "noData": "Nėra duomenų",
+    "notificationsForbidden": "Pranešimai užblokuoti. Galite juos leisti naršyklės nustatymuose."
   },
   "actions": {
+    "turnOn": "Įjungti {0}",
     "comment": "Atsiųsti pranešimą",
     "delete": "Ištrinti",
     "act": "{0} aktas",
@@ -222,6 +224,7 @@
     "select": "pasirink {0}"
   },
   "accusative": {
+    "notifications": "pranešimus",
     "date": "datą",
     "property": "ypatybę",
     "profile": "Profilį",

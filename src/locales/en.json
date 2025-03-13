@@ -192,9 +192,11 @@
     "required": "{0} is required",
     "formInvalid": "The form is filled out with errors",
     "constrainedDelete": "Can't delete this record because there are \"{0}\"",
-    "noData": "No data"
+    "noData": "No data",
+    "notificationsForbidden": "Notifications are blocked. You can allow them in the browser settings."
   },
   "actions": {
+    "turnOn": "Turn on {0}",
     "act": "Declaration of {0}",
     "add": "Add {0}",
     "show": "Show {0}",
@@ -208,6 +210,7 @@
     "select": "select {0}"
   },
   "accusative": {
+    "notifications": "noitifications",
     "date": "date",
     "property": "property",
     "profile": "Profile",

@@ -1,40 +1,48 @@
-import vue from '@vitejs/plugin-vue';
+import vue from '@vitejs/plugin-vue'
 // import eslint from 'vite-plugin-eslint';
-import { fileURLToPath, URL } from 'node:url';
-import { defineConfig, loadEnv } from 'vite';
+import { fileURLToPath, URL } from 'node:url'
+import { defineConfig, loadEnv } from 'vite'
 import { createHtmlPlugin } from 'vite-plugin-html'
 import vueDevTools from 'vite-plugin-vue-devtools'
-import legacy from '@vitejs/plugin-legacy';
-import { sentryVitePlugin } from '@sentry/vite-plugin';
+import { sentryVitePlugin } from '@sentry/vite-plugin'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import dotEnv from 'dotenv-flow'
+import { VitePWA } from 'vite-plugin-pwa'
 
 dotEnv.config()
 
+const { PWA_MODE } = process.env
+
 export default defineConfig(({ mode }) => {
-  const env = loadEnv(mode, process.cwd(), '');
-  const release = `${process.env.npm_package_name}@${process.env.npm_package_version}`;
-  console.log('release:', release);
+  const env = loadEnv(mode, process.cwd(), '')
+  const release = `${process.env.npm_package_name}@${process.env.npm_package_version}`
+  console.log('release:', release, PWA_MODE)
   return {
-    // optimizeDeps: {
-    //   include: ['sistemium-data'],
-    // },
     plugins: [
       vue({}),
-      // eslint({
-      //   include: ['src/**/*.ts', 'src/**/*.vue', 'src/*.ts', 'src/*.vue'],
-      // }),
       vueJsx(),
-      legacy({
-        // ignoreBrowserslistConfig: true,
-        targets: ['defaults', 'not IE 11'],
-        modernPolyfills: false,
+      VitePWA({
+        mode: PWA_MODE ? 'development' : 'production',
+        strategies: 'injectManifest',
+        injectManifest: {
+          rollupFormat: 'iife',
+          injectionPoint: undefined,
+        },
+        manifest: false,
+        registerType: 'autoUpdate',
+        srcDir: 'src/workers',
+        filename: 'firebase-messaging-sw.ts',
+        devOptions: PWA_MODE ? {
+          enabled: true,
+          type: 'module',
+        } : undefined,
       }),
       sentryVitePlugin({
         org: 'sistemium',
         project: 'stw',
         authToken: env.SENTRY_AUTH_TOKEN,
         release,
+        injectRelease: !PWA_MODE,
         include: './dist',
         sourcemaps: {
           assets: './dist/**',
@@ -98,4 +106,4 @@ export default defineConfig(({ mode }) => {
       },
     },
   }
-});
+})
