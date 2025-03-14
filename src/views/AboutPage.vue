@@ -9,6 +9,7 @@
     el-button(
       @click="toggleNotifications"
       :type="isEnabled ? 'success' : 'primary'"
+      :disabled="isBusy"
     )
       el-icon(v-if="isGranted" )
         Check(v-if="isEnabled")
@@ -42,6 +43,7 @@ const { updatePushToken, clientData } = useClientData()
 const isGranted = ref(permissionGranted)
 const version = computed(() => packageJson.version)
 const isEnabled = computed(() => isGranted.value && !!clientData.value?.deviceToken)
+const isBusy = ref()
 
 isSupported && onMessage(messaging, message => {
   show(message.notification)
@@ -57,22 +59,30 @@ isSupported && onMessage(messaging, message => {
 
 function toggleNotifications() {
   if (isEnabled.value) {
+    isBusy.value = true
     updatePushToken(null)
+      .finally(() => {
+        isBusy.value = false
+      })
   } else {
     requestNotifications()
   }
 }
 
 function requestNotifications() {
+  isBusy.value = true
   Notification.requestPermission().then((permission) => {
     if (permission === 'granted') {
       isGranted.value = true
-      getNotificationToken()
+      return getNotificationToken()
     } else {
       isGranted.value = false
       ElMessage.warning(t('validation.notificationsForbidden').toString())
     }
   })
+    .finally(() => {
+      isBusy.value = false
+    })
 }
 
 async function getNotificationToken() {
