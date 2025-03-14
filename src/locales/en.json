@@ -197,6 +197,7 @@
   },
   "actions": {
     "turnOn": "Turn on {0}",
+    "turnOff": "Turn off {0}",
     "act": "Declaration of {0}",
     "add": "Add {0}",
     "show": "Show {0}",

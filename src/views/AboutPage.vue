@@ -7,11 +7,13 @@
 
   p(v-if="isSupported && clientData")
     el-button(
-      @click="requestNotifications"
+      @click="toggleNotifications"
+      :type="isEnabled ? 'success' : 'primary'"
     )
-      el-icon(v-if="isGranted && clientData?.deviceToken" )
-        Check
-      span {{ tAction('turnOn', 'notifications') }}
+      el-icon(v-if="isGranted" )
+        Check(v-if="isEnabled")
+        MuteNotification(v-else)
+      span {{ tAction(isEnabled ? 'turnOff' : 'turnOn', 'notifications') }}
 
 </template>
 <script setup lang="ts">
@@ -26,7 +28,7 @@ import { ElMessage } from 'element-plus'
 import { t } from '@/lib/validations'
 import { tAction } from '@/lib/validations'
 import { useWebNotification } from '@vueuse/core'
-import { Check } from '@element-plus/icons-vue'
+import { Check, MuteNotification } from '@element-plus/icons-vue'
 
 const {
   isSupported,
@@ -39,6 +41,7 @@ const {
 const { updatePushToken, clientData } = useClientData()
 const isGranted = ref(permissionGranted)
 const version = computed(() => packageJson.version)
+const isEnabled = computed(() => isGranted.value && !!clientData.value?.deviceToken)
 
 isSupported && onMessage(messaging, message => {
   show(message.notification)
@@ -51,6 +54,14 @@ isSupported && onMessage(messaging, message => {
       }
     })
 })
+
+function toggleNotifications() {
+  if (isEnabled.value) {
+    updatePushToken(null)
+  } else {
+    requestNotifications()
+  }
+}
 
 function requestNotifications() {
   Notification.requestPermission().then((permission) => {

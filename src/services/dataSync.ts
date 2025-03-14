@@ -106,7 +106,7 @@ export function useClientData() {
   const clientData = computed(() => ClientData.reactiveGet(store.clientDataId))
   return {
     clientData,
-    async updatePushToken(deviceToken?: string) {
+    async updatePushToken(deviceToken?: string | null) {
       return ClientData.updateOne({
         id: store.clientDataId,
         deviceToken,
