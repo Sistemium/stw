@@ -48,7 +48,7 @@ export function useTasking({ dateRange, siteId, search, statuses }: TaskingFilte
         $gte: day(value[0]).startOf('day').toJSON(),
         $lte: day(value[1]).endOf('day').toJSON(),
       }
-      const tasks = orderBy(ServiceTask.reactiveFilter({
+      const tasks = orderBy(ServiceTask.hydratedFilter({
         siteId: siteId.value,
         // @ts-ignore
         date,
@@ -64,6 +64,7 @@ export function useTasking({ dateRange, siteId, search, statuses }: TaskingFilte
         const point = ServicePointCustomer.getByID(task.servicePointId)
         return re.test(task.description)
           || point && (re.test(point?.address) || re.test(point?.name))
+          || task.assignee && re.test(task.assignee.name)
       })
     }),
   }

@@ -95,9 +95,12 @@ function onAdd() {
 }
 
 function onEdit(serviceTask: { id: string }, tab?: string) {
-  const query = { tab }
+  const query: Record<string, any> = { tab }
   if (!tab) {
     delete query.tab
+  }
+  if (search.value) {
+    query.search = search.value
   }
   router.push({
     name: props.editRoute,
