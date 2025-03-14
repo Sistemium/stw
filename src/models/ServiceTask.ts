@@ -83,7 +83,7 @@ export const serviceTaskWorkflow = new Workflow({
       }],
       primaryOption: 'finished',
       editable: true,
-      type: 'primary',
+      type: 'success',
       important: true,
     },
     {
