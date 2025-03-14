@@ -3,6 +3,7 @@
 .about
   page-title(title="menu.about")
   h3 {{ $t('about') }}
+  h3(v-if="store.account") {{ $t('actions.welcome', [store.account.name]) }}
   .version v{{ version }}
 
   p(v-if="isSupported && clientData")
@@ -30,7 +31,9 @@ import { t } from '@/lib/validations'
 import { tAction } from '@/lib/validations'
 import { useWebNotification } from '@vueuse/core'
 import { Check, MuteNotification } from '@element-plus/icons-vue'
+import { useInvStore } from '@/store/invStore'
 
+const store = useInvStore()
 const {
   isSupported,
   permissionGranted,

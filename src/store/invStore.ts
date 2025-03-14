@@ -28,7 +28,10 @@ export const useInvStore = defineStore('inv', {
     },
     authId() {
       const account = store.getters['auth/account']
-      return (account.authId || account.id) as string
+      return (account?.authId || account?.id) as string
+    },
+    account() {
+      return store.getters['auth/account'] as { id: string, name: string, authId: string }
     }
   },
   actions: {
