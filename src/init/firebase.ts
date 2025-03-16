@@ -21,6 +21,13 @@ export function initMessaging() {
     return
   }
   navigator.serviceWorker.ready.then(registration => {
-    onMessage(messaging, payload => showMessage(payload, registration))
+    onMessage(messaging, payload => {
+      const id = payload.data?.id
+      console.log('foreground:message', self.location?.href)
+      if (id && self.location?.href.match(new RegExp(id))) {
+        return
+      }
+      return showMessage(payload, registration)
+    })
   })
 }

@@ -1,6 +1,6 @@
 import { type MessagePayload } from 'firebase/messaging'
 
-export function showMessage(payload: MessagePayload, registration: ServiceWorkerRegistration) {
+export async function showMessage(payload: MessagePayload, registration: ServiceWorkerRegistration): Promise<any> {
   const {
     notification,
     data,
@@ -8,13 +8,14 @@ export function showMessage(payload: MessagePayload, registration: ServiceWorker
   if (!notification) {
     return
   }
+  // console.log('showMessage', notification, data)
   const { title } = notification
 
   if (!title) {
     return
   }
 
-  registration.showNotification(title, {
+  return registration.showNotification(title, {
     body: notification.body,
     data,
   }).catch(e => {

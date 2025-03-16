@@ -2,8 +2,6 @@
 declare const self: ServiceWorkerGlobalScope
 
 import { showMessage, urlFromMessage } from '@/services/messaging'
-import { initializeApp } from 'firebase/app'
-import { getMessaging, onBackgroundMessage } from 'firebase/messaging/sw'
 import { clientsClaim } from 'workbox-core'
 import { type MessagePayload } from 'firebase/messaging'
 
@@ -16,29 +14,20 @@ clientsClaim()
 
 console.log('firebase-messaging-sw init with skipWaiting')
 
-const app = initializeApp({
-  apiKey: import.meta.env.VITE_FB_API_KEY,
-  authDomain: import.meta.env.VITE_FB_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FB_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FB_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FB_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FB_APP_ID,
-  measurementId: import.meta.env.VITE_FB_MEASURMENT_ID,
+self.addEventListener('push', (event) => {
+  const payload: MessagePayload = event.data?.json()
+  event.waitUntil(showMessage(payload, self.registration))
 })
-
-const messaging = getMessaging(app)
-
-onBackgroundMessage(messaging, showBackgroundMessage)
 
 self.addEventListener('notificationclick', (event) => {
   event.notification.close() // Android needs explicit close
+  // console.log('notificationClick', event.notification.data, self.origin)
   const path = urlFromMessage(event.notification.data)
   const url = [
     self.origin,
     path,
   ].filter(x => x)
     .join('/#/')
-  console.log('notificationclick', url)
   event.waitUntil(self.clients
     .matchAll({ type: 'window', includeUncontrolled: true })
     .then(async windowClients => {
@@ -46,18 +35,14 @@ self.addEventListener('notificationclick', (event) => {
         return client.url.startsWith(self.origin) && 'focus' in client
       })
       if (opened) {
+        await opened.focus()
         if (path && opened.url !== url) {
           await opened.navigate(url)
         }
-        return opened.focus()
+        return
       }
 
       return self.clients.openWindow(url)
     }),
   )
 })
-
-
-function showBackgroundMessage(payload: MessagePayload) {
-  showMessage(payload, self.registration)
-}
