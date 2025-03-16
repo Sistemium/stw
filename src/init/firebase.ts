@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app'
-import { getMessaging, getToken } from 'firebase/messaging'
+import { getMessaging, getToken, onMessage } from 'firebase/messaging'
+import { showMessage } from '@/services/messaging'
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FB_API_KEY,
@@ -14,3 +15,12 @@ const firebaseConfig = {
 export const app = initializeApp(firebaseConfig)
 export const messaging = getMessaging(app)
 export { getToken }
+
+export function initMessaging() {
+  if (!navigator.serviceWorker?.ready) {
+    return
+  }
+  navigator.serviceWorker.ready.then(registration => {
+    onMessage(messaging, payload => showMessage(payload, registration))
+  })
+}

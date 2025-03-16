@@ -24,7 +24,6 @@ import { computed, ref } from 'vue'
 import packageJson from '../../package.json'
 import PageTitle from '@/components/PageTitle.vue'
 import { getToken, messaging } from '@/init/firebase'
-import { onMessage } from 'firebase/messaging'
 import { useClientData } from '@/services/dataSync'
 import { ElMessage } from 'element-plus'
 import { t } from '@/lib/validations'
@@ -37,7 +36,6 @@ const store = useInvStore()
 const {
   isSupported,
   permissionGranted,
-  show,
 } = useWebNotification({
   requestPermissions: false,
 })
@@ -47,18 +45,6 @@ const isGranted = ref(permissionGranted)
 const version = computed(() => packageJson.version)
 const isEnabled = computed(() => isGranted.value && !!clientData.value?.deviceToken)
 const isBusy = ref()
-
-isSupported && onMessage(messaging, message => {
-  show(message.notification)
-    .then(notification => {
-      if (!notification) {
-        return
-      }
-      notification.onclick = () => {
-        notification.close()
-      }
-    })
-})
 
 function toggleNotifications() {
   if (isEnabled.value) {
@@ -97,14 +83,14 @@ async function getNotificationToken() {
     serviceWorkerRegistration: sw,
   })
     .catch(err => {
-      console.log('An error occurred while retrieving token. ', err)
+      console.error('An error occurred while retrieving token. ', err)
     })
 
   if (currentToken) {
     console.log('FCM Token:', currentToken)
     return updatePushToken(currentToken)
   } else {
-    console.log('No registration token available.')
+    console.error('No registration token available.')
   }
 }
 

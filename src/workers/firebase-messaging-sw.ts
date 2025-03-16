@@ -1,9 +1,11 @@
 /// <reference lib="webworker" />
 declare const self: ServiceWorkerGlobalScope
 
+import { showMessage, urlFromMessage } from '@/services/messaging'
 import { initializeApp } from 'firebase/app'
 import { getMessaging, onBackgroundMessage } from 'firebase/messaging/sw'
 import { clientsClaim } from 'workbox-core'
+import { type MessagePayload } from 'firebase/messaging'
 
 self.skipWaiting()
   .catch(e => {
@@ -24,50 +26,38 @@ const app = initializeApp({
   measurementId: import.meta.env.VITE_FB_MEASURMENT_ID,
 })
 
-
 const messaging = getMessaging(app)
 
-onBackgroundMessage(messaging, (payload) => {
-  if (!payload.notification) {
-    return
-  }
-  const { title } = payload.notification
-
-  if (!title) {
-    return
-  }
-
-  const options = {
-    body: payload.notification.body,
-    data: payload.fcmOptions?.link,
-  }
-
-  self.registration.showNotification(title, options)
-    .catch((e: any) => {
-      console.error(e)
-    })
-
-})
+onBackgroundMessage(messaging, showBackgroundMessage)
 
 self.addEventListener('notificationclick', (event) => {
   event.notification.close() // Android needs explicit close
-  const { data } = event.notification
+  const path = urlFromMessage(event.notification.data)
   const url = [
     self.origin,
-    data,
+    path,
   ].filter(x => x)
-    .join('/')
+    .join('/#/')
+  console.log('notificationclick', url)
   event.waitUntil(self.clients
     .matchAll({ type: 'window', includeUncontrolled: true })
-    .then(windowClients => {
+    .then(async windowClients => {
       const opened = windowClients.find(client => {
         return client.url.startsWith(self.origin) && 'focus' in client
       })
       if (opened) {
-        return (data && opened.url !== url) ? opened.navigate(url) : opened.focus()
+        if (path && opened.url !== url) {
+          await opened.navigate(url)
+        }
+        return opened.focus()
       }
 
       return self.clients.openWindow(url)
     }),
   )
 })
+
+
+function showBackgroundMessage(payload: MessagePayload) {
+  showMessage(payload, self.registration)
+}

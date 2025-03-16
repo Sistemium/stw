@@ -12,6 +12,7 @@ import store from './store';
 import './index.scss';
 import i18n from './i18n';
 import { socket } from '@/services/socket'
+import { initMessaging } from '@/init/firebase'
 
 const { debug, error } = log('main');
 
@@ -39,6 +40,8 @@ app.use(router)
 init(app)
 
 app.mount('#app');
+
+initMessaging()
 
 router.isReady().then(() => {
   debug('router:ready');
