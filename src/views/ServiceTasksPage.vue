@@ -40,6 +40,7 @@
                 :width="width"
                 @edit-click="onEdit"
                 @show-history-click="t => onEdit(t, 'history')"
+                :active-id="currentTaskId"
               )
   router-view
 
@@ -75,7 +76,7 @@ const siteId = ref(store.currentSiteId)
 const { dateRange, resetDates } = useDateRange()
 const { search } = useSearch()
 const { router } = useRouteParams()
-const { serviceTasks, refresh } = useTasking({ dateRange, siteId, search, statuses })
+const { serviceTasks, refresh, currentTaskId } = useTasking({ dateRange, siteId, search, statuses })
 
 watch(siteId, id => {
   if (id) {

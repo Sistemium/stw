@@ -8,6 +8,7 @@ import ServiceTaskHistory, { type IServiceTaskHistory } from '@/models/ServiceTa
 import User from '@/models/User'
 import Employee from '@/models/Employee'
 import { fetchServiceTasks } from '@/services/dataSync'
+import { useRoute } from 'vue-router'
 
 interface TaskingFilter {
   dateRange: Ref<Date[]>
@@ -37,11 +38,13 @@ export function useTaskHistory(props: { serviceTaskId: string }) {
 }
 
 export function useTasking({ dateRange, siteId, search, statuses }: TaskingFilter) {
+  const route = useRoute()
   return {
     refresh() {
       fetchServiceTasks()
         .then()
     },
+    currentTaskId: computed(() => route.params.serviceTaskId as string),
     serviceTasks: computed(() => {
       const { value } = dateRange
       const date = {

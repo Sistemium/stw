@@ -9,6 +9,7 @@ el-table-v2.service-task-table(
   :height="height"
   :fixed="true"
   :estimated-row-height="50"
+  :row-class="rowClass"
 )
   template(#empty)
     alert-empty
@@ -34,6 +35,7 @@ const props = withDefaults(defineProps<{
   height?: number
   width?: number
   columnWidth?: number
+  activeId?: string
 }>(), {
   columnWidth: 70,
   width: 0,
@@ -46,6 +48,7 @@ const emit = defineEmits<{
   (e: 'showHistoryClick', row: IServiceTask): void
 }>()
 
+const rowClass = (row: { rowData: IServiceTask }) => (row.rowData.id === props.activeId) ? 'active' : ''
 
 const columns = computed(() => {
   const count = 7.5
@@ -112,7 +115,7 @@ const columns = computed(() => {
         <ServiceTaskEventsInfo
           service-task-id={rowData.id}
           onClick={() => emit('showHistoryClick', rowData)}
-        ></ServiceTaskEventsInfo>
+        ></ServiceTaskEventsInfo>,
     },
     {
       key: 'buttons',
@@ -133,17 +136,21 @@ const columns = computed(() => {
 
 <style scoped lang="scss">
 @import "@/styles/variables.scss";
+
 small {
   color: $gray;
 }
+
 .service-task-table::v-deep(.description > div) {
   white-space: normal;
   text-align: left;
   //font-size: small;
 }
+
 .service-task-table::v-deep(.text-left) {
   max-width: 100%;
   overflow: hidden;
+
   * {
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -152,6 +159,9 @@ small {
 
 .service-task-table::v-deep(.el-table-v2__row) {
   min-height: 50px;
+  &.active {
+    background: lightcyan;
+  }
 }
 
 .alert-empty {
