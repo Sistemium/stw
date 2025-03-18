@@ -1,6 +1,6 @@
 import { type MessagePayload } from 'firebase/messaging'
 
-export async function showMessage(payload: MessagePayload, registration: ServiceWorkerRegistration): Promise<any> {
+export async function showMessage(payload: Partial<MessagePayload>, registration: ServiceWorkerRegistration): Promise<any> {
   const {
     notification,
     data,

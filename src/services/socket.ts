@@ -1,60 +1,84 @@
-import { io } from 'socket.io-client'
 import log from 'sistemium-debug'
-import store from '@/store'
 import { eachSeries } from 'async'
+import day from 'dayjs'
 
 const { debug, error } = log('socket')
 export type SubscriptionHandler = (fullDocument?: Record<string, any>) => any | Promise<any>
 
 const SUBS = new Map<string, SubscriptionHandler>()
+const channel = new BroadcastChannel('leader-election');
+const WORKER_KEEPALIVE = Number(import.meta.env.VITE_WORKER_KEEPALIVE || '0')
 
-export const socket = io({
-  autoConnect: false,
-  auth: (cb) => {
-    try {
-      const token = store.getters['auth/ACCESS_TOKEN'] as string
-      debug('auth', token)
-      cb({ token })
-    } catch (e) {
-      console.error(e)
-    }
-  },
-  transports: ['websocket'],
-})
 
 export interface ChangesPayload {
   collection: string
   fullDocument: Record<string, any>
 }
 
-export function bindEvents() {
-  debug('bindEvents')
-  socket
-    .on('connect', () => {
-      debug('connect')
-      triggerAllSubscriptions()
-    })
-    .on('disconnect', () => {
-      debug('disconnect')
-    })
-    .on('foo', (...args) => {
-      debug('foo', args)
-    })
-    .on('error', e => {
-      debug('error', e)
-    })
-    .on('connect_error', (err) => {
-      console.log(err.message) // prints the message associated with the error
-      setTimeout(() => socket.connect(), 5000)
-    })
-    .on('changes', ({ collection, fullDocument }: ChangesPayload) => {
-      debug('changes', collection)
-      triggerSubscription(collection, fullDocument)
-        .catch(e => {
-          error(e)
-        })
-    })
+let interval: number
+let lastPing: Date = new Date()
 
+channel.addEventListener('message', (event) => {
+  if (event.data.type === 'PING') {
+    lastPing = new Date()
+  }
+});
+
+export function authorizeSocket(token: string) {
+  navigator.serviceWorker.ready.then(() => {
+    debug('worker:ready')
+    navigator.serviceWorker.controller?.postMessage({
+      type: 'AUTH',
+      token,
+    })
+    if (!WORKER_KEEPALIVE) {
+      return
+    }
+    if (interval) {
+      clearInterval(interval)
+    }
+    interval = setInterval(() => {
+      if (day().diff(lastPing, 'millisecond') < 10000) {
+        return
+      }
+      channel.postMessage({ type: 'PING' })
+      navigator.serviceWorker.controller?.postMessage({
+        type: 'PING',
+      })
+    }, WORKER_KEEPALIVE)
+  })
+}
+
+export function logoffSocket() {
+  navigator.serviceWorker.controller?.postMessage({
+    type: 'LOG_OFF',
+  })
+  clearInterval(interval)
+}
+
+export function bindEvents() {
+  // socket.off()
+  debug('bindEvents')
+  navigator.serviceWorker.onmessage = (event) => {
+    if (event.data?.type === 'changes') {
+      return onChanges(event.data.payload)
+    }
+    if (event.data?.type === 'connect') {
+      return triggerAllSubscriptions()
+    }
+    if (event.data?.type === 'start') {
+      debug('sw:start')
+    }
+  }
+
+}
+
+function onChanges({ collection, fullDocument }: ChangesPayload) {
+  debug('changes', collection)
+  triggerSubscription(collection, fullDocument)
+    .catch(e => {
+      error(e)
+    })
 }
 
 export async function subscribeChanges(keys: string | string[], callback: SubscriptionHandler, auto = true) {

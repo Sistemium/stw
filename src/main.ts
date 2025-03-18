@@ -11,8 +11,7 @@ import router from './router';
 import store from './store';
 import './index.scss';
 import i18n from './i18n';
-import { socket } from '@/services/socket'
-// import { initMessaging } from '@/init/firebase'
+import { authorizeSocket } from '@/services/socket'
 
 const { debug, error } = log('main');
 
@@ -49,7 +48,8 @@ router.isReady().then(() => {
   store.dispatch('auth/AUTH_INIT')
     .then((authorized: boolean) => {
       if (authorized) {
-        socket.connect()
+        const token = store.getters['auth/ACCESS_TOKEN']
+        authorizeSocket(token)
         return store.dispatch('inv/SUBSCRIBE_SOCKET_STATUS');
       }
       return loading.close();
