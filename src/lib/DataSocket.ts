@@ -28,6 +28,9 @@ export default class DataSocket {
   off() {
     return this.socket.off()
   }
+  getToken() {
+    return this.token
+  }
   reconnect() {
     return this.socket.connect()
   }

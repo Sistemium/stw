@@ -1,11 +1,16 @@
 /// <reference lib="webworker" />
-declare const self: ServiceWorkerGlobalScope
+import { filterJoin } from '@/services/util'
 
+declare const self: ServiceWorkerGlobalScope
+import { BackendOP, IDBRequest } from '@/lib/axiosIDB'
 import { showMessage, urlFromMessage } from '@/services/messaging'
 import { clientsClaim } from 'workbox-core'
 import { type MessagePayload } from 'firebase/messaging'
 import DataSocket from '@/lib/DataSocket'
 import Dexie, { type EntityTable } from 'dexie'
+import pick from 'lodash/pick'
+import { forEach } from 'lodash'
+import qs from 'qs'
 
 const socket = new DataSocket()
 
@@ -125,23 +130,38 @@ self.addEventListener('notificationclick', (event) => {
 })
 
 self.addEventListener('message', event => {
-  if (event.data?.type === 'AUTH') {
-    console.log('AUTH')
-    set('authorization', event.data.token)
-      .then(() => {
-        socket.authorize(event.data.token)
-      })
-      .catch(e => {
-        console.error(e)
-      })
-  }
-  if (event.data?.type === 'LOG_OFF') {
-    console.log('LOG_OFF')
-    del('authorization')
-      .catch(e => {
-        console.error(e)
-      })
-    socket.disconnect()
+  switch (event.data?.type) {
+    case 'AUTH': {
+      console.log('AUTH')
+      socket.authorize(event.data.token)
+      set('authorization', event.data.token)
+        .catch(e => {
+          console.error(e)
+        })
+      return
+    }
+    case 'LOG_OFF': {
+      console.log('LOG_OFF')
+      del('authorization')
+        .catch(e => {
+          console.error(e)
+        })
+      socket.disconnect()
+      return
+    }
+    case 'DATA': {
+      console.log('DATA', event.data.params)
+      const requestId: string = event.data.params?.requestId
+      if (!requestId) {
+        console.error('empty requestId')
+        return
+      }
+      if (!event.source) {
+        console.error('empty source')
+        return
+      }
+      requestFromBackend(event.data.params, event.source as Client)
+    }
   }
 })
 
@@ -161,5 +181,67 @@ function notifyClients(message: ClientMessage) {
   })
     .catch(e => {
       console.error('notifyClients', e)
+    })
+}
+
+const MethodMap = new Map<BackendOP, string>([
+  ['find', 'GET'],
+  ['findAll', 'GET'],
+  ['update', 'PATCH'],
+  ['destroy', 'DELETE'],
+  ['create', 'POST'],
+])
+
+// function trimJSON(str) {
+//   return str.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '')
+// }
+
+function requestFromBackend(request: IDBRequest, source: Client) {
+  const params = request.params ? qs.stringify(request.params, { arrayFormat: 'brackets' }) : undefined
+  const url = filterJoin([
+    filterJoin([`/api/${request.entity}`, request.id], '/'),
+    params?.toString(),
+  ], '?')
+  fetch(url, {
+    method: MethodMap.get(request.type),
+    headers: new Headers({
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      ...pick(request.headers, ['x-page-size', 'x-offset', 'authorization']),
+    }),
+    body: request.data && JSON.stringify(request.data),
+  })
+    .then(async res => {
+      const { status } = res
+      const headers: Record<string, string> = {}
+      forEach(['x-page-size', 'x-offset'], key => {
+        const val = res.headers.get(key)
+        if (val) {
+          headers[key] = val
+        }
+      })
+      if (status === 200) {
+        source.postMessage({
+          requestId: request.requestId,
+          type: 'IDB-RESPONSE',
+          data: await res.json(),
+          headers,
+        })
+      }
+      if (status === 204) {
+        source.postMessage({
+          requestId: request.requestId,
+          type: 'IDB-RESPONSE',
+          headers,
+        })
+      }
+      throw Error(res.statusText)
+    })
+    .catch(e => {
+      source.postMessage({
+        requestId: request.requestId,
+        type: 'IDB-RESPONSE',
+        error: e.message,
+      })
     })
 }

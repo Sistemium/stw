@@ -60,7 +60,7 @@ export function logoffSocket() {
 export function bindEvents() {
   // socket.off()
   debug('bindEvents')
-  navigator.serviceWorker.onmessage = (event) => {
+  navigator.serviceWorker.addEventListener('message', (event) => {
     if (event.data?.type === 'changes') {
       return onChanges(event.data.payload)
     }
@@ -70,7 +70,7 @@ export function bindEvents() {
     if (event.data?.type === 'start') {
       debug('sw:start')
     }
-  }
+  })
 
 }
 
