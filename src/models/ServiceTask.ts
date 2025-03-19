@@ -83,7 +83,7 @@ export const serviceTaskWorkflow = new Workflow({
       }],
       primaryOption: 'finished',
       editable: true,
-      type: 'success',
+      type: 'danger',
       important: true,
     },
     {
@@ -100,7 +100,7 @@ export const serviceTaskWorkflow = new Workflow({
       }],
       primaryOption: 'finished',
       editable: true,
-      type: 'primary',
+      type: 'warning',
       important: true,
     },
     {
