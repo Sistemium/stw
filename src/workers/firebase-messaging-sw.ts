@@ -5,30 +5,47 @@ import { showMessage, urlFromMessage } from '@/services/messaging'
 import { clientsClaim } from 'workbox-core'
 import { type MessagePayload } from 'firebase/messaging'
 import DataSocket from '@/lib/DataSocket'
-import { IDBPDatabase, openDB } from 'idb'
+import Dexie, { type EntityTable } from 'dexie'
 
 const socket = new DataSocket()
-const dbPromise: Promise<IDBPDatabase> = openDB('stw-store', 1, {
-  upgrade(db) {
-    db.createObjectStore('settings');
-  },
-});
+
+interface Setting {
+  id: string
+  value: string
+}
+
+const db = new Dexie('stw-store') as Dexie & { setting: EntityTable<Setting, 'id'> }
+db.version(1).stores({
+  settings: '',
+})
+db.version(2).stores({
+  setting: 'id,value',
+  settings: null,
+})
+db.version(3).stores({
+  setting: 'id',
+})
+
+console.log('Using Dexie v' + Dexie.semVer)
 
 async function get(key: string) {
-  return (await dbPromise).get('settings', key);
+  const setting = await db.setting.get(key)
+  return setting?.value
 }
-async function set(key: string, val: string) {
-  return (await dbPromise).put('settings', val, key);
+
+async function set(id: string, value: string) {
+  return db.setting.put({ value, id })
 }
+
 async function del(key: string) {
-  return (await dbPromise).delete('settings', key);
+  return db.setting.delete(key)
 }
 
 self.skipWaiting()
   .then(async () => {
-    console.info('skipped')
     notifyClients({ type: 'start' })
     const token = await get('authorization')
+    console.info('skipped', token)
     if (token) {
       socket.authorize(token)
     }
@@ -131,7 +148,8 @@ self.addEventListener('message', event => {
 
 interface ClientMessage {
   type: string
-  [key:string]: any
+
+  [key: string]: any
 }
 
 function notifyClients(message: ClientMessage) {

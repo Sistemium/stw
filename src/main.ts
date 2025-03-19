@@ -48,8 +48,6 @@ router.isReady().then(() => {
   store.dispatch('auth/AUTH_INIT')
     .then((authorized: boolean) => {
       if (authorized) {
-        const token = store.getters['auth/ACCESS_TOKEN']
-        authorizeSocket(token)
         return store.dispatch('inv/SUBSCRIBE_SOCKET_STATUS');
       }
       return loading.close();
@@ -66,6 +64,7 @@ const unsubscribe = store.subscribe((mutation: { type: string; payload: Record<s
   if (type === 'auth/SET_AUTHORIZED') {
     const { token, account: { name: username = 'unknown' } = {} } = payload;
     authorizeAxios(token);
+    authorizeSocket(token);
     debug('environment:', environment, 'user:', username);
     Sentry.setUser({ username });
     store.dispatch('inv/SUBSCRIBE_SOCKET_STATUS')

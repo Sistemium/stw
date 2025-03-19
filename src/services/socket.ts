@@ -25,6 +25,7 @@ channel.addEventListener('message', (event) => {
 });
 
 export function authorizeSocket(token: string) {
+  debug('authorizeSocket')
   navigator.serviceWorker.ready.then(() => {
     debug('worker:ready')
     navigator.serviceWorker.controller?.postMessage({
