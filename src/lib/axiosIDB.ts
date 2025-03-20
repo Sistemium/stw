@@ -79,7 +79,8 @@ async function main(config: ModelRequestConfig, requestId: number) {
 
   const type = OP_TYPES.get(op)
 
-  debug('request:', requestId, collection, op, resourceId || params || requestData)
+  const etc = [resourceId, Object.keys(params).length && params, headers[OFFSET_HEADER], requestData]
+  debug('req:', requestId, collection, op, ...etc.filter(x => x))
 
   if (!type) {
     throw new Error(`Unknown type for op ${op}`)
@@ -96,7 +97,7 @@ async function main(config: ModelRequestConfig, requestId: number) {
     params,
   })
 
-  debug('response:', requestId, collection, op, res.data?.length)
+  debug('res:', requestId, collection, op, res.data?.length)
   return res
 
 }

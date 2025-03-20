@@ -1,52 +1,11 @@
-/// <reference lib="webworker" />
-import { filterJoin } from '@/services/util'
-
-declare const self: ServiceWorkerGlobalScope
-import { BackendOP, IDBRequest } from '@/lib/axiosIDB'
 import { showMessage, urlFromMessage } from '@/services/messaging'
 import { clientsClaim } from 'workbox-core'
 import { type MessagePayload } from 'firebase/messaging'
-import DataSocket from '@/lib/DataSocket'
-import Dexie, { type EntityTable } from 'dexie'
-import pick from 'lodash/pick'
-import { forEach } from 'lodash'
-import qs from 'qs'
+import { socket } from '@/workers/socket-worker'
+import { del, get, requestFromBackend, set } from '@/workers/idb-worker'
+import { notifyClients, worker } from '@/workers/common-sw'
 
-const socket = new DataSocket()
-
-interface Setting {
-  id: string
-  value: string
-}
-
-const db = new Dexie('stw-store') as Dexie & { setting: EntityTable<Setting, 'id'> }
-db.version(1).stores({
-  settings: '',
-})
-db.version(2).stores({
-  setting: 'id,value',
-  settings: null,
-})
-db.version(3).stores({
-  setting: 'id',
-})
-
-console.log('Using Dexie v' + Dexie.semVer)
-
-async function get(key: string) {
-  const setting = await db.setting.get(key)
-  return setting?.value
-}
-
-async function set(id: string, value: string) {
-  return db.setting.put({ value, id })
-}
-
-async function del(key: string) {
-  return db.setting.delete(key)
-}
-
-self.skipWaiting()
+worker().skipWaiting()
   .then(async () => {
     notifyClients({ type: 'start' })
     const token = await get('authorization')
@@ -59,34 +18,11 @@ self.skipWaiting()
     console.error(e)
   })
 
-
-console.log('firebase-messaging-sw init with skipWaiting')
-
-socket
-  .on('connect', () => {
-    console.info('socket:connect')
-    notifyClients({ type: 'connect' })
-  })
-  .on('disconnect', () => {
-    console.info('socket:disconnect')
-  })
-  .on('error', e => {
-    console.error('socket:error', e)
-  })
-  .on('connect_error', (err) => {
-    console.log('socket:connect_error', err.message)
-    // setTimeout(() => socket.reconnect(), 5000)
-  })
-  .on('changes', (payload) => {
-    notifyClients({
-      type: 'changes',
-      payload,
-    })
-  })
+console.log('service worker init')
 
 clientsClaim()
 
-self.addEventListener('push', (event) => {
+worker().addEventListener('push', (event) => {
   const getPayload = (): Partial<MessagePayload> => {
     try {
       return event.data?.json()
@@ -98,10 +34,10 @@ self.addEventListener('push', (event) => {
       }
     }
   }
-  event.waitUntil(showMessage(getPayload(), self.registration))
+  event.waitUntil(showMessage(getPayload(), worker().registration))
 })
 
-self.addEventListener('notificationclick', (event) => {
+worker().addEventListener('notificationclick', (event) => {
   event.notification.close() // Android needs explicit close
   // console.log('notificationClick', event.notification.data, self.origin)
   const path = urlFromMessage(event.notification.data)
@@ -110,7 +46,7 @@ self.addEventListener('notificationclick', (event) => {
     path,
   ].filter(x => x)
     .join('/#/')
-  event.waitUntil(self.clients
+  event.waitUntil(worker().clients
     .matchAll({ type: 'window', includeUncontrolled: true })
     .then(async windowClients => {
       const opened = windowClients.find(client => {
@@ -124,12 +60,12 @@ self.addEventListener('notificationclick', (event) => {
         return
       }
 
-      return self.clients.openWindow(url)
+      return worker().clients.openWindow(url)
     }),
   )
 })
 
-self.addEventListener('message', event => {
+worker().addEventListener('message', event => {
   switch (event.data?.type) {
     case 'AUTH': {
       console.log('AUTH')
@@ -150,7 +86,7 @@ self.addEventListener('message', event => {
       return
     }
     case 'DATA': {
-      console.log('DATA', event.data.params)
+      // console.log('DATA', event.data.params)
       const requestId: string = event.data.params?.requestId
       if (!requestId) {
         console.error('empty requestId')
@@ -164,84 +100,3 @@ self.addEventListener('message', event => {
     }
   }
 })
-
-
-interface ClientMessage {
-  type: string
-
-  [key: string]: any
-}
-
-function notifyClients(message: ClientMessage) {
-  self.clients.matchAll().then(clients => {
-    console.log('notifyClients', clients.length, message.type)
-    clients.forEach(client => {
-      client.postMessage(message)
-    })
-  })
-    .catch(e => {
-      console.error('notifyClients', e)
-    })
-}
-
-const MethodMap = new Map<BackendOP, string>([
-  ['find', 'GET'],
-  ['findAll', 'GET'],
-  ['update', 'PATCH'],
-  ['destroy', 'DELETE'],
-  ['create', 'POST'],
-])
-
-// function trimJSON(str) {
-//   return str.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '')
-// }
-
-function requestFromBackend(request: IDBRequest, source: Client) {
-  const params = request.params ? qs.stringify(request.params, { arrayFormat: 'brackets' }) : undefined
-  const url = filterJoin([
-    filterJoin([`/api/${request.entity}`, request.id], '/'),
-    params?.toString(),
-  ], '?')
-  fetch(url, {
-    method: MethodMap.get(request.type),
-    headers: new Headers({
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      ...pick(request.headers, ['x-page-size', 'x-offset', 'authorization']),
-    }),
-    body: request.data && JSON.stringify(request.data),
-  })
-    .then(async res => {
-      const { status } = res
-      const headers: Record<string, string> = {}
-      forEach(['x-page-size', 'x-offset'], key => {
-        const val = res.headers.get(key)
-        if (val) {
-          headers[key] = val
-        }
-      })
-      if (status === 200) {
-        source.postMessage({
-          requestId: request.requestId,
-          type: 'IDB-RESPONSE',
-          data: await res.json(),
-          headers,
-        })
-      }
-      if (status === 204) {
-        source.postMessage({
-          requestId: request.requestId,
-          type: 'IDB-RESPONSE',
-          headers,
-        })
-      }
-      throw Error(res.statusText)
-    })
-    .catch(e => {
-      source.postMessage({
-        requestId: request.requestId,
-        type: 'IDB-RESPONSE',
-        error: e.message,
-      })
-    })
-}
