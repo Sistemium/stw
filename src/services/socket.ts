@@ -72,6 +72,11 @@ export function bindEvents() {
     }
   })
 
+  navigator.serviceWorker.addEventListener('controllerchange', (ev) => {
+    console.warn('controllerChange', ev)
+    window.location.reload()
+  })
+
 }
 
 function onChanges({ collection, fullDocument }: ChangesPayload) {
