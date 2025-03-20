@@ -1,8 +1,8 @@
 import { showMessage, urlFromMessage } from '@/services/messaging'
 import { clientsClaim } from 'workbox-core'
 import { type MessagePayload } from 'firebase/messaging'
-import { socket } from '@/workers/socket-worker'
-import { del, get, requestFromBackend, set } from '@/workers/idb-worker'
+import { AUTH, LOG_OFF, socket } from '@/workers/socket-worker'
+import { DATA, get } from '@/workers/idb-worker'
 import { notifyClients, worker } from '@/workers/common-sw'
 
 worker().skipWaiting()
@@ -65,38 +65,13 @@ worker().addEventListener('notificationclick', (event) => {
   )
 })
 
+type MessageHandler = (event: ExtendableMessageEvent) => void
+const MESSAGE_HANDLERS: Record<string, MessageHandler> = {
+  DATA,
+  LOG_OFF,
+  AUTH,
+}
+
 worker().addEventListener('message', event => {
-  switch (event.data?.type) {
-    case 'AUTH': {
-      console.log('AUTH')
-      socket.authorize(event.data.token)
-      set('authorization', event.data.token)
-        .catch(e => {
-          console.error(e)
-        })
-      return
-    }
-    case 'LOG_OFF': {
-      console.log('LOG_OFF')
-      del('authorization')
-        .catch(e => {
-          console.error(e)
-        })
-      socket.disconnect()
-      return
-    }
-    case 'DATA': {
-      // console.log('DATA', event.data.params)
-      const requestId: string = event.data.params?.requestId
-      if (!requestId) {
-        console.error('empty requestId')
-        return
-      }
-      if (!event.source) {
-        console.error('empty source')
-        return
-      }
-      requestFromBackend(event.data.params, event.source as Client)
-    }
-  }
+  MESSAGE_HANDLERS[event.data?.type]?.call(worker(), event)
 })

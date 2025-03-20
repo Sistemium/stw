@@ -24,6 +24,20 @@ db.version(3).stores({
   setting: 'id',
 })
 
+export function DATA(event: ExtendableMessageEvent) {
+  // console.log('DATA', event.data.params)
+  const requestId: string = event.data.params?.requestId
+  if (!requestId) {
+    console.error('empty requestId')
+    return
+  }
+  if (!event.source) {
+    console.error('empty source')
+    return
+  }
+  requestFromBackend(event.data.params, event.source as Client)
+}
+
 export async function get(key: string) {
   const setting = await db.setting.get(key)
   return setting?.value
@@ -50,7 +64,7 @@ function filterJoin(input: (string | undefined)[], separator?: string): string {
   return input.filter(x => x).join(separator)
 }
 
-export function requestFromBackend(request: IDBRequest, source: Client) {
+function requestFromBackend(request: IDBRequest, source: Client) {
   const params = request.params ? qs.stringify(request.params, { arrayFormat: 'brackets' }) : undefined
   const url = filterJoin([
     filterJoin([`/api/${request.entity}`, request.id], '/'),

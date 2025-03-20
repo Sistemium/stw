@@ -1,8 +1,9 @@
 import DataSocket from '@/lib/DataSocket'
 import { notifyClients } from '@/workers/common-sw'
+import { del, set } from '@/workers/idb-worker'
 
 export const socket = new DataSocket()
-console.warn('init socket-worker')
+console.info('init socket-worker')
 
 socket
   .on('connect', () => {
@@ -26,4 +27,20 @@ socket
     })
   })
 
+export function AUTH(event: ExtendableMessageEvent) {
+  console.log('AUTH')
+  socket.authorize(event.data.token)
+  set('authorization', event.data.token)
+    .catch(e => {
+      console.error(e)
+    })
+}
 
+export function LOG_OFF() {
+  console.log('LOG_OFF')
+  del('authorization')
+    .catch(e => {
+      console.error(e)
+    })
+  socket.disconnect()
+}
