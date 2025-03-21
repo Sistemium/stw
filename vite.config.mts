@@ -85,7 +85,7 @@ export default defineConfig(({ mode }) => {
           changeOrigin: true,
         },
         '/socket.io': {
-          target: process.env.DEV_SERVER_WS_TARGET,
+          target: process.env.DEV_SERVER_WS_TARGET || process.env.DEV_SERVER_PROXY_TARGET,
           changeOrigin: true,
           ws: true,
         },
