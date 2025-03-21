@@ -44,6 +44,7 @@ drawer-edit.service-task-edit(
             .float-right
               el-button(
                 size="small"
+                type="primary"
                 @click="commentClick"
                 :disabled="!comment"
               ) {{ $t('actions.comment') }}
