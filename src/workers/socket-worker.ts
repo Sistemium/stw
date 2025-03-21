@@ -1,6 +1,11 @@
 import DataSocket from '@/lib/DataSocket'
 import { notifyClients } from '@/workers/common-sw'
-import { del, set } from '@/workers/idb-worker'
+import { del, set, fetchEntity } from '@/workers/idb-worker'
+
+interface ChangesPayload {
+  collection: string
+  fullDocument: Record<string, any>
+}
 
 export const socket = new DataSocket()
 console.info('init socket-worker')
@@ -20,27 +25,27 @@ socket
     console.log('socket:connect_error', err.message)
     // setTimeout(() => socket.reconnect(), 5000)
   })
-  .on('changes', (payload) => {
-    notifyClients({
-      type: 'changes',
-      payload,
-    })
+  .on('changes', (payload: ChangesPayload) => {
+    fetchEntity(payload.collection)
+      .then(() => {
+        notifyClients({
+          type: 'changes',
+          payload,
+        })
+      })
+      .catch((e: any) => {
+        console.error(e)
+      })
   })
 
-export function AUTH(event: ExtendableMessageEvent) {
+export async function AUTH(event: ExtendableMessageEvent) {
   console.log('AUTH')
   socket.authorize(event.data.token)
-  set('authorization', event.data.token)
-    .catch(e => {
-      console.error(e)
-    })
+  await set('authorization', event.data.token)
 }
 
-export function LOG_OFF() {
+export async function LOG_OFF() {
   console.log('LOG_OFF')
-  del('authorization')
-    .catch(e => {
-      console.error(e)
-    })
   socket.disconnect()
+  await del('authorization')
 }

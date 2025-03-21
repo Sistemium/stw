@@ -2,14 +2,9 @@ import log from 'sistemium-debug'
 import { settle } from 'sistemium-data/lib/util/axios'
 import { BaseItem, ModelRequestConfig } from 'sistemium-data'
 import pick from 'lodash/pick'
+import { OFFSET_HEADER, PAGE_SIZE_HEADER } from '@/workers/common-sw'
 
-const {
-  debug,
-  error,
-} = log('axios:idb')
-
-export const OFFSET_HEADER = 'x-offset'
-export const PAGE_SIZE_HEADER = 'x-page-size'
+const { debug } = log('axios:idb')
 
 let REQUEST_ID = 0
 
@@ -50,7 +45,7 @@ export default async function(config: ModelRequestConfig) {
   } catch (e: any) {
     status = 503
     statusText = e.message
-    error(e.message)
+    console.error(e)
   }
 
   return new Promise((resolve, reject) => {
@@ -79,7 +74,12 @@ async function main(config: ModelRequestConfig, requestId: number) {
 
   const type = OP_TYPES.get(op)
 
-  const etc = [resourceId, Object.keys(params).length && params, headers[OFFSET_HEADER], requestData]
+  const etc = [
+    resourceId,
+    Object.keys(params || {}).length && params,
+    headers[OFFSET_HEADER],
+    requestData,
+  ]
   debug('req:', requestId, collection, op, ...etc.filter(x => x))
 
   if (!type) {
@@ -93,7 +93,7 @@ async function main(config: ModelRequestConfig, requestId: number) {
     entity: collection,
     headers: pick(headers, [PAGE_SIZE_HEADER, OFFSET_HEADER, 'authorization']),
     id: resourceId,
-    data: requestData,
+    data: requestData && JSON.parse(JSON.stringify(requestData)),
     params,
   })
 
@@ -122,7 +122,7 @@ function requestFromWorker(params: IDBRequest): Promise<WorkerSuccessResponse> {
   })
 }
 
-interface IDBResponse {
+export interface IDBResponse {
   type: string
   requestId: number
   data?: BaseItem | BaseItem[]
@@ -130,15 +130,21 @@ interface IDBResponse {
   headers: BaseItem
 }
 
+const HANDLERS: Record<string, (e: MessageEvent) => void> = {
+  ['IDB-RESPONSE'](event) {
+    const { requestId, error, data, headers }: IDBResponse = event.data
+    const message = MESSAGES.get(requestId)
+    MESSAGES.delete(requestId)
+    if (error) {
+      return message?.reject(Error(error))
+    }
+    message?.resolve({ data, headers })
+  },
+}
+
 navigator.serviceWorker.addEventListener('message', (event) => {
-  const { requestId, type, error, data, headers }: IDBResponse = event.data
-  if (type !== 'IDB-RESPONSE') {
-    return
+  const type: string = event.data?.type
+  if (type) {
+    HANDLERS[type]?.call(null, event)
   }
-  const message = MESSAGES.get(requestId)
-  MESSAGES.delete(requestId)
-  if (error) {
-    return message?.reject(Error(error))
-  }
-  message?.resolve({ data, headers })
 })

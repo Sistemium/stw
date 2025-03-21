@@ -20,3 +20,9 @@ export function notifyClients(message: ClientMessage) {
 export interface ClientMessage extends Record<string, any> {
   type: string
 }
+
+export type MessageHandler<T = ExtendableMessageEvent> = (event: T) => Promise<void>
+export const OFFSET_HEADER = 'x-offset'
+export const PAGE_SIZE_HEADER = 'x-page-size'
+export const OFFSET_FIELD = 'x_offset'
+export const PAGE_SIZE_DEFAULT = '500'

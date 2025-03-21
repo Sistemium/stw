@@ -3,7 +3,7 @@ import { clientsClaim } from 'workbox-core'
 import { type MessagePayload } from 'firebase/messaging'
 import { AUTH, LOG_OFF, socket } from '@/workers/socket-worker'
 import { DATA, get } from '@/workers/idb-worker'
-import { notifyClients, worker } from '@/workers/common-sw'
+import { MessageHandler, notifyClients, worker } from '@/workers/common-sw'
 
 worker().skipWaiting()
   .then(async () => {
@@ -65,7 +65,6 @@ worker().addEventListener('notificationclick', (event) => {
   )
 })
 
-type MessageHandler = (event: ExtendableMessageEvent) => void
 const MESSAGE_HANDLERS: Record<string, MessageHandler> = {
   DATA,
   LOG_OFF,
@@ -73,5 +72,8 @@ const MESSAGE_HANDLERS: Record<string, MessageHandler> = {
 }
 
 worker().addEventListener('message', event => {
-  MESSAGE_HANDLERS[event.data?.type]?.call(worker(), event)
+  const handler = MESSAGE_HANDLERS[event.data?.type]
+  if (handler) {
+    event.waitUntil(handler(event))
+  }
 })
