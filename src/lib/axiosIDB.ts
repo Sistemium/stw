@@ -42,9 +42,15 @@ export default async function(config: ModelRequestConfig) {
     const response = await main(config, REQUEST_ID)
     data = response.data
     headers = response.headers || {}
+    status = response.status
+    if (response.error) {
+      statusText = response.error
+      data = statusText
+    }
   } catch (e: any) {
     status = 503
     statusText = e.message
+    data = statusText
     console.error(e)
   }
 
@@ -105,6 +111,8 @@ async function main(config: ModelRequestConfig, requestId: number) {
 interface WorkerSuccessResponse {
   data?: BaseItem | BaseItem[]
   headers?: BaseItem
+  status: number
+  error?: string
 }
 
 interface Resolver {
@@ -128,17 +136,18 @@ export interface IDBResponse {
   data?: BaseItem | BaseItem[]
   error: string
   headers: BaseItem
+  status: number
 }
 
 const HANDLERS: Record<string, (e: MessageEvent) => void> = {
   ['IDB-RESPONSE'](event) {
-    const { requestId, error, data, headers }: IDBResponse = event.data
+    const { requestId, error, data, headers, status }: IDBResponse = event.data
     const message = MESSAGES.get(requestId)
     MESSAGES.delete(requestId)
-    if (error) {
-      return message?.reject(Error(error))
-    }
-    message?.resolve({ data, headers })
+    // if (error) {
+    //   return message?.reject(Error(error))
+    // }
+    message?.resolve({ data, headers, status, error })
   },
 }
 
