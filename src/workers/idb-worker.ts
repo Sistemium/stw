@@ -6,9 +6,9 @@ import {
   OFFSET_HEADER,
   PAGE_SIZE_HEADER,
   OFFSET_FIELD,
-  PAGE_SIZE_DEFAULT,
+  PAGE_SIZE_DEFAULT, notifyClients,
 } from '@/workers/common-sw'
-
+import { eachSeries } from 'async'
 
 type BackendData = Record<string, any> | Record<string, any>[]
 
@@ -74,7 +74,11 @@ export async function DATA(event: ExtendableMessageEvent) {
   }
 
   const backend = await requestFromBackend(request)
-  await saveData(request.entity, backend.data)
+  if (request.type === 'destroy' && request.id) {
+    await hasTable(request.entity)?.delete(request.id)
+  } else {
+    await saveData(request.entity, backend.data)
+  }
   if (offset && isEmpty(request.params)) {
     await saveOffset(request.entity, backend.headers[OFFSET_HEADER])
   }
@@ -127,6 +131,7 @@ interface BackendResponse {
   data?: BackendData
   headers: Record<string, string>
   error?: string
+  status: number
 }
 
 async function requestFromBackend(request: IDBRequest): Promise<BackendResponse> {
@@ -149,7 +154,7 @@ export async function fetchEntity(entity: string) {
   const offset = await getSavedOffset(entity)
   const authorization = await get('authorization')
   if (!offset || !authorization) {
-    return
+    return []
   }
   const { data, headers } = await fetchBackend({
     method: 'GET',
@@ -161,14 +166,22 @@ export async function fetchEntity(entity: string) {
     },
   })
   if (!data?.length) {
-    return
+    return []
   }
   await saveData(entity, data)
   const newOffset = headers[OFFSET_HEADER]
   if (newOffset) {
     await saveOffset(entity, newOffset)
-    return newOffset
   }
+  return data
+}
+
+export async function processDeleted(deletes: Record<string, any>) {
+  await eachSeries(deletes, async (doc: Record<string, any>) => {
+    const { name, objectXid } = doc
+    await hasTable(name)?.delete(objectXid)
+    notifyClients({ type: 'changes', payload: { collection: 'RecordStatus', fullDocument: doc } })
+  })
 }
 
 async function fetchBackend(query: BackendQuery): Promise<BackendResponse> {
@@ -194,13 +207,15 @@ async function fetchBackend(query: BackendQuery): Promise<BackendResponse> {
     })
     if (status === 200) {
       const data = await res.json()
-      return { data, headers }
+      return { data, headers, status }
     } else if (status === 204) {
-      return { headers }
+      return { headers, status }
+    } else if (status === 400) {
+      return { headers, error: await res.text(), status }
     }
-    return { error: res.statusText, headers }
+    return { error: res.statusText, headers, status }
   } catch (e: any) {
-    return { error: e.message, headers: {} }
+    return { error: e.message, headers: {}, status: 500 }
   }
 }
 
@@ -226,5 +241,10 @@ async function saveOffset(entity: string, offset: string) {
 
 async function getSavedOffset(entity: string) {
   const saved = await db.offset.get(entity)
-  return saved?.offset
+  if (!saved && entity === 'RecordStatus') {
+    const clientData = await db.table('ClientData').limit(1).first()
+    console.warn(clientData)
+    return clientData && tsToOffset(clientData[OFFSET_FIELD])
+  }
+  return saved?.offset || '*'
 }

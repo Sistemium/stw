@@ -1,6 +1,6 @@
 import DataSocket from '@/lib/DataSocket'
 import { notifyClients } from '@/workers/common-sw'
-import { del, set, fetchEntity } from '@/workers/idb-worker'
+import { del, set, fetchEntity, processDeleted } from '@/workers/idb-worker'
 
 interface ChangesPayload {
   collection: string
@@ -14,6 +14,11 @@ socket
   .on('connect', () => {
     console.info('socket:connect')
     notifyClients({ type: 'connect' })
+    fetchEntity('RecordStatus')
+      .then(processDeleted)
+      .catch(e => {
+        console.error(e)
+      })
   })
   .on('disconnect', () => {
     console.info('socket:disconnect')
@@ -27,6 +32,11 @@ socket
   })
   .on('changes', (payload: ChangesPayload) => {
     fetchEntity(payload.collection)
+      .then(data => {
+        if (payload.collection === 'RecordStatus') {
+          return processDeleted(data)
+        }
+      })
       .then(() => {
         notifyClients({
           type: 'changes',
