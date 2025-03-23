@@ -62,3 +62,7 @@ function storesV4() {
     ServiceTaskHistory: 'id,serviceTaskId',
   }
 }
+
+export async function cleanup() {
+  return db.delete()
+}

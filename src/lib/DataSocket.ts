@@ -46,7 +46,7 @@ export default class DataSocket {
     this.socket.connect()
   }
   disconnect() {
-    this.socket.off()
+    // this.socket.off()
     this.socket.disconnect()
   }
   rebind() {

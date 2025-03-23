@@ -1,7 +1,7 @@
 import DataSocket from '@/lib/DataSocket'
 import { notifyClients, worker } from '@/workers/common-sw'
 import { set, fetchEntity, processDeleted } from '@/workers/idb-worker'
-import { cleanup } from '@/workers/stores'
+import { cleanup, db } from '@/workers/stores'
 
 interface ChangesPayload {
   collection: string
@@ -50,14 +50,17 @@ socket
 
 export async function AUTH(event: ExtendableMessageEvent) {
   console.log('AUTH')
-  socket.authorize(event.data.token)
-  await set('authorization', event.data.token)
+  db.open()
+    .then(() => {
+      socket.authorize(event.data.token)
+      return set('authorization', event.data.token)
+    })
 }
 
 export async function LOG_OFF() {
   console.log('LOG_OFF')
   socket.disconnect()
-  await del('authorization')
+  await cleanup()
 }
 
 const STATE = {
@@ -76,7 +79,7 @@ function awake() {
           sleep()
         }
       })
-  }, 10000)
+  }, 60000)
 }
 
 function sleep() {
