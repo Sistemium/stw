@@ -1,6 +1,7 @@
 import DataSocket from '@/lib/DataSocket'
-import { notifyClients } from '@/workers/common-sw'
-import { del, set, fetchEntity, processDeleted } from '@/workers/idb-worker'
+import { notifyClients, worker } from '@/workers/common-sw'
+import { set, fetchEntity, processDeleted } from '@/workers/idb-worker'
+import { cleanup } from '@/workers/stores'
 
 interface ChangesPayload {
   collection: string
@@ -13,6 +14,7 @@ console.info('init socket-worker')
 socket
   .on('connect', () => {
     console.info('socket:connect')
+    awake()
     notifyClients({ type: 'connect' })
     fetchEntity('RecordStatus')
       .then(processDeleted)
@@ -36,8 +38,6 @@ socket
         if (payload.collection === 'RecordStatus') {
           return processDeleted(data)
         }
-      })
-      .then(() => {
         notifyClients({
           type: 'changes',
           payload,
@@ -58,4 +58,31 @@ export async function LOG_OFF() {
   console.log('LOG_OFF')
   socket.disconnect()
   await del('authorization')
+}
+
+const STATE = {
+  heartbeat: 0,
+}
+
+function awake() {
+  if (STATE.heartbeat) {
+    clearInterval(STATE.heartbeat)
+  }
+  STATE.heartbeat = setInterval(() => {
+    worker().clients
+      .matchAll({ type: 'window', includeUncontrolled: true })
+      .then(clients => {
+        if (!clients.length) {
+          sleep()
+        }
+      })
+  }, 10000)
+}
+
+function sleep() {
+  console.warn('go:sleep')
+  socket.disconnect()
+  if (STATE.heartbeat) {
+    clearInterval(STATE.heartbeat)
+  }
 }
