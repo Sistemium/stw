@@ -62,7 +62,7 @@ export async function DATA(event: ExtendableMessageEvent) {
 
   if (savedOffset > useOffset) {
     const saved = await findManyByOffset(request.entity, offset, limit)
-    if (saved) {
+    if (saved?.length) {
       return reply({
         data: saved,
         headers: {
@@ -75,11 +75,14 @@ export async function DATA(event: ExtendableMessageEvent) {
 
   const backend = await requestFromBackend(request)
   if (request.type === 'destroy' && request.id) {
-    await hasTable(request.entity)?.delete(request.id)
-  } else {
+    if ([204, 404, 200].includes(backend.status)) {
+      await hasTable(request.entity)?.delete(request.id)
+      backend.status = 204
+    }
+  } else if(backend.status === 200) {
     await saveData(request.entity, backend.data)
   }
-  if (offset && isEmpty(request.params)) {
+  if (useOffset && [204, 200].includes(backend.status)) {
     await saveOffset(request.entity, backend.headers[OFFSET_HEADER])
   }
   reply(backend)
@@ -165,20 +168,23 @@ export async function fetchEntity(entity: string) {
       authorization,
     },
   })
-  if (!data?.length) {
-    return []
-  }
-  await saveData(entity, data)
   const newOffset = headers[OFFSET_HEADER]
   if (newOffset) {
     await saveOffset(entity, newOffset)
   }
+  if (!data?.length) {
+    return []
+  }
+  await saveData(entity, data)
   return data
 }
 
 export async function processDeleted(deletes: Record<string, any>) {
   await eachSeries(deletes, async (doc: Record<string, any>) => {
     const { name, objectXid } = doc
+    if (!objectXid || !name) {
+      return
+    }
     await hasTable(name)?.delete(objectXid)
     notifyClients({ type: 'changes', payload: { collection: 'RecordStatus', fullDocument: doc } })
   })
@@ -199,7 +205,7 @@ async function fetchBackend(query: BackendQuery): Promise<BackendResponse> {
     })
     const { status } = res
     const headers: Record<string, string> = {}
-    ;['x-page-size', 'x-offset'].forEach(key => {
+    ;[PAGE_SIZE_HEADER, OFFSET_HEADER].forEach(key => {
       const val = res.headers.get(key)
       if (val) {
         headers[key] = val
@@ -242,9 +248,7 @@ async function saveOffset(entity: string, offset: string) {
 async function getSavedOffset(entity: string) {
   const saved = await db.offset.get(entity)
   if (!saved && entity === 'RecordStatus') {
-    const clientData = await db.table('ClientData').limit(1).first()
-    console.warn(clientData)
-    return clientData && tsToOffset(clientData[OFFSET_FIELD])
+    return '*'
   }
-  return saved?.offset || '*'
+  return saved?.offset
 }

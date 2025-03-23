@@ -5,10 +5,11 @@ interface Setting {
   id: string
   value: string
 }
+
 Dexie.debug = true
 export const db = new Dexie('stw-store') as Dexie & {
   setting: EntityTable<Setting, 'id'>
-  offset: EntityTable<{ entity: string, offset:  string}, 'entity'>
+  offset: EntityTable<{ entity: string, offset: string }, 'entity'>
 }
 
 console.log('Using Dexie v' + Dexie.semVer)
@@ -26,6 +27,15 @@ db.version(7).stores({
   ...storesV6(),
   offset: 'entity',
 })
+db.version(8).stores({})
+  .upgrade(async (trans) => {
+    await trans
+      .table('offset')
+      .delete('ClientData')
+    await trans
+      .table('ClientData')
+      .clear()
+  })
 
 function storesV5() {
   return mapValues(storesV4(), (value) => `${value},ts`)
