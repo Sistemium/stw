@@ -6,7 +6,7 @@ const { debug, error } = log('socket')
 export type SubscriptionHandler = (fullDocument?: Record<string, any>) => any | Promise<any>
 
 const SUBS = new Map<string, SubscriptionHandler>()
-const channel = new BroadcastChannel('leader-election');
+const channel = new BroadcastChannel('leader-election')
 const WORKER_KEEPALIVE = Number(import.meta.env.VITE_WORKER_KEEPALIVE || '0')
 
 
@@ -15,14 +15,35 @@ export interface ChangesPayload {
   fullDocument: Record<string, any>
 }
 
-let interval: number
+let interval: any
 let lastPing: Date = new Date()
 
 channel.addEventListener('message', (event) => {
   if (event.data.type === 'PING') {
     lastPing = new Date()
   }
-});
+})
+
+function keepAliveWorker() {
+  if (interval) {
+    clearInterval(interval)
+  }
+  interval = setInterval(() => {
+    pingWorker()
+  }, WORKER_KEEPALIVE)
+  pingWorker()
+}
+
+function pingWorker() {
+  if (day().diff(lastPing, 'millisecond') < 10000) {
+    return
+  }
+  if (document.visibilityState !== 'visible') {
+    return
+  }
+  channel.postMessage({ type: 'PING' })
+  navigator.serviceWorker.controller?.postMessage({ type: 'PING' })
+}
 
 export function authorizeSocket(token: string) {
   debug('authorizeSocket')
@@ -35,18 +56,13 @@ export function authorizeSocket(token: string) {
     if (!WORKER_KEEPALIVE) {
       return
     }
-    if (interval) {
-      clearInterval(interval)
-    }
-    interval = setInterval(() => {
-      if (day().diff(lastPing, 'millisecond') < 10000) {
-        return
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') {
+        keepAliveWorker()
+      } else if (interval) {
+        clearInterval(interval)
       }
-      channel.postMessage({ type: 'PING' })
-      navigator.serviceWorker.controller?.postMessage({
-        type: 'PING',
-      })
-    }, WORKER_KEEPALIVE)
+    })
   })
 }
 
@@ -61,14 +77,23 @@ export function bindEvents() {
   // socket.off()
   debug('bindEvents')
   navigator.serviceWorker.addEventListener('message', (event) => {
-    if (event.data?.type === 'changes') {
-      return onChanges(event.data.payload)
+    const type: string | undefined = event.data?.type
+    if (!type) {
+      return
     }
-    if (event.data?.type === 'connect') {
-      return triggerAllSubscriptions()
-    }
-    if (event.data?.type === 'start') {
-      debug('sw:start')
+    switch (type) {
+      case 'changes': {
+        return onChanges(event.data.payload)
+      }
+      case 'connect': {
+        return triggerAllSubscriptions()
+      }
+      case 'IDB-RESPONSE': {
+        return
+      }
+      default: {
+        debug('sw:', type)
+      }
     }
   })
 
