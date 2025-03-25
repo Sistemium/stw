@@ -55,3 +55,14 @@ function onEdit(user: { id: string }) {
 }
 
 </script>
+<style scoped lang="scss">
+.filters {
+  display: flex;
+}
+.search-input {
+  flex: 1;
+}
+.page-title {
+  margin-bottom: 0;
+}
+</style>

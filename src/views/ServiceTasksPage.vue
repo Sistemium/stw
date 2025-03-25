@@ -130,4 +130,7 @@ function onEdit(serviceTask: { id: string }, tab?: string) {
 .tool-button {
   margin-left: $margin-right;
 }
+.page-title {
+  margin-bottom: 0;
+}
 </style>
