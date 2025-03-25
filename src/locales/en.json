@@ -250,7 +250,8 @@
     "stockReceivingItem": "Stock receiving item",
     "legalEntity": "Legal entity",
     "recipe": "Recipe",
-    "productionItem": "Production item"
+    "productionItem": "Production item",
+    "user": "User"
   },
   "shortened": {
     "positions": "pos",

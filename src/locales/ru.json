@@ -246,7 +246,8 @@
     "stockReceivingItem": "позиции прихода на склад",
     "legalEntity": "юр. лица",
     "recipe": "рецепта",
-    "productionItem": "позиции производства"
+    "productionItem": "позиции производства",
+    "user": "пользователя"
   },
   "shortened": {
     "positions": "поз",

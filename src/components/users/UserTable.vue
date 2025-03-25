@@ -22,6 +22,7 @@ import { computed } from 'vue'
 import max from 'lodash/max'
 import { t } from '@/lib/validations'
 import ToolButton from '@/lib/ToolButton.vue'
+import Employee from '@/models/Employee'
 
 const props = withDefaults(defineProps<{
   users: IUser[]
@@ -42,7 +43,7 @@ const emit = defineEmits<{
 
 const rowClass = (row: { rowData: IUser }) => (row.rowData.id === props.activeId) ? 'active' : ''
 const columns = computed(() => {
-  const count = 2
+  const count = 3.5
   const { columnWidth } = props
   const nameWidth = max([props.width - columnWidth * count - 6 - 300, 300]) || 0
   const width = max([Math.floor((props.width - nameWidth - 6 - 60) / count), columnWidth]) || 0
@@ -54,7 +55,7 @@ const columns = computed(() => {
       dataKey: 'name',
     },
     {
-      width,
+      width: width * 1.5,
       align: 'left',
       title: t('fields.email'),
       dataKey: 'email',
@@ -64,6 +65,14 @@ const columns = computed(() => {
       align: 'left',
       title: t('fields.phone'),
       dataKey: 'phone',
+    },
+    {
+      width,
+      align: 'left',
+      title: t('fields.employee'),
+      dataKey: 'masterId',
+      cellRenderer: ({ cellData }) =>
+        <span>{ Employee.reactiveGet(cellData)?.name }</span>
     },
     {
       key: 'buttons',

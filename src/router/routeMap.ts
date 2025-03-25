@@ -103,6 +103,7 @@ export default new RouteMapper({
     editing: () => import(/* webpackChunkName: "articles" */ '../components/users/UserEdit.vue'),
     meta: {
       menuGroup: 'other',
+      role: 'admin',
     },
   },
   pricing: {

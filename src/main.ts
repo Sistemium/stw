@@ -12,6 +12,7 @@ import store from './store';
 import './index.scss';
 import i18n from './i18n';
 import { authorizeSocket } from '@/services/socket'
+import { useInvStore } from '@/store/invStore'
 
 const { debug, error } = log('main');
 
@@ -46,7 +47,9 @@ router.isReady().then(() => {
   debug('router:ready');
   const loading = ElLoading.service({});
   store.dispatch('auth/AUTH_INIT')
-    .then((authorized: boolean) => {
+    .then(async (authorized: boolean) => {
+      const invStore= useInvStore()
+      await invStore.initUser()
       if (authorized) {
         return store.dispatch('inv/SUBSCRIBE_SOCKET_STATUS');
       }

@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import { useStorage } from '@vueuse/core';
 import { v4 } from 'uuid'
 import store from '.'
+import User, { IUser } from '@/models/User'
 
 const { VITE_LS_PREFIX = 'stv' } = import.meta.env;
 
@@ -14,6 +15,11 @@ function prefixed(key: string) {
   return `${VITE_LS_PREFIX}.${key}`
 }
 
+interface StoreType extends Record<string, any> {
+  user?: IUser
+  uuid: string
+}
+
 export const useInvStore = defineStore('inv', {
   state: () => ({
     currentStorageId: useStorage<string>(prefixed('CURRENT_STORAGE'), ''),
@@ -21,7 +27,8 @@ export const useInvStore = defineStore('inv', {
     scannedBarcode: undefined,
     uuid: v4(),
     clientDataId: useStorage<string>(prefixed('CLIENT_DATA_ID'), v4()),
-  }),
+    user: undefined
+  } as StoreType),
   getters: {
     authToken() {
       return store.getters['auth/ACCESS_TOKEN'] as string
@@ -35,11 +42,17 @@ export const useInvStore = defineStore('inv', {
     }
   },
   actions: {
+    hasRole(role: string) {
+      return this.user?.roles[role]
+    },
     clearBarcode() {
       this.scannedBarcode = undefined;
     },
     resetUUID() {
       this.uuid = v4()
     },
+    async initUser() {
+      this.user = await User.findByID('me')
+    }
   },
 });

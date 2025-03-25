@@ -50,13 +50,16 @@ import type Language from '@/models/Languages'
 import { Languages } from '@/models/Languages'
 import groupBy from 'lodash/groupBy'
 import map from 'lodash/map'
+import { useInvStore } from '@/store/invStore'
 
+const store = useInvStore()
 const route = useRoute()
 const languages: Language[] = [...Languages]
 
 const menu = computed(() => {
   const items = routes
     .filter(({ meta }) => !meta || !meta.menuHidden)
+    .filter(({ meta }) => !meta?.role || store.hasRole(meta.role))
     .map(({ name, path, meta }) => ({
       path,
       name,

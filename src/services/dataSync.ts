@@ -233,7 +233,9 @@ export async function authGuard(to: RouteRecord, from: RouteRecord, next: NextCa
 
   const authorized = store.getters['auth/IS_AUTHORIZED']
 
-  if (to.meta.public) {
+  const { role: needRole, public: isPublic } = to.meta
+
+  if (isPublic) {
     next()
     return
   }
@@ -247,6 +249,16 @@ export async function authGuard(to: RouteRecord, from: RouteRecord, next: NextCa
       },
     })
     return
+  }
+
+  if (needRole) {
+    const store = useInvStore()
+    if (!store.user) {
+      await store.initUser()
+    }
+    if (!store.hasRole(needRole as string)) {
+      return next({ path: '/' })
+    }
   }
 
   try {
@@ -293,7 +305,8 @@ const LOADERS: Map<RegExp, LoaderFn> = new Map([
   }],
   [/users?/, async () => {
     await User.fetchSubscribed()
-  }]
+    await Employee.fetchSubscribed()
+  }],
 ])
 
 async function fetchEmployees() {
