@@ -28,15 +28,15 @@
             @click="onAdd()"
             :disabled="!siteId"
           )
-      resize#stock-operation-scroll(
+      resize(
         :padding="40"
       )
         template(#default="{ resized }")
           el-auto-resizer
             template(#default="{ width }")
               service-task-table(
-                :height="resized"
                 :service-tasks="serviceTasks"
+                :height="resized"
                 :width="width"
                 @edit-click="onEdit"
                 @show-history-click="t => onEdit(t, 'history')"
