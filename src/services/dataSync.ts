@@ -291,6 +291,9 @@ const LOADERS: Map<RegExp, LoaderFn> = new Map([
     await subscribeChanges(['ServiceTask', 'ServiceTaskHistory'], fetchServiceTasks)
     await subscribeChanges('Employee', fetchEmployees)
   }],
+  [/users?/, async () => {
+    await User.fetchSubscribed()
+  }]
 ])
 
 async function fetchEmployees() {

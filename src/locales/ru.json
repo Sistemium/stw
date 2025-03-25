@@ -15,6 +15,8 @@
   "typeToSearch": "Наберите несколько букв для поиска",
   "menu": {
     "about": "О программе",
+    "active": "Активные",
+    "inactive": "Неактивные",
     "articlePricing": "Прайс-лист",
     "pricing": "Прайс-листы",
     "auth": "Вход в систему",
@@ -35,7 +37,10 @@
     "stockWithdrawing": "Выдача со склада",
     "stockPeriod": "Остатки",
     "reports": "Отчёты",
-    "measurements": "Измерения"
+    "serviceTasks": "Задания",
+    "measurements": "Измерения",
+    "other": "Прочее",
+    "users": "Пользователи"
   },
   "reports": {
     "stockMovement": "Перемещения"
@@ -46,7 +51,9 @@
     "regCode": "Код предприятия",
     "vatCode": "НСД код",
     "name": "Название",
+    "firstName": "Имя",
     "email": "Е-мейл",
+    "phone": "Номер тел.",
     "date": "Дата",
     "ndoc": "№ документа",
     "series": "Серия",

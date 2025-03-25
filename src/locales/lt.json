@@ -39,7 +39,8 @@
     "reports": "Ataskaitos",
     "serviceTasks": "Užduotys",
     "measurements": "Išmatavimai",
-    "other": "Kita"
+    "other": "Kita",
+    "users": "Naudotojai"
   },
   "reports": {
     "stockMovement": "Perkelimai"
@@ -57,7 +58,9 @@
     "regCode": "Įmonės kodas",
     "vatCode": "PVM kodas",
     "name": "Pavadinimas",
+    "firstName": "Vardas",
     "email": "El. paštas",
+    "phone": "Tel. numeris",
     "date": "Data",
     "ndoc": "Dok. nr.",
     "series": "Serija",
@@ -259,7 +262,8 @@
     "legalEntity": "Įmonės",
     "recipe": "Recepto",
     "serviceTask": "Užduoties",
-    "productionItem": "Gamybos pozicijos"
+    "productionItem": "Gamybos pozicijos",
+    "user": "Naudotojo"
   },
   "shortened": {
     "positions": "poz",
