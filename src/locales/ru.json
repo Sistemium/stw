@@ -106,6 +106,7 @@
     "units": "Количество единиц",
     "package": "Упаковка",
     "processing": "Статус",
+    "roles": "Роли",
     "storage": "Склад",
     "naming": "Часть названия",
     "initUnits": "Вх. остаток",
@@ -268,5 +269,8 @@
   "after": {
     "stockReceiving": "после прихода",
     "withVat": "с НДС"
+  },
+  "roles": {
+    "admin": "Админ"
   }
 }

@@ -114,6 +114,7 @@
     "units": "Vienetų kiekis",
     "package": "Pakavimas",
     "processing": "Būsena",
+    "roles": "Vaidmenys",
     "storage": "Sandėlis",
     "naming": "Pavadinimo dalis",
     "initUnits": "Pradinis",
@@ -294,5 +295,8 @@
   "after": {
     "stockReceiving": "po priemimo",
     "withVat": "su PVM"
+  },
+  "roles": {
+    "admin": "Admin"
   }
 }

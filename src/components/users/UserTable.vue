@@ -23,6 +23,7 @@ import max from 'lodash/max'
 import { t } from '@/lib/validations'
 import ToolButton from '@/lib/ToolButton.vue'
 import Employee from '@/models/Employee'
+import RoleTags from '@/components/users/RoleTags.vue'
 
 const props = withDefaults(defineProps<{
   users: IUser[]
@@ -43,7 +44,7 @@ const emit = defineEmits<{
 
 const rowClass = (row: { rowData: IUser }) => (row.rowData.id === props.activeId) ? 'active' : ''
 const columns = computed(() => {
-  const count = 3.5
+  const count = 4.5
   const { columnWidth } = props
   const nameWidth = max([props.width - columnWidth * count - 6 - 300, 300]) || 0
   const width = max([Math.floor((props.width - nameWidth - 6 - 60) / count), columnWidth]) || 0
@@ -73,6 +74,14 @@ const columns = computed(() => {
       dataKey: 'masterId',
       cellRenderer: ({ cellData }) =>
         <span>{ Employee.reactiveGet(cellData)?.name }</span>
+    },
+    {
+      width,
+      align: 'left',
+      title: t('fields.roles'),
+      dataKey: 'roles',
+      cellRenderer: ({ cellData }) =>
+        <RoleTags roles={cellData}></RoleTags>
     },
     {
       key: 'buttons',

@@ -106,6 +106,7 @@
     "units": "Units quantity",
     "package": "Package",
     "processing": "Status",
+    "roles": "Roles",
     "storage": "Storage",
     "naming": "Part of name",
     "ord": "Order number",
@@ -272,5 +273,8 @@
   "after": {
     "stockReceiving": "after receiving",
     "withVat": "inc. VAT"
+  },
+  "roles": {
+    "admin": "Admin"
   }
 }
