@@ -9,7 +9,7 @@ export interface IUser extends ApiModel {
     admin?: boolean
     masterIds?: string[]
   },
-  masterId?: string
+  employeeId?: string
 }
 
 export default new Model<IUser>({

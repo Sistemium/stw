@@ -71,7 +71,7 @@ const columns = computed(() => {
       width,
       align: 'left',
       title: t('fields.employee'),
-      dataKey: 'masterId',
+      dataKey: 'employeeId',
       cellRenderer: ({ cellData }) =>
         <span>{ Employee.reactiveGet(cellData)?.name }</span>
     },

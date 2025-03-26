@@ -22,10 +22,10 @@ el-form(
     el-input(v-model="model.email")
   el-form-item(
     :label="$t('fields.employee')"
-    prop="masterId"
+    prop="employeeId"
   )
     employee-select(
-      v-model="model.masterId"
+      v-model="model.employeeId"
       site-id="*"
     )
 </template>
