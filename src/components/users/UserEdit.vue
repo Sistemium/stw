@@ -5,7 +5,7 @@ drawer-edit.user-edit(
   :destroy-fn="destroyFn"
   :model-origin="modelOrigin"
   :from="from"
-  :deletable="false"
+  :deletable="!!modelOrigin.id"
   :validate-fn="formRef?.validate"
 )
   template(#default="{ model }")
@@ -24,8 +24,7 @@ import { useFormValidate } from '@/services/validating'
 import UserForm from '@/components/users/UserForm.vue'
 
 const { form: formRef } = useFormValidate()
-const destroyFn = undefined
-const { saveFn } = useDrawerEditing(User)
+const { saveFn, destroyFn } = useDrawerEditing(User)
 const modelOrigin = computed<Partial<IUser>>(() => {
   return props.userId && User.reactiveGet(props.userId) || {}
 })
@@ -37,7 +36,3 @@ const props = defineProps<{
 }>()
 
 </script>
-
-<style scoped lang="scss">
-@import "@/styles/variables.scss";
-</style>
