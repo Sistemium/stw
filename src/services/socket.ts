@@ -91,6 +91,9 @@ export function bindEvents() {
       case 'IDB-RESPONSE': {
         return
       }
+      case 'reload': {
+        return window.location.reload()
+      }
       default: {
         debug('sw:', type)
       }

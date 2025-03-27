@@ -74,17 +74,21 @@ export async function DATA(event: ExtendableMessageEvent) {
   }
 
   const backend = await requestFromBackend(request)
-  if (request.type === 'destroy' && request.id) {
-    if ([204, 404, 200].includes(backend.status)) {
-      await hasTable(request.entity)?.delete(request.id)
-      backend.status = 204
+
+  if (useOffset) {
+    if (request.type === 'destroy' && request.id) {
+      if ([204, 404, 200].includes(backend.status)) {
+        await hasTable(request.entity)?.delete(request.id)
+        backend.status = 204
+      }
+    } else if (backend.status === 200) {
+      await saveData(request.entity, backend.data)
     }
-  } else if(backend.status === 200) {
-    await saveData(request.entity, backend.data)
+    if (useOffset && [204, 200].includes(backend.status)) {
+      await saveOffset(request.entity, backend.headers[OFFSET_HEADER])
+    }
   }
-  if (useOffset && [204, 200].includes(backend.status)) {
-    await saveOffset(request.entity, backend.headers[OFFSET_HEADER])
-  }
+
   reply(backend)
 
   function reply(params: Partial<IDBResponse>) {
@@ -182,12 +186,25 @@ export async function fetchEntity(entity: string) {
 export async function processDeleted(deletes: Record<string, any>) {
   await eachSeries(deletes, async (doc: Record<string, any>) => {
     const { name, objectXid } = doc
+    if (name === '*') {
+      await rebuild()
+      throw Error('rebuild:done')
+    }
     if (!objectXid || !name) {
       return
     }
     await hasTable(name)?.delete(objectXid)
     notifyClients({ type: 'changes', payload: { collection: 'RecordStatus', fullDocument: doc } })
   })
+}
+
+async function rebuild() {
+  const tables = db.tables.filter(t => /^[A-Z]/.test(t.name))
+  await eachSeries(tables, async ({ name }) => {
+    await db.table(name).clear()
+  })
+  await db.offset.clear()
+  notifyClients({ type: 'reload' })
 }
 
 async function fetchBackend(query: BackendQuery): Promise<BackendResponse> {
