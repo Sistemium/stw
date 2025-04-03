@@ -14,7 +14,7 @@
         v-model="date"
         format="YYYY-MM-DD"
       )
-      employee-select(v-model="masterId")
+      employee-select(v-model="masterId" :site-id="siteId")
     .tools
       search-input(v-model="search")
       tool-button(
