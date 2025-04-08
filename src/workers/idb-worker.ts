@@ -232,7 +232,7 @@ async function fetchBackend(query: BackendQuery): Promise<BackendResponse> {
       const data = await res.json()
       return { data, headers, status }
     } else if (status === 204) {
-      return { headers, status }
+      return { headers, status, data: query.id ? undefined : [] }
     } else if (status === 400) {
       return { headers, error: await res.text(), status }
     }
