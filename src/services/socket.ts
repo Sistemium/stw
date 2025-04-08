@@ -121,9 +121,6 @@ export async function subscribeChanges(keys: string | string[], callback: Subscr
   }
   const arr = typeof keys === 'string' ? [keys] : keys
   arr.forEach(key => {
-    if (SUBS.get(key)) {
-      return
-    }
     SUBS.set(key, callback)
   })
 }
