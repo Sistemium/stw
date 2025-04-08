@@ -43,7 +43,7 @@ export const useInvStore = defineStore('inv', {
   },
   actions: {
     hasRole(role: string) {
-      return this.user?.roles[role]
+      return this.user?.roles && this.user.roles[role]
     },
     clearBarcode() {
       this.scannedBarcode = undefined;
