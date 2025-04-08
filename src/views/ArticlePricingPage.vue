@@ -9,7 +9,7 @@
     )
   .filters(v-if="pricing")
     .searchers
-      site-select(v-model="siteId" :auto-select="pricing.requireSite")
+      site-select(v-model="siteId" :auto-select="pricing?.requireSite")
       date-string-picker(
         v-model="date"
         format="YYYY-MM-DD"
