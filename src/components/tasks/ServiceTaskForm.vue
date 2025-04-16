@@ -44,6 +44,11 @@
         type="textarea"
         :model-value="address"
       )
+    service-list-input(
+      v-if="model.services"
+      v-model="model.services"
+      ref="servicesForm"
+    )
     el-form-item.description(
       :label="$t('fields.description')"
       prop="description"
@@ -64,7 +69,7 @@
 </template>
 
 <script setup lang="ts">
-import { useFormValidate } from '@/services/validating'
+import { type FormValidateCallback, useFormValidate } from '@/services/validating'
 import { $requiredRule } from '@/lib/validations'
 import { computed, watch } from 'vue'
 import { type IServiceTask, serviceTaskWorkflow } from '@/models/ServiceTask'
@@ -76,10 +81,22 @@ import WorkflowProcessing from '@/lib/WorkflowProcessing.vue'
 import ServicePointCustomer from '@/models/ServicePointCustomer'
 import SiteSelect from '@/components/select/SiteSelect.vue'
 import { fetchServiceTask } from '@/services/dataSync'
+import ServiceListInput from '@/components/tasks/ServiceListInput.vue'
 
 const { form, validate } = useFormValidate()
+const { form: servicesForm, validate: servicesFormValidate } = useFormValidate()
 
-defineExpose({ validate })
+defineExpose({
+  validate(cb: FormValidateCallback) {
+    return validate(res => {
+      if (!res || !servicesForm.value) {
+        cb(res)
+      } else {
+        servicesFormValidate(cb)
+      }
+    })
+  },
+})
 
 const props = defineProps<{
   model: IServiceTask
@@ -88,9 +105,12 @@ const props = defineProps<{
 const address = computed(() => ServicePointCustomer.reactiveGet(props.model.servicePointId)?.address)
 
 const rules = computed(() => {
-  const required = ['date', 'description', 'siteId',]
-  if (!['draft',  'rejected', 'cancelled'].includes(props.model.processing)) {
+  const required = ['date', 'siteId']
+  if (!['draft', 'rejected', 'cancelled'].includes(props.model.processing)) {
     required.push('assigneeId')
+  }
+  if (!props.model.services?.find(({ articleId }) => !!articleId)) {
+    required.push('description')
   }
   return $requiredRule(required)
 })

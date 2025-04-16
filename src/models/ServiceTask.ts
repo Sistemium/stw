@@ -6,6 +6,11 @@ import { IEmployee } from '@/models/Employee'
 
 // import { HydratedModel } from 'sistemium-data-vue'
 
+export interface ServiceTaskService {
+  articleId: string
+  price: number
+}
+
 export interface IServiceTask extends ApiModel {
   date: string
   description: string
@@ -15,6 +20,7 @@ export interface IServiceTask extends ApiModel {
   servicePointId: string
   counterpartyType: string
   creatorId?: string
+  services: ServiceTaskService[]
 }
 
 export interface HydratedServiceTask extends IServiceTask {

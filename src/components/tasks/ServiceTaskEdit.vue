@@ -85,6 +85,7 @@ const modelOrigin = computed<Partial<HydratedServiceTask>>(() =>
     siteId: route.query.siteId as string,
     processing: 'draft',
     assigneeId: undefined,
+    services: [],
   })
 
 const { form: formRef } = useFormValidate()
