@@ -47,7 +47,7 @@ const columns = computed<ColumnInfo[]>(() => {
         <ArticleAvatar
           article-id={rowData.articleId}
           onClick={(e: Event) => {
-            e.stopPropagation()
+            e?.stopPropagation()
             emit('avatarClick', rowData)
           }}
         ></ArticleAvatar>,
