@@ -199,7 +199,7 @@ function mapLastPrice(items: IArticlePricing[]) {
   return orderBy(filtered, 'date').at(-1)
 }
 
-async function onPriceChange(articleId: string, price: number) {
+async function onPriceChange(articleId: string, price?: number | null) {
   const existing = articlePricing.value.find(ap => {
     return ap.articleId === articleId
       && ap.date === date.value
@@ -209,12 +209,12 @@ async function onPriceChange(articleId: string, price: number) {
   loading.value = true
   try {
     if (existing?.id) {
-      if (!price) {
+      if (price === undefined || price === null) {
         await ArticlePricing.destroy(existing.id)
       } else {
         await ArticlePricing.updateOne({ id: existing.id, price })
       }
-    } else if (price) {
+    } else if (price !== null) {
       await ArticlePricing.createOne({
         date: date.value,
         pricingId: pricingId.value,
