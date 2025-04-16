@@ -79,6 +79,7 @@
     "valueType": "Value type",
     "required": "Required",
     "isSKU": "Is an SKU",
+    "isService": "Is a service",
     "bool": {
       "yes": "Yes",
       "no": "No"
@@ -224,6 +225,7 @@
     "property": "property",
     "profile": "Profile",
     "picture": "picture",
+    "service": "service",
     "storage": "storage",
     "stockTaking": "stockTaking",
     "position": "position",

@@ -86,6 +86,7 @@
     "valueType": "Duomenų tipas",
     "required": "Privaloma",
     "isSKU": "Skaičiuoti likutį",
+    "isService": "Ar paslauga",
     "bool": {
       "yes": "Taip",
       "no": "Ne"
@@ -234,6 +235,7 @@
     "property": "ypatybę",
     "profile": "Profilį",
     "picture": "nuotrauką",
+    "service": "paslaugą",
     "storage": "sandėlį",
     "stockTaking": "inventorizaciją",
     "position": "poziciją",
