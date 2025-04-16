@@ -27,10 +27,12 @@ const props = defineProps<{
 
 const { saveFn, destroyFn } = useDrawerEditing(Pricing)
 
-const modelOrigin = computed<Partial<IPricing>>(() => props.pricingId ? Pricing.reactiveGet(props.pricingId) : {
-  name: '',
-  vatPrices: true,
-})
+const modelOrigin = computed<Partial<IPricing>>(() => props.pricingId
+  && Pricing.reactiveGet(props.pricingId)
+  || {
+    name: '',
+    vatPrices: true,
+  })
 
 
 </script>
