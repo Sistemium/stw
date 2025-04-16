@@ -56,7 +56,7 @@ export function stockTakingItemInstance(item: STI) {
     measureUnitId: null,
 
     deviceCts: new Date().toJSON(),
-  };
+  }
 }
 
 export interface CounterPartyRef extends Record<string, any> {
@@ -65,7 +65,7 @@ export interface CounterPartyRef extends Record<string, any> {
 }
 
 export function stockOperationItemInstance(operationName: StockOperationName, props: Record<string, any>) {
-  const { stockOperationId } = props;
+  const { stockOperationId } = props
   return {
     [`${operationName}Id`]: stockOperationId,
     articleId: null,
@@ -83,28 +83,23 @@ export function stockOperationItemInstance(operationName: StockOperationName, pr
     price: null,
     vatPrice: null,
     ...omit(props, 'stockOperationId'),
-  };
+  }
 }
 
-export const CONSIGNEE_TYPES = new Map<CounterpartyType, HybridDataModel<BaseItem>>([
+export const CONSIGNEE_TYPES = new Map<CounterpartyType | undefined, HybridDataModel<BaseItem> | null>([
   ['Person', Person],
   ['LegalEntity', LegalEntity],
   ['Storage', Storage],
-]);
+  [undefined, null],
+])
 
 export function counterpartyModel(type: CounterpartyType) {
-  return type && CONSIGNEE_TYPES.get(type);
+  return type && CONSIGNEE_TYPES.get(type)
 }
 
-export function getCounterparty({ counterpartyType, counterpartyId }: CounterPartyRef) {
-  if (!counterpartyType) {
-    return null
-  }
-  const model = CONSIGNEE_TYPES.get(counterpartyType);
-  if (!model || !counterpartyId) {
-    return null;
-  }
-  return model.reactiveGet(counterpartyId);
+export function getCounterparty(record: CounterPartyRef) {
+  const model = CONSIGNEE_TYPES.get(record?.counterpartyType)
+  return model?.reactiveGet(record?.counterpartyId || undefined) || null
 }
 
 interface StockOperationViewData extends StockOperation {
@@ -118,13 +113,13 @@ interface StockOperationViewData extends StockOperation {
 
 export function stockOperationToViewData(item: StockOperation, positionsModel: Model, operationName: StockOperationName): StockOperationViewData {
   // const childFilter = { [`${operationName}Id`]: item.id };
-  const counterparty = getCounterparty(item);
-  const positions: BaseItem[] = positionsModel.reactiveManyByIndex(`${operationName}Id`, item.id as string);
-  const priceField = configPriceField(operationName);
-  const costFn = (p: BaseItem) => (p[priceField] || 0) * (p.units || 0);
+  const counterparty = getCounterparty(item)
+  const positions: BaseItem[] = positionsModel.reactiveManyByIndex(`${operationName}Id`, item.id as string)
+  const priceField = configPriceField(operationName)
+  const costFn = (p: BaseItem) => (p[priceField] || 0) * (p.units || 0)
   // const products = operationName === 'stockWithdrawing'
   //   ? StockWithdrawingProduct.reactiveFilter(childFilter) : [];
-  const totalCost = sumBy(positions, costFn);
+  const totalCost = sumBy(positions, costFn)
   return {
     ...item,
     // @ts-ignore
@@ -136,51 +131,51 @@ export function stockOperationToViewData(item: StockOperation, positionsModel: M
     // productsCount: products.length,
     units: sumBy(positions, 'units'),
     totalCost,
-  };
+  }
 }
 
 export function vatConfig(date: Date | string = new Date()) {
-  const stringDate = isDate(date) ? date.toISOString() : date;
+  const stringDate = isDate(date) ? date.toISOString() : date
   const [config] = Configuration.reactiveFilter({
     type: 'vat',
     dateB: { $lte: stringDate },
     dateE: { $gte: stringDate },
-  });
-  return (config || { defaultRate: 0 }) as VatConfig;
+  })
+  return (config || { defaultRate: 0 }) as VatConfig
 }
 
 type RecordPredicate = (_: BaseItem) => boolean
 
 export function searchOperations(search: string, itemsModel: Model, parentKey: string): RecordPredicate {
   if (!search) {
-    return () => true;
+    return () => true
   }
-  const re = likeLt(search);
+  const re = likeLt(search)
   return (operation: BaseItem) => {
-    const { commentText, counterpartyId, counterpartyType } = operation;
+    const { commentText, counterpartyId, counterpartyType } = operation
     return re.test(commentText)
       || re.test(operation.ndoc)
       || (counterpartyType === 'LegalEntity' && counterPartyTest(LegalEntity, counterpartyId, re))
       || (counterpartyType === 'Storage' && counterPartyTest(Storage, counterpartyId, re))
-      || !!positionsTest(itemsModel.reactiveManyByIndex(parentKey, operation.id), re);
-  };
+      || !!positionsTest(itemsModel.reactiveManyByIndex(parentKey, operation.id), re)
+  }
 }
 
 function counterPartyTest(model: Model, id: string, re: RegExp) {
-  return re.test(get(model.reactiveGet(id) as Record<string, any>, 'name'));
+  return re.test(get(model.reactiveGet(id) as Record<string, any>, 'name'))
 }
 
-function positionsTest(positions: { articleId?: string}[], re: RegExp) {
+function positionsTest(positions: { articleId?: string }[], re: RegExp) {
   if (!positions) {
-    return false;
+    return false
   }
-  return positions.find(({ articleId }) => testArticle(Article.reactiveGet(articleId), re));
+  return positions.find(({ articleId }) => testArticle(Article.reactiveGet(articleId), re))
 }
 
 export function configPriceField(operationName: StockOperationName, date: Date | string = new Date()) {
-  const { rules } = vatConfig(date);
-  const vatPrices = rules && rules.vatPrices[operationName];
-  return vatPrices ? 'vatPrice' : 'price';
+  const { rules } = vatConfig(date)
+  const vatPrices = rules && rules.vatPrices[operationName]
+  return vatPrices ? 'vatPrice' : 'price'
 }
 
 export async function findStockPeriod(storageId: string, dateB: string | Date, dateE: string | Date) {
@@ -188,17 +183,17 @@ export async function findStockPeriod(storageId: string, dateB: string | Date, d
     storageId,
     dateB,
     dateE,
-  }, { cacheResponse: false });
+  }, { cacheResponse: false })
   const res = data.map(item => {
-    const article = Article.getByID(item.articleId);
+    const article = Article.getByID(item.articleId)
     return {
       ...item,
       article,
       articleName: get(article, 'name'),
-    };
+    }
   })
-    .filter(({ article }) => article);
-  return orderBy(res, ['articleName', 'article.code']) as (IStockPeriod & { article: IArticle })[];
+    .filter(({ article }) => article)
+  return orderBy(res, ['articleName', 'article.code']) as (IStockPeriod & { article: IArticle })[]
 }
 
 export async function findStockPeriodOperations(articleId: string, storageId: string, dateB: Date, dateE: Date) {
@@ -209,39 +204,39 @@ export async function findStockPeriodOperations(articleId: string, storageId: st
       $lt: dateE,
       $gt: dateB,
     },
-  }, { cacheResponse: false });
+  }, { cacheResponse: false })
   const res = orderBy(data, 'date')
-    .map(({ operations }) => operations);
-  const { fix, in: incoming, out } = groupBy(flatten(res), 'operationType');
+    .map(({ operations }) => operations)
+  const { fix, in: incoming, out } = groupBy(flatten(res), 'operationType')
   return {
     fix: fix && await loadOperationsFix(fix),
     in: incoming && await loadOperationsIn(incoming),
     out: out && await loadOperationsOut(out),
-  };
+  }
 }
 
 async function loadOperationsIn(operations: BaseItem[] = []) {
-  return loadOperationsInOut(operations, StockReceivingItem, StockReceiving, 'stockReceivingId');
+  return loadOperationsInOut(operations, StockReceivingItem, StockReceiving, 'stockReceivingId')
 }
 
 async function loadOperationsOut(operations: BaseItem[] = []) {
-  return loadOperationsInOut(operations, StockWithdrawingItem, StockWithdrawing, 'stockWithdrawingId');
+  return loadOperationsInOut(operations, StockWithdrawingItem, StockWithdrawing, 'stockWithdrawingId')
 }
 
 async function loadOperationsFix(operations: BaseItem[] = []) {
-  return loadOperationsInOut(operations, StockTakingItem, StockTaking, 'stockTakingId');
+  return loadOperationsInOut(operations, StockTakingItem, StockTaking, 'stockTakingId')
 }
 
 async function loadOperationsInOut(operations: BaseItem[], itemsModel: Model, parentModel: Model, relation: string) {
-  const ids = map(operations, 'operationId');
-  await loadNotCachedIds(itemsModel, ids);
-  const items = itemsModel.filter({ id: { $in: ids } });
-  await loadRelation(parentModel, items, relation);
-  const parentIds = uniq(filter(map(items, relation)));
-  const parents = parentModel.filter({ id: { $in: parentIds } });
-  await loadCounterparty(parents as CounterPartyRef[]);
+  const ids = map(operations, 'operationId')
+  await loadNotCachedIds(itemsModel, ids)
+  const items = itemsModel.filter({ id: { $in: ids } })
+  await loadRelation(parentModel, items, relation)
+  const parentIds = uniq(filter(map(items, relation)))
+  const parents = parentModel.filter({ id: { $in: parentIds } })
+  await loadCounterparty(parents as CounterPartyRef[])
   const res = items.map(operation => {
-    const parent = parentModel.getByID(operation[relation]);
+    const parent = parentModel.getByID(operation[relation])
     if (!parent) {
       throw Error('Empty parent in loadOperationsInOut')
     }
@@ -251,18 +246,18 @@ async function loadOperationsInOut(operations: BaseItem[], itemsModel: Model, pa
       counterParty: getCounterparty(parent as CounterPartyRef),
       parentId: parent.id,
       commentText: parent.commentText,
-    };
-  });
-  return orderBy(res, 'date');
+    }
+  })
+  return orderBy(res, 'date')
 }
 
 async function loadCounterparty(records: CounterPartyRef[] = []) {
-  const withLegalEntity = filter(records, { counterpartyType: 'LegalEntity' });
-  await loadRelation(LegalEntity, withLegalEntity, 'counterpartyId');
-  const withPerson = filter(records, { counterpartyType: 'Person' });
-  await loadRelation(Person, withPerson, 'counterpartyId');
-  const withStorage = filter(records, { counterpartyType: 'Storage' });
-  await loadRelation(Storage, withStorage, 'counterpartyId');
+  const withLegalEntity = filter(records, { counterpartyType: 'LegalEntity' })
+  await loadRelation(LegalEntity, withLegalEntity, 'counterpartyId')
+  const withPerson = filter(records, { counterpartyType: 'Person' })
+  await loadRelation(Person, withPerson, 'counterpartyId')
+  const withStorage = filter(records, { counterpartyType: 'Storage' })
+  await loadRelation(Storage, withStorage, 'counterpartyId')
 }
 
 
@@ -271,6 +266,6 @@ export function stockArticleDateReactive(storageId: string, articleId: string, d
   return many.filter(stock => {
     return stock.storageId === storageId
       && stock.date <= date
-      && stock.nextDate >= date;
-  })[0];
+      && stock.nextDate >= date
+  })[0]
 }
