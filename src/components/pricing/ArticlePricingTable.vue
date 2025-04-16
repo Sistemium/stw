@@ -58,7 +58,7 @@ const emit = defineEmits<{
 const invStore = useInvStore();
 const currentStorageId = computed(() => invStore.currentStorageId);
 
-const columns = computed<Column[]>(() => {
+const columns = computed(() => {
   const count = 4
   const { columnWidth } = props
   const nameWidth = max([props.width - columnWidth * count - 6 - 60, 250]) || 0
@@ -72,7 +72,7 @@ const columns = computed<Column[]>(() => {
         <ArticleAvatar
           article-id={rowData.articleId}
           onClick={(e: Event) => {
-            e.stopPropagation()
+            e?.stopPropagation()
             emit('avatarClick', rowData)
           }}
         ></ArticleAvatar>,
@@ -118,7 +118,7 @@ const columns = computed<Column[]>(() => {
       minWidth: 60,
       cellRenderer: props.editing ? renderInput : renderSpan,
     },
-  ]
+  ] as Column[]
 })
 
 const priceMap = reactive<Map<string, number>>(new Map())
