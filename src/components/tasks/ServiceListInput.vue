@@ -15,6 +15,7 @@
       article-select(
         v-model="service.articleId"
         :filters="articleFilter"
+        @update:model-value="v => onArticle(v, idx)"
       )
     price-form(
       :model="service"
@@ -36,11 +37,13 @@ import ArticleSelect from '@/components/catalogue/ArticleSelect.vue'
 import PriceForm from '@/components/out/PriceForm.vue'
 import { eachSeries } from 'async'
 import { safeT } from '@/i18n'
+import { getPricing } from '@/services/pricing'
 
 const services: Ref<Partial<ServiceTaskService>[]> = defineModel({ default: [] })
 const articleFilter = { isService: true }
 const itemRefs = ref([])
 const rules = $requiredRule(['articleId', 'price'])
+const { VITE_MASTER_PRICING } = import.meta.env
 
 rules.articleId.push({
   validator(rule: any, value: any, callback: any) {
@@ -62,8 +65,11 @@ onBeforeUpdate(() => {
   itemRefs.value = []
 })
 
-defineProps<{
+const props = defineProps<{
   disabled?: boolean
+  date?: string
+  siteId?: string
+  employeeId?: string
 }>()
 
 function onAddMaterial() {
@@ -71,6 +77,13 @@ function onAddMaterial() {
     articleId: undefined,
     price: undefined,
   })
+}
+
+function onArticle(articleId: string, idx: number) {
+  if (!articleId) {
+    return
+  }
+  services.value[idx].price = getPricing(VITE_MASTER_PRICING, articleId, props.date, props.siteId, props.employeeId) || 0
 }
 
 type Validator = (result: boolean) => any

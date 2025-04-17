@@ -16,7 +16,6 @@ el-select-v2.article-select(
   :remote="true"
   :placeholder="placeholderValue"
   placement="bottom-start"
-  @change="changes => emit('update:modelValue', changes)"
   @visible-change="onVisibleChange"
 )
   template(#default="{ item: article }")

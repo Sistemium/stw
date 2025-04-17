@@ -47,6 +47,9 @@
     service-list-input(
       v-if="model.services"
       v-model="model.services"
+      :date="model.date"
+      :site-id="model.siteId"
+      :employee-id="model.assigneeId"
       ref="servicesForm"
     )
     el-form-item.description(

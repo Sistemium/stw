@@ -44,6 +44,7 @@ import packageJson from '../../package.json'
 import { computed } from 'vue'
 
 const { error, debug } = log('dataSync')
+const { VITE_MASTER_PRICING } = import.meta.env
 
 type NextCallback = NavigationGuardNext //(redirect?: Partial<RouteRecord>) => Promise<void>
 
@@ -302,6 +303,7 @@ const LOADERS: Map<RegExp, LoaderFn> = new Map([
   [/serviceTask/, async () => {
     await subscribeChanges(['ServiceTask', 'ServiceTaskHistory'], fetchServiceTasks)
     await subscribeChanges('Employee', fetchEmployees)
+    await subscribeChanges('ArticlePricing', () => fetchArticlePricing(VITE_MASTER_PRICING))
   }],
   [/users?/, async () => {
     await User.fetchSubscribed()
