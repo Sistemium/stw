@@ -10,6 +10,7 @@
   "search": "search",
   "loading": "Loading ...",
   "delete": "Delete",
+  "remove": "Remove",
   "reallyDelete": "Sure to delete?",
   "authorizing": "Authorizing",
   "typeToSearch": "Please type a keyword",
@@ -80,6 +81,7 @@
     "required": "Required",
     "isSKU": "Is an SKU",
     "isService": "Is a service",
+    "service": "Service",
     "bool": {
       "yes": "Yes",
       "no": "No"
@@ -202,7 +204,8 @@
     "formInvalid": "The form is filled out with errors",
     "constrainedDelete": "Can't delete this record because there are \"{0}\"",
     "noData": "No data",
-    "notificationsForbidden": "Notifications are blocked. You can allow them in the browser settings."
+    "notificationsForbidden": "Notifications are blocked. You can allow them in the browser settings.",
+    "uniq": "{0} field values must me unique"
   },
   "actions": {
     "turnOn": "Turn on {0}",

@@ -10,6 +10,7 @@
   "search": "paieška",
   "loading": "Kraunasi ...",
   "delete": "Ištrinti",
+  "remove": "Pašalinti",
   "reallyDelete": "Tikrai ištrinti?",
   "authorizing": "Leidimo suteikimas",
   "typeToSearch": "Įveskite kelias paieškos raides",
@@ -87,6 +88,7 @@
     "required": "Privaloma",
     "isSKU": "Skaičiuoti likutį",
     "isService": "Ar paslauga",
+    "service": "Paslauga",
     "bool": {
       "yes": "Taip",
       "no": "Ne"
@@ -211,7 +213,8 @@
     "formInvalid": "Klaidingai užpildyta forma",
     "constrainedDelete": "Negalima ištrinti šio įrašo, nes yra \"{0}\"",
     "noData": "Nėra duomenų",
-    "notificationsForbidden": "Pranešimai užblokuoti. Galite juos leisti naršyklės nustatymuose."
+    "notificationsForbidden": "Pranešimai užblokuoti. Galite juos leisti naršyklės nustatymuose.",
+    "uniq": "Laukelio \"{0}\" reikšmės turi būti unikalios"
   },
   "actions": {
     "turnOn": "Įjungti {0}",
