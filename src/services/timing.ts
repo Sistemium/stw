@@ -47,3 +47,7 @@ function updateToday() {
 export function todayStringDate() {
   return dayjs().toJSON()
 }
+
+export function dateFormat(date?: string | Date) {
+  return dayjs(date).format('YYYY-MM-DD')
+}

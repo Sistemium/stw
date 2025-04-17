@@ -38,6 +38,7 @@ import PriceForm from '@/components/out/PriceForm.vue'
 import { eachSeries } from 'async'
 import { safeT } from '@/i18n'
 import { getPricing } from '@/services/pricing'
+import { dateFormat } from '@/services/timing'
 
 const services: Ref<Partial<ServiceTaskService>[]> = defineModel({ default: [] })
 const articleFilter = { isService: true }
@@ -83,7 +84,7 @@ function onArticle(articleId: string, idx: number) {
   if (!articleId) {
     return
   }
-  services.value[idx].price = getPricing(VITE_MASTER_PRICING, articleId, props.date, props.siteId, props.employeeId) || 0
+  services.value[idx].price = getPricing(VITE_MASTER_PRICING, articleId, dateFormat(props.date), props.siteId, props.employeeId) || 0
 }
 
 type Validator = (result: boolean) => any

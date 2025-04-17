@@ -325,7 +325,7 @@ export async function fetchServiceTasks() {
 }
 
 export async function fetchServiceTask(serviceTaskId: string) {
-  const task = await ServiceTask.findOne({ serviceTaskId })
+  const task = await ServiceTask.findOne({ id: serviceTaskId })
   if (!task) {
     return
   }
