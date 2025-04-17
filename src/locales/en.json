@@ -48,7 +48,14 @@
   },
   "fields": {
     "address": "Address",
+    "assignee": "Assignee",
+    "assigned": "Assigned",
     "commentText": "Commentary",
+    "comment": "Commentary",
+    "created": "Created",
+    "creator": "Creator",
+    "description": "Description",
+    "events": "Events",
     "regCode": "Registration number",
     "vatCode": "VAT number",
     "name": "Name",
@@ -62,6 +69,7 @@
     "tare": "Tare",
     "supplierCode": "Supplier code",
     "producerCode": "Manufacturer code",
+    "customer": "Customer",
     "counterparty": {
       "Storage": "Storage",
       "LegalEntity": "Legal entity",
@@ -173,13 +181,16 @@
     "articleProperty": "Property",
     "article": "Article",
     "facility": "Facility",
+    "history": "History",
     "personal": "Personal",
     "storage": "Storage",
+    "site": "Site",
     "image": "Image",
     "settings": "Parameters",
     "items": "Items",
     "production": "Production",
     "person": "Person",
+    "serviceTask": "Service task",
     "legalEntity": "Legal entity",
     "unknown": "Unknown",
     "unitPackageType": "Unit package type",
@@ -210,6 +221,7 @@
   "actions": {
     "turnOn": "Turn on {0}",
     "turnOff": "Turn off {0}",
+    "comment": "Send message",
     "act": "Declaration of {0}",
     "add": "Add {0}",
     "show": "Show {0}",
@@ -240,7 +252,8 @@
     "article": "article",
     "pricing": "pricing",
     "employee": "employee",
-    "site": "department"
+    "site": "department",
+    "statuses": "statuses"
   },
   "genitive": {
     "pricing": "Pricing",
@@ -256,6 +269,7 @@
     "stockReceivingItem": "Stock receiving item",
     "legalEntity": "Legal entity",
     "recipe": "Recipe",
+    "serviceTask": "Service task",
     "productionItem": "Production item",
     "user": "User"
   },
@@ -267,13 +281,23 @@
     "selfCost": "s.c."
   },
   "workflow": {
+    "accept": "Accept",
+    "accepted": "Accepted",
+    "assign": "Assign",
+    "cancelled": "Cancelled",
+    "unassign": "Unassign",
+    "rejected": "Rejected",
+    "reject": "Reject",
     "start": "Start",
     "finish": "Finalize",
     "progress": "In progress",
     "continue": "Continue",
     "finished": "Finished",
     "planned": "Planned",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "draft": "Draft",
+    "makeDraft": "Make draft",
+    "assigned": "Assigned"
   },
   "after": {
     "stockReceiving": "after receiving",

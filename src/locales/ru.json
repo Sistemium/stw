@@ -48,7 +48,14 @@
   },
   "fields": {
     "address": "Адрес",
-    "commentText": "Комментарий",
+    "assignee": "Ответственный",
+    "assigned": "Назначен ответственным",
+    "commentText": "Примечание",
+    "comment": "Комментарий",
+    "created": "Создано",
+    "creator": "Создал",
+    "description": "Описание",
+    "events": "События",
     "regCode": "Код предприятия",
     "vatCode": "НСД код",
     "name": "Название",
@@ -67,6 +74,7 @@
     "tare": "Тара",
     "supplierCode": "Код поставщика",
     "producerCode": "Код производителя",
+    "customer": "Клиент",
     "counterparty": {
       "Storage": "Склад",
       "LegalEntity": "Компания",
@@ -175,13 +183,16 @@
     "articleProperty": "Свойство",
     "article": "Номенклатура",
     "facility": "Помещение",
+    "history": "История",
     "personal": "Персональный",
     "storage": "Склад",
+    "site": "Филиал",
     "image": "Фото",
     "settings": "Параметры",
     "items": "Позиции",
     "production": "Производство",
     "person": "Физлицо",
+    "serviceTask": "Задание",
     "legalEntity": "Юрлицо",
     "unknown": "Не известно",
     "unitPackageType": "Тип изделия",
@@ -207,6 +218,7 @@
   "actions": {
     "turnOn": "Включить {0}",
     "turnOff": "Выключить {0}",
+    "comment": "Отправить сообщение",
     "act": "Акт {0}",
     "add": "Добавить {0}",
     "show": "Показать {0}",
@@ -236,7 +248,8 @@
     "article": "номенклатуру",
     "pricing": "тип цен",
     "employee": "работника",
-    "site": "подразделение"
+    "site": "подразделение",
+    "statuses": "статусов"
   },
   "genitive": {
     "pricing": "прайс-листа",
@@ -252,6 +265,7 @@
     "stockReceivingItem": "позиции прихода на склад",
     "legalEntity": "юр. лица",
     "recipe": "рецепта",
+    "serviceTask": "задания",
     "productionItem": "позиции производства",
     "user": "пользователя"
   },
@@ -263,13 +277,23 @@
     "selfCost": "себ."
   },
   "workflow": {
+    "accept": "Принять",
+    "accepted": "Принято",
+    "assign": "Назначить",
+    "cancelled": "Отменено",
+    "unassign": "Отменить",
+    "rejected": "Отказано",
+    "reject": "Отказать",
     "start": "Начать",
     "finish": "Завершить",
     "progress": "В работе",
     "continue": "Продолжить",
     "finished": "Завершено",
     "planned": "Запланировано",
-    "cancel": "Отмена"
+    "cancel": "Отмена",
+    "draft": "Черновик",
+    "makeDraft": "В черновики",
+    "assigned": "Назначено"
   },
   "after": {
     "stockReceiving": "после прихода",
