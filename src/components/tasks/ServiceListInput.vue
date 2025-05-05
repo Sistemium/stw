@@ -23,6 +23,7 @@
     )
   .buttons
     el-link(
+      v-if="!services.length"
       @click="onAddMaterial()"
       :disabled="disabled"
     )
