@@ -29,6 +29,7 @@
     "articleProps": "Properties",
     "articlePropsTitle": "Article properties",
     "articles": "Articles",
+    "serviceReport": "Service report",
     "stockTakings": "Stocktaking",
     "storages": "Storages",
     "pictures": "Pictures",
@@ -60,6 +61,7 @@
     "vatCode": "VAT number",
     "name": "Name",
     "firstName": "Name",
+    "filterSystem": "Filter system",
     "ndoc": "Document nr.",
     "series": "Series",
     "number": "Number",
@@ -305,5 +307,10 @@
   },
   "roles": {
     "admin": "Admin"
+  },
+  "serviceType": {
+    "task": "Task",
+    "service": "Service",
+    "other": "Other"
   }
 }

@@ -32,6 +32,7 @@
     "stockTakings": "Inventorizavimas",
     "storages": "Sandėliai",
     "pictures": "Nuotraukos",
+    "serviceReport": "Aptarnavimo ataskaita",
     "stockReceivals": "Priemimai",
     "stockReceiving": "Priemimas į sandėlį",
     "stockWithdrawals": "Iškrovimai",
@@ -60,6 +61,7 @@
     "vatCode": "PVM kodas",
     "name": "Pavadinimas",
     "firstName": "Vardas",
+    "filterSystem": "Filtravimo sistema",
     "email": "El. paštas",
     "phone": "Tel. numeris",
     "date": "Data",
@@ -303,5 +305,10 @@
   },
   "roles": {
     "admin": "Admin"
+  },
+  "serviceType": {
+    "task": "Užduotis",
+    "service": "Aptarnavimas",
+    "other": "Remontas"
   }
 }

@@ -32,6 +32,7 @@
     "stockTakings": "Инвентаризация",
     "storages": "Склады",
     "pictures": "Изображения",
+    "serviceReport": "Отчет об ослуживании",
     "stockReceivals": "Приход на склад",
     "stockReceiving": "Приход на склад",
     "stockWithdrawals": "Отгрузки со склада",
@@ -60,6 +61,7 @@
     "vatCode": "НСД код",
     "name": "Название",
     "firstName": "Имя",
+    "filterSystem": "Система фильтрации",
     "email": "Е-мейл",
     "phone": "Номер тел.",
     "date": "Дата",
@@ -301,5 +303,10 @@
   },
   "roles": {
     "admin": "Админ"
+  },
+  "serviceType": {
+    "task": "Задание",
+    "service": "Обслуживание",
+    "other": "Ремонт"
   }
 }

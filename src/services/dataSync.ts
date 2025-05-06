@@ -309,6 +309,9 @@ const LOADERS: Map<RegExp, LoaderFn> = new Map([
     await User.fetchSubscribed()
     await Employee.fetchSubscribed()
   }],
+  [/serviceReport/, async () => {
+    await Employee.fetchSubscribed()
+  }]
 ])
 
 async function fetchEmployees() {

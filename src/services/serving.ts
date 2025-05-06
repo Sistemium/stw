@@ -72,3 +72,30 @@ export function useTasking({ dateRange, siteId, search, statuses }: TaskingFilte
     }),
   }
 }
+
+export interface ServiceReport {
+  employeeId: string
+  dateB: string
+  dateE: string
+  services: ServiceReportItem[]
+}
+
+type ServiceReportType = 'service' | 'other' | 'task'
+
+
+export interface ServiceReportEvent {
+  eventId: string
+  date: string
+  type: ServiceReportType
+  serviceItemId?: string
+  filterSystemName?: string
+  description?: string
+  comment?: string
+}
+
+export interface ServiceReportItem {
+  servicePointId: string
+  customerName: string
+  address: string
+  events: ServiceReportEvent[]
+}

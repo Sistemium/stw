@@ -59,3 +59,18 @@ export async function loadNotCachedIds(model: Model, ids: string[] = []) {
 export function filterJoin(input: (string | undefined)[], separator?: string): string {
   return input.filter(x => x).join(separator)
 }
+
+export function useRouteQuery(name: string = 'search') {
+  const { route, updateRouteParams } = useRouteParams()
+  const search = computed<string | undefined>({
+    get() {
+      return (route.query[name] as string) || undefined
+    },
+    set(val?: string) {
+      const q: Record<string, any> = {}
+      q[name] = val || undefined
+      return updateRouteParams(undefined, q)
+    },
+  })
+  return { search }
+}

@@ -72,6 +72,13 @@ export default new RouteMapper({
       menuHidden: true,
     },
   },
+  serviceReport: {
+    component: () => import(/* webpackChunkName: "articles" */ '../views/ServiceReportPage.vue'),
+    beforeEnter: initGuard,
+    meta: {
+      menuGroup: 'other',
+    },
+  },
   articles: {
     model: Article,
     component: () => import(/* webpackChunkName: "articles" */ '../views/ArticlesPage.vue'),
