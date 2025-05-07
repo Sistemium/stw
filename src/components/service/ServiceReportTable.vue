@@ -27,7 +27,9 @@ el-table.service-report-table(
     :label="$t('fields.type')"
   )
     template(#default="{ row }")
-      span {{ safeT(row.type, 'serviceType') }}
+      .type {{ safeT(row.type, 'serviceType') }}
+      .service-type(v-if="row.serviceType" )
+        small ({{ safeT(row.serviceType, 'serviceType') }})
   el-table-column(
     prop="description"
     :label="$t('fields.description')"
@@ -36,6 +38,14 @@ el-table.service-report-table(
     prop="filterSystemName"
     :label="$t('fields.filterSystem')"
   )
+  el-table-column(
+    :label="$t('fields.service')"
+  )
+    template(#default="{ row }")
+      .services(v-if="row.services")
+        .d-flex(v-for="service in row.services" :key="service.articleId")
+          .name {{ Article.reactiveGet(service.articleId)?.name }}
+          .price {{ service.price }} &euro;
   template(#empty)
     alert-empty
 </template>
@@ -48,6 +58,7 @@ import type { ServiceReportItem } from '@/services/serving'
 import flatten from 'lodash/flatten'
 import orderBy from 'lodash/orderBy'
 import { safeT } from '@/i18n'
+import Article from '../../models/Article'
 
 const props = withDefaults(defineProps<{
   items: ServiceReportItem[]
@@ -113,4 +124,7 @@ small {
   margin-top: 20px;
 }
 
+.d-flex {
+  justify-content: space-between;
+}
 </style>

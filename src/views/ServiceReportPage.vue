@@ -40,8 +40,8 @@ import type { ServiceReportItem } from '@/services/serving'
 const data = ref<ServiceReportItem[]>([])
 const { search: employeeId } = useRouteQuery('employeeId')
 const { dateRange } = useDateRange({
-  dateE: dayjs().endOf('month').subtract(1, 'month').toDate(),
-  dateB: dayjs().startOf('month').subtract(1, 'month').toDate(),
+  dateE: dayjs().endOf('month').toDate(),
+  dateB: dayjs().startOf('month').toDate(),
 })
 
 const queryParams = computed(() => {

@@ -311,6 +311,8 @@
   "serviceType": {
     "task": "Task",
     "service": "Service",
-    "other": "Other"
+    "other": "Other",
+    "1": "Half-yearly",
+    "2": "Yearly"
   }
 }

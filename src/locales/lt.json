@@ -309,6 +309,8 @@
   "serviceType": {
     "task": "Užduotis",
     "service": "Aptarnavimas",
-    "other": "Remontas"
+    "other": "Remontas",
+    "1": "Pusmetinis",
+    "2": "Metinis"
   }
 }

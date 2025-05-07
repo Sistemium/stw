@@ -91,6 +91,11 @@ export interface ServiceReportEvent {
   filterSystemName?: string
   description?: string
   comment?: string
+  serviceType?: '1' | '2' // 1 - small
+  services?: {
+    articleIs: string
+    price: number
+  }[]
 }
 
 export interface ServiceReportItem {
