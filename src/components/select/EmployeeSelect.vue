@@ -23,7 +23,14 @@ const props = defineProps<{
   siteId?: string
 }>()
 
-const options = computed(() => orderByName(Employee.reactiveFilter({ siteId: props.siteId })))
+const options = computed(() => {
+  const filter = { siteId: props.siteId }
+  if (props.siteId === '*') {
+    delete filter.siteId
+  }
+  const employees = Employee.reactiveFilter(filter)
+  return orderByName(employees)
+})
 const modelId = defineModel<string>()
 
 </script>

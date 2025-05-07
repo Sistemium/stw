@@ -31,7 +31,7 @@ const props = defineProps<{
 
 const modelOrigin = computed<Partial<IStorage>>(() => {
   const { storageId } = props
-  return storageId ? Storage.reactiveGet(storageId) : { type: 'facility' }
+  return storageId && Storage.reactiveGet(storageId) || { type: 'facility' }
 })
 
 const readOnly = computed(() => {

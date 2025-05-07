@@ -10,11 +10,14 @@
   "search": "search",
   "loading": "Loading ...",
   "delete": "Delete",
+  "remove": "Remove",
   "reallyDelete": "Sure to delete?",
   "authorizing": "Authorizing",
   "typeToSearch": "Please type a keyword",
   "menu": {
     "about": "About",
+    "active": "Active",
+    "inactive": "Inactive",
     "articlePricing": "Article pricing",
     "pricing": "Pricing",
     "auth": "Authorization",
@@ -26,6 +29,7 @@
     "articleProps": "Properties",
     "articlePropsTitle": "Article properties",
     "articles": "Articles",
+    "serviceReport": "Service report",
     "stockTakings": "Stocktaking",
     "storages": "Storages",
     "pictures": "Pictures",
@@ -35,25 +39,39 @@
     "stockWithdrawing": "Stock withdrawing",
     "stockPeriod": "Stock remains",
     "reports": "Reports",
-    "measurements": "Measurements"
+    "serviceTasks": "Tasks",
+    "measurements": "Measurements",
+    "other": "Other",
+    "users": "Users"
   },
   "reports": {
     "stockMovement": "Intra-movements"
   },
   "fields": {
     "address": "Address",
+    "assignee": "Assignee",
+    "assigned": "Assigned",
     "commentText": "Commentary",
+    "comment": "Commentary",
+    "created": "Created",
+    "creator": "Creator",
+    "description": "Description",
+    "events": "Events",
     "regCode": "Registration number",
     "vatCode": "VAT number",
     "name": "Name",
+    "firstName": "Name",
+    "filterSystem": "Filter system",
     "ndoc": "Document nr.",
     "series": "Series",
     "number": "Number",
     "email": "E-mail",
+    "phone": "Phone number",
     "type": "Type",
     "tare": "Tare",
     "supplierCode": "Supplier code",
     "producerCode": "Manufacturer code",
+    "customer": "Customer",
     "counterparty": {
       "Storage": "Storage",
       "LegalEntity": "Legal entity",
@@ -72,6 +90,8 @@
     "valueType": "Value type",
     "required": "Required",
     "isSKU": "Is an SKU",
+    "isService": "Is a service",
+    "service": "Service",
     "bool": {
       "yes": "Yes",
       "no": "No"
@@ -99,6 +119,7 @@
     "units": "Units quantity",
     "package": "Package",
     "processing": "Status",
+    "roles": "Roles",
     "storage": "Storage",
     "naming": "Part of name",
     "ord": "Order number",
@@ -162,13 +183,16 @@
     "articleProperty": "Property",
     "article": "Article",
     "facility": "Facility",
+    "history": "History",
     "personal": "Personal",
     "storage": "Storage",
+    "site": "Site",
     "image": "Image",
     "settings": "Parameters",
     "items": "Items",
     "production": "Production",
     "person": "Person",
+    "serviceTask": "Service task",
     "legalEntity": "Legal entity",
     "unknown": "Unknown",
     "unitPackageType": "Unit package type",
@@ -192,9 +216,14 @@
     "required": "{0} is required",
     "formInvalid": "The form is filled out with errors",
     "constrainedDelete": "Can't delete this record because there are \"{0}\"",
-    "noData": "No data"
+    "noData": "No data",
+    "notificationsForbidden": "Notifications are blocked. You can allow them in the browser settings.",
+    "uniq": "{0} field values must me unique"
   },
   "actions": {
+    "turnOn": "Turn on {0}",
+    "turnOff": "Turn off {0}",
+    "comment": "Send message",
     "act": "Declaration of {0}",
     "add": "Add {0}",
     "show": "Show {0}",
@@ -208,10 +237,12 @@
     "select": "select {0}"
   },
   "accusative": {
+    "notifications": "noitifications",
     "date": "date",
     "property": "property",
     "profile": "Profile",
     "picture": "picture",
+    "service": "service",
     "storage": "storage",
     "stockTaking": "stockTaking",
     "position": "position",
@@ -223,7 +254,8 @@
     "article": "article",
     "pricing": "pricing",
     "employee": "employee",
-    "site": "department"
+    "site": "department",
+    "statuses": "statuses"
   },
   "genitive": {
     "pricing": "Pricing",
@@ -239,7 +271,9 @@
     "stockReceivingItem": "Stock receiving item",
     "legalEntity": "Legal entity",
     "recipe": "Recipe",
-    "productionItem": "Production item"
+    "serviceTask": "Service task",
+    "productionItem": "Production item",
+    "user": "User"
   },
   "shortened": {
     "positions": "pos",
@@ -249,16 +283,36 @@
     "selfCost": "s.c."
   },
   "workflow": {
+    "accept": "Accept",
+    "accepted": "Accepted",
+    "assign": "Assign",
+    "cancelled": "Cancelled",
+    "unassign": "Unassign",
+    "rejected": "Rejected",
+    "reject": "Reject",
     "start": "Start",
     "finish": "Finalize",
     "progress": "In progress",
     "continue": "Continue",
     "finished": "Finished",
     "planned": "Planned",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "draft": "Draft",
+    "makeDraft": "Make draft",
+    "assigned": "Assigned"
   },
   "after": {
     "stockReceiving": "after receiving",
     "withVat": "inc. VAT"
+  },
+  "roles": {
+    "admin": "Admin"
+  },
+  "serviceType": {
+    "task": "Task",
+    "service": "Service",
+    "other": "Other",
+    "1": "Half-yearly",
+    "2": "Yearly"
   }
 }

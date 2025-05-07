@@ -20,6 +20,11 @@ el-select.workflow-filter(
       :label="$t(item.label)"
       :value="item.processing"
     )
+      el-tag(
+        :type="item.type"
+        :effect="item.effect"
+      ) {{ $t(item.label) }}
+
 </template>
 
 <script setup lang="ts">

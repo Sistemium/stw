@@ -15,6 +15,7 @@ import { initGuard } from '@/services/dataSync';
 import Pricing from '@/models/Pricing'
 import type { BaseItem } from '@/init/Model'
 import ServiceTask from '@/models/ServiceTask'
+import User from '@/models/User'
 
 // import Recipe from '@/models/Recipe';
 
@@ -71,6 +72,13 @@ export default new RouteMapper({
       menuHidden: true,
     },
   },
+  serviceReport: {
+    component: () => import(/* webpackChunkName: "articles" */ '../views/ServiceReportPage.vue'),
+    beforeEnter: initGuard,
+    meta: {
+      menuGroup: 'other',
+    },
+  },
   articles: {
     model: Article,
     component: () => import(/* webpackChunkName: "articles" */ '../views/ArticlesPage.vue'),
@@ -94,6 +102,15 @@ export default new RouteMapper({
     editing: () => import(/* webpackChunkName: "articles" */ '../components/ArticlePropertyEdit.vue'),
     meta: {
       menuGroup: 'other',
+    },
+  },
+  users: {
+    model: User,
+    component: () => import(/* webpackChunkName: "articles" */ '../views/UsersPage.vue'),
+    editing: () => import(/* webpackChunkName: "articles" */ '../components/users/UserEdit.vue'),
+    meta: {
+      menuGroup: 'other',
+      role: 'admin',
     },
   },
   pricing: {

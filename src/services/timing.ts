@@ -4,7 +4,7 @@ import { useRouteParams } from '@/lib/updateRouteParams'
 
 const today = ref<Dayjs>(dayjs().endOf('day'))
 
-export function useDateRange() {
+export function useDateRange(defaults?: { dateB: string | Date, dateE: string | Date }) {
   const { updateRouteParams, route } = useRouteParams()
   updateToday()
   const dateRange = computed({
@@ -26,8 +26,8 @@ export function useDateRange() {
   function resetDates(dateB?: string, dateE?: string) {
     const monthAgo = today.value.add(-12, 'month')
     return [
-      dayjs(dateB || monthAgo).startOf('day').toDate(),
-      dayjs(dateE || today.value).endOf('day').toDate(),
+      dayjs(dateB || defaults?.dateB || monthAgo).startOf('day').toDate(),
+      dayjs(dateE || defaults?.dateE || today.value).endOf('day').toDate(),
     ]
   }
 
@@ -46,4 +46,8 @@ function updateToday() {
 
 export function todayStringDate() {
   return dayjs().toJSON()
+}
+
+export function dateFormat(date?: string | Date) {
+  return dayjs(date).format('YYYY-MM-DD')
 }

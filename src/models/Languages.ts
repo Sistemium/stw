@@ -8,16 +8,16 @@ export const Languages : Language[] = [
   {
     key: 'en',
     name: 'English',
-    icon: '/img/icons8-great-britain.svg',
+    icon: '/img/icons8-en.svg',
   },
   {
     key: 'ru',
     name: 'Русский',
-    icon: '/img/icons8-russian-federation.svg',
+    icon: '/img/icons8-ru.svg',
   },
   {
     key: 'lt',
     name: 'Lietuvių',
-    icon: '/img/icons8-lithuania.svg',
+    icon: '/img/icons8-lt.svg',
   },
 ];

@@ -11,8 +11,8 @@ import router from './router';
 import store from './store';
 import './index.scss';
 import i18n from './i18n';
-import { socket } from '@/services/socket'
-
+import { authorizeSocket } from '@/services/socket'
+import { useInvStore } from '@/store/invStore'
 
 const { debug, error } = log('main');
 
@@ -27,12 +27,8 @@ Sentry.init({
   app,
   dsn: prodEnv ? dsn : null,
   environment,
-  integrations: [
-    new Sentry.BrowserTracing({
-      routingInstrumentation: Sentry.vueRouterInstrumentation(router),
-      tracePropagationTargets: ['localhost', 'stw.sistemium.com', /^\//],
-    }),
-  ],
+  integrations: [Sentry.browserTracingIntegration({ router })],
+  tracePropagationTargets: ['localhost', 'stw.sistemium.com', 'stwd.sistemium.com'],
   tracesSampleRate: prodEnv ? 0.1 : 1,
 });
 
@@ -45,13 +41,16 @@ init(app)
 
 app.mount('#app');
 
+// initMessaging()
+
 router.isReady().then(() => {
   debug('router:ready');
   const loading = ElLoading.service({});
   store.dispatch('auth/AUTH_INIT')
-    .then((authorized: boolean) => {
+    .then(async (authorized: boolean) => {
+      const invStore= useInvStore()
+      await invStore.initUser()
       if (authorized) {
-        socket.connect()
         return store.dispatch('inv/SUBSCRIBE_SOCKET_STATUS');
       }
       return loading.close();
@@ -68,6 +67,7 @@ const unsubscribe = store.subscribe((mutation: { type: string; payload: Record<s
   if (type === 'auth/SET_AUTHORIZED') {
     const { token, account: { name: username = 'unknown' } = {} } = payload;
     authorizeAxios(token);
+    authorizeSocket(token);
     debug('environment:', environment, 'user:', username);
     Sentry.setUser({ username });
     store.dispatch('inv/SUBSCRIBE_SOCKET_STATUS')

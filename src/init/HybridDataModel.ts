@@ -8,6 +8,7 @@ import axiosScriptMessaging, {
 } from 'sistemium-data/lib/util/axiosScriptMessaging';
 import type { BaseItem } from '@/init/Model'
 import { subscribeChanges } from '@/services/socket'
+import axiosIDB from '@/lib/axiosIDB'
 
 const { VITE_API_URL: API_URL } = import.meta.env;
 
@@ -25,17 +26,18 @@ export default class HybridDataModel<T extends BaseItem = BaseItem, HT extends T
 }
 
 export function authorizeAxios(token: string) {
+  const config = isNative()
+    ? nativeConfig()
+    : ('serviceWorker' in navigator ? workerConfig(token) : webConfig(token))
   // @ts-ignore
-  HybridDataModel.useAxios(axios.create({
-    ...(isNative() ? nativeConfig() : webConfig(token)),
-  }));
+  HybridDataModel.useAxios(axios.create(config));
 }
 
 function webConfig(token: string) {
   return {
     baseURL: API_URL || '/api',
     headers: {
-      'x-page-size': 10000,
+      'x-page-size': 1000,
       authorization: token,
     },
     paramsSerializer(params: any) {
@@ -57,4 +59,20 @@ function nativeConfig() {
       return data;
     },
   };
+}
+
+function workerConfig(token: string) {
+  return {
+    headers: {
+      'x-page-size': 1000,
+      authorization: token,
+    },
+    adapter: axiosIDB,
+    transformRequest(data: any) {
+      return data;
+    },
+    // transformResponse(data: any) {
+    //   return data;
+    // },
+  }
 }

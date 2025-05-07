@@ -1,6 +1,6 @@
-import type ApiModel from '@/models/ApiModels';
-import { RecipeMaterial } from '@/models/Recipes';
-import type { IArticleProp } from '@/models/ArticleProps';
+import type ApiModel from '@/models/ApiModels'
+import { RecipeMaterial } from '@/models/Recipes'
+import type { IArticleProp } from '@/models/ArticleProps'
 
 export interface ArticleProperty extends IArticleProp {
   propId: string;
@@ -26,6 +26,7 @@ export interface IArticle extends ApiModel {
 
   materials: RecipeMaterial[];
   isSKU: boolean;
+  isService: boolean;
 
   measureId?: string;
   measureUnitId?: string;

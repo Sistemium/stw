@@ -10,6 +10,7 @@
   "search": "paieška",
   "loading": "Kraunasi ...",
   "delete": "Ištrinti",
+  "remove": "Pašalinti",
   "reallyDelete": "Tikrai ištrinti?",
   "authorizing": "Leidimo suteikimas",
   "typeToSearch": "Įveskite kelias paieškos raides",
@@ -31,6 +32,7 @@
     "stockTakings": "Inventorizavimas",
     "storages": "Sandėliai",
     "pictures": "Nuotraukos",
+    "serviceReport": "Aptarnavimo ataskaita",
     "stockReceivals": "Priemimai",
     "stockReceiving": "Priemimas į sandėlį",
     "stockWithdrawals": "Iškrovimai",
@@ -39,7 +41,8 @@
     "reports": "Ataskaitos",
     "serviceTasks": "Užduotys",
     "measurements": "Išmatavimai",
-    "other": "Kita"
+    "other": "Kita",
+    "users": "Naudotojai"
   },
   "reports": {
     "stockMovement": "Perkelimai"
@@ -57,7 +60,10 @@
     "regCode": "Įmonės kodas",
     "vatCode": "PVM kodas",
     "name": "Pavadinimas",
+    "firstName": "Vardas",
+    "filterSystem": "Filtravimo sistema",
     "email": "El. paštas",
+    "phone": "Tel. numeris",
     "date": "Data",
     "ndoc": "Dok. nr.",
     "series": "Serija",
@@ -83,6 +89,8 @@
     "valueType": "Duomenų tipas",
     "required": "Privaloma",
     "isSKU": "Skaičiuoti likutį",
+    "isService": "Ar paslauga",
+    "service": "Paslauga",
     "bool": {
       "yes": "Taip",
       "no": "Ne"
@@ -111,6 +119,7 @@
     "units": "Vienetų kiekis",
     "package": "Pakavimas",
     "processing": "Būsena",
+    "roles": "Vaidmenys",
     "storage": "Sandėlis",
     "naming": "Pavadinimo dalis",
     "initUnits": "Pradinis",
@@ -205,9 +214,13 @@
     "required": "{0} yra privalomas",
     "formInvalid": "Klaidingai užpildyta forma",
     "constrainedDelete": "Negalima ištrinti šio įrašo, nes yra \"{0}\"",
-    "noData": "Nėra duomenų"
+    "noData": "Nėra duomenų",
+    "notificationsForbidden": "Pranešimai užblokuoti. Galite juos leisti naršyklės nustatymuose.",
+    "uniq": "Laukelio \"{0}\" reikšmės turi būti unikalios"
   },
   "actions": {
+    "turnOn": "Įjungti {0}",
+    "turnOff": "Išjungti {0}",
     "comment": "Atsiųsti pranešimą",
     "delete": "Ištrinti",
     "act": "{0} aktas",
@@ -222,10 +235,12 @@
     "select": "pasirink {0}"
   },
   "accusative": {
+    "notifications": "pranešimus",
     "date": "datą",
     "property": "ypatybę",
     "profile": "Profilį",
     "picture": "nuotrauką",
+    "service": "paslaugą",
     "storage": "sandėlį",
     "stockTaking": "inventorizaciją",
     "position": "poziciją",
@@ -255,7 +270,8 @@
     "legalEntity": "Įmonės",
     "recipe": "Recepto",
     "serviceTask": "Užduoties",
-    "productionItem": "Gamybos pozicijos"
+    "productionItem": "Gamybos pozicijos",
+    "user": "Naudotojo"
   },
   "shortened": {
     "positions": "poz",
@@ -286,5 +302,15 @@
   "after": {
     "stockReceiving": "po priemimo",
     "withVat": "su PVM"
+  },
+  "roles": {
+    "admin": "Admin"
+  },
+  "serviceType": {
+    "task": "Užduotis",
+    "service": "Aptarnavimas",
+    "other": "Remontas",
+    "1": "Pusmetinis",
+    "2": "Metinis"
   }
 }

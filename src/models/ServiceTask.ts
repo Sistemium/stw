@@ -2,8 +2,14 @@ import Workflow from '@/lib/Workflow'
 import type ApiModel from '@/models/ApiModels'
 import { IUser } from '@/models/User'
 import Model from '@/init/Model'
+import { IEmployee } from '@/models/Employee'
 
 // import { HydratedModel } from 'sistemium-data-vue'
+
+export interface ServiceTaskService {
+  articleId: string
+  price: number
+}
 
 export interface IServiceTask extends ApiModel {
   date: string
@@ -14,10 +20,12 @@ export interface IServiceTask extends ApiModel {
   servicePointId: string
   counterpartyType: string
   creatorId?: string
+  services: ServiceTaskService[]
 }
 
 export interface HydratedServiceTask extends IServiceTask {
   creator?: IUser
+  assignee?: IEmployee
 }
 
 export default new Model<IServiceTask, HydratedServiceTask>({
@@ -26,6 +34,7 @@ export default new Model<IServiceTask, HydratedServiceTask>({
   // methods: {},
   relations: {
     creator: 'User',
+    assignee: 'Employee',
   },
 })
 
@@ -78,9 +87,9 @@ export const serviceTaskWorkflow = new Workflow({
         label: 'workflow.accept',
         type: 'primary',
       }],
-      primaryOption: 'finished',
-      editable: true,
-      type: 'primary',
+      primaryOption: 'accepted',
+      editable: false,
+      type: 'danger',
       important: true,
     },
     {
@@ -96,8 +105,8 @@ export const serviceTaskWorkflow = new Workflow({
         type: 'primary',
       }],
       primaryOption: 'finished',
-      editable: true,
-      type: 'primary',
+      editable: false,
+      type: 'warning',
       important: true,
     },
     {

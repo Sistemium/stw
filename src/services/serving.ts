@@ -8,6 +8,7 @@ import ServiceTaskHistory, { type IServiceTaskHistory } from '@/models/ServiceTa
 import User from '@/models/User'
 import Employee from '@/models/Employee'
 import { fetchServiceTasks } from '@/services/dataSync'
+import { useRoute } from 'vue-router'
 
 interface TaskingFilter {
   dateRange: Ref<Date[]>
@@ -37,18 +38,20 @@ export function useTaskHistory(props: { serviceTaskId: string }) {
 }
 
 export function useTasking({ dateRange, siteId, search, statuses }: TaskingFilter) {
+  const route = useRoute()
   return {
     refresh() {
       fetchServiceTasks()
         .then()
     },
+    currentTaskId: computed(() => route.params.serviceTaskId as string),
     serviceTasks: computed(() => {
       const { value } = dateRange
       const date = {
         $gte: day(value[0]).startOf('day').toJSON(),
         $lte: day(value[1]).endOf('day').toJSON(),
       }
-      const tasks = orderBy(ServiceTask.reactiveFilter({
+      const tasks = orderBy(ServiceTask.hydratedFilter({
         siteId: siteId.value,
         // @ts-ignore
         date,
@@ -64,7 +67,40 @@ export function useTasking({ dateRange, siteId, search, statuses }: TaskingFilte
         const point = ServicePointCustomer.getByID(task.servicePointId)
         return re.test(task.description)
           || point && (re.test(point?.address) || re.test(point?.name))
+          || task.assignee && re.test(task.assignee.name)
       })
     }),
   }
+}
+
+export interface ServiceReport {
+  employeeId: string
+  dateB: string
+  dateE: string
+  services: ServiceReportItem[]
+}
+
+type ServiceReportType = 'service' | 'other' | 'task'
+
+
+export interface ServiceReportEvent {
+  eventId: string
+  date: string
+  type: ServiceReportType
+  serviceItemId?: string
+  filterSystemName?: string
+  description?: string
+  comment?: string
+  serviceType?: '1' | '2' // 1 - small
+  services?: {
+    articleIs: string
+    price: number
+  }[]
+}
+
+export interface ServiceReportItem {
+  servicePointId: string
+  customerName: string
+  address: string
+  events: ServiceReportEvent[]
 }

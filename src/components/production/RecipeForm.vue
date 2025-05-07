@@ -10,6 +10,12 @@ el-form.recipe-form(
   )
     el-switch(v-model="model.isSKU")
 
+  el-form-item(
+    prop="isService"
+    :label="$t('fields.isService')"
+  )
+    el-switch(v-model="model.isService")
+
   materials-form(
     :materials="model.materials || null"
     ref="materialsFormRef"

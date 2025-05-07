@@ -29,15 +29,22 @@ import ServicePointCustomer from '@/models/ServicePointCustomer'
 import Site from '@/models/Site'
 import { eachSeries } from 'async'
 import ServiceTask from '@/models/ServiceTask'
-import { loadRelation } from '@/services/util'
+import { filterJoin, loadRelation } from '@/services/util'
 import type { NavigationGuardNext, RouteLocationNormalized as RouteRecord } from 'vue-router'
 import type { CounterpartyType } from '@/models/StockOperations'
 import ServiceTaskHistory from '@/models/ServiceTaskHistory'
 import User from '@/models/User'
 import { subscribeChanges } from '@/services/socket'
 import syncDeletions from '@/services/syncDeletions'
+import ClientData, { type IClientData } from '@/models/ClientData'
+import DeviceDetector from 'device-detector-js'
+import matchesDeep from 'sistemium-data/lib/util/matchesDeep'
+import { getLocale } from '@/i18n'
+import packageJson from '../../package.json'
+import { computed } from 'vue'
 
 const { error, debug } = log('dataSync')
+const { VITE_MASTER_PRICING } = import.meta.env
 
 type NextCallback = NavigationGuardNext //(redirect?: Partial<RouteRecord>) => Promise<void>
 
@@ -57,6 +64,7 @@ export function initGuard(_to: RouteRecord, _from: RouteRecord, next: NextCallba
 
 export async function initData() {
   debug('initData')
+  await updateClientData()
   await Configuration.fetchSubscribed()
   await ArticleProp.fetchSubscribed()
   await PropOption.fetchSubscribed()
@@ -68,6 +76,44 @@ export async function initData() {
   await Site.fetchSubscribed()
   initPromiseInfo.resolve?.call(initPromiseInfo)
   syncDeletions()
+}
+
+async function updateClientData() {
+  const store = useInvStore()
+  const existing = await ClientData.findOne({ id: store.clientDataId })
+  const deviceDetector = new DeviceDetector()
+  const deviceInfo = deviceDetector.parse(navigator.userAgent)
+  const data: Partial<IClientData> = {
+    id: store.clientDataId,
+    authId: store.authId,
+    deviceInfo,
+    locale: getLocale(),
+    devicePlatform: filterJoin([deviceInfo.device?.brand, deviceInfo.os?.name], ' '),
+    systemVersion: deviceInfo.os?.version,
+    buildType: window.location.port ? 'DEBUG' : 'RELEASE',
+    bundleVersion: packageJson.version,
+    appVersion: packageJson.version,
+    bundleIdentifier: window.origin,
+    deviceName: filterJoin([deviceInfo.client?.name, deviceInfo.client?.version], ' '),
+  }
+  if (matchesDeep(data, existing)) {
+    return
+  }
+  await ClientData.updateOne(data)
+}
+
+export function useClientData() {
+  const store = useInvStore()
+  const clientData = computed(() => ClientData.reactiveGet(store.clientDataId))
+  return {
+    clientData,
+    async updatePushToken(deviceToken?: string | null) {
+      return ClientData.updateOne({
+        id: store.clientDataId,
+        deviceToken,
+      })
+    },
+  }
 }
 
 async function stockWithdrawingIdSync(to: RouteRecord, model: Model, positionsModel: Model, field: string) {
@@ -188,7 +234,9 @@ export async function authGuard(to: RouteRecord, from: RouteRecord, next: NextCa
 
   const authorized = store.getters['auth/IS_AUTHORIZED']
 
-  if (to.meta.public) {
+  const { role: needRole, public: isPublic } = to.meta
+
+  if (isPublic) {
     next()
     return
   }
@@ -202,6 +250,16 @@ export async function authGuard(to: RouteRecord, from: RouteRecord, next: NextCa
       },
     })
     return
+  }
+
+  if (needRole) {
+    const store = useInvStore()
+    if (!store.user) {
+      await store.initUser()
+    }
+    if (!store.hasRole(needRole as string)) {
+      return next({ path: '/' })
+    }
   }
 
   try {
@@ -245,7 +303,15 @@ const LOADERS: Map<RegExp, LoaderFn> = new Map([
   [/serviceTask/, async () => {
     await subscribeChanges(['ServiceTask', 'ServiceTaskHistory'], fetchServiceTasks)
     await subscribeChanges('Employee', fetchEmployees)
+    await subscribeChanges('ArticlePricing', () => fetchArticlePricing(VITE_MASTER_PRICING))
   }],
+  [/users?/, async () => {
+    await User.fetchSubscribed()
+    await Employee.fetchSubscribed()
+  }],
+  [/serviceReport/, async () => {
+    await Employee.fetchSubscribed()
+  }]
 ])
 
 async function fetchEmployees() {
@@ -262,7 +328,7 @@ export async function fetchServiceTasks() {
 }
 
 export async function fetchServiceTask(serviceTaskId: string) {
-  const task = await ServiceTask.findOne({ serviceTaskId })
+  const task = await ServiceTask.findOne({ id: serviceTaskId })
   if (!task) {
     return
   }

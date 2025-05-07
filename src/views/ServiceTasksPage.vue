@@ -28,18 +28,19 @@
             @click="onAdd()"
             :disabled="!siteId"
           )
-      resize#stock-operation-scroll(
+      resize(
         :padding="40"
       )
         template(#default="{ resized }")
           el-auto-resizer
             template(#default="{ width }")
               service-task-table(
-                :height="resized"
                 :service-tasks="serviceTasks"
+                :height="resized"
                 :width="width"
                 @edit-click="onEdit"
                 @show-history-click="t => onEdit(t, 'history')"
+                :active-id="currentTaskId"
               )
   router-view
 
@@ -75,7 +76,7 @@ const siteId = ref(store.currentSiteId)
 const { dateRange, resetDates } = useDateRange()
 const { search } = useSearch()
 const { router } = useRouteParams()
-const { serviceTasks, refresh } = useTasking({ dateRange, siteId, search, statuses })
+const { serviceTasks, refresh, currentTaskId } = useTasking({ dateRange, siteId, search, statuses })
 
 watch(siteId, id => {
   if (id) {
@@ -95,9 +96,12 @@ function onAdd() {
 }
 
 function onEdit(serviceTask: { id: string }, tab?: string) {
-  const query = { tab }
+  const query: Record<string, any> = { tab }
   if (!tab) {
     delete query.tab
+  }
+  if (search.value) {
+    query.search = search.value
   }
   router.push({
     name: props.editRoute,
@@ -125,5 +129,8 @@ function onEdit(serviceTask: { id: string }, tab?: string) {
 
 .tool-button {
   margin-left: $margin-right;
+}
+.page-title {
+  margin-bottom: 0;
 }
 </style>

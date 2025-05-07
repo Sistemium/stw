@@ -44,6 +44,7 @@ drawer-edit.service-task-edit(
             .float-right
               el-button(
                 size="small"
+                type="primary"
                 @click="commentClick"
                 :disabled="!comment"
               ) {{ $t('actions.comment') }}
@@ -56,7 +57,8 @@ import DrawerEdit from '@/lib/DrawerEdit'
 import ServiceTaskForm from '@/components/tasks/ServiceTaskForm'
 import { useDrawerEditing } from '@/services/drawerEditing'
 import { useFormValidate } from '@/services/validating'
-import ServiceTask, { type HydratedServiceTask } from '@/models/ServiceTask'
+import ServiceTask from '@/models/ServiceTask'
+import type { HydratedServiceTask, ServiceTaskService } from '@/models/ServiceTask'
 import { useRouteParams } from '@/lib/updateRouteParams'
 import ServiceTaskHistoryList from '@/components/tasks/ServiceTaskHistoryList'
 import Resize from '@/lib/StmResize'
@@ -70,12 +72,16 @@ const props = defineProps<{
   drawerStyle?: Record<string, any>
 }>()
 
+interface ServiceTaskPartial extends Partial<HydratedServiceTask> {
+  services: Partial<ServiceTaskService>[]
+}
+
 const comment = ref('')
 const loading = ref()
 const { route } = useRouteParams()
 const currentTab = ref<string>(route.query.tab as string || 'form')
 const { saveFn, destroyFn } = useDrawerEditing<HydratedServiceTask>(ServiceTask)
-const modelOrigin = computed<Partial<HydratedServiceTask>>(() =>
+const modelOrigin = computed<ServiceTaskPartial>(() =>
   props.serviceTaskId
   && ServiceTask.hydratedGet(props.serviceTaskId as string)
   || {
@@ -84,6 +90,7 @@ const modelOrigin = computed<Partial<HydratedServiceTask>>(() =>
     siteId: route.query.siteId as string,
     processing: 'draft',
     assigneeId: undefined,
+    services: [{ articleId: undefined, price: undefined }],
   })
 
 const { form: formRef } = useFormValidate()

@@ -8,6 +8,7 @@ import uiLt from 'element-plus/dist/locale/lt';
 import ru from '@/locales/ru.json';
 import en from '@/locales/en.json';
 import lt from '@/locales/lt.json';
+import isString from 'lodash/isString'
 
 const LS_KEY_I18N_LOCALE = 'I18N_LOCALE';
 
@@ -82,4 +83,41 @@ export function saveLocale(locale: string) {
 
 function getSavedLocale() {
   return localStorage.getItem(LS_KEY_I18N_LOCALE);
+}
+
+export function getLocale(): string {
+  // @ts-ignore
+  return i18n.global.locale.value
+}
+
+
+export function safeTd(stringOrDate?: string | Date | null, format: string = 'timestamp'): string {
+  if (!stringOrDate) {
+    return stringOrDate || ''
+  }
+  const date = isString(stringOrDate) ? new Date(stringOrDate) : stringOrDate
+  return i18n.global.d(date, format)
+}
+
+export function safeN(number: number): string | null {
+  if (number === undefined || number === null) {
+    return null
+  }
+  return i18n.global.n(number)
+}
+
+export function safeT(mayBeNullKey?: string, prefix: string = '', ...param: string[]): string {
+  if (!mayBeNullKey) {
+    return ''
+  }
+  const key = prefixedKey(mayBeNullKey, prefix)
+  return i18n.global.te(key) ? i18n.global.t(key, param) : key
+}
+
+function prefixedKey(key: string, prefix: string = ''): string {
+  return prefix ? `${prefix}.${key}` : key
+}
+
+export function ta(key: string, param: string): string {
+  return safeT(key, 'action', param)
 }

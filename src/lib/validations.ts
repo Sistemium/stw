@@ -24,8 +24,10 @@ export default {
   },
 }
 
+import type { FormItemRule } from 'element-plus'
+
 export function $requiredRule(fieldOrArray: string | string[]) {
-  const res: BaseItem = {}
+  const res: Record<string, FormItemRule[]> = {}
   const fields = Array.isArray(fieldOrArray) ? fieldOrArray : [fieldOrArray]
   fields.forEach(field => {
     const [, concept] = field.match(/(.+)Id$/) || []
