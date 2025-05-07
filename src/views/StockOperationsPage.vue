@@ -200,7 +200,7 @@ const storageId = computed({
   },
 });
 
-const reports = [{ label: 'reports.stockMovement', to: 'stockMovementReport' }];
+const reports = [{ label: 'reports.stockMovement', to: '/stockMovementReport' }];
 
 watch(storageId, () => {
   triggerSubscription(props.model.collection)
