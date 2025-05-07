@@ -36,6 +36,7 @@ import StmResize from '@/lib/StmResize.vue'
 import ServiceReport from '@/models/reports/ServiceReport'
 import ServiceReportTable from '@/components/service/ServiceReportTable.vue'
 import type { ServiceReportItem } from '@/services/serving'
+import matchesDeep from 'sistemium-data/lib/util/matchesDeep.js'
 
 const data = ref<ServiceReportItem[]>([])
 const { search: employeeId } = useRouteQuery('employeeId')
@@ -53,7 +54,10 @@ const queryParams = computed(() => {
   }
 })
 
-watch(queryParams, async p => {
+watch(queryParams, async (p, oldValue) => {
+  if (matchesDeep(p, oldValue)) {
+    return
+  }
   if (p.dateB && p.dateE && p.employeeId) {
     data.value = await ServiceReport.findAll(p, { cacheResponse: false })
   }
