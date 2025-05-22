@@ -79,6 +79,13 @@ export default new RouteMapper({
       menuGroup: 'other',
     },
   },
+  assistant: {
+    component: () => import('../views/AssistantPage.vue'),
+    beforeEnter: initGuard,
+    meta: {
+      menuGroup: 'other',
+    },
+  },
   articles: {
     model: Article,
     component: () => import(/* webpackChunkName: "articles" */ '../views/ArticlesPage.vue'),

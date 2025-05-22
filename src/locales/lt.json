@@ -16,6 +16,7 @@
   "typeToSearch": "Įveskite kelias paieškos raides",
   "menu": {
     "about": "Apie",
+    "assistant": "DI asistentas",
     "active": "Aktyvūs",
     "inactive": "Neaktyvūs",
     "articlePricing": "Kainynas",
@@ -48,7 +49,9 @@
     "stockMovement": "Perkelimai"
   },
   "fields": {
+    "prompt": "Pasakykite, kuo galiu padėti",
     "address": "Adresas",
+    "article": "Prekė",
     "assignee": "Atsakingas",
     "assigned": "Paskirtas atsakingu",
     "commentText": "Pastaba",
@@ -210,6 +213,7 @@
     "number": "Skaičius"
   },
   "validation": {
+    "error getting response": "Nepavyko gauti duomenų",
     "otherSite": "Priklauso kitam padaliniui",
     "required": "{0} yra privalomas",
     "formInvalid": "Klaidingai užpildyta forma",
@@ -219,6 +223,7 @@
     "uniq": "Laukelio \"{0}\" reikšmės turi būti unikalios"
   },
   "actions": {
+    "send": "Atsiųsti",
     "turnOn": "Įjungti {0}",
     "turnOff": "Išjungti {0}",
     "comment": "Atsiųsti pranešimą",

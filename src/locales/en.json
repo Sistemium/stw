@@ -16,6 +16,7 @@
   "typeToSearch": "Please type a keyword",
   "menu": {
     "about": "About",
+    "assistant": "AI assistant",
     "active": "Active",
     "inactive": "Inactive",
     "articlePricing": "Article pricing",
@@ -48,7 +49,9 @@
     "stockMovement": "Intra-movements"
   },
   "fields": {
+    "prompt": "Tell me what I can do to help",
     "address": "Address",
+    "article": "Product",
     "assignee": "Assignee",
     "assigned": "Assigned",
     "commentText": "Commentary",
@@ -212,6 +215,7 @@
     "suffix": "Suffix"
   },
   "validation": {
+    "error getting response": "Failed to retrieve data",
     "otherSite": "Belongs to another department",
     "required": "{0} is required",
     "formInvalid": "The form is filled out with errors",
@@ -221,6 +225,7 @@
     "uniq": "{0} field values must me unique"
   },
   "actions": {
+    "send": "Send",
     "turnOn": "Turn on {0}",
     "turnOff": "Turn off {0}",
     "comment": "Send message",
