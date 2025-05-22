@@ -4,7 +4,7 @@ import axios from 'axios'
 import { useInvStore } from '@/store/invStore'
 
 export interface SearchResult {
-  id: number
+  id: string
   name: string
   entityType: 'article' | 'customer'
 }

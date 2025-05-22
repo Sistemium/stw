@@ -1,6 +1,7 @@
 {
   "message": "Greetings to the warehouse workers!",
   "about": "This is an application for warehouse management",
+  "add": "Add",
   "savingError": "Saving error",
   "numberLabel": "Nr.",
   "saved": "Saved",

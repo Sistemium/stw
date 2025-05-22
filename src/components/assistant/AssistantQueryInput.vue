@@ -1,11 +1,15 @@
 <template lang="pug">
-.assistant-query-input.d-flex
-  el-input(
+.assistant-query-input.d-flex.align-center
+  speech-button(
+    :busy="disabled"
+    @spoken="onSpoken"
+  )
+  el-input.ml-2(
     v-model="query"
     :disabled="disabled"
     type="textarea"
     :autosize="{ minRows: 2 }"
-    :placeholder="$t('fields.prompt')"
+    :placeholder="disabled ? $t('loading') : $t('fields.prompt')"
     @keyup.ctrl.enter="emitSearch"
   )
   el-button.ml-2(
@@ -18,6 +22,7 @@
 <script setup lang="ts">
 
 import { ref } from 'vue'
+import SpeechButton from '@/components/assistant/SpeechButton.vue'
 
 defineProps<{
   disabled?: boolean
@@ -31,5 +36,9 @@ const query = ref('')
 function emitSearch() {
   emit('query', query.value)
   query.value = ''
+}
+
+function onSpoken(text: string) {
+  query.value = text
 }
 </script>
