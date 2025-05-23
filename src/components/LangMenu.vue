@@ -1,21 +1,24 @@
 <template lang="pug">
 
-el-sub-menu.lang-menu(
-  index="lang"
+v-btn.lang-menu(
+  variant="text"
+  append-icon='$mdiMenuDown'
+  size="small"
 )
-  template(#title) {{ lang.key }}
-  el-menu-item(
-    v-for="lng in languages"
-    :key="lng.key"
-    @click="setLang(lng)"
-  ) {{ lng.name }}
+  span {{ lang.key }}
+  v-menu(activator='parent')
+    v-list
+      v-list-item(
+        v-for="lng in languages"
+        :key="lng.key"
+        @click="setLang(lng)"
+      ) {{ lng.name }}
 
 </template>
 <script setup lang="ts">
 
 import find from 'lodash/find'
 import { computed } from 'vue'
-// import FlaggedLang from './FlaggedLang.vue'
 
 const props = defineProps<{
   languages: any[],
@@ -34,11 +37,3 @@ function setLang(lng) {
 }
 
 </script>
-<style scoped>
-
-.el-dropdown-link {
-  cursor: pointer;
-  color: #409EFF;
-}
-
-</style>

@@ -5,12 +5,14 @@ import { createPinia } from 'pinia';
 import * as Sentry from '@sentry/vue';
 import { authorizeAxios } from '@/init/HybridDataModel';
 import { authGuard, initData } from '@/services/dataSync';
+import 'vuetify/styles'
+import vuetify from '@/services/vuetify'
 import init from './init';
 import App from './App.vue';
 import router from './router';
 import store from './store';
 import './index.scss';
-import i18n from './i18n';
+import i18n from './services/i18n';
 import { authorizeSocket } from '@/services/socket'
 import { useInvStore } from '@/store/invStore'
 
@@ -33,6 +35,7 @@ Sentry.init({
 });
 
 app.use(router)
+  .use(vuetify)
   .use(i18n)
   .use(store)
   .use(createPinia());

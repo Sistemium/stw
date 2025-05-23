@@ -1,4 +1,4 @@
-import i18n from '@/i18n';
+import i18n from '@/services/i18n';
 import upperFirst from 'lodash/upperFirst';
 import keyBy from 'lodash/keyBy';
 import mapValues from 'lodash/mapValues';

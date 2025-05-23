@@ -37,7 +37,7 @@ import type { ServiceTaskService } from '@/models/ServiceTask'
 import ArticleSelect from '@/components/catalogue/ArticleSelect.vue'
 import PriceForm from '@/components/out/PriceForm.vue'
 import { eachSeries } from 'async'
-import { safeT } from '@/i18n'
+import { safeT } from '@/services/i18n'
 import { getPricing } from '@/services/pricing'
 import { dateFormat } from '@/services/timing'
 

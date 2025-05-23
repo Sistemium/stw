@@ -1,5 +1,5 @@
 import { ref } from 'vue'
-import { safeT } from '@/i18n'
+import { safeT } from '@/services/i18n'
 import axios from 'axios'
 import { useInvStore } from '@/store/invStore'
 

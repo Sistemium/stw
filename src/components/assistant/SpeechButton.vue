@@ -12,7 +12,7 @@
 <script setup lang="ts">
 import { useSpeechRecognition } from '@vueuse/core'
 import { watch } from 'vue'
-import { getLocale } from '@/i18n'
+import { getLocale } from '@/services/i18n'
 import { Microphone } from '@element-plus/icons-vue'
 
 const { lang = getLocale(), continuous = false } = defineProps<{

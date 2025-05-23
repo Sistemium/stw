@@ -1,6 +1,6 @@
 <template lang="pug">
 
-#app
+v-layout#app
   app-menu
     template(#left)
       barcode-scanner-status(v-if="showBarcodeStatus")
@@ -8,7 +8,8 @@
     v-if="showBarcodeInput"
     :lock="false"
   )
-  router-view
+  v-main
+    router-view
 
 </template>
 <script setup lang="ts">
@@ -23,7 +24,7 @@ import BarcodeScannerStatus, {
 } from '@/components/BarcodeScanner/BarcodeScannerStatus.vue';
 import BarcodeInput from '@/components/BarcodeScanner/BarcodeInput.vue';
 import * as g from '@/store/inv/getters.js';
-import i18n, { saveLocale } from '@/i18n';
+import i18n, { saveLocale } from '@/services/i18n';
 import { useInvStore } from '@/store/invStore'
 import { bindEvents } from '@/services/socket'
 
@@ -64,9 +65,6 @@ watch(showBarcodeInput, () => {
   margin-bottom: $margin-top;
 }
 
-.app-menu {
-  margin-bottom: $margin-top;
-}
 
 .barcode-scanner-status {
   position: relative;

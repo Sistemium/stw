@@ -1,16 +1,20 @@
-import { createI18n } from 'vue-i18n';
+import { createI18n } from 'vue-i18n'
 // @ts-ignore
-import uiEn from 'element-plus/dist/locale/en';
+import uiEn from 'element-plus/dist/locale/en'
 // @ts-ignore
-import uiRu from 'element-plus/dist/locale/ru';
+import uiRu from 'element-plus/dist/locale/ru'
 // @ts-ignore
-import uiLt from 'element-plus/dist/locale/lt';
-import ru from '@/locales/ru.json';
-import en from '@/locales/en.json';
-import lt from '@/locales/lt.json';
+import uiLt from 'element-plus/dist/locale/lt'
+import ru from '@/locales/ru.json'
+import en from '@/locales/en.json'
+import lt from '@/locales/lt.json'
 import isString from 'lodash/isString'
+import ruFields from '@/locales/fields/ru.json'
+import enFields from '@/locales/fields/en.json'
+import ltFields from '@/locales/fields/lt.json'
 
-const LS_KEY_I18N_LOCALE = 'I18N_LOCALE';
+
+const LS_KEY_I18N_LOCALE = 'I18N_LOCALE'
 
 const dateTimeFormatGeneric = {
   timestamp: {
@@ -41,7 +45,7 @@ const dateTimeFormatGeneric = {
     hour: 'numeric',
     minute: 'numeric',
   },
-} as const;
+} as const
 
 const numberFormats = {
   decimal: {
@@ -56,9 +60,9 @@ const i18n = createI18n({
   locale: getSavedLocale() || import.meta.env.VITE_I18N_LOCALE || 'en',
   fallbackLocale: import.meta.env.VITE_I18N_FALLBACK_LOCALE || 'en',
   messages: {
-    en: { ...en, ...uiEn },
-    ru: { ...ru, ...uiRu },
-    lt: { ...lt, ...uiLt },
+    en: { ...en, ...uiEn, fields: enFields },
+    ru: { ...ru, ...uiRu, fields: ruFields },
+    lt: { ...lt, ...uiLt, fields: ltFields },
   },
   silentFallbackWarn: true,
   datetimeFormats: {
@@ -71,18 +75,18 @@ const i18n = createI18n({
     ru: numberFormats,
     lt: numberFormats,
   },
-});
+})
 
 // ElementLocale.i18n((key, value) => i18n.global.t(key, value));
 
-export default i18n;
+export default i18n
 
 export function saveLocale(locale: string) {
-  localStorage.setItem(LS_KEY_I18N_LOCALE, locale);
+  localStorage.setItem(LS_KEY_I18N_LOCALE, locale)
 }
 
 function getSavedLocale() {
-  return localStorage.getItem(LS_KEY_I18N_LOCALE);
+  return localStorage.getItem(LS_KEY_I18N_LOCALE)
 }
 
 export function getLocale(): string {

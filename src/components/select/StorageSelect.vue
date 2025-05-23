@@ -25,7 +25,7 @@ el-select.storage-select(
 import { computed, ref } from 'vue';
 import orderBy from 'lodash/orderBy';
 import Storage from '@/models/Storage';
-import i18n from '@/i18n';
+import i18n from '@/services/i18n';
 
 const props = defineProps({
   modelValue: String,

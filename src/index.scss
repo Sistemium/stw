@@ -6,7 +6,7 @@
 @import "styles/helpers";
 
 body {
-  font-family: "Helvetica Neue", Arial, sans-serif;
+  //font-family: "Helvetica Neue", Arial, sans-serif;
 }
 
 .list-group {
@@ -28,4 +28,16 @@ body {
 
 .el-drawer__header {
   margin-bottom: 20px;
+}
+
+body {
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
+  Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  overflow: hidden;
 }

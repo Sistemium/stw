@@ -39,7 +39,7 @@ import syncDeletions from '@/services/syncDeletions'
 import ClientData, { type IClientData } from '@/models/ClientData'
 import DeviceDetector from 'device-detector-js'
 import matchesDeep from 'sistemium-data/lib/util/matchesDeep'
-import { getLocale } from '@/i18n'
+import { getLocale } from '@/services/i18n'
 import packageJson from '../../package.json'
 import { computed } from 'vue'
 

@@ -57,7 +57,7 @@ import AlertEmpty from '@/lib/AlertEmpty.vue'
 import type { ServiceReportItem } from '@/services/serving'
 import flatten from 'lodash/flatten'
 import orderBy from 'lodash/orderBy'
-import { safeT } from '@/i18n'
+import { safeT } from '@/services/i18n'
 import Article from '../../models/Article'
 
 const props = withDefaults(defineProps<{

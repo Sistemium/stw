@@ -1,43 +1,48 @@
 <template lang="pug">
 
-el-menu.app-menu(
+v-app-bar(
   :key="$i18n.locale"
-  mode="horizontal"
-  router
-  :default-active="route.path"
+  dense
+  elevation="1"
 )
 
-  .left(v-if="$slots.left")
-    slot(name="left")
-
-  lang-menu(
-    :languages="languages"
-    trigger="click"
-    size="default"
-    v-model="$i18n.locale"
-  )
-
-  el-menu-item(
-    v-for="{ t, path, href } in menu.rootItems"
-    :key="t"
-    :index="path"
-  )
-    a(:href="href") {{ $t(t) }}
-
-  el-sub-menu(
-    v-for="grp in menu.groups"
-    :key="grp.name"
-    :index="grp.name"
-  )
-    template(#title)
-      .strong {{ $t('menu.other') }}
-    el-menu-item(
-      v-for="{ t, path, href } in grp.items"
+  .app-menu
+    v-btn(
+      v-for="{ t, path } in menu.rootItems"
       :key="t"
-      :index="path"
+      :to="path"
+      variant="text"
+      exact
+    ) {{ $t(t) }}
+    v-menu(
+      v-if="menu.groups.length"
+      offset-y
     )
-      template(#title)
-        a(:href="href") {{ $t(t) }}
+      template(#activator="{ props }")
+        v-btn.mx-2(
+          v-bind="props"
+          variant="text"
+          append-icon="$mdiMenuDown"
+        ) {{ $t('menu.other') }}
+
+      v-list
+        v-list-item(
+          v-for="({ t, path }) in menu.groups.flatMap(g => g.items)"
+          :key="t"
+          :to="path"
+          @click="$emit('navigate')"
+        )
+          v-list-item-title {{ $t(t) }}
+
+  template(#append)
+    .left(v-if="$slots.left")
+      slot(name="left")
+
+    lang-menu(
+      :languages="languages"
+      v-model="$i18n.locale"
+    )
+
 
 </template>
 <script setup lang="ts">
@@ -53,7 +58,6 @@ import map from 'lodash/map'
 import { useInvStore } from '@/store/invStore'
 
 const store = useInvStore()
-const route = useRoute()
 const languages: Language[] = [...Languages]
 
 const menu = computed(() => {
@@ -75,7 +79,6 @@ const menu = computed(() => {
     groups: map(grouped, (items, name) => ({ name, items }))
       .filter(({ name }) => name !== 'root') as Record<string, any>[]
   }
-
 })
 
 defineSlots<{
@@ -84,29 +87,12 @@ defineSlots<{
 
 </script>
 <style scoped lang="scss">
-@import "../styles/responsive";
 
-.left {
-  position: absolute;
-  top: 0;
-  right: 70px;
-}
-
-.lang-menu {
-  @include gt-xxs() {
-    position: absolute;
-    top: 0;
-    right: 0;
-  }
-  @include xxs() {
-    :deep(img) {
-      display: none;
-    }
-  }
-}
-
-a {
-  text-decoration: none;
-  color: unset;
+.app-menu {
+  text-align: center;
+  overflow-x: auto;
+  display: flex;
+  padding: 0 2em;
+  margin: auto;
 }
 </style>

@@ -2,7 +2,7 @@ import cloneDeep from 'lodash/cloneDeep'
 import round from 'lodash/round'
 import isNumber from 'lodash/isNumber'
 import { ElLoading, ElMessage } from 'element-plus'
-import i18n from '@/i18n'
+import i18n from '@/services/i18n'
 import type { BaseItem } from '@/init/Model'
 
 export default {

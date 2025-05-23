@@ -26,7 +26,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { SearchResult } from '@/services/prompting'
-import { safeT } from '@/i18n'
+import { safeT } from '@/services/i18n'
 import { Check } from '@element-plus/icons-vue'
 
 const selected = defineModel({ default: [] })

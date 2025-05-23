@@ -17,7 +17,7 @@ el-input.search-input(
 import debounceFn from 'lodash/debounce';
 import { computed, ref, watch } from 'vue';
 import { Search } from '@element-plus/icons-vue';
-import i18n from '@/i18n';
+import i18n from '@/services/i18n';
 import type { ElementsSize } from '@/types/elements'
 
 const props = withDefaults(defineProps<{
