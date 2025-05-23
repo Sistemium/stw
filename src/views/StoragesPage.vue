@@ -1,12 +1,12 @@
 <template lang="pug">
 
-.storages-page.page
+.storages-page.page.my-4
   page-title(title="menu.storages")
-  .buttons(v-if="storages.length")
-    tool-button(
-      tool="add"
-      @click="onAdd()"
-    )
+    .float-right(v-if="storages.length")
+      tool-button(
+        tool="add"
+        @click="onAdd()"
+      )
   resize(:padding="20")
     storages-list(
       :storages="storages"
@@ -19,9 +19,8 @@
       :title="$t('validation.noData')"
       type="info"
     )
-      el-button(
-        :plain="true"
-        type="primary"
+      v-btn(
+        variant="plain"
         @click="onAdd()"
       ) {{ $tAction('add', 'storage') }}
 

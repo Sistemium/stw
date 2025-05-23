@@ -25,7 +25,7 @@ import type { BaseItem } from '@/init/Model'
 import { hasSiteAuth } from '@/services/validating'
 
 const props = defineProps<{
-  storageId: string
+  storageId?: string
   from: BaseItem
 }>()
 

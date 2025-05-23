@@ -1,13 +1,17 @@
 <template lang="pug">
 
-.storages-list.list-group
-  .list-group-item(
+v-list.storages-list.text-left(
+  density="compact"
+  border
+)
+  v-list-item(
     v-for="storage in storages"
     :key="storage.id"
     @click="emit('click', storage)"
+    :title="storage.name"
   )
-    .name {{ storage.name }}
-    simple-label(:text="`concepts.${storage.type}`")
+    template(#append)
+      simple-label(:text="`concepts.${storage.type}`")
 
 </template>
 <script setup lang="ts">
@@ -24,11 +28,3 @@ const emit = defineEmits<{
 }>()
 
 </script>
-<style scoped lang="scss">
-
-.list-group-item {
-  display: flex;
-  justify-content: space-between;
-}
-
-</style>

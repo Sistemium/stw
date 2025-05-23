@@ -26,13 +26,3 @@ onBeforeUnmount(() => {
 });
 
 </script>
-<style scoped lang="scss">
-@import "../styles/responsive";
-
-h1 {
-  //margin-bottom: $margin-top;
-  @include xxs() {
-    display: none;
-  }
-}
-</style>
