@@ -10,7 +10,7 @@
     type="textarea"
     :autosize="{ minRows: 2 }"
     :placeholder="disabled ? $t('loading') : $t('fields.prompt')"
-    @keyup.ctrl.enter="emitSearch"
+    @keyup.enter="emitSearch"
   )
   el-button.ml-2(
     type="primary"
