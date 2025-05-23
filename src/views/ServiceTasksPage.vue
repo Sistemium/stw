@@ -1,5 +1,5 @@
 <template lang="pug">
-.service-tasks-page
+.service-tasks-page.my-4
   page-title(:title="`menu.${rootState}`")
     tool-button(
       tool="refresh"
