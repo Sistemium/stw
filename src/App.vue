@@ -71,4 +71,32 @@ watch(showBarcodeInput, () => {
   top: 10px;
 }
 
+.v-main {
+  overflow-y: auto;
+  max-height: var(--viewport-height);
+}
+
+@media (min-width: 1050px) {
+  .v-container {
+    max-width: 1050px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .v-container {
+    max-width: 1200px;
+  }
+}
+
+@media (min-width: 1400px) {
+  .v-container {
+    max-width: 1350px;
+  }
+}
+@media (min-width: 1600px) {
+  .v-container {
+    max-width: 1550px;
+  }
+}
+
 </style>
