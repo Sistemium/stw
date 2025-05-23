@@ -18,7 +18,7 @@ import { computed } from 'vue';
 
 const ICONS: Record<string, any> = {
   add: '$mdiPlusCircle',
-  edit: '$mdiPencilCircle',
+  edit: '$mdiPencilCircleOutline',
   refresh: '$mdiRefreshCircle',
   loading: '$mdiLoading',
   back: '$mdiChevronLeft',

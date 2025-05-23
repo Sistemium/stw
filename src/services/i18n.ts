@@ -12,7 +12,7 @@ import isString from 'lodash/isString'
 import ruFields from '@/locales/fields/ru.json'
 import enFields from '@/locales/fields/en.json'
 import ltFields from '@/locales/fields/lt.json'
-
+import { ru as ruV, en as enV, lt as ltV } from 'vuetify/locale'
 
 const LS_KEY_I18N_LOCALE = 'I18N_LOCALE'
 
@@ -60,9 +60,9 @@ const i18n = createI18n({
   locale: getSavedLocale() || import.meta.env.VITE_I18N_LOCALE || 'en',
   fallbackLocale: import.meta.env.VITE_I18N_FALLBACK_LOCALE || 'en',
   messages: {
-    en: { ...en, ...uiEn, fields: enFields },
-    ru: { ...ru, ...uiRu, fields: ruFields },
-    lt: { ...lt, ...uiLt, fields: ltFields },
+    en: { ...en, ...uiEn, fields: enFields, $vuetify: enV },
+    ru: { ...ru, ...uiRu, fields: ruFields, $vuetify: ruV },
+    lt: { ...lt, ...uiLt, fields: ltFields, $vuetify: ltV },
   },
   silentFallbackWarn: true,
   datetimeFormats: {

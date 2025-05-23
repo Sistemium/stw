@@ -1,34 +1,48 @@
 <template lang="pug">
-
-el-table-v2.service-task-table(
-  :key="width"
-  v-if="width"
-  :columns="columns"
-  :data="serviceTasks"
-  :width="width"
+v-data-table-virtual.service-task-table.text-left(
+  :headers="columns"
+  :items="serviceTasks"
+  fixed-header
   :height="height"
-  :fixed="true"
-  :estimated-row-height="50"
-  :row-class="rowClass"
+  :row-props="rowProps"
+  hover
 )
-  template(#empty)
-    alert-empty
+
+  template(#item.date="{ value }") {{ $d(value) }}
+  template(#item.processing="{ value }")
+    workflow-processing(
+      :workflow="serviceTaskWorkflow"
+      :processing="value"
+      size="small"
+      disabled
+    )
+  template(#item.servicePointId="{ value }")
+    customer-name(:customer-id="value")
+  template(#item.assigneeId="{ value }")
+    | {{ Employee.reactiveGet(value)?.name }}
+  template(#item.events="{ item }")
+    service-task-events-info(
+      :service-task-id="item.id"
+      @click="() => emit('showHistoryClick', item)"
+    )
+  template(#item.buttons="{ item }")
+    tool-button(
+      tool="edit"
+      :circle="false"
+      @click="() => emit('editClick', item)"
+    )
 </template>
 
 <script setup lang="tsx">
 
-import max from 'lodash/max'
 import { computed } from 'vue'
 import { t } from '@/lib/validations'
-import type { ColumnInfo } from '@/services/util'
-import { renderDate } from '@/services/rendering'
-import AlertEmpty from '@/lib/AlertEmpty.vue'
 import ToolButton from '@/lib/ToolButton.vue'
 import WorkflowProcessing from '@/lib/WorkflowProcessing.vue'
-import ServiceTaskEventsInfo from '@/components/tasks/ServiceTaskEventsInfo.vue'
+import CustomerName from '@/components/contacts/CustomerName.vue'
 import { type IServiceTask, serviceTaskWorkflow } from '@/models/ServiceTask'
 import Employee from '@/models/Employee'
-import ServicePointCustomer from '@/models/ServicePointCustomer'
+import ServiceTaskEventsInfo from '@/components/tasks/ServiceTaskEventsInfo.vue'
 
 const props = withDefaults(defineProps<{
   serviceTasks: IServiceTask[]
@@ -44,128 +58,50 @@ const props = withDefaults(defineProps<{
 
 const emit = defineEmits<{
   (e: 'editClick', row: IServiceTask): void
-  (e: 'resize', columns: ColumnInfo[]): void
   (e: 'showHistoryClick', row: IServiceTask): void
 }>()
 
-const rowClass = (row: { rowData: IServiceTask }) => (row.rowData.id === props.activeId) ? 'active' : ''
+function rowProps(row: { item: IServiceTask }) {
+  return { class: (row.item.id === props.activeId) ? 'bg-cyan-lighten-4' : '' }
+}
 
-const columns = computed(() => {
-  const count = 7.5
-  const { columnWidth } = props
-  const nameWidth = max([props.width - columnWidth * count - 6 - 300, 300]) || 0
-  const width = max([Math.floor((props.width - nameWidth - 6 - 60) / count), columnWidth]) || 0
-  // console.log(props.width, { columnWidth, nameWidth, width }, props.width - (nameWidth + width))
-  return [
-    {
-      width,
-      align: 'left',
-      title: t('fields.date'),
-      dataKey: 'date',
-      cellRenderer: renderDate,
-    },
-    {
-      width,
-      align: 'center',
-      title: t('fields.processing'),
-      dataKey: 'processing',
-      cellRenderer: ({ rowData }) =>
-        <WorkflowProcessing
-          workflow={serviceTaskWorkflow}
-          processing={rowData.processing}
-          size="small"
-          disabled
-        ></WorkflowProcessing>,
-    },
-    {
-      width: nameWidth,
-      align: 'left',
-      title: t('fields.description'),
-      dataKey: 'description',
-      class: 'description',
-    },
-    {
-      width: width * 3,
-      align: 'left',
-      title: t('fields.customer'),
-      key: 'servicePointId',
-      class: 'text-left',
-      cellRenderer({ rowData }) {
-        const c = ServicePointCustomer.reactiveGet(rowData.servicePointId)
-        return <div className="text-left">
-          <div>{c?.name}</div>
-          <small>{c?.address}</small>
-        </div>
-      },
-    },
-    {
-      width,
-      align: 'left',
-      title: t('fields.assignee'),
-      dataKey: 'date',
-      cellRenderer: ({ rowData }) =>
-        <div className="text-left">{Employee.reactiveGet(rowData.assigneeId)?.name}</div>,
-    },
-    {
-      width: width * 1.5,
-      align: 'center',
-      title: t('fields.events'),
-      key: 'events',
-      cellRenderer: ({ rowData }) =>
-        <ServiceTaskEventsInfo
-          service-task-id={rowData.id}
-          onClick={() => emit('showHistoryClick', rowData)}
-        ></ServiceTaskEventsInfo>,
-    },
-    {
-      key: 'buttons',
-      width: 60,
-      align: 'right',
-      cellRenderer: ({ rowData }) =>
-        <ToolButton
-          tool="edit"
-          circle={false}
-          onClick={() => emit('editClick', rowData)}>
-        </ToolButton>,
-    },
-  ] as ColumnInfo<IServiceTask>[]
-})
+const columns = computed(() => [
+  {
+    width: 110,
+    title: t('fields.date'),
+    key: 'date',
+  },
+  {
+    align: 'center',
+    title: t('fields.processing'),
+    key: 'processing',
+  },
+  {
+    // width: 250,
+    title: t('fields.description'),
+    key: 'description',
+    class: 'description',
+  },
+  {
+    width: 300,
+    title: t('fields.customer'),
+    key: 'servicePointId',
+  },
+  {
+    title: t('fields.assignee'),
+    key: 'assigneeId',
+  },
+  {
+    align: 'center',
+    title: t('fields.events'),
+    key: 'events',
+  },
+  {
+    key: 'buttons',
+    width: 60,
+    align: 'end',
+  },
+])
 
 
 </script>
-
-<style scoped lang="scss">
-@import "@/styles/variables.scss";
-
-small {
-  color: $gray;
-}
-
-.service-task-table::v-deep(.description > div) {
-  white-space: normal;
-  text-align: left;
-  //font-size: small;
-}
-
-.service-task-table::v-deep(.text-left) {
-  max-width: 100%;
-  overflow: hidden;
-
-  * {
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
-}
-
-.service-task-table::v-deep(.el-table-v2__row) {
-  min-height: 50px;
-  &.active {
-    background: lightcyan;
-  }
-}
-
-.alert-empty {
-  margin-top: 20px;
-}
-
-</style>

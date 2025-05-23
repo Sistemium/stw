@@ -5,43 +5,39 @@
       tool="refresh"
       @click="refresh"
     )
-  el-container
-    el-main
-      .filters
-        search-input(v-model="search")
-          //template(#append)
-        workflow-filter(v-model="statuses" :workflow="serviceTaskWorkflow")
-        .date-picker
-          el-date-picker(
-            v-model="dateRange"
-            type="daterange"
-            :unlink-panels="true"
-            :value-on-clear="resetDates"
-          )
-        .buttons
-          site-select(
-            v-model="siteId"
-            auto-select
-          )
-          tool-button(
-            tool="add"
-            @click="onAdd()"
-            :disabled="!siteId"
-          )
-      resize(
-        :padding="40"
-      )
-        template(#default="{ resized }")
-          el-auto-resizer
-            template(#default="{ width }")
-              service-task-table(
-                :service-tasks="serviceTasks"
-                :height="resized"
-                :width="width"
-                @edit-click="onEdit"
-                @show-history-click="t => onEdit(t, 'history')"
-                :active-id="currentTaskId"
-              )
+  v-container
+    .filters
+      search-input(v-model="search")
+        //template(#append)
+      workflow-filter(v-model="statuses" :workflow="serviceTaskWorkflow")
+      .date-picker
+        el-date-picker(
+          v-model="dateRange"
+          type="daterange"
+          :unlink-panels="true"
+          :value-on-clear="resetDates"
+        )
+      .buttons
+        site-select(
+          v-model="siteId"
+          auto-select
+        )
+        tool-button(
+          tool="add"
+          @click="onAdd()"
+          :disabled="!siteId"
+        )
+    resize(
+      :padding="40"
+    )
+      template(#default="{ resized }")
+        service-task-table(
+          :service-tasks="serviceTasks"
+          :height="resized"
+          @edit-click="onEdit"
+          @show-history-click="t => onEdit(t, 'history')"
+          :active-id="currentTaskId"
+        )
   router-view
 
 </template>
