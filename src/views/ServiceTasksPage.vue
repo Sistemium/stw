@@ -5,7 +5,7 @@
       tool="refresh"
       @click="refresh"
     )
-  v-container
+  v-sheet
     .filters
       search-input(v-model="search")
         //template(#append)

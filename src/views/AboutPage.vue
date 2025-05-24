@@ -2,7 +2,7 @@
 
 .about.text-center
   page-title(title="menu.about")
-  v-container
+  v-sheet
     h3 {{ $t('about') }}
     //h3(v-if="store.account") {{ $t('actions.welcome', [store.account.name]) }}
     .version v{{ version }}

@@ -6,7 +6,7 @@
 )
   page-title(title="menu.auth")
 
-  v-container
+  v-sheet
     v-sheet(v-if="!isAuthorized")
       oauth-button(
         :label="$t('actions.signIn')"

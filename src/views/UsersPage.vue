@@ -1,23 +1,22 @@
 <template lang="pug">
 .users-page.page
   page-title(title="menu.users")
-  el-container
-    el-main
-      .filters
-        search-input(v-model="search")
-      resize(
-        :padding="40"
-      )
-        template(#default="{ resized }")
-          el-auto-resizer
-            template(#default="{ width }")
-              user-table(
-                :users="users"
-                :height="resized"
-                :width="width"
-                :active-id="currentUserId"
-                @edit-click="onEdit"
-              )
+  v-sheet
+    .filters
+      search-input(v-model="search")
+    resize(
+      :padding="40"
+    )
+      template(#default="{ resized }")
+        el-auto-resizer
+          template(#default="{ width }")
+            user-table(
+              :users="users"
+              :height="resized"
+              :width="width"
+              :active-id="currentUserId"
+              @edit-click="onEdit"
+            )
   router-view
 
 </template>

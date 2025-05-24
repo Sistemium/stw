@@ -1,6 +1,6 @@
 <template lang="pug">
 
-h1.page-title.text-center {{ $t(title) }}
+h1.page-title.text-center.mb-4 {{ $t(title) }}
   slot
 
 </template>

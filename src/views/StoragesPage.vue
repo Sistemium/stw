@@ -7,7 +7,7 @@
         tool="add"
         @click="onAdd()"
       )
-  v-container.px-0
+  v-sheet
     resize(:padding="20")
       storages-list(
         :storages="storages"
