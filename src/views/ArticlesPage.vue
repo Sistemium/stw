@@ -6,7 +6,7 @@
   barcode-view(@input="setBarcode")
 
   .buttons
-    search-input(v-model="search" :disabled="!!barcode")
+    search-input.flex-1-1(v-model="search" :disabled="!!barcode")
     download-excel-button(
       :data-fn="downloadExcelData"
       :name="$t('menu.articles')"
@@ -27,9 +27,10 @@
       @click="onAdd()"
     )
 
-  resize#articles-page-scroll(
+  stm-resize(
     :class="viewComponentName"
     :padding="20"
+    :scrollable="false"
     @resized="setHeight"
   )
     template(
@@ -46,6 +47,7 @@
         @click="onArticleClick"
         @avatar-click="avatarClick"
         :selected-id="selectedArticle?.id"
+        :active-id="selectedArticle?.id"
       )
     el-alert.empty(
       v-else
@@ -66,7 +68,7 @@ import map from 'lodash/map';
 import pick from 'lodash/pick';
 import filter from 'lodash/filter';
 import SearchInput from '@/lib/SearchInput.vue';
-import Resize from '@/lib/StmResize.vue';
+import StmResize from '@/lib/StmResize.vue';
 import ToolButton from '@/lib/ToolButton.vue';
 import DownloadExcelButton from '@/lib/DownloadExcelButton.vue';
 import useResponsiveTables from '@/components/useResponsiveTables';
@@ -79,6 +81,7 @@ import { DocumentCopy } from '@element-plus/icons-vue';
 import { catalogueData, searchArticle } from '@/services/catalogue.js';
 import { useScrollToCreated } from '@/services/scrolling';
 import { useRouteParams } from '@/lib/updateRouteParams'
+import type { IArticle } from '@/models/Articles'
 
 const props = defineProps<{
   editRoute: string
@@ -207,7 +210,7 @@ function onArticleClick(article: { id: string }) {
   });
 }
 
-function handleCurrentChange(row: object) {
+function handleCurrentChange(row?: IArticle) {
   selectedArticle.value = row;
 }
 
@@ -222,14 +225,3 @@ function avatarClick(article: { id: string }) {
 }
 
 </script>
-<style scoped lang="scss">
-
-.search-input {
-  flex: 1;
-}
-
-.stm-resize {
-  overflow-y: hidden;
-}
-
-</style>

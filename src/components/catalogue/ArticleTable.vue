@@ -1,104 +1,89 @@
 <template lang="pug">
-.article-table(:style="{ height: `${height}px`}")
-  el-auto-resizer
-    template(#default="{ height: tableHeight, width }")
-      watch-emitter(
-        :value="width"
-        @change="value => {tableWidth = value}"
-      )
-      el-table-v2(
-        v-if="tableWidth"
-        ref="tableInstance"
-        :key="tableWidth"
-        :columns="columns"
-        :data="articles"
-        :width="tableWidth"
-        :height="tableHeight"
-        fixed
-        :estimated-row-height="50"
-        :row-event-handlers="{ onClick: handleCLick }"
-        :row-class="({ rowData }) => rowData.id === selectedId && 'active'"
-      )
+v-data-table-virtual.article-table(
+  ref="tableInstance"
+  :headers="columns"
+  :items="articles"
+  :height="height"
+  fixed-header
+  :row-props="rowProps"
+  hover
+)
+  template(#item.avatar="{ item }")
+    article-avatar(
+      :article="item"
+      @click="() => emit('avatarClick', item)"
+    )
+  template(#item.buttons="{ item }")
+    tool-button(
+      tool="edit"
+      :circle="false"
+      @click="() => emit('click', item)"
+    )
 </template>
 <script setup lang="tsx">
 
 import { computed, ref } from 'vue'
-import max from 'lodash/max'
-import type { TableV2Instance, Column } from 'element-plus'
 import ToolButton from '@/lib/ToolButton.vue'
 import ArticleAvatar from '@/components/catalogue/ArticleAvatar.vue'
 import { t } from '@/lib/validations'
-import WatchEmitter from '@/lib/WatchEmitter.vue'
 import type { BaseItem } from '@/init/Model'
 import type { IArticle } from '@/models/Articles'
 import type { IArticleProp } from '@/models/ArticleProps'
+import { useRowProps } from '@/services/util'
 
 const props = defineProps<{
   articles: IArticle[],
-  propColumns: IArticleProp[],
-  size?: string;
+  propColumns: (IArticleProp & { align: 'end' | 'start' })[],
   height?: number;
-  selectedId?: string;
+  activeId?: string;
 }>()
+
+const rowPropsClass = useRowProps(props)
+
+function rowProps(row: { item: IArticle }) {
+  return {
+    onClick() {
+      const article = (props.activeId === row.item.id) ? undefined : row.item
+      emit('currentChange', article)
+    },
+    ...rowPropsClass(row),
+  }
+}
+
+const tableInstance = ref()
 
 const emit = defineEmits<{
   (e: 'avatarClick', row: BaseItem): void;
   (e: 'click', row: BaseItem): void;
-  (e: 'currentChange', current: BaseItem): void;
+  (e: 'currentChange', current: IArticle | undefined): void;
 }>()
 
-const tableWidth = ref(0)
-const tableInstance = ref<TableV2Instance>()
-
-const columns = computed<Column[]>(() => {
-  const fullWidth = max([tableWidth.value, 900]) as number - 60 - 50 - 6
-  const colNumber = props.propColumns.length + 2
-  const colWidth = Math.floor(fullWidth / colNumber)
-  const nameWidth = fullWidth - colWidth * (colNumber - 1)
-  return [
-    {
-      key: 'avatar',
-      title: '',
-      width: 60,
-      cellRenderer: ({ rowData }) =>
-        <ArticleAvatar
-          article={rowData}
-          onClick={() => emit('avatarClick', rowData)}
-        ></ArticleAvatar>,
-    },
-    {
-      align: 'left',
-      key: 'name',
-      title: t('fields.name'),
-      dataKey: 'name',
-      width: nameWidth,
-    },
-    {
-      key: 'code',
-      title: t('fields.code'),
-      dataKey: 'code',
-      width: colWidth,
-    },
-    ...props.propColumns.map(prop => ({
-      key: prop.id,
-      title: prop.name,
-      dataKey: prop.id,
-      width: colWidth,
-      align: prop.align,
-    })),
-    {
-      key: 'buttons',
-      width: 50,
-      align: 'right',
-      cellRenderer: ({ rowData }) =>
-        <ToolButton
-          tool="edit"
-          circle={false}
-          onClick={() => emit('click', rowData)}>
-        </ToolButton>,
-    },
-  ]
-})
+const columns = computed(() => [
+  {
+    key: 'avatar',
+    title: '',
+    width: 60,
+  },
+  {
+    align: 'left',
+    key: 'name',
+    title: t('fields.name'),
+  },
+  {
+    key: 'code',
+    title: t('fields.code'),
+  },
+  ...props.propColumns.map(prop => ({
+    key: prop.id,
+    title: prop.name,
+    align: prop.align,
+  })),
+  {
+    key: 'buttons',
+    width: 50,
+    align: 'end',
+  },
+])
 
 defineExpose({
   isReady(): boolean {
@@ -111,15 +96,12 @@ defineExpose({
       return false
     }
     setTimeout(() => {
-      table.scrollToRow(idx ? idx - 1 : 0, 'start')
+      table.scrollToIndex(idx ? idx - 1 : 0)
+      emit('currentChange', props.articles[idx])
     }, 100)
     return true
   },
 })
-
-function handleCLick({ rowData }: { rowData: IArticle }) {
-  emit('currentChange', rowData)
-}
 
 </script>
 <style scoped lang="scss">
