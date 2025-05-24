@@ -1,21 +1,22 @@
 <template lang="pug">
 
-.about.text-center.my-4
+.about.text-center
   page-title(title="menu.about")
-  h3 {{ $t('about') }}
-  //h3(v-if="store.account") {{ $t('actions.welcome', [store.account.name]) }}
-  .version v{{ version }}
+  v-container
+    h3 {{ $t('about') }}
+    //h3(v-if="store.account") {{ $t('actions.welcome', [store.account.name]) }}
+    .version v{{ version }}
 
-  .my-4(v-if="isSupported && clientData")
-    el-button(
-      @click="toggleNotifications"
-      :type="isEnabled ? 'success' : 'primary'"
-      :disabled="isBusy"
-    )
-      el-icon(v-if="isGranted" )
-        Check(v-if="isEnabled")
-        MuteNotification(v-else)
-      span {{ tAction(isEnabled ? 'turnOff' : 'turnOn', 'notifications') }}
+    .my-4(v-if="isSupported && clientData")
+      el-button(
+        @click="toggleNotifications"
+        :type="isEnabled ? 'success' : 'primary'"
+        :disabled="isBusy"
+      )
+        el-icon(v-if="isGranted" )
+          Check(v-if="isEnabled")
+          MuteNotification(v-else)
+        span {{ tAction(isEnabled ? 'turnOff' : 'turnOn', 'notifications') }}
 
 </template>
 <script setup lang="ts">

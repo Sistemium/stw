@@ -1,28 +1,29 @@
 <template lang="pug">
 
-.storages-page.page.my-4
+.storages-page.page
   page-title(title="menu.storages")
     .float-right(v-if="storages.length")
       tool-button(
         tool="add"
         @click="onAdd()"
       )
-  resize(:padding="20")
-    storages-list(
-      :storages="storages"
-      @click="onStorageClick"
-      v-if="storages.length"
-    )
-    el-alert.empty(
-      v-else
-      :closable="false"
-      :title="$t('validation.noData')"
-      type="info"
-    )
-      v-btn(
-        variant="plain"
-        @click="onAdd()"
-      ) {{ $tAction('add', 'storage') }}
+  v-container.px-0
+    resize(:padding="20")
+      storages-list(
+        :storages="storages"
+        @click="onStorageClick"
+        v-if="storages.length"
+      )
+      el-alert.empty(
+        v-else
+        :closable="false"
+        :title="$t('validation.noData')"
+        type="info"
+      )
+        v-btn(
+          variant="plain"
+          @click="onAdd()"
+        ) {{ $tAction('add', 'storage') }}
 
   router-view
 

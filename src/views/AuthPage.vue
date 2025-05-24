@@ -1,27 +1,28 @@
 <template lang="pug">
 
-.auth-page.page.text-center.my-4(
+.auth-page.page.text-center(
   v-loading="isAuthorizing"
   :element-loading-text="$t('authorizing')"
 )
   page-title(title="menu.auth")
 
-  .my-3(v-if="!isAuthorized")
-    oauth-button(
-      :label="$t('actions.signIn')"
-      image="img/icons8-cell_phone"
-      button-type="danger"
-      code="sms"
-      :from="from"
-      :disabled="!!isAuthorizing"
-    )
+  v-container
+    v-sheet(v-if="!isAuthorized")
+      oauth-button(
+        :label="$t('actions.signIn')"
+        image="img/icons8-cell_phone"
+        button-type="danger"
+        code="sms"
+        :from="from"
+        :disabled="!!isAuthorizing"
+      )
 
-  template(v-else)
-    hello-world.my-3(
-      :msg="$t('actions.welcome', [account.name])"
-    )
-    .my-3
-      el-button(type="warning" @click="logout") {{ $t('actions.logout') }}
+    template(v-else)
+      hello-world(
+        :msg="$t('actions.welcome', [account.name])"
+      )
+      .my-3
+        el-button(type="warning" @click="logout") {{ $t('actions.logout') }}
 
 </template>
 <script setup lang="ts">

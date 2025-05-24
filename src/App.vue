@@ -8,7 +8,7 @@ v-layout#app
     v-if="showBarcodeInput"
     :lock="false"
   )
-  v-main
+  v-main.my-5
     router-view
 
 </template>
