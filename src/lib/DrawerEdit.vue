@@ -17,8 +17,10 @@ component.drawer-edit.box-card(
     v-toolbar(
       color="secondary"
       v-if="isDrawer"
+      density="compact"
     )
-      v-toolbar-title {{ safeT(title) }}
+      v-toolbar-title
+        small {{ safeT(title) }}
       v-btn(
         icon="$mdiClose"
         @click="handleClose"
