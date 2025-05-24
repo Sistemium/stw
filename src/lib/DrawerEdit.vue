@@ -15,7 +15,7 @@ component.drawer-edit.box-card(
   v-card.fill-height.d-flex.flex-column(flat)
 
     v-toolbar(
-      color="secondary"
+      color="grey-lighten-2"
       v-if="isDrawer"
       density="compact"
     )

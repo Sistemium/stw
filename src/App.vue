@@ -4,11 +4,11 @@ v-layout#app
   app-menu
     template(#left)
       barcode-scanner-status(v-if="showBarcodeStatus")
-  barcode-input(
-    v-if="showBarcodeInput"
-    :lock="false"
-  )
   v-main.my-5
+    barcode-input(
+      v-if="showBarcodeInput"
+      :lock="false"
+    )
     router-view
 
 </template>
@@ -62,12 +62,6 @@ watch(showBarcodeInput, () => {
 
 .barcode-input {
   margin-bottom: $margin-top;
-}
-
-
-.barcode-scanner-status {
-  position: relative;
-  top: 10px;
 }
 
 .v-main {

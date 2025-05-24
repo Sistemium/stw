@@ -35,8 +35,8 @@ v-app-bar(
           v-list-item-title {{ $t(t) }}
 
   template(#append)
-    .left(v-if="$slots.left")
-      slot(name="left")
+    slot(name="left" v-if="$slots.left")
+    //.left()
 
     lang-menu(
       :languages="languages"

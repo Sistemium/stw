@@ -1,23 +1,23 @@
 <template lang="pug">
 
-.barcode-scanner-status
-  el-link(
-    :class="scannerStatus"
-    @click="toggleScanner()"
-  )
-    svg
-      use(:xlink:href="statusSrc")
+v-btn.barcode-scanner-status(
+  :class="scannerStatus"
+  size="small"
+  @click="toggleScanner()"
+)
+  svg
+    use(:xlink:href="statusSrc")
 
 </template>
 <script>
-import { createNamespacedHelpers } from 'vuex';
-import * as nativeScanner from '@/lib/nativeScanner';
-import * as g from '@/store/inv/getters';
-import * as m from '@/store/inv/mutations';
+import { createNamespacedHelpers } from 'vuex'
+import * as nativeScanner from '@/lib/nativeScanner'
+import * as g from '@/store/inv/getters'
+import * as m from '@/store/inv/mutations'
 
-const { mapGetters, mapMutations } = createNamespacedHelpers('inv');
+const { mapGetters, mapMutations } = createNamespacedHelpers('inv')
 
-export const { isNative } = nativeScanner;
+export const { isNative } = nativeScanner
 
 export default {
   name: 'BarcodeScannerStatus',
@@ -28,8 +28,8 @@ export default {
       isConnected: g.SCANNER_IS_CONNECTED,
     }),
     statusSrc() {
-      const icon = this.isConnected ? 'no-barcode' : 'barcode';
-      return `/img/icons8-${icon}.svg#iconRoot`;
+      const icon = this.isConnected ? 'no-barcode' : 'barcode'
+      return `/img/icons8-${icon}.svg#iconRoot`
     },
   },
   methods: {
@@ -39,24 +39,24 @@ export default {
     }),
     toggleScanner() {
       if (nativeScanner.isNative()) {
-        this.toggleScannerNative();
+        this.toggleScannerNative()
       } else {
-        this.setScannerStatus(this.isConnected ? 'disconnected' : 'connected');
+        this.setScannerStatus(this.isConnected ? 'disconnected' : 'connected')
       }
     },
     toggleScannerNative() {
       if (this.scannerStatus === 'connected') {
-        nativeScanner.barCodeScannerOff();
-        return;
+        nativeScanner.barCodeScannerOff()
+        return
       }
       nativeScanner.barCodeScannerOn((code, symbology) => {
-        this.setScannedBarcode({ code, symbology });
+        this.setScannedBarcode({ code, symbology })
       }, status => {
-        this.setScannerStatus(status);
-      });
+        this.setScannerStatus(status)
+      })
     },
   },
-};
+}
 
 </script>
 <style scoped lang="scss">
@@ -68,19 +68,10 @@ svg {
   filter: $filter-primary;
 }
 
-.el-button.connected {
+.v-btn.connected {
   svg {
     filter: $filter-green;
   }
-}
-
-.el-button {
-  svg {
-    position: relative;
-    top: 2px;
-  }
-
-  padding: 0;
 }
 
 </style>
