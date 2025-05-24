@@ -6,7 +6,7 @@ component.drawer-edit.box-card(
   v-model="drawerOpen"
   :width="size"
   :style="drawerStyle"
-  @update:model-value="open => { !open && handleClose() }"
+  @update:model-value="open => { !open && handleClose(model) }"
   location="right"
   temporary
   bg-color="background"
