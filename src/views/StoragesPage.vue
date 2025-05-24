@@ -1,6 +1,6 @@
 <template lang="pug">
 
-.storages-page
+.storages-page.mx-auto(style="max-width: 1200px")
   page-title(title="menu.storages")
     .float-right(v-if="storages.length")
       tool-button(

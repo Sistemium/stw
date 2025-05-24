@@ -1,9 +1,9 @@
 <template lang="pug">
-.users-page.page
+.users-page.page.mx-auto(style="max-width: 1200px")
   page-title(title="menu.users")
   v-sheet
-    .filters
-      search-input(v-model="search")
+    .filters.d-flex
+      search-input.flex-1-1(v-model="search")
     resize.mt-1(
       :padding="40"
       :scrollable="false"
@@ -52,14 +52,3 @@ function onEdit(user: { id: string }) {
 }
 
 </script>
-<style scoped lang="scss">
-.filters {
-  display: flex;
-}
-.search-input {
-  flex: 1;
-}
-.page-title {
-  margin-bottom: 0;
-}
-</style>
