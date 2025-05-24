@@ -23,8 +23,9 @@ component.drawer-edit.box-card(
         icon="$mdiClose"
         @click="handleClose"
       )
-    v-card-text
-      slot(:model="model")
+    stm-resize(:padding="20")
+      v-card-text
+          slot(:model="model")
 
     v-spacer
 
@@ -47,6 +48,7 @@ import { ElMessage } from 'element-plus'
 import cloneDeep from 'lodash/cloneDeep'
 import pick from 'lodash/pick'
 import merge from 'lodash/merge'
+import StmResize from '@/lib/StmResize.vue'
 import FormButtons from 'sistemium-vue/components/FormButtons.vue'
 import matchesDeep from 'sistemium-data/lib/util/matchesDeep.js'
 import { localizedDeleteError } from '@/services/erroring.js'

@@ -41,7 +41,7 @@ export function $requiredRule(fieldOrArray: string | string[]) {
   return res
 }
 
-export function cloneInstance(res: BaseItem) {
+export function cloneInstance(res?: BaseItem) {
   return res && {
     ...cloneDeep(res),
     cts: undefined,

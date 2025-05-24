@@ -114,11 +114,11 @@ const route = useRoute();
 const { width } = useWindowSize();
 const drawerWidth = computed(() => {
   if (width.value > 1100) {
-    return '550px'
+    return '550'
   }
-  return width.value > 450 ? '450px' : '370px'
+  return width.value > 450 ? '450' : '370'
 });
-const copyArticle = computed<Partial<IArticle>>(() => {
+const copyArticle = computed(() => {
   const { copyId } = route.query;
   return cloneInstance(Article.reactiveGet(copyId as string));
 });
