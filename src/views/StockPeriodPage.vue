@@ -1,6 +1,6 @@
 <template lang="pug">
 
-.stock-date-page
+.stock-date-page.mx-auto
   page-title(title="menu.stockPeriod")
     tool-button(
       tool="refresh"
@@ -261,6 +261,10 @@ watch(showDetails, show => {
 <style scoped lang="scss">
 @import "../styles/variables";
 @import "../styles/filters";
+
+.stock-date-page {
+  max-width: 1200px;
+}
 
 .stm-resize {
   margin-top: $margin-top;

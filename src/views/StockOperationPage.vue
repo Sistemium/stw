@@ -245,7 +245,9 @@ function onProcessing(processing: string) {
 </script>
 <style scoped lang="scss">
 @import "../styles/variables";
-
+.stock-withdrawing-page {
+  max-width: 1100px;
+}
 .stock-withdrawing {
   flex: 1;
 }

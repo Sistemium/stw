@@ -201,8 +201,8 @@ export default createVuetify({
         dark: false,
         colors: {
           background: '#FFFFFF',
-          'on-background': '#1C1468',
-          primary: '#1C1468',
+          'on-background': '#339af0',
+          primary: '#339af0',
           'on-primary': '#88E2F2',
           secondary: '#88E2F2',
           'on-secondary': '#1C1468',

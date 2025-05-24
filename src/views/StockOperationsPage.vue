@@ -1,6 +1,6 @@
 <template lang="pug">
 
-.stock-withdrawals-page
+.stock-withdrawals-page.mx-auto
 
   page-title(:title="`menu.${rootState}`")
     menu-button(
@@ -409,6 +409,10 @@ function downloadSchema() {
 .date-picker :deep(.el-date-editor) {
   width: auto;
   margin: auto;
+}
+
+.stock-withdrawals-page {
+  max-width: 1200px;
 }
 
 </style>
