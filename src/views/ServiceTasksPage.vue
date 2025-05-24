@@ -29,6 +29,7 @@
         )
     resize(
       :padding="40"
+      :scrollable="false"
     )
       template(#default="{ resized }")
         service-task-table(
