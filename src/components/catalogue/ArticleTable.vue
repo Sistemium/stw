@@ -104,23 +104,3 @@ defineExpose({
 })
 
 </script>
-<style scoped lang="scss">
-@import "../../styles/variables";
-
-.article-table {
-  text-align: left;
-}
-
-.article-table :deep(.el-table-v2__row-cell) {
-  padding: 6px;
-}
-
-.article-table :deep(.el-table-v2__row.active) {
-  background: $gray-background;
-
-  .el-table-v2__cell-text {
-    color: $primary-color;
-  }
-}
-
-</style>
