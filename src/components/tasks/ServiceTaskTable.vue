@@ -33,7 +33,7 @@ v-data-table-virtual.service-task-table.text-left(
     )
 </template>
 
-<script setup lang="tsx">
+<script setup lang="ts">
 
 import { computed } from 'vue'
 import { t } from '@/lib/validations'
@@ -43,6 +43,7 @@ import CustomerName from '@/components/contacts/CustomerName.vue'
 import { type IServiceTask, serviceTaskWorkflow } from '@/models/ServiceTask'
 import Employee from '@/models/Employee'
 import ServiceTaskEventsInfo from '@/components/tasks/ServiceTaskEventsInfo.vue'
+import { useRowProps } from '@/services/util'
 
 const props = withDefaults(defineProps<{
   serviceTasks: IServiceTask[]
@@ -61,9 +62,7 @@ const emit = defineEmits<{
   (e: 'showHistoryClick', row: IServiceTask): void
 }>()
 
-function rowProps(row: { item: IServiceTask }) {
-  return { class: (row.item.id === props.activeId) ? 'bg-cyan-lighten-4' : '' }
-}
+const rowProps = useRowProps(props)
 
 const columns = computed(() => [
   {

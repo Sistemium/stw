@@ -6,6 +6,7 @@ import filter from 'lodash/filter'
 import uniq from 'lodash/uniq'
 import map from 'lodash/map'
 
+
 export function orderByName<T = BaseItem>(items: T[]) {
   return orderBy(items, 'name')
 }
@@ -73,4 +74,10 @@ export function useRouteQuery(name: string = 'search') {
     },
   })
   return { search }
+}
+
+export function useRowProps(props: { activeId: string }) {
+  return (row: { item: { id: string } }) => ({
+    class: (row.item.id === props.activeId) ? 'bg-cyan-lighten-4' : '',
+  })
 }

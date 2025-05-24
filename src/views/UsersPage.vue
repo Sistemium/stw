@@ -8,15 +8,12 @@
       :padding="40"
     )
       template(#default="{ resized }")
-        el-auto-resizer
-          template(#default="{ width }")
-            user-table(
-              :users="users"
-              :height="resized"
-              :width="width"
-              :active-id="currentUserId"
-              @edit-click="onEdit"
-            )
+        user-table(
+          :users="users"
+          :height="resized"
+          :active-id="currentUserId"
+          @edit-click="onEdit"
+        )
   router-view
 
 </template>
