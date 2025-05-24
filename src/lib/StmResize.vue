@@ -1,40 +1,38 @@
 <template lang="pug">
-
 .stm-resize(
-  :style="style"
-  ref="root"
+  :class='{ scrollable }'
+  :style='style'
+  ref='root'
 )
   slot(v-bind:resized='resized')
-
 </template>
 <script setup lang="ts">
-
 import debounce from 'lodash/debounce'
 import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import { useInvStore } from '@/store/invStore'
-
-const props = defineProps<{
-  padding?: number;
-  maximize?: boolean;
-}>()
-
-const emit = defineEmits<{
-  (e: 'resized', height: number): void;
-}>()
 
 defineSlots<{
-  default(props: { resized: number }): any
+  default(props: { resized?: number }): any
 }>()
 
-const root = ref(null)
+const props = withDefaults(
+  defineProps<{
+    padding?: number
+    maximize?: boolean
+    scrollable?: boolean
+  }>(),
+  { scrollable: true }
+)
+
+const emit = defineEmits<{
+  (e: 'resized', height: number): void
+}>()
+
+const root = ref<{ getBoundingClientRect: () => Record<string, any> }>()
 const style = ref<{ [key: string]: string | number }>({})
 const top = ref(0)
 const height = ref(0)
 const handleResize = debounce(setHeight, 700)
 const resized = ref<number>()
-const invStore = useInvStore()
-
-watch(() => invStore.uuid, setHeight)
 
 onMounted(() => {
   window.addEventListener('resize', handleResize)
@@ -46,6 +44,10 @@ onMounted(() => {
 onBeforeUnmount(() => {
   window.removeEventListener('resize', handleResize)
 })
+
+watch(props, setHeight)
+
+defineExpose({ setHeight })
 
 function setHeight() {
   if (!root.value) {
@@ -62,17 +64,17 @@ function setHeight() {
   }
   emit('resized', resized.value)
 }
-
 </script>
 <style scoped lang="scss">
-
 .stm-resize {
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
+  &.scrollable {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
   @media print {
     max-height: none !important;
     height: auto !important;
   }
 }
-
 </style>

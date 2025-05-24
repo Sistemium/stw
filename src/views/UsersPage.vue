@@ -4,8 +4,9 @@
   v-sheet
     .filters
       search-input(v-model="search")
-    resize(
+    resize.mt-1(
       :padding="40"
+      :scrollable="false"
     )
       template(#default="{ resized }")
         user-table(
