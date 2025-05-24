@@ -1,12 +1,12 @@
 <template lang="pug">
 
-.auth-page.page(
+.auth-page.page.text-center.my-4(
   v-loading="isAuthorizing"
   :element-loading-text="$t('authorizing')"
 )
   page-title(title="menu.auth")
 
-  p(v-if="!isAuthorized")
+  .my-3(v-if="!isAuthorized")
     oauth-button(
       :label="$t('actions.signIn')"
       image="img/icons8-cell_phone"
@@ -17,10 +17,10 @@
     )
 
   template(v-else)
-    hello-world(
+    hello-world.my-3(
       :msg="$t('actions.welcome', [account.name])"
     )
-    p
+    .my-3
       el-button(type="warning" @click="logout") {{ $t('actions.logout') }}
 
 </template>

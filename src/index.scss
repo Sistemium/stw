@@ -6,10 +6,6 @@
 @import "styles/animations";
 @import "styles/helpers";
 
-body {
-  //font-family: "Helvetica Neue", Arial, sans-serif;
-}
-
 .list-group {
   @include list-group($border-radius, $list-cell-borders,
           $gray-background, $dark-gray, $margin-top, $primary-color, $white, $padding);

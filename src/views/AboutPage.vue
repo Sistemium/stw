@@ -1,12 +1,12 @@
 <template lang="pug">
 
-.about
+.about.text-center.my-4
   page-title(title="menu.about")
   h3 {{ $t('about') }}
-  h3(v-if="store.account") {{ $t('actions.welcome', [store.account.name]) }}
+  //h3(v-if="store.account") {{ $t('actions.welcome', [store.account.name]) }}
   .version v{{ version }}
 
-  p(v-if="isSupported && clientData")
+  .my-4(v-if="isSupported && clientData")
     el-button(
       @click="toggleNotifications"
       :type="isEnabled ? 'success' : 'primary'"

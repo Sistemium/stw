@@ -55,7 +55,6 @@ watch(showBarcodeInput, () => {
 #app {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: $black;
   max-width: 1200px;
   margin: auto;

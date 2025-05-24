@@ -1,6 +1,6 @@
 <template lang="pug">
 
-.home
+.home.text-center
   img(alt="Vue logo" src="../assets/logo.png")
   hello-world(:msg="$t('message')")
 

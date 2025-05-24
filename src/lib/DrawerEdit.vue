@@ -94,14 +94,16 @@ const emit = defineEmits<{
 
 const drawer = ref(null)
 const loadingMessage = ref()
-const drawerOpen = ref(false)
+const drawerOpen = ref()
 const model = ref()
 const router = useRouter()
 const route = useRoute()
 const $parent = ref()
 
 nextTick(() => {
-  drawerOpen.value = true
+  setTimeout(() => {
+    drawerOpen.value = true
+  }, 50)
 })
 
 const drawerComponent = computed(() => props.isDrawer ? 'v-dialog' : 'el-card')
