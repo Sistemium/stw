@@ -1,51 +1,62 @@
 <template lang="pug">
 
-component.drawer-edit.box-card(
+v-navigation-drawer.drawer-edit.box-card(
   ref="drawer"
   :is="drawerComponent"
-  shadow="never"
-  :title="title"
-  :model-value="true"
-  :append-to-body="true"
-  :destroy-on-close="true"
-  :size="size"
+  v-model="drawerOpen"
+  :width="size"
   :style="drawerStyle"
-  @close="handleClose"
+  @update:model-value="open => { !open && handleClose() }"
+  location="right"
+  temporary
+  bg-color="background"
 )
 
-  .container
-    slot(:model="model")
+  v-card.fill-height.d-flex.flex-column(flat)
 
-  form-buttons(
-    :changed="changed"
-    :deletable="isDeletable"
-    size="default"
-    @save-click="onSaveClick"
-    @cancel-click="cancelClick"
-    @delete-click="onDeleteClick"
-  )
+    v-toolbar(color="secondary")
+      v-toolbar-title {{ safeT(title) }}
+      v-btn(
+        icon="$mdiClose"
+        @click="handleClose"
+      )
+    v-card-text
+      slot(:model="model")
+
+    v-spacer
+
+    v-card-actions.bg-grey-lighten-3
+      form-buttons.justify-space-around.w-100(
+        :changed="changed"
+        :deletable="isDeletable"
+        size="default"
+        @save-click="onSaveClick"
+        @cancel-click="cancelClick"
+        @delete-click="onDeleteClick"
+      )
 
 </template>
 <script setup lang="ts">
 
-import { computed, getCurrentInstance, nextTick, onMounted, ref, watch } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import { ElMessage } from 'element-plus';
-import cloneDeep from 'lodash/cloneDeep';
-import pick from 'lodash/pick';
-import merge from 'lodash/merge';
-import FormButtons from 'sistemium-vue/components/FormButtons.vue';
-import matchesDeep from 'sistemium-data/lib/util/matchesDeep.js';
-import { localizedDeleteError } from '@/services/erroring.js';
+import { computed, getCurrentInstance, nextTick, onMounted, ref, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { ElMessage } from 'element-plus'
+import cloneDeep from 'lodash/cloneDeep'
+import pick from 'lodash/pick'
+import merge from 'lodash/merge'
+import FormButtons from 'sistemium-vue/components/FormButtons.vue'
+import matchesDeep from 'sistemium-data/lib/util/matchesDeep.js'
+import { localizedDeleteError } from '@/services/erroring.js'
 import type { BaseItem } from '@/init/Model'
-import { t } from '@/lib/validations';
+import { t } from '@/lib/validations'
+import { safeT } from '@/services/i18n'
 
 const props = defineProps({
   title: String,
   isDrawer: { type: Boolean, default: true },
   size: {
     type: String,
-    default: '370px',
+    default: '370',
   },
   from: Object,
   forceModified: Boolean,
@@ -60,13 +71,13 @@ const props = defineProps({
   saveFn: {
     type: Function,
     async default(props: any) {
-      console.error('saveFn not implemented', props);
+      console.error('saveFn not implemented', props)
     },
   },
   destroyFn: {
     type: Function,
     async default(id: string) {
-      console.error('destroyFn not implemented', id);
+      console.error('destroyFn not implemented', id)
     },
   },
   validateFn: {
@@ -74,114 +85,114 @@ const props = defineProps({
   },
   drawerStyle: Object,
   afterCloseTo: Object,
-});
+})
 
 const emit = defineEmits<{
   (e: 'deleted', id: string | null): void
   (e: 'error', error: Error): void
-}>();
+}>()
 
-const drawer = ref(null);
-const loadingMessage = ref();
-const drawerOpen = ref(false);
-const model = ref();
-const router = useRouter();
-const route = useRoute();
-const $parent = ref();
+const drawer = ref(null)
+const loadingMessage = ref()
+const drawerOpen = ref(false)
+const model = ref()
+const router = useRouter()
+const route = useRoute()
+const $parent = ref()
 
 nextTick(() => {
-  drawerOpen.value = true;
-});
+  drawerOpen.value = true
+})
 
-const drawerComponent = computed(() => props.isDrawer ? 'el-drawer' : 'el-card');
+const drawerComponent = computed(() => props.isDrawer ? 'v-dialog' : 'el-card')
 // const loading = computed(() => !!loadingMessage.value);
-const isDeletable = computed(() => props.deletable && !!props.modelOrigin?.id);
-const changed = computed(() => props.forceModified || hasChanges.value);
+const isDeletable = computed(() => props.deletable && !!props.modelOrigin?.id)
+const changed = computed(() => props.forceModified || hasChanges.value)
 const hasChanges = computed(() => {
   return !props.modelOrigin
     || !props.modelOrigin.id
-    || !matchesDeep(model.value, props.modelOrigin);
-});
+    || !matchesDeep(model.value, props.modelOrigin)
+})
 
 onMounted(() => {
-  $parent.value = getCurrentInstance()?.parent;
-});
+  $parent.value = getCurrentInstance()?.parent
+})
 
 watch(() => props.modelOrigin, modelOrigin => {
-  model.value = cloneDeep(modelOrigin || {});
-}, { immediate: true });
+  model.value = cloneDeep(modelOrigin || {})
+}, { immediate: true })
 
 function onDeleteClick() {
-  const { id } = model.value;
+  const { id } = model.value
   if (!id) {
-    emit('deleted', null);
-    return;
+    emit('deleted', null)
+    return
   }
   performOperation(() => props.destroyFn(id)
     .then(() => {
-      emit('deleted', id);
+      emit('deleted', id)
     }).catch((e: any) => {
-      throw localizedDeleteError(e);
-    }));
+      throw localizedDeleteError(e)
+    }))
 }
 
 function getValidateForm() {
-  const fn = props.validateFn || $parent.value?.refs?.form?.validate;
-  return fn || ((cb: any) => typeof cb === 'function' && cb(true));
+  const fn = props.validateFn || $parent.value?.refs?.form?.validate
+  return fn || ((cb: any) => typeof cb === 'function' && cb(true))
 }
 
 function onSaveClick() {
   getValidateForm()((valid: any) => {
     if (valid) {
-      performOperation(save);
+      performOperation(save)
     } else {
-      ElMessage.warning(t('validation.formInvalid').toString());
+      ElMessage.warning(t('validation.formInvalid').toString())
     }
-  });
+  })
 }
 
 function save() {
   return props.saveFn(model.value)
     .then((record: BaseItem) => {
-      $parent.value?.emit('saved', record);
-      return record;
-    });
+      $parent.value?.emit('saved', record)
+      return record
+    })
 }
 
 function handleClose(record: any) {
   if (!props.from) {
-    drawerOpen.value = false;
-    $parent.value?.emit('closed', record);
-    return;
+    drawerOpen.value = false
+    $parent.value?.emit('closed', record)
+    return
   }
-  const query = pick(route.query, 'search') as { [key: string]: string };
+  const query = pick(route.query, 'search') as { [key: string]: string }
   if (record && !props.modelOrigin.id) {
-    query.createdId = record.id;
+    query.createdId = record.id
   }
   router.replace(merge({ ...(props.afterCloseTo || props.from) }, { query }))
-    .catch((e: any) => console.error('handleClose', e));
+    .catch((e: any) => console.error('handleClose', e))
 }
 
 function cancelClick(record: any) {
   if (!drawer.value) {
-    console.error('cancelClick', 'drawer ref is empty');
-    return;
+    console.error('cancelClick', 'drawer ref is empty')
+    return
   }
-  handleClose(record);
+  handleClose(record)
 }
 
 async function performOperation(op: () => Partial<any>) {
 
-  showLoading();
+  showLoading()
 
   try {
-    const res = await op();
-    hideLoading();
-    cancelClick(res);
+    const res = await op()
+    hideLoading()
+    cancelClick(res)
   } catch (e: any) {
-    hideLoading();
-    emit('error', e);
-    showError(e);
+    hideLoading()
+    emit('error', e)
+    showError(e)
   }
 
 }
@@ -193,49 +204,26 @@ function showError(e: Error) {
     duration: 7500,
     showClose: true,
     dangerouslyUseHTMLString: true,
-  });
+  })
 }
 
 function showLoading(message = '') {
   loadingMessage.value = ElMessage({
     message: message || `${t('saving')} ...`,
     duration: 0,
-  });
+  })
 }
 
 function hideLoading() {
   if (!loadingMessage.value) {
-    return;
+    return
   }
-  loadingMessage.value.close();
-  loadingMessage.value = null;
+  loadingMessage.value.close()
+  loadingMessage.value = null
 }
 
 </script>
 <style lang="scss">
-
 @import "../styles/variables";
-
-.container {
-  //padding: $margin-right;
-}
-
-.el-drawer.drawer-edit {
-  height: unset;
-}
-
-.el-card.drawer-edit {
-  @include responsive-only(xxs) {
-    border: none;
-    :deep(.el-card__body), .container {
-      padding: 0;
-    }
-  }
-  @include responsive-only(gt-xxs) {
-    .form-buttons {
-      justify-content: flex-end;
-    }
-  }
-}
 
 </style>
