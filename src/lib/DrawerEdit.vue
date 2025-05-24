@@ -1,6 +1,6 @@
 <template lang="pug">
 
-v-navigation-drawer.drawer-edit.box-card(
+component.drawer-edit.box-card(
   ref="drawer"
   :is="drawerComponent"
   v-model="drawerOpen"
@@ -14,7 +14,10 @@ v-navigation-drawer.drawer-edit.box-card(
 
   v-card.fill-height.d-flex.flex-column(flat)
 
-    v-toolbar(color="secondary")
+    v-toolbar(
+      color="secondary"
+      v-if="isDrawer"
+    )
       v-toolbar-title {{ safeT(title) }}
       v-btn(
         icon="$mdiClose"
@@ -106,7 +109,7 @@ nextTick(() => {
   }, 50)
 })
 
-const drawerComponent = computed(() => props.isDrawer ? 'v-dialog' : 'el-card')
+const drawerComponent = computed(() => props.isDrawer ? 'v-navigation-drawer' : 'el-card')
 // const loading = computed(() => !!loadingMessage.value);
 const isDeletable = computed(() => props.deletable && !!props.modelOrigin?.id)
 const changed = computed(() => props.forceModified || hasChanges.value)
