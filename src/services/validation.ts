@@ -38,7 +38,7 @@ interface Validator {
 }
 
 export function useFormValidation() {
-  const formRef = ref<null | Validator>(null)
+  const formRef = ref<Validator>()
   return {
     formRef,
     async validate(): Promise<ValidationResult> {

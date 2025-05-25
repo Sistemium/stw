@@ -151,13 +151,19 @@ function getValidateForm() {
 }
 
 function onSaveClick() {
-  getValidateForm()((valid: any) => {
-    if (valid) {
-      performOperation(save)
-    } else {
-      ElMessage.warning(t('validation.formInvalid').toString())
-    }
-  })
+  const validator = getValidateForm()
+  const validated = validator(Boolean)
+  if (typeof validated?.then === 'function') {
+    validated.then(onValidate)
+  }
+}
+
+function onValidate(valid: any) {
+  if (valid) {
+    return performOperation(save)
+  } else {
+    ElMessage.warning(t('validation.formInvalid').toString())
+  }
 }
 
 function save() {
@@ -196,12 +202,12 @@ async function performOperation(op: () => Partial<any>) {
 
   try {
     const res = await op()
-    hideLoading()
     cancelClick(res)
   } catch (e: any) {
-    hideLoading()
     emit('error', e)
     showError(e)
+  } finally {
+    hideLoading()
   }
 
 }
