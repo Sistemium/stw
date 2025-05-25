@@ -84,7 +84,7 @@ import StockOperationItemList from '@/components/out/StockOperationItemList.vue'
 import StockOperationEdit from '@/components/out/StockOperationEdit.vue';
 import { configPriceField, stockOperationToViewData } from '@/services/warehousing.js'
 import { workflow } from '@/models/StockWithdrawing.js';
-import { useBusy } from '@/views/pages';
+import { useBusy } from '@/services/pages';
 import { useOperationDisabled } from '@/services/workflowing';
 import type {
   StockOperation,

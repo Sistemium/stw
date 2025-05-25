@@ -63,7 +63,7 @@ import { useRouteParams } from '@/lib/updateRouteParams';
 import { useOperationDisabled } from '@/services/workflowing';
 import StockTaking, { workflow } from '@/models/StockTaking.js';
 import WorkflowTransitions from '@/lib/WorkflowTransitions.vue';
-import { useBusy } from '@/views/pages';
+import { useBusy } from '@/services/pages';
 import { useVatOperationConfig } from '@/services/vatConfiguring';
 // import { useI18n } from 'vue-i18n';
 // import StockTaking from '@/models/StockTaking';
