@@ -131,6 +131,7 @@
     "suffix": "Suffix"
   },
   "validation": {
+    "email": "Invalid e-mail in the ‘{0}’ field",
     "error getting response": "Failed to retrieve data",
     "otherSite": "Belongs to another department",
     "required": "{0} is required",

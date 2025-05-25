@@ -72,6 +72,7 @@ export default createVuetify({
   components,
   directives,
   locale: {
+    // @ts-ignore
     adapter: createVueI18nAdapter({ i18n, useI18n }),
   },
   icons: {
