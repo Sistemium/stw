@@ -103,6 +103,7 @@ defineExpose({
 
 const props = defineProps<{
   model: IServiceTask
+  modelOrigin?: IServiceTask
 }>()
 
 const address = computed(() => ServicePointCustomer.reactiveGet(props.model.servicePointId)?.address)
@@ -117,7 +118,7 @@ const rules = computed(() => {
   }
   return $requiredRule(required)
 })
-const disabled = computed(() => !serviceTaskWorkflow.step(props.model.processing)?.editable)
+const disabled = computed(() => !serviceTaskWorkflow.step(props.modelOrigin?.processing)?.editable)
 
 watch(() => props.model?.id, serviceTaskId => {
   serviceTaskId && fetchServiceTask(serviceTaskId)

@@ -17,6 +17,7 @@ drawer-edit.service-task-edit(
         service-task-form(
           ref="formRef"
           :model="model"
+          :model-origin="modelOrigin"
         )
           user-collapse(
             :model-value="modelOrigin?.creator"
