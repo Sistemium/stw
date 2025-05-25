@@ -9,6 +9,7 @@ v-layout#app
       v-if="showBarcodeInput"
       :lock="false"
     )
+    busy-loading(:busy="invStore.busy" size="128")
     router-view
 
 </template>
@@ -27,6 +28,7 @@ import * as g from '@/store/inv/getters.js';
 import i18n, { saveLocale } from '@/services/i18n';
 import { useInvStore } from '@/store/invStore'
 import { bindEvents } from '@/services/socket'
+import BusyLoading from '@/lib/BusyLoading.vue'
 
 const store = useStore()
 const route = useRoute()

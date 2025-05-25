@@ -1,6 +1,5 @@
 import log from 'sistemium-debug'
 import dayjs from 'dayjs'
-import store from '@/store'
 import Configuration from '@/models/Configuration'
 import ArticleProp from '@/models/ArticleProp'
 import PropOption from '@/models/PropOption'
@@ -232,7 +231,9 @@ async function stockTakingSync() {
 
 export async function authGuard(to: RouteRecord, from: RouteRecord, next: NextCallback) {
 
-  const authorized = store.getters['auth/IS_AUTHORIZED']
+  // const authorized = store.getters['auth/IS_AUTHORIZED']
+  const store = useInvStore()
+  const authorized = store.authId
 
   const { role: needRole, public: isPublic } = to.meta
 
@@ -264,9 +265,12 @@ export async function authGuard(to: RouteRecord, from: RouteRecord, next: NextCa
 
   try {
     // debug('authGuard', to.name);
+    store.busy = true
     await switchLoad(to, from)
   } catch (e) {
     error(e)
+  } finally {
+    store.busy = false
   }
 
   next()

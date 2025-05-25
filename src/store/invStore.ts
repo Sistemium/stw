@@ -18,6 +18,7 @@ function prefixed(key: string) {
 interface StoreType extends Record<string, any> {
   user?: IUser
   uuid: string
+  busy: boolean
 }
 
 export const useInvStore = defineStore('inv', {
@@ -27,7 +28,8 @@ export const useInvStore = defineStore('inv', {
     scannedBarcode: undefined,
     uuid: v4(),
     clientDataId: useStorage<string>(prefixed('CLIENT_DATA_ID'), v4()),
-    user: undefined
+    user: undefined,
+    busy: false,
   } as StoreType),
   getters: {
     authToken() {
