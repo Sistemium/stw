@@ -1,33 +1,39 @@
 <template lang="pug">
-.list-group(v-if="results")
-  el-alert(
+v-list(v-if="results" density="compact")
+  v-list-item(
     v-if="!results.length"
     :title="$t('validation.noData')"
-    @close="emit('close')"
   )
-  .list-group-item.d-flex.align-center(
+    template(#append)
+      v-btn(
+        icon="$mdiClose"
+        variant="tonal"
+        size="small"
+        @click="emit('close')"
+      )
+  v-list-item(
     v-for="result in fullResults"
     :key="result.id"
+    :title="result.name"
+    :subtitle="safeT(result.entityType, 'fields')"
   )
-    strong {{ safeT(result.entityType, 'fields') }}
-    .ml-2.flex-1.text-left
-      span {{ result.name }}
-    el-icon(v-if="result.selected" size="large")
-      Check
-    el-button(
-      type="success"
-      size="small"
-      text
-      bg
-      @click="toggleItem(result.id)"
-    ) {{ result.selected ? $t('remove') : $t('add') }}
+    template(#append)
+      v-btn(
+        type="success"
+        size="small"
+        density="comfortable"
+        variant="tonal"
+        :color="result.selected ? 'success' : ''"
+        @click="toggleItem(result.id)"
+      ) {{ result.selected ? $t('remove') : $t('add') }}
+        template(#prepend)
+          v-icon(v-if="result.selected" size="large") $mdiCheck
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { SearchResult } from '@/services/prompting'
 import { safeT } from '@/services/i18n'
-import { Check } from '@element-plus/icons-vue'
 
 const selected = defineModel({ default: [] })
 
@@ -53,11 +59,3 @@ function toggleItem(id: string) {
   }
 }
 </script>
-<style scoped>
-.list-group-item.d-flex {
-  cursor: default;
-}
-.el-button {
-  width: 75px;
-}
-</style>

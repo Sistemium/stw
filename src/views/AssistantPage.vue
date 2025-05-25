@@ -1,33 +1,40 @@
 <template lang="pug">
 .assistant-page
   page-title(title="menu.assistant")
-  el-container
-    el-main
-      assistant-query-input(
-        :disabled="loading"
-        @query="onQuery"
+  assistant-query-input.mb-3(
+    :disabled="!!loading"
+    @query="onQuery"
+  )
+  stm-resize(:padding="20")
+    v-list.my-3(
+      border
+      v-if="loading"
+    )
+      v-list-subheader
+        v-icon $mdiMessageProcessingOutline
+        span.ml-3 {{ loading }}
+      v-skeleton-loader.ma-2(type="paragraph")
+    .assistance.my-3(
+      v-for="item in thread"
+      :key="item.id"
+    )
+      v-list-item
+        v-list-subheader
+          v-icon $mdiMessageOutline
+          span.ml-3 {{ item.query }}
+        template(#append)
+          v-btn(
+            variant="tonal"
+            color="info"
+            density="compact"
+            @click="removeItem(item.id)"
+          ) {{ $t('delete') }}
+      assistant-found-list(
+        border
+        :results="item.results"
+        @close="removeItem(item.id)"
+        v-model="selected"
       )
-      stm-resize.my-3(:padding="20")
-        .assistance(
-          v-for="item in thread"
-          :key="item.id"
-        )
-          p.text-left {{ item.query }}
-            el-button.float-right(
-              text
-              type="info"
-              @click="removeItem(item.id)"
-            ) {{ $t('delete') }}
-          assistant-found-list(
-            :results="item.results"
-            @close="removeItem(item.id)"
-            v-model="selected"
-          )
-        el-skeleton.my-3(
-          v-if="loading"
-          :rows="3"
-          animated
-        )
 </template>
 
 <script setup lang="ts">
@@ -49,7 +56,7 @@ function onQuery(query: string) {
   search(query)
     .then(({ data }) => {
       if (data) {
-        thread.value.push({
+        thread.value.splice(0, 0, {
           id: v4(),
           query,
           results: data,
@@ -83,6 +90,7 @@ function removeItem(id: string) {
   margin: 0 auto;
   max-width: 1000px;
 }
+
 .page-title {
   margin-bottom: 0;
 }

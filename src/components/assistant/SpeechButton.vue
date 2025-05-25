@@ -1,19 +1,21 @@
 <template lang="pug">
-.speech-button(v-if="isSupported")
-  el-button(
-    @click="toggle"
-    :disabled="busy"
-    :type="isListening ? 'warning' : 'success'"
-    circle
-    :icon="Microphone"
-  )
+v-btn.speech-button(
+  v-if="isSupported"
+  @click="toggle"
+  :disabled="busy || false"
+  density="comfortable"
+  :color="isListening ? 'warning' : ''"
+  variant="tonal"
+  circle
+  :icon="isListening ? '$mdiMicrophoneOff' : '$mdiMicrophone'"
+)
 </template>
 
 <script setup lang="ts">
 import { useSpeechRecognition } from '@vueuse/core'
 import { watch } from 'vue'
 import { getLocale } from '@/services/i18n'
-import { Microphone } from '@element-plus/icons-vue'
+
 
 const { lang = getLocale(), continuous = false } = defineProps<{
   continuous?: boolean

@@ -10,13 +10,13 @@ export interface SearchResult {
 }
 
 export function useAiQuery() {
-  const loading = ref(false)
+  const loading = ref('')
   const error = ref<string | null>(null)
   const results = ref<SearchResult[]>([])
   const store = useInvStore()
 
   async function search(query: string) {
-    loading.value = true
+    loading.value = query
     error.value = null
     try {
       const { data } = await axios.post<SearchResult[]>('/api/ai/query', { query }, {
@@ -30,7 +30,7 @@ export function useAiQuery() {
       error.value = safeT('error getting response', 'validation')
       return { error }
     } finally {
-      loading.value = false
+      loading.value = ''
     }
   }
 

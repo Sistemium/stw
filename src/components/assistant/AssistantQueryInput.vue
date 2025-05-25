@@ -1,22 +1,28 @@
 <template lang="pug">
 .assistant-query-input.d-flex.align-center
-  speech-button(
-    :busy="disabled"
-    @spoken="onSpoken"
-  )
-  el-input.ml-2(
+  v-textarea(
     v-model="query"
-    :disabled="disabled"
-    type="textarea"
-    :autosize="{ minRows: 2 }"
+    :disabled="disabled || false"
+    :rows="1"
+    clearable
+    variant="outlined"
+    auto-grow
     :placeholder="disabled ? $t('loading') : $t('fields.prompt')"
-    @keyup.enter="emitSearch"
+    @keydown.enter.exact.prevent="emitSearch"
+    hide-details
   )
-  el-button.ml-2(
-    type="primary"
-    :disabled="disabled || !query"
-    @click="emitSearch"
-  ) {{ $t('actions.send') }}
+    template(#prepend)
+      speech-button(
+        :busy="disabled"
+        @spoken="onSpoken"
+      )
+    template(#append-inner)
+      v-btn(
+        variant="flat"
+        color="primary"
+        :disabled="disabled || !query"
+        @click="emitSearch"
+      ) {{ $t('actions.send') }}
 </template>
 
 <script setup lang="ts">
