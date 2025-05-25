@@ -1,5 +1,5 @@
 <template lang="pug">
-.assistant-page
+.assistant-page.mx-auto(style="max-width: 1000px")
   page-title(title="menu.assistant")
   assistant-query-input.mb-3(
     :disabled="!!loading"
@@ -82,16 +82,3 @@ function removeItem(id: string) {
 }
 
 </script>
-
-<style scoped lang="scss">
-@import "@/styles/variables.scss";
-
-.assistant-page {
-  margin: 0 auto;
-  max-width: 1000px;
-}
-
-.page-title {
-  margin-bottom: 0;
-}
-</style>
