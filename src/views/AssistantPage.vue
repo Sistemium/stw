@@ -1,5 +1,14 @@
 <template lang="pug">
 .assistant-page.mx-auto(style="max-width: 1000px")
+  v-snackbar(
+    :model-value="!!error"
+    color="error"
+  ) {{ error }}
+    template(#actions)
+      v-btn(
+        @click="() => { error = '' }"
+        icon="$mdiClose"
+      )
   page-title(title="menu.assistant")
   assistant-query-input.mb-3(
     :disabled="!!loading"
@@ -38,8 +47,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
-import { ElMessage } from 'element-plus'
+import { ref } from 'vue'
 import { v4 } from 'uuid'
 import PageTitle from '@/components/PageTitle.vue'
 import AssistantQueryInput from '@/components/assistant/AssistantQueryInput.vue'
@@ -64,15 +72,6 @@ function onQuery(query: string) {
       }
     })
 }
-
-watch(error, message => {
-  if (message) {
-    ElMessage.error({
-      message,
-      showClose: true,
-    })
-  }
-})
 
 function removeItem(id: string) {
   const idx = thread.value.findIndex(item => item.id === id)
