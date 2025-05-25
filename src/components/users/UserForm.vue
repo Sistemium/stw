@@ -1,44 +1,45 @@
 <template lang="pug">
 // eslint-disable vue/no-mutating-props
-el-form(
-  ref="form"
+v-form(
+  ref="formRef"
   :model="model"
-  :rules="rules"
 )
-  el-form-item(
+  v-text-field(
     :label="$t('fields.firstName')"
-    prop="name"
+    v-model="model.name"
+    :rules="[nameRequired]"
+    :density
   )
-    el-input(v-model="model.name")
-  el-form-item(
+  v-text-field(
     :label="$t('fields.phone')"
-    prop="phone"
+    v-model="model.phone"
+    :density
   )
-    el-input(v-model="model.phone")
-  el-form-item(
+  v-text-field(
     :label="$t('fields.email')"
-    prop="email"
+    v-model="model.email"
+    :density
+    :rules="[validEmail]"
   )
-    el-input(v-model="model.email")
-  el-form-item(
-    :label="$t('fields.employee')"
-    prop="employeeId"
+  employee-select(
+    v-model="model.employeeId"
+    site-id="*"
+    :density
+    clearable
   )
-    employee-select(
-      v-model="model.employeeId"
-      site-id="*"
-    )
 </template>
 
 <script setup lang="ts">
-import { useFormValidate } from '@/services/validating'
-import { computed } from 'vue'
-import { $requiredRule } from '@/lib/validations'
 import type { IUser } from '@/models/User'
-import EmployeeSelect from '@/components/select/EmployeeSelect.vue'
+import EmployeeSelect from '@/components/selects/EmployeeSelect.vue'
+import { emailRule, requiredRule, useFormValidation } from '@/services/validation'
+import type { VuetifyDensity } from '@/services/vuetify'
 
-const { form, validate } = useFormValidate()
-const rules = computed(() => $requiredRule('name'))
+const { formRef, validate } = useFormValidation()
+const nameRequired = requiredRule('fields.name')
+const validEmail = emailRule('fields.email')
+const density: VuetifyDensity = 'comfortable'
+
 defineProps<{
   model: Partial<IUser>
 }>()
