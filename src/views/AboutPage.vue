@@ -4,19 +4,19 @@
   page-title(title="menu.about")
   v-sheet
     h3 {{ $t('about') }}
-    //h3(v-if="store.account") {{ $t('actions.welcome', [store.account.name]) }}
-    .version v{{ version }}
+    h3.my-4(v-if="store.account") {{ $t('actions.welcome', [store.account.name]) }}
+    .my-4 v{{ version }}
 
     .my-4(v-if="isSupported && clientData")
-      el-button(
+      v-btn(
         @click="toggleNotifications"
-        :type="isEnabled ? 'success' : 'primary'"
+        :color="isEnabled ? 'success' : 'primary'"
         :disabled="isBusy"
+        variant="tonal"
       )
-        el-icon(v-if="isGranted" )
-          Check(v-if="isEnabled")
-          MuteNotification(v-else)
-        span {{ tAction(isEnabled ? 'turnOff' : 'turnOn', 'notifications') }}
+        v-icon(v-if="isGranted")
+          | {{ isEnabled ? '$mdiCheckBold' : '$mdiBellOff' }}
+        span.ml-2 {{ tAction(isEnabled ? 'turnOff' : 'turnOn', 'notifications') }}
 
 </template>
 <script setup lang="ts">
@@ -30,7 +30,6 @@ import { ElMessage } from 'element-plus'
 import { t } from '@/lib/validations'
 import { tAction } from '@/lib/validations'
 import { useWebNotification } from '@vueuse/core'
-import { Check, MuteNotification } from '@element-plus/icons-vue'
 import { useInvStore } from '@/store/invStore'
 
 const store = useInvStore()
