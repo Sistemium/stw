@@ -9,7 +9,7 @@ v-layout#app
       v-if="showBarcodeInput"
       :lock="false"
     )
-    busy-loading(:busy="invStore.busy" size="128")
+    busy-loading(:busy="invStore.busy" :size="128")
     router-view
 
 </template>
