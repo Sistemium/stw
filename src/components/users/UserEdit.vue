@@ -20,10 +20,10 @@ import { useDrawerEditing } from '@/services/drawerEditing'
 import User, { type IUser } from '@/models/User'
 import { computed } from 'vue'
 import DrawerEdit from '@/lib/DrawerEdit.vue'
-import { useFormValidate } from '@/services/validating'
 import UserForm from '@/components/users/UserForm.vue'
+import { useFormValidation } from '@/services/validation'
 
-const { form: formRef } = useFormValidate()
+const { formRef } = useFormValidation()
 const { saveFn, destroyFn } = useDrawerEditing(User)
 const modelOrigin = computed<Partial<IUser>>(() => {
   return props.userId && User.reactiveGet(props.userId) || {}
