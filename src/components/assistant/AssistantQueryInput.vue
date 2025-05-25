@@ -23,6 +23,14 @@
         :disabled="disabled || !query"
         @click="emitSearch"
       ) {{ $t('actions.send') }}
+    template(#prepend-inner v-if="context")
+      v-chip(
+        v-for="item in context"
+        :key="item.id"
+        closable
+        size="small"
+        @click:close="emit('removeContext', item.id)"
+      ) {{ item.label }}
 </template>
 
 <script setup lang="ts">
@@ -32,10 +40,12 @@ import SpeechButton from '@/components/assistant/SpeechButton.vue'
 
 defineProps<{
   disabled?: boolean
+  context?: { id: string, label: string }[]
 }>()
 
 const emit = defineEmits<{
   (e: 'query', query: string): void
+  (e: 'removeContext', id: string): void
 }>()
 const query = ref('')
 
