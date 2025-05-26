@@ -11,8 +11,6 @@ v-data-table(
         :key="column.key"
         :class="column.cls"
       ) {{ column.render(item[column.key]) }}
-        //span(v-if="column.dataType === 'number'") {{ safeN(item[column.name]) }}
-        //span(v-else) {{ item[column.name] }}
 </template>
 
 <script setup lang="ts">
@@ -27,10 +25,19 @@ const { report } = defineProps<{
 const headers = computed(() => report.columns.map(column => ({
   key: column.name,
   title: column.name,
-  align: column.dataType === 'number' ? 'end' : 'start',
-  cls: column.dataType === 'number' ? 'text-right' : '',
-  render: column.dataType === 'number' ? safeN : x => x,
+  align: aligners[column.dataType] || 'start',
+  cls: aligners[column.dataType] === 'end' ? 'text-right' : '',
+  render: renderers[column.dataType] || (x => x),
 })))
 
+const renderers = {
+  number: safeN,
+  currency: (x: number) => safeN(x, 'currency'),
+}
+
+const aligners = {
+  number: 'end',
+  currency: 'end',
+}
 
 </script>

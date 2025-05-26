@@ -7,6 +7,7 @@ export interface AssistantReport {
   columns: {
     name: string
     dataType: 'string' | 'date' | 'number' | 'boolean'
+    decimals?: number
   }[]
   data: Record<string, any>[]
 }

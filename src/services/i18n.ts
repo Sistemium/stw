@@ -59,6 +59,11 @@ const numberFormats = {
     minimumFractionDigits: 0,
     maximumFractionDigits: 2,
   },
+  currency: {
+    style: 'decimal',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  },
 }
 
 // @ts-ignore
@@ -132,11 +137,11 @@ export function safeTd(stringOrDate?: string | Date | null, format: string = 'ti
   return i18n.global.d(date, format)
 }
 
-export function safeN(number: number): string | null {
+export function safeN(number: number, format?: string): string | null {
   if (number === undefined || number === null) {
     return null
   }
-  return i18n.global.n(number)
+  return i18n.global.n(number, format || 'decimal')
 }
 
 export function safeT(mayBeNullKey?: string, prefix: string = '', ...param: string[]): string {
