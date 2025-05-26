@@ -4,26 +4,19 @@
   page-title(title="menu.assistant")
   assistant-query-input.mb-3(
     :disabled="!!loading"
-    :context
     @query="onQuery"
     @remove-context="removeContextItem"
+    :context
   )
   stm-resize(:padding="20")
-    v-list.my-3(
-      border
-      v-if="loading"
-    )
-      v-list-subheader
-        v-icon $mdiMessageProcessingOutline
-        span.ml-3 {{ loading }}
-      v-skeleton-loader.ma-2(type="paragraph")
+    loading-skeleton.my-3(:loading)
     assistant-found-list.my-3(
       v-for="prompt in thread"
       :key="prompt.id"
-      border
-      :prompt
       @close="removeItem(prompt.id)"
       v-model="selected"
+      border
+      :prompt
     )
 </template>
 
@@ -36,6 +29,7 @@ import map from 'lodash/map'
 import PageTitle from '@/components/PageTitle.vue'
 import AssistantQueryInput from '@/components/assistant/AssistantQueryInput.vue'
 import AssistantFoundList from '@/components/assistant/AssistantFoundList.vue'
+import LoadingSkeleton from '@/components/assistant/LoadingSkeleton.vue'
 import SnackMessage from '@/lib/SnackMessage.vue'
 import { type PromptData, useAiQuery } from '@/services/prompting'
 import StmResize from '@/lib/StmResize.vue'

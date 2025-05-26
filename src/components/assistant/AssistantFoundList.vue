@@ -16,13 +16,6 @@ v-list(v-if="prompt.results" density="compact")
     v-if="!prompt.results.length"
     :title="$t('validation.noData')"
   )
-    template(#append)
-      v-btn(
-        icon="$mdiClose"
-        variant="tonal"
-        size="small"
-        @click="emit('close')"
-      )
   v-list-item(
     v-for="result in fullResults"
     :key="result.id"
