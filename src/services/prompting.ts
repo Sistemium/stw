@@ -9,6 +9,12 @@ export interface SearchResult {
   entityType: 'article' | 'customer'
 }
 
+export interface PromptData {
+  id: string
+  query: string
+  results: SearchResult[]
+}
+
 export function useAiQuery() {
   const loading = ref('')
   const error = ref<string | null>(null)

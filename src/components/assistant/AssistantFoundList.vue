@@ -1,7 +1,19 @@
 <template lang="pug">
-v-list(v-if="results" density="compact")
+v-list(v-if="prompt.results" density="compact")
+  v-list-item
+    v-list-subheader
+      v-icon $mdiMessageOutline
+      span.ml-3 {{ prompt.query }}
+    template(#append)
+      v-btn(
+        variant="flat"
+        icon="$mdiClose"
+        density="compact"
+        size="small"
+        @click="emit('close')"
+      )
   v-list-item(
-    v-if="!results.length"
+    v-if="!prompt.results.length"
     :title="$t('validation.noData')"
   )
     template(#append)
@@ -32,20 +44,20 @@ v-list(v-if="results" density="compact")
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import type { SearchResult } from '@/services/prompting'
+import type { PromptData } from '@/services/prompting'
 import { safeT } from '@/services/i18n'
 
 const selected = defineModel({ default: [] })
 
 const props = defineProps<{
-  results: SearchResult[]
+  prompt: PromptData
 }>()
 
 const emit = defineEmits<{
   (e: 'close'): void
 }>()
 
-const fullResults = computed(() => props.results.map(res => ({
+const fullResults = computed(() => props.prompt.results.map(res => ({
   ...res,
   selected: selected.value.includes(res.id),
 })))

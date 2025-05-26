@@ -25,27 +25,14 @@
         v-icon $mdiMessageProcessingOutline
         span.ml-3 {{ loading }}
       v-skeleton-loader.ma-2(type="paragraph")
-    .assistance.my-3(
-      v-for="item in thread"
-      :key="item.id"
+    assistant-found-list.my-3(
+      v-for="prompt in thread"
+      :key="prompt.id"
+      border
+      :prompt
+      @close="removeItem(prompt.id)"
+      v-model="selected"
     )
-      v-list-item
-        v-list-subheader
-          v-icon $mdiMessageOutline
-          span.ml-3 {{ item.query }}
-        template(#append)
-          v-btn(
-            variant="tonal"
-            color="info"
-            density="compact"
-            @click="removeItem(item.id)"
-          ) {{ $t('delete') }}
-      assistant-found-list(
-        border
-        :results="item.results"
-        @close="removeItem(item.id)"
-        v-model="selected"
-      )
 </template>
 
 <script setup lang="ts">
@@ -57,12 +44,12 @@ import map from 'lodash/map'
 import PageTitle from '@/components/PageTitle.vue'
 import AssistantQueryInput from '@/components/assistant/AssistantQueryInput.vue'
 import AssistantFoundList from '@/components/assistant/AssistantFoundList.vue'
-import { type SearchResult, useAiQuery } from '@/services/prompting'
+import { type PromptData, useAiQuery } from '@/services/prompting'
 import StmResize from '@/lib/StmResize.vue'
 import { safeT } from '@/services/i18n'
 
 
-const thread = ref<{ id: string, query: string, results: SearchResult[] }[]>([])
+const thread = ref<PromptData[]>([])
 const { search, loading, error } = useAiQuery()
 const selected = ref<string[]>([])
 
@@ -77,7 +64,7 @@ const context = computed<ContextItem[]>(() => {
     .filter(({ id }) => selected.value.includes(id))
   return map(groupBy(all, 'entityType'), (items, entityType) => ({
     id: entityType,
-    label: `${safeT(entityType, 'fields')}: ${items.length}`,
+    label: `${safeT(entityType, 'plural')}: ${items.length}`,
     ids: items.map(({ id }) => id)
   }))
 })
