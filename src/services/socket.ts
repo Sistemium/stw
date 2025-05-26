@@ -138,7 +138,7 @@ export async function triggerSubscription(collection: string, fullDocument?: Rec
 
 export function triggerAllSubscriptions() {
   eachSeries(Array.from(SUBS.keys()), async key => {
-    debug('triggerAll', key)
+    // debug('triggerAll', key)
     await SUBS.get(key)?.call(null)
   })
     .catch(error)
