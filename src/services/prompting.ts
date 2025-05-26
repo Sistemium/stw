@@ -3,10 +3,19 @@ import { safeT } from '@/services/i18n'
 import axios from 'axios'
 import { useInvStore } from '@/store/invStore'
 
+export interface AssistantReport {
+  columns: {
+    name: string
+    dataType: 'string' | 'date' | 'number' | 'boolean'
+  }[]
+  data: Record<string, any>[]
+}
+
 export interface SearchResult {
   id: string
   name: string
-  entityType: 'article' | 'customer'
+  entityType: 'article' | 'customer' | 'report'
+  report: AssistantReport
 }
 
 export interface PromptData {

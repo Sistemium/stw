@@ -1,5 +1,5 @@
 <template lang="pug">
-v-list(v-if="prompt.results" density="compact")
+v-list(v-if="prompt" density="compact")
   v-list-item
     v-list-subheader
       v-icon $mdiMessageOutline
@@ -33,12 +33,21 @@ v-list(v-if="prompt.results" density="compact")
       ) {{ result.selected ? $t('remove') : $t('add') }}
         template(#prepend)
           v-icon(v-if="result.selected" size="large") $mdiCheck
+  v-sheet(
+    v-for="report in reports"
+    :key="report.id"
+  )
+    h3.ma-3 {{ report.name }}
+    assistant-report-table(
+      :report="report.report"
+    )
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { PromptData, SearchResult } from '@/services/prompting'
 import { safeT } from '@/services/i18n'
+import AssistantReportTable from '@/components/assistant/AssistantReportTable.vue'
 
 const selected = defineModel({ default: new Map<string, SearchResult>() })
 
@@ -50,10 +59,15 @@ const emit = defineEmits<{
   (e: 'close'): void
 }>()
 
-const fullResults = computed(() => props.prompt.results.map(res => ({
+const entityResults = computed(() => props.prompt.results.filter(r => r.entityType !== 'report'))
+
+const fullResults = computed(() => entityResults.value.map(res => ({
   ...res,
   selected: selected.value.has(res.id),
 })))
+
+const reports = computed(() => props.prompt.results.filter(r => r.entityType === 'report'))
+
 
 function toggleItem(result: SearchResult) {
   const { id } = result
