@@ -1,0 +1,52 @@
+{
+  "accusative": {
+    "notifications": "уведомления",
+    "date": "дату",
+    "property": "свойство",
+    "profile": "Профиль",
+    "picture": "картинку",
+    "service": "услугу",
+    "storage": "склад",
+    "stockTaking": "инвентаризацию",
+    "position": "позицию",
+    "stockWithdrawing": "отгрузку",
+    "stockReceiving": "приход на склад",
+    "recipe": "рецепт",
+    "material": "компонент",
+    "productItem": "позицию производства",
+    "article": "номенклатуру",
+    "pricing": "тип цен",
+    "employee": "работника",
+    "site": "подразделение",
+    "statuses": "статусов"
+  },
+  "genitive": {
+    "pricing": "прайс-листа",
+    "property": "признака",
+    "article": "номенклатуры",
+    "option": "выбора",
+    "storage": "склада",
+    "stockTaking": "инвентаризации",
+    "stockTakingItem": "позиции инвентаризации",
+    "stockWithdrawing": "отгрузки со склада",
+    "stockWithdrawingItem": "позиции отгрузки со склада",
+    "stockReceiving": "прихода на склад",
+    "stockReceivingItem": "позиции прихода на склад",
+    "legalEntity": "юр. лица",
+    "recipe": "рецепта",
+    "serviceTask": "задания",
+    "productionItem": "позиции производства",
+    "user": "пользователя"
+  },
+  "shortened": {
+    "positions": "поз",
+    "units": "шт",
+    "boxes": "кор",
+    "products": "изд",
+    "selfCost": "себ."
+  },
+  "plural": {
+    "article": "Товары",
+    "customer": "Клиенты"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "measures": {
+    "weight": "Вес",
+    "length": "Длина",
+    "volume": "Объем",
+    "quantity": "Количество"
+  },
+  "units": {
+    "kilogram": "Килограммы",
+    "gram": "Граммы",
+    "litre": "Литры",
+    "millilitre": "Миллилитры",
+    "metre": "Метры",
+    "centimetre": "Сантиметры",
+    "tonne": "Тонны",
+    "piece": "Штуки",
+    "quantityOf": "Кол-во {0}",
+    "genitive": {
+      "kilogram": "килограмм",
+      "gram": "грамм",
+      "litre": "литров",
+      "millilitre": "Ммллилитроы",
+      "metre": "метров",
+      "centimetre": "сантиметров",
+      "tonne": "тонн",
+      "piece": "штук"
+    },
+    "short": {
+      "kilogram": "кг",
+      "gram": "г",
+      "litre": "л",
+      "millilitre": "мл",
+      "metre": "м",
+      "centimetre": "см",
+      "tonne": "т",
+      "piece": "шт"
+    }
+  },
+  "storage": {
+    "boxes": "Коробки",
+    "units": "Штуки"
+  },
+  "dataTypes": {
+    "string": "Строка",
+    "options": "Выбор из списка",
+    "boolean": "Да/Нет",
+    "number": "Число"
+  }
+}

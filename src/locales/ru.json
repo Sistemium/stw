@@ -52,47 +52,6 @@
   "models": {
     "StockArticleDate": "Складские операции"
   },
-  "measures": {
-    "weight": "Вес",
-    "length": "Длина",
-    "volume": "Объем",
-    "quantity": "Количество"
-  },
-  "units": {
-    "kilogram": "Килограммы",
-    "gram": "Граммы",
-    "litre": "Литры",
-    "millilitre": "Миллилитры",
-    "metre": "Метры",
-    "centimetre": "Сантиметры",
-    "tonne": "Тонны",
-    "piece": "Штуки",
-    "quantityOf": "Кол-во {0}",
-    "genitive": {
-      "kilogram": "килограмм",
-      "gram": "грамм",
-      "litre": "литров",
-      "millilitre": "Ммллилитроы",
-      "metre": "метров",
-      "centimetre": "сантиметров",
-      "tonne": "тонн",
-      "piece": "штук"
-    },
-    "short": {
-      "kilogram": "кг",
-      "gram": "г",
-      "litre": "л",
-      "millilitre": "мл",
-      "metre": "м",
-      "centimetre": "см",
-      "tonne": "т",
-      "piece": "шт"
-    }
-  },
-  "storage": {
-    "boxes": "Коробки",
-    "units": "Штуки"
-  },
   "concepts": {
     "articleProperty": "Свойство",
     "article": "Номенклатура",
@@ -113,12 +72,6 @@
     "packageType": "Тип упаковки",
     "recipe": "Рецепт",
     "other": "Другое"
-  },
-  "dataTypes": {
-    "string": "Строка",
-    "options": "Выбор из списка",
-    "boolean": "Да/Нет",
-    "number": "Число"
   },
   "validation": {
     "email": "В поле \"{0}\" введен невозможный электронный адрес",
@@ -146,52 +99,6 @@
     "welcome": "Приветствую, {0}!",
     "logout": "Выйти из системы",
     "select": "выбери {0}"
-  },
-  "accusative": {
-    "notifications": "уведомления",
-    "date": "дату",
-    "property": "свойство",
-    "profile": "Профиль",
-    "picture": "картинку",
-    "service": "услугу",
-    "storage": "склад",
-    "stockTaking": "инвентаризацию",
-    "position": "позицию",
-    "stockWithdrawing": "отгрузку",
-    "stockReceiving": "приход на склад",
-    "recipe": "рецепт",
-    "material": "компонент",
-    "productItem": "позицию производства",
-    "article": "номенклатуру",
-    "pricing": "тип цен",
-    "employee": "работника",
-    "site": "подразделение",
-    "statuses": "статусов"
-  },
-  "genitive": {
-    "pricing": "прайс-листа",
-    "property": "признака",
-    "article": "номенклатуры",
-    "option": "выбора",
-    "storage": "склада",
-    "stockTaking": "инвентаризации",
-    "stockTakingItem": "позиции инвентаризации",
-    "stockWithdrawing": "отгрузки со склада",
-    "stockWithdrawingItem": "позиции отгрузки со склада",
-    "stockReceiving": "прихода на склад",
-    "stockReceivingItem": "позиции прихода на склад",
-    "legalEntity": "юр. лица",
-    "recipe": "рецепта",
-    "serviceTask": "задания",
-    "productionItem": "позиции производства",
-    "user": "пользователя"
-  },
-  "shortened": {
-    "positions": "поз",
-    "units": "шт",
-    "boxes": "кор",
-    "products": "изд",
-    "selfCost": "себ."
   },
   "workflow": {
     "accept": "Принять",

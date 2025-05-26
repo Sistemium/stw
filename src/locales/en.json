@@ -57,47 +57,6 @@
   "reports": {
     "stockMovement": "Intra-movements"
   },
-  "measures": {
-    "weight": "Weight",
-    "length": "Length",
-    "volume": "Volume",
-    "quantity": "Quantity"
-  },
-  "units": {
-    "kilogram": "Kilograms",
-    "gram": "Grams",
-    "litre": "Litres",
-    "millilitre": "Millilitres",
-    "metre": "Metres",
-    "centimetre": "Centimetres",
-    "tonne": "Tonnes",
-    "piece": "Pieces",
-    "quantityOf": "Number of {0}",
-    "genitive": {
-      "kilogram": "kilograms",
-      "gram": "grams",
-      "litre": "litres",
-      "millilitre": "millilitres",
-      "metre": "metres",
-      "centimetre": "centimetres",
-      "tonne": "tonnes",
-      "piece": "pieces"
-    },
-    "short": {
-      "kilogram": "kg",
-      "gram": "g",
-      "litre": "l",
-      "millilitre": "ml",
-      "metre": "m",
-      "centimetre": "cm",
-      "tonne": "t",
-      "piece": "pcs"
-    }
-  },
-  "storage": {
-    "boxes": "Boxes",
-    "units": "Units"
-  },
   "concepts": {
     "articleProperty": "Property",
     "article": "Article",
@@ -121,14 +80,6 @@
   },
   "models": {
     "StockArticleDate": "Warehouse operations"
-  },
-  "dataTypes": {
-    "string": "String",
-    "options": "Options",
-    "boolean": "Yes/no",
-    "number": "Number",
-    "prefix": "Prefix",
-    "suffix": "Suffix"
   },
   "validation": {
     "email": "Invalid e-mail in the ‘{0}’ field",
@@ -157,52 +108,6 @@
     "choose": "Choose {0}",
     "logout": "Sign out",
     "select": "select {0}"
-  },
-  "accusative": {
-    "notifications": "noitifications",
-    "date": "date",
-    "property": "property",
-    "profile": "Profile",
-    "picture": "picture",
-    "service": "service",
-    "storage": "storage",
-    "stockTaking": "stockTaking",
-    "position": "position",
-    "stockWithdrawing": "withdrawing",
-    "stockReceiving": "stock receiving",
-    "recipe": "recipe",
-    "material": "material",
-    "productItem": "production item",
-    "article": "article",
-    "pricing": "pricing",
-    "employee": "employee",
-    "site": "department",
-    "statuses": "statuses"
-  },
-  "genitive": {
-    "pricing": "Pricing",
-    "property": "Property",
-    "article": "Article",
-    "option": "Option",
-    "storage": "Storage",
-    "stockTaking": "Stocktaking",
-    "stockTakingItem": "Stocktaking item",
-    "stockWithdrawing": "Stock withdrawing",
-    "stockWithdrawingItem": "Stock withdrawing item",
-    "stockReceiving": "Stock receiving",
-    "stockReceivingItem": "Stock receiving item",
-    "legalEntity": "Legal entity",
-    "recipe": "Recipe",
-    "serviceTask": "Service task",
-    "productionItem": "Production item",
-    "user": "User"
-  },
-  "shortened": {
-    "positions": "pos",
-    "units": "unt",
-    "boxes": "bx",
-    "products": "prod",
-    "selfCost": "s.c."
   },
   "workflow": {
     "accept": "Accept",

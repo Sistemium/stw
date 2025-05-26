@@ -1,0 +1,52 @@
+{
+  "accusative": {
+    "notifications": "pranešimus",
+    "date": "datą",
+    "property": "ypatybę",
+    "profile": "Profilį",
+    "picture": "nuotrauką",
+    "service": "paslaugą",
+    "storage": "sandėlį",
+    "stockTaking": "inventorizaciją",
+    "position": "poziciją",
+    "stockWithdrawing": "iš sandėlio iškrovimą",
+    "stockReceiving": "į sandėlį piemimą",
+    "recipe": "receptą",
+    "material": "sudedamojį dalį",
+    "productItem": "gamybos poziciją",
+    "article": "prekę",
+    "pricing": "kainyną",
+    "employee": "darbuotoją",
+    "site": "padalinį",
+    "statuses": "būseną"
+  },
+  "genitive": {
+    "pricing": "Kainyno",
+    "property": "Ypatybės",
+    "article": "Prekės",
+    "option": "Parinkties",
+    "storage": "Sandėlio",
+    "stockTaking": "Inventorizacijos",
+    "stockTakingItem": "Inventorizacijos pozicijos",
+    "stockWithdrawing": "Iš sandėlio iškrovimo",
+    "stockWithdrawingItem": "Iš sandėlio iškrovimo pozicijos",
+    "stockReceiving": "Į sandėlį priemimo",
+    "stockReceivingItem": "Į sandėlį priemimo pozicijos",
+    "legalEntity": "Įmonės",
+    "recipe": "Recepto",
+    "serviceTask": "Užduoties",
+    "productionItem": "Gamybos pozicijos",
+    "user": "Naudotojo"
+  },
+  "shortened": {
+    "positions": "poz",
+    "units": "vnt",
+    "boxes": "dėž",
+    "products": "gam",
+    "selfCost": "sav."
+  },
+  "plural": {
+    "article": "Prekės",
+    "customer": "Klientai"
+  }
+}

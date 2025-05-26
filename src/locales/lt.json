@@ -52,47 +52,6 @@
   "models": {
     "StockArticleDate": "Sandėlio operacijos"
   },
-  "measures": {
-    "weight": "Svoris",
-    "length": "Ilgis",
-    "volume": "Tūris",
-    "quantity": "Kiekis"
-  },
-  "units": {
-    "kilogram": "Kilogramai",
-    "gram": "Gramai",
-    "litre": "Litrai",
-    "millilitre": "Mililitrai",
-    "metre": "Metrai",
-    "centimetre": "Centimetrai",
-    "tonne": "Tonos",
-    "piece": "Vienetai",
-    "quantityOf": "{0} kiekis",
-    "genitive": {
-      "kilogram": "Kilogramų",
-      "gram": "Gramų",
-      "litre": "Litrų",
-      "millilitre": "Mililitrų",
-      "metre": "Metrų",
-      "centimetre": "Centimetrų",
-      "tonne": "Tonų",
-      "piece": "Vienetų"
-    },
-    "short": {
-      "kilogram": "kg",
-      "gram": "g",
-      "litre": "l",
-      "millilitre": "ml",
-      "metre": "m",
-      "centimetre": "cm",
-      "tonne": "t",
-      "piece": "vnt"
-    }
-  },
-  "storage": {
-    "boxes": "Dėžės",
-    "units": "Vienetai"
-  },
   "concepts": {
     "assignee": "Atsakingas",
     "articleProperty": "Ypatybė",
@@ -114,12 +73,6 @@
     "packageType": "Pakuotės tipas",
     "recipe": "Receptas",
     "other": "Kita"
-  },
-  "dataTypes": {
-    "string": "Eilutė",
-    "options": "Pasirinkimas iš sąrašo",
-    "boolean": "Taip/Ne",
-    "number": "Skaičius"
   },
   "validation": {
     "email": "Laukelyje „{0}“ neteisingas el. pašto adresas",
@@ -148,52 +101,6 @@
     "welcome": "Sveiki, {0}!",
     "logout": "Atsijungti",
     "select": "pasirink {0}"
-  },
-  "accusative": {
-    "notifications": "pranešimus",
-    "date": "datą",
-    "property": "ypatybę",
-    "profile": "Profilį",
-    "picture": "nuotrauką",
-    "service": "paslaugą",
-    "storage": "sandėlį",
-    "stockTaking": "inventorizaciją",
-    "position": "poziciją",
-    "stockWithdrawing": "iš sandėlio iškrovimą",
-    "stockReceiving": "į sandėlį piemimą",
-    "recipe": "receptą",
-    "material": "sudedamojį dalį",
-    "productItem": "gamybos poziciją",
-    "article": "prekę",
-    "pricing": "kainyną",
-    "employee": "darbuotoją",
-    "site": "padalinį",
-    "statuses": "būseną"
-  },
-  "genitive": {
-    "pricing": "Kainyno",
-    "property": "Ypatybės",
-    "article": "Prekės",
-    "option": "Parinkties",
-    "storage": "Sandėlio",
-    "stockTaking": "Inventorizacijos",
-    "stockTakingItem": "Inventorizacijos pozicijos",
-    "stockWithdrawing": "Iš sandėlio iškrovimo",
-    "stockWithdrawingItem": "Iš sandėlio iškrovimo pozicijos",
-    "stockReceiving": "Į sandėlį priemimo",
-    "stockReceivingItem": "Į sandėlį priemimo pozicijos",
-    "legalEntity": "Įmonės",
-    "recipe": "Recepto",
-    "serviceTask": "Užduoties",
-    "productionItem": "Gamybos pozicijos",
-    "user": "Naudotojo"
-  },
-  "shortened": {
-    "positions": "poz",
-    "units": "vnt",
-    "boxes": "dėž",
-    "products": "gam",
-    "selfCost": "sav."
   },
   "workflow": {
     "accept": "Priimti",

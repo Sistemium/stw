@@ -1,0 +1,51 @@
+{
+  "measures": {
+    "weight": "Weight",
+    "length": "Length",
+    "volume": "Volume",
+    "quantity": "Quantity"
+  },
+  "units": {
+    "kilogram": "Kilograms",
+    "gram": "Grams",
+    "litre": "Litres",
+    "millilitre": "Millilitres",
+    "metre": "Metres",
+    "centimetre": "Centimetres",
+    "tonne": "Tonnes",
+    "piece": "Pieces",
+    "quantityOf": "Number of {0}",
+    "genitive": {
+      "kilogram": "kilograms",
+      "gram": "grams",
+      "litre": "litres",
+      "millilitre": "millilitres",
+      "metre": "metres",
+      "centimetre": "centimetres",
+      "tonne": "tonnes",
+      "piece": "pieces"
+    },
+    "short": {
+      "kilogram": "kg",
+      "gram": "g",
+      "litre": "l",
+      "millilitre": "ml",
+      "metre": "m",
+      "centimetre": "cm",
+      "tonne": "t",
+      "piece": "pcs"
+    }
+  },
+  "storage": {
+    "boxes": "Boxes",
+    "units": "Units"
+  },
+  "dataTypes": {
+    "string": "String",
+    "options": "Options",
+    "boolean": "Yes/no",
+    "number": "Number",
+    "prefix": "Prefix",
+    "suffix": "Suffix"
+  }
+}

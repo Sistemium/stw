@@ -1,0 +1,52 @@
+{
+  "accusative": {
+    "notifications": "noitifications",
+    "date": "date",
+    "property": "property",
+    "profile": "Profile",
+    "picture": "picture",
+    "service": "service",
+    "storage": "storage",
+    "stockTaking": "stockTaking",
+    "position": "position",
+    "stockWithdrawing": "withdrawing",
+    "stockReceiving": "stock receiving",
+    "recipe": "recipe",
+    "material": "material",
+    "productItem": "production item",
+    "article": "article",
+    "pricing": "pricing",
+    "employee": "employee",
+    "site": "department",
+    "statuses": "statuses"
+  },
+  "genitive": {
+    "pricing": "Pricing",
+    "property": "Property",
+    "article": "Article",
+    "option": "Option",
+    "storage": "Storage",
+    "stockTaking": "Stocktaking",
+    "stockTakingItem": "Stocktaking item",
+    "stockWithdrawing": "Stock withdrawing",
+    "stockWithdrawingItem": "Stock withdrawing item",
+    "stockReceiving": "Stock receiving",
+    "stockReceivingItem": "Stock receiving item",
+    "legalEntity": "Legal entity",
+    "recipe": "Recipe",
+    "serviceTask": "Service task",
+    "productionItem": "Production item",
+    "user": "User"
+  },
+  "shortened": {
+    "positions": "pos",
+    "units": "unt",
+    "boxes": "bx",
+    "products": "prod",
+    "selfCost": "s.c."
+  },
+  "plural": {
+    "article": "Products",
+    "customer": "Customers"
+  }
+}

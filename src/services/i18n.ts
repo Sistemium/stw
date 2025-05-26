@@ -12,6 +12,12 @@ import isString from 'lodash/isString'
 import ruFields from '@/locales/fields/ru.json'
 import enFields from '@/locales/fields/en.json'
 import ltFields from '@/locales/fields/lt.json'
+import ruUnits from '@/locales/units/ru.json'
+import enUnits from '@/locales/units/en.json'
+import ltUnits from '@/locales/units/lt.json'
+import ruWords from '@/locales/words/ru.json'
+import enWords from '@/locales/words/en.json'
+import ltWords from '@/locales/words/lt.json'
 import { ru as ruV, en as enV, lt as ltV } from 'vuetify/locale'
 
 const LS_KEY_I18N_LOCALE = 'I18N_LOCALE'
@@ -60,9 +66,32 @@ const i18n = createI18n({
   locale: getSavedLocale() || import.meta.env.VITE_I18N_LOCALE || 'en',
   fallbackLocale: import.meta.env.VITE_I18N_FALLBACK_LOCALE || 'en',
   messages: {
-    en: { ...en, ...uiEn, fields: enFields, $vuetify: enV },
-    ru: { ...ru, ...uiRu, fields: ruFields, $vuetify: ruV },
-    lt: { ...lt, ...uiLt, fields: ltFields, $vuetify: ltV },
+    en: {
+      ...en,
+      ...uiEn,
+      fields:
+      enFields,
+      $vuetify: enV,
+      ...enUnits,
+      ...enWords,
+    },
+    ru: {
+      ...ru,
+      ...uiRu,
+      fields: ruFields,
+      $vuetify:
+      ruV,
+      ...ruUnits,
+      ...ruWords,
+    },
+    lt: {
+      ...lt,
+      ...uiLt,
+      fields: ltFields,
+      $vuetify: ltV,
+      ...ltUnits,
+      ...ltWords,
+    },
   },
   silentFallbackWarn: true,
   datetimeFormats: {
