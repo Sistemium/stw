@@ -26,6 +26,8 @@ import {
   mdiChevronLeft,
   mdiChevronRight,
   mdiChevronUp,
+  mdiChevronDoubleRight,
+  mdiChevronDoubleLeft,
   mdiCircle,
   mdiEmail,
   mdiFullscreenExit,
@@ -101,6 +103,8 @@ export default createVuetify({
       mdiChevronUp,
       mdiChevronLeft,
       mdiChevronRight,
+      mdiChevronDoubleRight,
+      mdiChevronDoubleLeft,
       mdiCircle,
       mdiEmail,
       mdiFullscreenExit,
@@ -184,6 +188,8 @@ export default createVuetify({
     VDataTable: {
       sortAscIcon: '$mdiSortAscending',
       sortDescIcon: '$mdiSortDescending',
+      lastIcon: '$mdiChevronDoubleRight',
+      firstIcon: '$mdiChevronDoubleLeft',
     },
     VTextField: {},
     VAutocomplete: {
