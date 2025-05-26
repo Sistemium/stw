@@ -29,7 +29,7 @@ v-list(v-if="prompt.results" density="compact")
         density="comfortable"
         variant="tonal"
         :color="result.selected ? 'success' : ''"
-        @click="toggleItem(result.id)"
+        @click="toggleItem(result)"
       ) {{ result.selected ? $t('remove') : $t('add') }}
         template(#prepend)
           v-icon(v-if="result.selected" size="large") $mdiCheck
@@ -37,10 +37,10 @@ v-list(v-if="prompt.results" density="compact")
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import type { PromptData } from '@/services/prompting'
+import type { PromptData, SearchResult } from '@/services/prompting'
 import { safeT } from '@/services/i18n'
 
-const selected = defineModel({ default: [] })
+const selected = defineModel({ default: new Map<string, SearchResult>() })
 
 const props = defineProps<{
   prompt: PromptData
@@ -52,15 +52,16 @@ const emit = defineEmits<{
 
 const fullResults = computed(() => props.prompt.results.map(res => ({
   ...res,
-  selected: selected.value.includes(res.id),
+  selected: selected.value.has(res.id),
 })))
 
-function toggleItem(id: string) {
-  const idx = selected.value.indexOf(id)
-  if (idx === -1) {
-    selected.value.push(id)
+function toggleItem(result: SearchResult) {
+  const { id } = result
+  const has = selected.value.has(id)
+  if (has) {
+    selected.value.delete(id)
   } else {
-    selected.value.splice(idx, 1)
+    selected.value.set(id, result)
   }
 }
 </script>

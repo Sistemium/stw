@@ -31,14 +31,14 @@ import AssistantQueryInput from '@/components/assistant/AssistantQueryInput.vue'
 import AssistantFoundList from '@/components/assistant/AssistantFoundList.vue'
 import LoadingSkeleton from '@/components/assistant/LoadingSkeleton.vue'
 import SnackMessage from '@/lib/SnackMessage.vue'
-import { type PromptData, useAiQuery } from '@/services/prompting'
+import { type PromptData, type SearchResult, useAiQuery } from '@/services/prompting'
 import StmResize from '@/lib/StmResize.vue'
 import { safeT } from '@/services/i18n'
 
 
 const thread = ref<PromptData[]>([])
 const { search, loading, error } = useAiQuery()
-const selected = ref<string[]>([])
+const selected = ref(new Map<string, SearchResult>())
 
 interface ContextItem {
   id: string
@@ -48,18 +48,20 @@ interface ContextItem {
 
 const context = computed<ContextItem[]>(() => {
   const all = flatten(thread.value.map(({ results }) => results))
-    .filter(({ id }) => selected.value.includes(id))
+    .filter(({ id }) => selected.value.has(id))
   return map(groupBy(all, 'entityType'), (items, entityType) => ({
     id: entityType,
     label: `${safeT(entityType, 'plural')}: ${items.length}`,
-    ids: items.map(({ id }) => id)
+    ids: items.map(({ id }) => id),
   }))
 })
 
 function removeContextItem(id: string) {
   const ctx = context.value.find(item => item.id === id)
   if (ctx) {
-    selected.value = selected.value.filter(s => !ctx.ids.includes(s))
+    ctx.ids.forEach(id => {
+      selected.value.delete(id)
+    })
   }
 }
 
