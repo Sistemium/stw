@@ -1,14 +1,6 @@
 <template lang="pug">
 .assistant-page.mx-auto(style="max-width: 1000px")
-  v-snackbar(
-    :model-value="!!error"
-    color="error"
-  ) {{ error }}
-    template(#actions)
-      v-btn(
-        @click="() => { error = '' }"
-        icon="$mdiClose"
-      )
+  snack-message(v-model="error")
   page-title(title="menu.assistant")
   assistant-query-input.mb-3(
     :disabled="!!loading"
@@ -44,6 +36,7 @@ import map from 'lodash/map'
 import PageTitle from '@/components/PageTitle.vue'
 import AssistantQueryInput from '@/components/assistant/AssistantQueryInput.vue'
 import AssistantFoundList from '@/components/assistant/AssistantFoundList.vue'
+import SnackMessage from '@/lib/SnackMessage.vue'
 import { type PromptData, useAiQuery } from '@/services/prompting'
 import StmResize from '@/lib/StmResize.vue'
 import { safeT } from '@/services/i18n'

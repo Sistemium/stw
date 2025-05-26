@@ -58,3 +58,8 @@ function onSpoken(text: string) {
   query.value = text
 }
 </script>
+<style scoped lang="scss">
+  .v-chip + .v-chip {
+    margin-left: 4px;
+  }
+</style>
