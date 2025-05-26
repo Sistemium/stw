@@ -86,7 +86,7 @@ async function main(config: ModelRequestConfig, requestId: number) {
     headers[OFFSET_HEADER],
     requestData,
   ]
-  debug('req:', requestId, collection, op, ...etc.filter(x => x))
+  // debug('req:', requestId, collection, op, ...etc.filter(x => x))
 
   if (!type) {
     throw new Error(`Unknown type for op ${op}`)
@@ -103,7 +103,7 @@ async function main(config: ModelRequestConfig, requestId: number) {
     params,
   })
 
-  debug('res:', requestId, collection, op, res.data?.length)
+  debug('res:', requestId, collection, op, ...etc.filter(x => x), res.data?.length)
   return res
 
 }
