@@ -78,16 +78,20 @@ function refresh(prompt: PromptData) {
 
   search(prompt.query)
     .then(() => {
-      item.results.value = results.value
+      updateThreadItem(prompt.id, { ...item, results })
     })
 
-  const idx = thread.value.findIndex(v => v.id == prompt.id)
+  updateThreadItem(prompt.id, item)
+
+}
+
+function updateThreadItem(id: string, item: PromptData) {
+  const idx = thread.value.findIndex(v => v.id == id)
   if (idx === -1) {
     thread.value.splice(0, 0, item)
   } else {
     thread.value.splice(idx, 1, item)
   }
-
 }
 
 function onQuery(query: string) {
