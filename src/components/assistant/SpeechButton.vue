@@ -17,7 +17,7 @@ import { watch } from 'vue'
 import { getLocale } from '@/services/i18n'
 
 
-const { lang = getLocale(), continuous = false } = defineProps<{
+const props = defineProps<{
   continuous?: boolean
   lang?: string
   busy?: boolean
@@ -28,8 +28,8 @@ const emit = defineEmits<{
 }>()
 
 const { isSupported, isListening, isFinal, result, start, stop } = useSpeechRecognition({
-  lang,
-  continuous,
+  lang: () => props.lang || getLocale(),
+  continuous: props.continuous || false,
 })
 
 function toggle() {
