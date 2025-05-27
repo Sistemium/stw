@@ -32,11 +32,15 @@ v-list(v-if="prompt" density="compact")
     v-if="isEmpty && !prompt.loading"
     :title="prompt.error || $t('validation.noData')"
   )
+    template(#prepend)
+      v-icon(
+        :color="prompt.error ? 'error' : ''"
+      ) $mdiAlertCircle
   v-list-item(v-if="prompt.loading && isEmpty")
     v-skeleton-loader.ma-2(type="paragraph")
   busy-loading(v-if="prompt.loading && !isEmpty" :busy="prompt.loading")
   v-list-item(
-    v-for="result in fullResults"
+    v-for="result in entityResults"
     :key="result.id"
     :title="result.name"
     :subtitle="safeT(result.entityType, 'fields')"
@@ -82,14 +86,15 @@ const emit = defineEmits<{
   (e: 'copy'): void
 }>()
 
-const entityResults = computed(() => props.prompt.results.filter(r => r.entityType !== 'report') || [])
+const entityResults = computed(() => {
+  return props.prompt.results.filter(r => r.entityType !== 'report')
+    .map(res => ({
+      ...res,
+      selected: selected.value.has(res.id),
+    }))
+})
 
-const fullResults = computed(() => entityResults.value.map(res => ({
-  ...res,
-  selected: selected.value.has(res.id),
-})))
-
-const reports = computed(() => props.prompt.results.filter(r => r.entityType === 'report') || [])
+const reports = computed(() => props.prompt.results.filter(r => r.report && r.entityType === 'report'))
 
 const isEmpty = computed(() => !props.prompt.results.length)
 
