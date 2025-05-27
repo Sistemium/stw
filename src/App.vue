@@ -4,7 +4,7 @@ v-layout#app
   app-menu
     template(#left)
       barcode-scanner-status(v-if="showBarcodeStatus")
-  v-main.my-5
+  v-main.my-5.px-3
     barcode-input(
       v-if="showBarcodeInput"
       :lock="false"
