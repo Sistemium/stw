@@ -5,7 +5,15 @@ v-list(v-if="prompt" density="compact")
       v-icon $mdiMessageOutline
       span.ml-3 {{ prompt.query }}
     template(#append)
-      v-btn(
+      tool-button(
+        tool="refresh"
+        variant="flat"
+        color=""
+        density="compact"
+        size="small"
+        @click="emit('refresh')"
+      )
+      v-btn.ml-2(
         variant="flat"
         icon="$mdiClose"
         density="compact"
@@ -13,9 +21,12 @@ v-list(v-if="prompt" density="compact")
         @click="emit('close')"
       )
   v-list-item(
-    v-if="!prompt.results.length"
-    :title="$t('validation.noData')"
+    v-if="isEmpty && !prompt.loading"
+    :title="prompt.error || $t('validation.noData')"
   )
+  v-list-item(v-if="prompt.loading && isEmpty")
+    v-skeleton-loader.ma-2(type="paragraph")
+  busy-loading(v-if="prompt.loading && !isEmpty" :busy="prompt.loading")
   v-list-item(
     v-for="result in fullResults"
     :key="result.id"
@@ -45,29 +56,33 @@ v-list(v-if="prompt" density="compact")
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import type { PromptData, SearchResult } from '@/services/prompting'
+import type { SearchResult, UnwrappedPrompt } from '@/services/prompting'
 import { safeT } from '@/services/i18n'
 import AssistantReportTable from '@/components/assistant/AssistantReportTable.vue'
+import ToolButton from '@/lib/ToolButton.vue'
+import BusyLoading from '@/lib/BusyLoading.vue'
 
 const selected = defineModel({ default: new Map<string, SearchResult>() })
 
 const props = defineProps<{
-  prompt: PromptData
+  prompt: UnwrappedPrompt
 }>()
 
 const emit = defineEmits<{
   (e: 'close'): void
+  (e: 'refresh'): void
 }>()
 
-const entityResults = computed(() => props.prompt.results.filter(r => r.entityType !== 'report'))
+const entityResults = computed(() => props.prompt.results.filter(r => r.entityType !== 'report') || [])
 
 const fullResults = computed(() => entityResults.value.map(res => ({
   ...res,
   selected: selected.value.has(res.id),
 })))
 
-const reports = computed(() => props.prompt.results.filter(r => r.entityType === 'report'))
+const reports = computed(() => props.prompt.results.filter(r => r.entityType === 'report') || [])
 
+const isEmpty = computed(() => !props.prompt.results.length)
 
 function toggleItem(result: SearchResult) {
   const { id } = result
