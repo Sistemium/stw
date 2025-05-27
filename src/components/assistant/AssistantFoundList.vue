@@ -3,9 +3,17 @@ v-list(v-if="prompt" density="compact")
   v-list-item
     v-list-subheader
       v-icon $mdiMessageOutline
-      span.ml-3 {{ prompt.query }}
+      span.ml-3.text-wrap {{ prompt.query }}
     template(#append)
-      tool-button(
+      tool-button.ml-2(
+        tool="copy"
+        variant="flat"
+        color=""
+        density="compact"
+        size="small"
+        @click="emit('copy')"
+      )
+      tool-button.ml-2(
         tool="refresh"
         variant="flat"
         color=""
@@ -71,6 +79,7 @@ const props = defineProps<{
 const emit = defineEmits<{
   (e: 'close'): void
   (e: 'refresh'): void
+  (e: 'copy'): void
 }>()
 
 const entityResults = computed(() => props.prompt.results.filter(r => r.entityType !== 'report') || [])

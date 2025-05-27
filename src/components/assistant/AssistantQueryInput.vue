@@ -35,7 +35,6 @@
 
 <script setup lang="ts">
 
-import { ref } from 'vue'
 import SpeechButton from '@/components/assistant/SpeechButton.vue'
 
 defineProps<{
@@ -47,7 +46,7 @@ const emit = defineEmits<{
   (e: 'query', query: string): void
   (e: 'removeContext', id: string): void
 }>()
-const query = ref('')
+const query = defineModel({ default: '' })
 
 function emitSearch() {
   emit('query', query.value)
@@ -59,7 +58,7 @@ function onSpoken(text: string) {
 }
 </script>
 <style scoped lang="scss">
-  .v-chip + .v-chip {
-    margin-left: 4px;
-  }
+.v-chip + .v-chip {
+  margin-left: 4px;
+}
 </style>

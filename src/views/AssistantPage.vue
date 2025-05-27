@@ -4,6 +4,7 @@
   page-title(title="menu.assistant")
   assistant-query-input.mb-3(
     :disabled="!!loading"
+    v-model="search"
     @query="onQuery"
     @remove-context="removeContextItem"
     :context
@@ -16,6 +17,7 @@
       :key="prompt.id"
       @close="removeItem(prompt.id)"
       @refresh="refresh(prompt)"
+      @copy="copyPrompt(prompt)"
       border
       :prompt
     )
@@ -40,6 +42,7 @@ const loading = ref(false)
 const rootError = ref('')
 const thread: Ref<PromptData[]> = ref([])
 const selected = ref(new Map<string, SearchResult>())
+const search = ref('')
 
 interface ContextItem {
   id: string
@@ -64,6 +67,10 @@ function removeContextItem(id: string) {
       selected.value.delete(id)
     })
   }
+}
+
+function copyPrompt(prompt: PromptData) {
+  search.value = prompt.query
 }
 
 function refresh(prompt: PromptData) {
@@ -96,6 +103,7 @@ function updateThreadItem(id: string, item: PromptData) {
 
 function onQuery(query: string) {
   const { search, loading, error, results } = useAiQuery()
+  loading.value = true
   search(query)
   thread.value.splice(0, 0, {
     id: v4(),

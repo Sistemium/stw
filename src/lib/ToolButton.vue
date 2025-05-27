@@ -17,6 +17,7 @@ v-btn.tool-button(
 import { computed } from 'vue';
 
 const ICONS: Record<string, any> = {
+  copy: '$mdiContentCopy',
   add: '$mdiPlusCircle',
   edit: '$mdiPencilCircleOutline',
   refresh: '$mdiRefresh',
