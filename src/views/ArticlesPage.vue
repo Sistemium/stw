@@ -82,6 +82,7 @@ import { catalogueData, searchArticle } from '@/services/catalogue.js';
 import { useScrollToCreated } from '@/services/scrolling';
 import { useRouteParams } from '@/lib/updateRouteParams'
 import type { IArticle } from '@/models/Articles'
+import { useRouteQuery } from '@/services/util'
 
 const props = defineProps<{
   editRoute: string
@@ -93,16 +94,9 @@ const props = defineProps<{
 const barcode = ref<string>('');
 const tableHeight = ref<number>();
 const selectedArticle = ref();
-const { route, router, updateRouteParams } = useRouteParams()
+const { route, router } = useRouteParams()
 const viewComponentRef = ref();
-const search = computed({
-  get() {
-    return route.query.search;
-  },
-  set(search) {
-    updateRouteParams({}, { search: search || undefined });
-  },
-});
+const { search } = useRouteQuery()
 
 useScrollToCreated({
   ifIdExistsFn(id: string): boolean {
