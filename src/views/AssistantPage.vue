@@ -2,7 +2,7 @@
 .assistant-page.mx-auto(style="max-width: 1000px")
   snack-message(v-model="rootError")
   page-title(title="menu.assistant")
-  assistant-query-input.mb-3(
+  assistant-query-input.mb-6(
     :disabled="busy"
     v-model="search"
     @query="onQuery"
@@ -10,7 +10,7 @@
     :context
   )
   stm-resize(:padding="20")
-    assistant-found-list.my-3(
+    assistant-found-list.mb-6(
       v-model="selected"
       v-for="prompt in thread"
       :key="prompt.id"
@@ -39,6 +39,7 @@ import {
 } from '@/services/prompting'
 import StmResize from '@/lib/StmResize.vue'
 import { safeT } from '@/services/i18n'
+import dayjs from 'dayjs'
 
 const busy = ref(false)
 const rootError = ref('')
@@ -83,25 +84,27 @@ function refresh(prompt: PromptData) {
     results: prompt.results,
     loading,
     error,
-  }
+    startedAt: new Date(),
+    duration: ref(),
+  } as PromptData
   rootError.value = ''
   busy.value = true
   search(prompt.query)
     .then(() => {
-      updateThreadItem(prompt.id, { ...item, results })
+      updateThreadItem({ ...item, results })
     })
     .finally(() => {
+      item.duration.value = dayjs().diff(item.startedAt, 'second')
       rootError.value = error.value
       busy.value = false
     })
 
-
-  updateThreadItem(prompt.id, item)
+  updateThreadItem(item)
 
 }
 
-function updateThreadItem(id: string, item: PromptData) {
-  const idx = thread.value.findIndex(v => v.id == id)
+function updateThreadItem(item: PromptData) {
+  const idx = thread.value.findIndex(v => v.id == item.id)
   if (idx === -1) {
     thread.value.splice(0, 0, item)
   } else {
@@ -113,18 +116,22 @@ function onQuery(query: string) {
   const { search, loading, error, results } = useAiQuery()
   busy.value = true
   rootError.value = ''
-  search(query)
-    .finally(() => {
-      busy.value = false
-      rootError.value = error.value
-    })
-  thread.value.splice(0, 0, {
+  const item = {
     id: v4(),
     query,
     loading,
     error,
     results,
-  })
+    startedAt: new Date(),
+    duration: ref(),
+  } as PromptData
+  search(query)
+    .finally(() => {
+      item.duration.value = dayjs().diff(item.startedAt, 'second')
+      busy.value = false
+      rootError.value = error.value
+    })
+  updateThreadItem(item)
 }
 
 function removeItem(id: string) {

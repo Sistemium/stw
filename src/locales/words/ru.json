@@ -39,6 +39,7 @@
     "user": "пользователя"
   },
   "shortened": {
+    "seconds": "сек.",
     "positions": "поз",
     "units": "шт",
     "boxes": "кор",

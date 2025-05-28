@@ -5,9 +5,9 @@ import { useInvStore } from '@/store/invStore'
 
 export interface AssistantReport {
   columns: {
-    name: string
+    title: string
     dataType: 'string' | 'date' | 'number' | 'boolean'
-    decimals?: number
+    dataKey: string
   }[]
   data: Record<string, any>[]
 }
@@ -15,6 +15,7 @@ export interface AssistantReport {
 export interface SearchResult {
   id: string
   name: string
+  code?: string | null
   entityType: 'article' | 'customer' | 'report'
   report: AssistantReport
 }
@@ -25,6 +26,8 @@ export interface PromptData {
   results: Ref<SearchResult[]>
   loading: Ref<boolean>
   error?: Ref<string>
+  startedAt: Date
+  duration: Ref<number | undefined>
 }
 
 export interface UnwrappedPrompt {
@@ -33,6 +36,8 @@ export interface UnwrappedPrompt {
   results: SearchResult[]
   loading: boolean
   error?: string
+  startedAt: Date
+  duration: number
 }
 
 
@@ -50,6 +55,7 @@ export function useAiQuery() {
         headers: {
           authorization: store.authToken,
         },
+        timeout: 180000,
       })
       results.value = data || []
       return { data }

@@ -5,6 +5,8 @@ v-list(v-if="prompt" density="compact")
       v-icon $mdiMessageOutline
       span.ml-3.text-wrap {{ prompt.query }}
     template(#append)
+      small.duration.text-grey-darken-3 {{ $d(prompt.startedAt, 'timestamp') }}
+      small.duration.text-grey-darken-3.ml-1(v-if="prompt.duration") + {{ prompt.duration }} {{ $t('shortened.seconds') }}
       tool-button.ml-2(
         tool="copy"
         variant="flat"
@@ -39,23 +41,29 @@ v-list(v-if="prompt" density="compact")
   v-list-item(v-if="prompt.loading && isEmpty")
     v-skeleton-loader.ma-2(type="paragraph")
   busy-loading(v-if="prompt.loading && !isEmpty" :busy="prompt.loading")
-  v-list-item(
-    v-for="result in entityResults"
-    :key="result.id"
-    :title="result.name"
-    :subtitle="safeT(result.entityType, 'fields')"
-  )
-    template(#append)
-      v-btn(
-        type="success"
-        size="small"
-        density="comfortable"
-        variant="tonal"
-        :color="result.selected ? 'success' : ''"
-        @click="toggleItem(result)"
-      ) {{ result.selected ? $t('remove') : $t('add') }}
-        template(#prepend)
-          v-icon(v-if="result.selected" size="large") $mdiCheck
+  template(v-for="type in entityResults" :key="type.entityType")
+    v-list-subheader
+      template(#default)
+        h4 {{ safeT(type.entityType, 'fields') }}
+    v-divider
+    v-list-item(
+      v-for="result in type.data"
+      :key="result.id"
+      :title="result.name"
+    )
+      template(#subtitle)
+        span(v-if="result.code") {{ result.code }}
+      template(#append)
+        v-btn(
+          type="success"
+          size="small"
+          density="comfortable"
+          variant="tonal"
+          :color="result.selected ? 'success' : ''"
+          @click="toggleItem(result)"
+        ) {{ result.selected ? $t('remove') : $t('add') }}
+          template(#prepend)
+            v-icon(v-if="result.selected" size="large") $mdiCheck
   v-sheet(
     v-for="report in reports"
     :key="report.id"
@@ -73,6 +81,8 @@ import { safeT } from '@/services/i18n'
 import AssistantReportTable from '@/components/assistant/AssistantReportTable.vue'
 import ToolButton from '@/lib/ToolButton.vue'
 import BusyLoading from '@/lib/BusyLoading.vue'
+import groupBy from 'lodash/groupBy'
+import map from 'lodash/map'
 
 const selected = defineModel({ default: new Map<string, SearchResult>() })
 
@@ -87,16 +97,18 @@ const emit = defineEmits<{
 }>()
 
 const entityResults = computed(() => {
-  return props.prompt.results.filter(r => r.entityType !== 'report')
+  const results = props.prompt.results.filter(r => r.entityType !== 'report')
     .map(res => ({
       ...res,
       selected: selected.value.has(res.id),
     }))
+  const grouped = groupBy<SearchResult>(results, 'entityType')
+  return map(grouped, (data, entityType) => ({ entityType, data })) as { data: SearchResult[], entityType: string }[]
 })
 
 const reports = computed(() => props.prompt.results.filter(r => r.report && r.entityType === 'report'))
 
-const isEmpty = computed(() => !props.prompt.results.length)
+const isEmpty = computed(() => !reports.value.length && !entityResults.value.length)
 
 function toggleItem(result: SearchResult) {
   const { id } = result

@@ -39,6 +39,7 @@
     "user": "User"
   },
   "shortened": {
+    "seconds": "sec.",
     "positions": "pos",
     "units": "unt",
     "boxes": "bx",

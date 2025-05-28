@@ -23,8 +23,8 @@ const { report } = defineProps<{
 }>()
 
 const headers = computed(() => report.columns.map(column => ({
-  key: column.name,
-  title: column.name,
+  key: column.dataKey,
+  title: column.title,
   align: aligners[column.dataType] || 'start',
   cls: aligners[column.dataType] === 'end' ? 'text-right' : '',
   render: renderers[column.dataType] || (x => x),
