@@ -65,7 +65,7 @@ export function useRouteQuery(name: string = 'search') {
   const { route, updateRouteParams } = useRouteParams()
   const search = computed<string | undefined>({
     get() {
-      return (route.query[name] as string) || undefined
+      return route.query[name] as string || ''
     },
     set(val?: string) {
       const q: Record<string, any> = {}

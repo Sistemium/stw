@@ -8,7 +8,7 @@ import orderBy from 'lodash/orderBy'
 import ArticleProp, { TYPES_DEFAULTS, VALUE_TYPES } from '@/models/ArticleProp'
 import Article from '@/models/Article'
 import * as PackageType from '@/models/PackageType'
-import { likeLt } from '@/services/lt'
+import { searchRe } from '@/services/lt'
 import type { BaseItem } from '@/init/Model'
 import type { IArticleProp } from '@/models/ArticleProps'
 import type { IArticle } from '@/models/Articles'
@@ -89,10 +89,10 @@ export function searchArticle(search: string): (x?: IArticle) => boolean {
   if (!search) {
     return (x?: IArticle) => !!x
   }
-  return (article?: IArticle) => testArticle(article, likeLt(search))
+  return (article?: IArticle) => testArticle(article, searchRe(search))
 }
 
-export function testArticle(article: IArticle | undefined, re: RegExp) {
+export function testArticle(article: IArticle | undefined, re: { test: (x: string) => boolean }) {
   if (!article) {
     return false
   }
