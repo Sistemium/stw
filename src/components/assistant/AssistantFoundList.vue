@@ -106,7 +106,7 @@ const entityResults = computed(() => {
   return map(grouped, (data, entityType) => ({ entityType, data })) as { data: SearchResult[], entityType: string }[]
 })
 
-const reports = computed(() => props.prompt.results.filter(r => r.report && r.entityType === 'report'))
+const reports = computed(() => props.prompt.results.filter(r => r.report))
 
 const isEmpty = computed(() => !reports.value.length && !entityResults.value.length)
 
