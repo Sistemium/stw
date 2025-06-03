@@ -16,7 +16,7 @@ v-data-table(
 <script setup lang="ts">
 import { type AssistantReport } from '@/services/prompting'
 import { computed } from 'vue'
-import { safeN, safeTd } from '@/services/i18n'
+import { getLocale, safeN, safeTd } from '@/services/i18n'
 
 const { report } = defineProps<{
   report: AssistantReport
@@ -24,10 +24,10 @@ const { report } = defineProps<{
 
 const headers = computed(() => report.columns.map(column => ({
   key: column.dataKey,
-  title: column.title,
-  align: aligners[column.dataType] || 'start',
-  cls: aligners[column.dataType] === 'end' ? 'text-right' : '',
-  render: renderers[column.dataType] || (x => x),
+  title: column.title[getLocale()],
+  align: aligners[column.datatype] || 'start',
+  cls: aligners[column.datatype] === 'end' ? 'text-right' : '',
+  render: renderers[column.datatype] || (x => x),
 })))
 
 const renderers = {

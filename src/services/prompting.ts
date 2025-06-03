@@ -5,8 +5,8 @@ import { useInvStore } from '@/store/invStore'
 
 export interface AssistantReport {
   columns: {
-    title: string
-    dataType: 'string' | 'date' | 'number' | 'boolean'
+    title: LocalizedString
+    datatype: ColumnDatatype
     dataKey: string
   }[]
   data: Record<string, any>[]
@@ -16,14 +16,38 @@ export interface SearchResult {
   id: string
   name: string
   code?: string | null
-  entityType: 'article' | 'customer' | 'report'
-  report: AssistantReport
+  entityType: 'article' | 'customer'
+  // report: AssistantReport
+}
+
+type Lang = 'en' | 'lt' | 'ru'
+type ColumnDatatype = 'string' | 'number' | 'currency' | 'boolean' | 'date'
+export type LocalizedString = Record<Lang, string>
+
+export interface MongoReportResult {
+  title: LocalizedString
+  comments: { label: LocalizedString, text: string }[]
+  columns: {
+    dataKey: string
+    title: LocalizedString
+    datatype: ColumnDatatype
+  }[]
+}
+
+export interface PromptResult {
+  found?: SearchResult[]
+  report?: {
+    config: {
+      resultSchema: MongoReportResult
+    }
+    data: Record<string, any>[]
+  }
 }
 
 export interface PromptData {
   id: string
   query: string
-  results: Ref<SearchResult[]>
+  results: Ref<PromptResult>
   loading: Ref<boolean>
   error?: Ref<string>
   startedAt: Date
@@ -33,7 +57,7 @@ export interface PromptData {
 export interface UnwrappedPrompt {
   id: string
   query: string
-  results: SearchResult[]
+  results: PromptResult
   loading: boolean
   error?: string
   startedAt: Date
@@ -44,14 +68,14 @@ export interface UnwrappedPrompt {
 export function useAiQuery() {
   const loading: Ref<boolean> = ref(false)
   const error: Ref<string> = ref('')
-  const results: Ref<SearchResult[]> = ref([])
+  const results: Ref<PromptResult> = ref({})
   const store = useInvStore()
 
   async function search(query: string) {
     loading.value = true
     error.value = ''
     try {
-      const { data } = await axios.post<SearchResult[]>('/api/ai/query', { query }, {
+      const { data } = await axios.post<PromptResult>('/api/ai/query', { query }, {
         headers: {
           authorization: store.authToken,
         },

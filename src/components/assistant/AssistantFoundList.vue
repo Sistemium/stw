@@ -65,12 +65,12 @@ v-list(v-if="prompt" density="compact")
           template(#prepend)
             v-icon(v-if="result.selected" size="large") $mdiCheck
   v-sheet(
-    v-for="report in reports"
-    :key="report.id"
+    v-if="report"
   )
-    h3.ma-3 {{ report.name }}
+    h3.ma-3
+      localized-string-view(:localized="report?.config.resultSchema.title")
     assistant-report-table(
-      :report="report.report"
+      :report="{ data: report?.data || [], columns: report?.config.resultSchema.columns || [] }"
     )
 </template>
 
@@ -83,6 +83,7 @@ import ToolButton from '@/lib/ToolButton.vue'
 import BusyLoading from '@/lib/BusyLoading.vue'
 import groupBy from 'lodash/groupBy'
 import map from 'lodash/map'
+import LocalizedStringView from '@/components/LocalizedStringView.vue'
 
 const selected = defineModel({ default: new Map<string, SearchResult>() })
 
@@ -97,18 +98,21 @@ const emit = defineEmits<{
 }>()
 
 const entityResults = computed(() => {
-  const results = props.prompt.results.filter(r => r.entityType !== 'report')
-    .map(res => ({
-      ...res,
-      selected: selected.value.has(res.id),
-    }))
+  const results = props.prompt.results.found?.map(res => ({
+    ...res,
+    selected: selected.value.has(res.id),
+  })) || []
+
   const grouped = groupBy<SearchResult>(results, 'entityType')
-  return map(grouped, (data, entityType) => ({ entityType, data })) as { data: SearchResult[], entityType: string }[]
+  return map(grouped, (data, entityType) => ({ entityType, data })) as {
+    data: SearchResult[],
+    entityType: string
+  }[]
 })
 
-const reports = computed(() => props.prompt.results.filter(r => r.report))
+const report = computed(() => props.prompt.results?.report)
 
-const isEmpty = computed(() => !reports.value.length && !entityResults.value.length)
+const isEmpty = computed(() => !report.value && !entityResults.value.length)
 
 function toggleItem(result: SearchResult) {
   const { id } = result
