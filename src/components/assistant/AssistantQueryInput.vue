@@ -24,18 +24,16 @@
         @click="emitSearch"
       ) {{ $t('actions.send') }}
     template(#prepend-inner v-if="context")
-      v-chip(
-        v-for="item in context"
-        :key="item.id"
-        closable
-        size="small"
-        @click:close="emit('removeContext', item.id)"
-      ) {{ item.label }}
+      context-chips(
+        :context="context"
+        @click:close="id => emit('removeContext', id)"
+      )
 </template>
 
 <script setup lang="ts">
 
 import SpeechButton from '@/components/assistant/SpeechButton.vue'
+import ContextChips from '@/components/assistant/ContextChips.vue'
 
 defineProps<{
   disabled?: boolean
