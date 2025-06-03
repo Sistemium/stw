@@ -6,10 +6,17 @@
     :disabled="busy"
     v-model="search"
     @query="onQuery"
-    @remove-context="removeContextItem"
-    :context
   )
-  stm-resize(:padding="20")
+  //v-fade-transition
+  v-toolbar.mb-6(
+    density="compact"
+    v-if="context.length"
+  )
+    template(#title)
+      context-chips(:context="context" @click:close="removeContextItem")
+    template(#append)
+      v-btn.mr-2(variant="tonal") {{ ta('add', $t('accusative.stockWithdrawing')) }}
+  stm-resize(:padding="20" :key="!!context.length")
     assistant-found-list.mb-6(
       v-model="selected"
       v-for="prompt in thread"
@@ -38,8 +45,9 @@ import {
   useAiQuery,
 } from '@/services/prompting'
 import StmResize from '@/lib/StmResize.vue'
-import { safeT } from '@/services/i18n'
+import { safeT, ta } from '@/services/i18n'
 import dayjs from 'dayjs'
+import ContextChips from '@/components/assistant/ContextChips.vue'
 
 const busy = ref(false)
 const rootError = ref('')
