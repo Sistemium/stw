@@ -47,7 +47,7 @@ export const workflow = new Workflow({
         to: 'progress',
         label: 'workflow.continue',
       }],
-      primaryOption: null,
+      primaryOption: undefined,
       editable: false,
     },
   ],

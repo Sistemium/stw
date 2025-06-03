@@ -30,6 +30,7 @@ export interface WorkflowOption {
   options: WorkflowStepOption[]
   inactive?: boolean
   important?: boolean
+  style?: string
 }
 
 

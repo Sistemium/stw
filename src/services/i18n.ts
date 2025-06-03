@@ -157,5 +157,5 @@ function prefixedKey(key: string, prefix: string = ''): string {
 }
 
 export function ta(key: string, param: string): string {
-  return safeT(key, 'action', param)
+  return safeT(key, 'actions', param)
 }

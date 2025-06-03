@@ -1,5 +1,5 @@
 export default {
-  mounted(element) {
+  mounted(element: any) {
     const input = element.tagName === 'INPUT' ? element
       : element.getElementsByTagName('input')[0];
     if (!input) {
@@ -11,6 +11,6 @@ export default {
   },
 };
 
-function selectThis() {
+function selectThis(this: any) {
   this.select();
 }

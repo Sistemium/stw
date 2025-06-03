@@ -48,7 +48,7 @@ export function stockOperationAct(items: StockOperationItem[], storageId: string
 
   return materializedItems.map(item => {
     const article = Article.reactiveGet(item.articleId);
-    const cost = stockArticleDateReactive(storageId, article?.id, date)?.resultCost || 0
+    const cost = stockArticleDateReactive(storageId, article?.id || '', date)?.resultCost || 0
     return {
       ...item,
       total: item.price ? item.price * item.units : undefined,
