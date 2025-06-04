@@ -31,8 +31,8 @@ export interface ReportColumn {
 }
 
 export interface ReportComment {
-  label: LocalizedString,
-  text: string,
+  label: LocalizedString
+  text: LocalizedString
 }
 
 export interface MongoReportResult {
@@ -46,6 +46,7 @@ export interface PromptResult {
   found?: SearchResult[]
   report?: MongoReportResult
   error?: string
+  text?: string
 }
 
 export interface PromptData {

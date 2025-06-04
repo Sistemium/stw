@@ -11,7 +11,7 @@ v-sheet
         v-list-item-subtitle
           localized-string-view(:localized="comment.label")
       template(#default)
-        span {{ comment.text }}
+        localized-string-view(:localized="comment.text")
   assistant-report-table(:report="report")
 </template>
 <script setup lang="ts">
