@@ -45,6 +45,7 @@ export interface MongoReportResult {
 export interface PromptResult {
   found?: SearchResult[]
   report?: MongoReportResult
+  error?: string
 }
 
 export interface PromptData {

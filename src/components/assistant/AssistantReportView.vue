@@ -2,15 +2,15 @@
 v-sheet
   h3.ma-4
     localized-string-view(:localized="report.title")
-  v-list(density="compact" v-if="report.comments.length")
+  v-list.pa-0(density="compact" v-if="report.comments.length")
     v-list-item(
       v-for="(comment, idx) in report.comments"
       :key="idx"
     )
-      template(#subtitle)
+      template(#title)
         v-list-item-subtitle
           localized-string-view(:localized="comment.label")
-      template(#title)
+      template(#default)
         span {{ comment.text }}
   assistant-report-table(:report="report")
 </template>

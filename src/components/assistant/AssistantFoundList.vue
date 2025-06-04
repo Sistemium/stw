@@ -30,6 +30,8 @@ v-list(v-if="prompt" density="compact")
         size="small"
         @click="emit('close')"
       )
+  v-list-item(v-if="prompt.results.error")
+    template(#default) {{ prompt.results.error }}
   v-list-item(
     v-if="isEmpty && !prompt.loading"
     :title="prompt.error || $t('validation.noData')"
@@ -107,7 +109,7 @@ const entityResults = computed(() => {
 
 const report = computed(() => props.prompt.results?.report)
 
-const isEmpty = computed(() => !report.value && !entityResults.value.length)
+const isEmpty = computed(() => !report.value && !entityResults.value.length && !props.prompt.results.error)
 
 function toggleItem(result: SearchResult) {
   const { id } = result
