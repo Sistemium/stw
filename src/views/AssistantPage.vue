@@ -42,6 +42,7 @@ import SnackMessage from '@/lib/SnackMessage.vue'
 import {
   type PromptData,
   type SearchResult,
+  type UnwrappedPrompt,
   useAiQuery,
 } from '@/services/prompting'
 import StmResize from '@/lib/StmResize.vue'
@@ -62,7 +63,7 @@ interface ContextItem {
 }
 
 const context = computed<ContextItem[]>(() => {
-  const all = flatten(thread.value.map(({ results }) => results || []))
+  const all = flatten((thread.value as UnwrappedPrompt[]).map(({ results }) => results.found || []))
     .filter(({ id }) => selected.value.has(id))
   return map(groupBy(all, 'entityType'), (items, entityType) => ({
     id: entityType,
