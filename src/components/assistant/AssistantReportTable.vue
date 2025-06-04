@@ -14,12 +14,12 @@ v-data-table(
 </template>
 
 <script setup lang="ts">
-import { type AssistantReport } from '@/services/prompting'
+import { type MongoReportResult } from '@/services/prompting'
 import { computed } from 'vue'
 import { getLocale, safeN, safeTd } from '@/services/i18n'
 
 const { report } = defineProps<{
-  report: AssistantReport
+  report: MongoReportResult
 }>()
 
 const headers = computed(() => report.columns.map(column => ({

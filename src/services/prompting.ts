@@ -24,24 +24,27 @@ type Lang = 'en' | 'lt' | 'ru'
 type ColumnDatatype = 'string' | 'number' | 'currency' | 'boolean' | 'date'
 export type LocalizedString = Record<Lang, string>
 
+export interface ReportColumn {
+  dataKey: string
+  title: LocalizedString
+  datatype: ColumnDatatype
+}
+
+export interface ReportComment {
+  label: LocalizedString,
+  text: string,
+}
+
 export interface MongoReportResult {
   title: LocalizedString
-  comments: { label: LocalizedString, text: string }[]
-  columns: {
-    dataKey: string
-    title: LocalizedString
-    datatype: ColumnDatatype
-  }[]
+  comments: ReportComment[]
+  columns: ReportColumn[]
+  data: Record<string, any>[]
 }
 
 export interface PromptResult {
   found?: SearchResult[]
-  report?: {
-    config: {
-      resultSchema: MongoReportResult
-    }
-    data: Record<string, any>[]
-  }
+  report?: MongoReportResult
 }
 
 export interface PromptData {

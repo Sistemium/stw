@@ -64,26 +64,21 @@ v-list(v-if="prompt" density="compact")
         ) {{ result.selected ? $t('remove') : $t('add') }}
           template(#prepend)
             v-icon(v-if="result.selected" size="large") $mdiCheck
-  v-sheet(
+  assistant-report-view(
     v-if="report"
+    :report="report"
   )
-    h3.ma-3
-      localized-string-view(:localized="report?.config.resultSchema.title")
-    assistant-report-table(
-      :report="{ data: report?.data || [], columns: report?.config.resultSchema.columns || [] }"
-    )
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { SearchResult, UnwrappedPrompt } from '@/services/prompting'
 import { safeT } from '@/services/i18n'
-import AssistantReportTable from '@/components/assistant/AssistantReportTable.vue'
 import ToolButton from '@/lib/ToolButton.vue'
 import BusyLoading from '@/lib/BusyLoading.vue'
 import groupBy from 'lodash/groupBy'
 import map from 'lodash/map'
-import LocalizedStringView from '@/components/LocalizedStringView.vue'
+import AssistantReportView from '@/components/assistant/AssistantReportView.vue'
 
 const selected = defineModel({ default: new Map<string, SearchResult>() })
 
